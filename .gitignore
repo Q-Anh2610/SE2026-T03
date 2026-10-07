@@ -1,0 +1,44 @@
+# Secrets and local agent configuration
+.env
+.env.*
+!.env.example
+.aws/
+.codex/
+.agents/
+
+# Dependencies and caches
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+*.tsbuildinfo
+
+# Build and test output
+dist/
+build/
+coverage/
+.coverage
+htmlcov/
+playwright-report/
+test-results/
+
+# Local datasets, models and service state
+/data/raw/
+/data/processed/
+/data/models/
+/data/runtime/
+
+# Local editor and temporary files
+.idea/
+.vscode/
+.DS_Store
+*.log
+*.pid
+*.swp
+*.swo
+*~
