@@ -10,4 +10,4 @@
 - `BRANCHING.md`: quy trình Git.
 - `STRUCTURE.md`: cấu trúc repository.
 
-Thư mục mới chỉ là vị trí dự kiến để đặt tài liệu; chưa có contract, ADR hoặc báo cáo kết quả được chốt.
+Có [contract nháp tìm kiếm văn bản W1](contracts/search-text.md) và [báo cáo kiểm tra frontend W1](guides/frontend-w1-verification.md). Contract cần review trước khi tích hợp backend; chưa có ADR hoặc kết quả evaluation retrieval được chốt.

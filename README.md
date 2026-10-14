@@ -29,7 +29,7 @@ Semantic Search cho thư viện 3D assets: tìm bằng văn bản/ảnh, sử d�
 
 Xem [sơ đồ thư mục và ranh giới module](docs/STRUCTURE.md), [kế hoạch](ROADMAP.md) và [hướng dẫn Codex](AGENTS.md).
 
-Hiện repository mới có khung thư mục và quy trình Git; chưa có ứng dụng, dependencies hoặc lệnh chạy backend/frontend.
+Frontend có prototype React + TypeScript + Vite cho tìm kiếm văn bản bằng mock W1; xem [hướng dẫn chạy frontend](frontend/README.md) và [contract nháp](docs/contracts/search-text.md). Backend, ingestion, encoder/index thật và evaluation chưa được triển khai; prototype không xác nhận toàn milestone M0 đã hoàn thành.
 `compose.yaml` sẽ được bổ sung ở nhiệm vụ CI/Docker khi có cấu hình dịch vụ thực tế; không tạo file Compose rỗng để giả định hệ thống đã chạy được.
 
 ## Quy trình Git
