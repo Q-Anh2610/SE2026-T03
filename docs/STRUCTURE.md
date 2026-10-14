@@ -37,4 +37,4 @@ Ký hiệu `{a,b}` trong sơ đồ là các thư mục riêng `a/`, `b/`, không
 
 Frontend → HTTP API; API → services/persistence/search; ingestion và search → encoder chung. Evaluation dùng search của sản phẩm. Metadata nghiệp vụ nằm ở PostgreSQL, vector ở Qdrant; không dùng file trong `data/` thay thế persistence nghiệp vụ.
 
-Không tạo sẵn entrypoints, endpoint giả, migration rỗng, package manifests hoặc lockfiles khi chưa triển khai module. `compose.yaml` ở gốc sẽ được TV5 phối hợp TV1 thêm khi có cấu hình khởi chạy thật. Reviewer cụ thể/CODEOWNERS cần GitHub usernames thật; không dùng TV1–TV5 làm username giả.
+Không tạo sẵn entrypoints, endpoint giả, migration rỗng, package manifests hoặc lockfiles khi chưa triển khai module. `compose.yaml` ở gốc sẽ được Đoàn Thị Minh Khuê phối hợp Vũ Nguyễn Quỳnh Anh thêm khi có cấu hình khởi chạy thật. Reviewer cụ thể/CODEOWNERS cần GitHub usernames thật; không dùng họ tên thay cho GitHub username.

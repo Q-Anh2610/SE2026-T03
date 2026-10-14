@@ -2,7 +2,7 @@
 
 Phiên bản: 1.0 | Ngày: 08/10/2026 | Nhóm: 5 người | Thời gian: 8 tuần + 2 tuần dự phòng.
 
-Đây là kế hoạch triển khai, không phải xác nhận tính năng đã hoàn thành. Tất cả milestone ban đầu có trạng thái **chưa bắt đầu**. Thay TV1-TV5 bằng tên thật; xác nhận rubric môn học trước khi chốt yêu cầu cuối.
+Đây là kế hoạch triển khai, không phải xác nhận tính năng đã hoàn thành. Tất cả milestone ban đầu có trạng thái **chưa bắt đầu**. Xác nhận rubric môn học trước khi chốt yêu cầu cuối.
 
 ## 1. Mục tiêu và phạm vi
 
@@ -75,23 +75,23 @@ Các trường chuẩn: `asset_id`, `source`, `source_id`, `source_url`, `author
 
 | Đường dẫn | Trách nhiệm | Chủ trì |
 |---|---|---|
-| `frontend/src/app/` | Router/layout | TV4 |
-| `frontend/src/features/search/` | Text/image query, filters, results | TV4 |
-| `frontend/src/features/assets/` | Chi tiết asset | TV4 |
-| `frontend/src/features/feedback/` | Feedback | TV4 |
-| `frontend/src/features/admin/` | Job status, lỗi, reindex UI | TV5 phối hợp TV4 |
-| `frontend/src/components/`, `lib/api/`, `types/` | Thành phần/contract chung | TV4 + TV1 |
-| `frontend/tests/e2e/` | Luồng tích hợp trên web | TV5 |
-| `backend/app/api/`, `schemas/`, `core/` | API, DTO, cấu hình | TV1 |
-| `backend/app/db/`, `services/`, `migrations/` | Nghiệp vụ và persistence | TV1 |
-| `backend/app/ingestion/` | Source adapter, download, normalization, pipeline | TV2 |
-| `backend/app/embedding/` | Model adapter, batch encoding | TV3 |
-| `backend/app/search/` | Vector store, retrieval, filters, fusion, explanation | TV3 |
-| `backend/tests/unit/`, `tests/integration/` | Tests module và tích hợp | Chủ module + TV5 |
-| `evaluation/` | CLI, runner, metrics, configs, results, tests | TV5 + TV3 |
-| `data/manifests/`, `samples/`, `benchmark/` | ID, mẫu nhỏ, query/nhãn | TV2 + TV5 |
-| `data/raw/`, `processed/`, `models/` | Dữ liệu local, không commit bulk | TV2 |
-| `scripts/`, `.github/` | Setup, smoke tests, CI và templates | TV5 + chủ module |
+| `frontend/src/app/` | Router/layout | Nguyễn Văn Duy |
+| `frontend/src/features/search/` | Text/image query, filters, results | Nguyễn Văn Duy |
+| `frontend/src/features/assets/` | Chi tiết asset | Nguyễn Văn Duy |
+| `frontend/src/features/feedback/` | Feedback | Nguyễn Văn Duy |
+| `frontend/src/features/admin/` | Job status, lỗi, reindex UI | Đoàn Thị Minh Khuê phối hợp Nguyễn Văn Duy |
+| `frontend/src/components/`, `lib/api/`, `types/` | Thành phần/contract chung | Nguyễn Văn Duy + Vũ Nguyễn Quỳnh Anh |
+| `frontend/tests/e2e/` | Luồng tích hợp trên web | Đoàn Thị Minh Khuê |
+| `backend/app/api/`, `schemas/`, `core/` | API, DTO, cấu hình | Vũ Nguyễn Quỳnh Anh |
+| `backend/app/db/`, `services/`, `migrations/` | Nghiệp vụ và persistence | Vũ Nguyễn Quỳnh Anh |
+| `backend/app/ingestion/` | Source adapter, download, normalization, pipeline | Trịnh Thị Thu Huyền |
+| `backend/app/embedding/` | Model adapter, batch encoding | Lê Thị Linh Chi |
+| `backend/app/search/` | Vector store, retrieval, filters, fusion, explanation | Lê Thị Linh Chi |
+| `backend/tests/unit/`, `tests/integration/` | Tests module và tích hợp | Chủ module + Đoàn Thị Minh Khuê |
+| `evaluation/` | CLI, runner, metrics, configs, results, tests | Đoàn Thị Minh Khuê + Lê Thị Linh Chi |
+| `data/manifests/`, `samples/`, `benchmark/` | ID, mẫu nhỏ, query/nhãn | Trịnh Thị Thu Huyền + Đoàn Thị Minh Khuê |
+| `data/raw/`, `processed/`, `models/` | Dữ liệu local, không commit bulk | Trịnh Thị Thu Huyền |
+| `scripts/`, `.github/` | Setup, smoke tests, CI và templates | Đoàn Thị Minh Khuê + chủ module |
 | `docs/`, `docs/adr/` | Tài liệu, quyết định, đóng góp | Cả nhóm |
 
 File gốc: `README.md`, `ROADMAP.md`, `AGENTS.md`, `compose.yaml`, `.env.example`, `.gitignore`. Bản hướng dẫn giao dưới tên `AGENT.md`; đổi tên thành `AGENTS.md` trước khi dùng Codex. Chỉ tạo file/module cần cho Issue hiện tại.
@@ -100,13 +100,13 @@ File gốc: `README.md`, `ROADMAP.md`, `AGENTS.md`, `compose.yaml`, `.env.exampl
 
 | Thành viên | Sở hữu đầu ra kỹ thuật | Phối hợp/review |
 |---|---|---|
-| TV1 | API nghiệp vụ, DB/migrations, điều phối tích hợp | TV4 API/UI, TV5 release |
-| TV2 | Pipeline ingestion, dataset snapshot, batch tests | TV3 schema/index, TV5 chất lượng dữ liệu |
-| TV3 | Encoder adapters, retrieval, filters, fusion, index versioning | TV2 dữ liệu, TV5 benchmark |
-| TV4 | UI tìm kiếm/detail/feedback, API client | TV1 contract, TV5 admin/E2E |
-| TV5 | Evaluation CLI, admin job UI, CI/Docker/E2E | TV3 metric, TV1 jobs/release |
+| Vũ Nguyễn Quỳnh Anh | API nghiệp vụ, DB/migrations, điều phối tích hợp | Nguyễn Văn Duy API/UI, Đoàn Thị Minh Khuê release |
+| Trịnh Thị Thu Huyền | Pipeline ingestion, dataset snapshot, batch tests | Lê Thị Linh Chi schema/index, Đoàn Thị Minh Khuê chất lượng dữ liệu |
+| Lê Thị Linh Chi | Encoder adapters, retrieval, filters, fusion, index versioning | Trịnh Thị Thu Huyền dữ liệu, Đoàn Thị Minh Khuê benchmark |
+| Nguyễn Văn Duy | UI tìm kiếm/detail/feedback, API client | Vũ Nguyễn Quỳnh Anh contract, Đoàn Thị Minh Khuê admin/E2E |
+| Đoàn Thị Minh Khuê | Evaluation CLI, admin job UI, CI/Docker/E2E | Lê Thị Linh Chi metric, Vũ Nguyễn Quỳnh Anh jobs/release |
 
-Mỗi người đều có code, tests và tài liệu phần mình. TV1 không chỉ quản lý; TV5 không chỉ viết báo cáo. Người chủ trì thư mục không có quyền độc quyền sửa.
+Mỗi người đều có code, tests và tài liệu phần mình. Vũ Nguyễn Quỳnh Anh không chỉ quản lý; Đoàn Thị Minh Khuê không chỉ viết báo cáo. Người chủ trì thư mục không có quyền độc quyền sửa.
 
 ## 6. Milestones theo tuần
 
@@ -114,79 +114,79 @@ Mỗi nhiệm vụ dưới đây chuyển thành Issue có owner, reviewer, depe
 
 ### W1 / M0 - Chốt phạm vi và kiểm chứng môi trường
 
-- TV1: SRS/use cases, FastAPI skeleton, asset schema, draft API contract.
-- TV2: source reader, 200-ID manifest, kiểm tra metadata/thumbnail/license.
-- TV3: CLIP proof of concept trên 20-50 ảnh; đo encoding trên máy thực tế.
-- TV4: React skeleton và search UI mock theo contract.
-- TV5: CI lint/smoke, Docker khung, evaluation CLI skeleton và kế hoạch nhãn.
+- Vũ Nguyễn Quỳnh Anh: SRS/use cases, FastAPI skeleton, asset schema, draft API contract.
+- Trịnh Thị Thu Huyền: source reader, 200-ID manifest, kiểm tra metadata/thumbnail/license.
+- Lê Thị Linh Chi: CLIP proof of concept trên 20-50 ảnh; đo encoding trên máy thực tế.
+- Nguyễn Văn Duy: React skeleton và search UI mock theo contract.
+- Đoàn Thị Minh Khuê: CI lint/smoke, Docker khung, evaluation CLI skeleton và kế hoạch nhãn.
 - Gate: prototype nhỏ chạy; quy mô dữ liệu khả thi; lựa chọn ngôn ngữ truy vấn được ghi rõ.
 
 ### W2 / M1 - Dữ liệu và baseline
 
-- TV1: migration, list/detail API, error format, pagination.
-- TV2: batch download/cleaning, checksum, retry, chống trùng.
-- TV3: CLIP batch, Qdrant index và keyword baseline đơn giản.
-- TV4: list/detail nối API, filters UI mock.
-- TV5: metric CLI bản đầu, tests metric, admin status UI mock và fixtures.
+- Vũ Nguyễn Quỳnh Anh: migration, list/detail API, error format, pagination.
+- Trịnh Thị Thu Huyền: batch download/cleaning, checksum, retry, chống trùng.
+- Lê Thị Linh Chi: CLIP batch, Qdrant index và keyword baseline đơn giản.
+- Nguyễn Văn Duy: list/detail nối API, filters UI mock.
+- Đoàn Thị Minh Khuê: metric CLI bản đầu, tests metric, admin status UI mock và fixtures.
 - Gate: 200 asset có trạng thái, chạy lại pipeline không trùng; baseline có kết quả đo thử.
 
 ### W3 / M2 - Text search xuyên suốt
 
-- TV1: API text search gọi search service; search event schema.
-- TV2: tăng dữ liệu; batch tests cho ảnh hỏng, thiếu trường, chạy lại.
-- TV3: text-to-preview retrieval, filters và index manifest.
-- TV4: tìm text thật, loading/empty/error, nguồn asset trên detail.
-- TV5: smoke text search, báo cáo baseline, status UI nối API.
+- Vũ Nguyễn Quỳnh Anh: API text search gọi search service; search event schema.
+- Trịnh Thị Thu Huyền: tăng dữ liệu; batch tests cho ảnh hỏng, thiếu trường, chạy lại.
+- Lê Thị Linh Chi: text-to-preview retrieval, filters và index manifest.
+- Nguyễn Văn Duy: tìm text thật, loading/empty/error, nguồn asset trên detail.
+- Đoàn Thị Minh Khuê: smoke text search, báo cáo baseline, status UI nối API.
 - Gate: text search trên web dùng dữ liệu thật; tag `v0.1.0` sau review.
 
 ### W4 / M3 - Image search và khóa dữ liệu đánh giá
 
-- TV1: image upload API, validation kích thước/định dạng, feedback API.
-- TV2: dataset snapshot, loại trùng và kiểm tra độ phủ danh mục.
-- TV3: image retrieval; adapter SigLIP 2 để so sánh.
-- TV4: upload preview, filters thật, feedback UI.
-- TV5: image/filter E2E, latency, nhãn và khóa tập test.
+- Vũ Nguyễn Quỳnh Anh: image upload API, validation kích thước/định dạng, feedback API.
+- Trịnh Thị Thu Huyền: dataset snapshot, loại trùng và kiểm tra độ phủ danh mục.
+- Lê Thị Linh Chi: image retrieval; adapter SigLIP 2 để so sánh.
+- Nguyễn Văn Duy: upload preview, filters thật, feedback UI.
+- Đoàn Thị Minh Khuê: image/filter E2E, latency, nhãn và khóa tập test.
 - Gate: hai luồng chạy; tập đánh giá/manifest được version hóa.
 
 ### W5 / M4 - MVP đầy đủ
 
-- TV1: explanation response, jobs/reindex API theo runner đã chọn, nghiệp vụ tests.
-- TV2: dataset card, cập nhật metadata và đồng bộ payload.
-- TV3: E5/RRF thử nghiệm trên validation, dedup theo asset.
-- TV4: explanation/feedback hoàn chỉnh, xử lý trạng thái cần thiết.
-- TV5: admin job/reindex UI, integration tests, báo cáo so sánh ban đầu.
+- Vũ Nguyễn Quỳnh Anh: explanation response, jobs/reindex API theo runner đã chọn, nghiệp vụ tests.
+- Trịnh Thị Thu Huyền: dataset card, cập nhật metadata và đồng bộ payload.
+- Lê Thị Linh Chi: E5/RRF thử nghiệm trên validation, dedup theo asset.
+- Nguyễn Văn Duy: explanation/feedback hoàn chỉnh, xử lý trạng thái cần thiết.
+- Đoàn Thị Minh Khuê: admin job/reindex UI, integration tests, báo cáo so sánh ban đầu.
 - Gate: chức năng bắt buộc hoàn chỉnh; tag `v0.5.0`; ngừng thêm tính năng lớn.
 
 ### W6 / M5 - Chọn cấu hình và sửa lỗi
 
-- TV1: sửa API/DB, logging và tác vụ lỗi.
-- TV2: dữ liệu gây lỗi, incremental update tests.
-- TV3: chọn model/fusion trên validation; ghi ADR và đóng băng cấu hình.
-- TV4: sửa UI sau user testing, component tests phù hợp.
-- TV5: chạy test benchmark sau khi cấu hình khóa, integration CI, lỗi có bước tái hiện.
+- Vũ Nguyễn Quỳnh Anh: sửa API/DB, logging và tác vụ lỗi.
+- Trịnh Thị Thu Huyền: dữ liệu gây lỗi, incremental update tests.
+- Lê Thị Linh Chi: chọn model/fusion trên validation; ghi ADR và đóng băng cấu hình.
+- Nguyễn Văn Duy: sửa UI sau user testing, component tests phù hợp.
+- Đoàn Thị Minh Khuê: chạy test benchmark sau khi cấu hình khóa, integration CI, lỗi có bước tái hiện.
 - Gate: decision record có chất lượng, latency và chi phí vận hành; báo cáo test không dùng để chỉnh lại cấu hình.
 
 ### W7 / M6 - Tái lập và ổn định
 
-- TV1: API docs, release integration và lỗi ưu tiên.
-- TV2: script dataset mẫu, license/attribution, manifest checks.
-- TV3: rebuild index, pin revision, search regression.
-- TV4: responsive/accessibility cơ bản, tài liệu UI.
-- TV5: Docker đầy đủ, dựng trên máy sạch, E2E và hiệu năng.
+- Vũ Nguyễn Quỳnh Anh: API docs, release integration và lỗi ưu tiên.
+- Trịnh Thị Thu Huyền: script dataset mẫu, license/attribution, manifest checks.
+- Lê Thị Linh Chi: rebuild index, pin revision, search regression.
+- Nguyễn Văn Duy: responsive/accessibility cơ bản, tài liệu UI.
+- Đoàn Thị Minh Khuê: Docker đầy đủ, dựng trên máy sạch, E2E và hiệu năng.
 - Gate: thành viên không phải tác giả dựng hệ thống theo README; benchmark tái lập.
 
 ### W8 / M7 - Bản nộp
 
-- TV1: release PR, SRS/architecture và tổng hợp đóng góp.
-- TV2: chốt pipeline/card/tests, demo retry/idempotency.
-- TV3: chốt retrieval/model/index và demo hạn chế.
-- TV4: chốt UI, demo tìm kiếm/filter/feedback.
-- TV5: chốt evaluation/CI, kiểm thử main và hướng dẫn chạy.
+- Vũ Nguyễn Quỳnh Anh: release PR, SRS/architecture và tổng hợp đóng góp.
+- Trịnh Thị Thu Huyền: chốt pipeline/card/tests, demo retry/idempotency.
+- Lê Thị Linh Chi: chốt retrieval/model/index và demo hạn chế.
+- Nguyễn Văn Duy: chốt UI, demo tìm kiếm/filter/feedback.
+- Đoàn Thị Minh Khuê: chốt evaluation/CI, kiểm thử main và hướng dẫn chạy.
 - Gate: tag `v1.0.0`; cả 5 demo phần mình; không còn lỗi nghiêm trọng ở luồng chính.
 
 ### W9-W10 / M8 - Tùy chọn
 
-Chọn **một** mở rộng sau M7: multi-view retrieval hoặc viewer GLB. TV2 data, TV3 retrieval, TV1 API, TV4 UI, TV5 benchmark/E2E. W10 dành sửa lỗi và phát hành. Nếu không đủ thời gian, giữ bản 8 tuần.
+Chọn **một** mở rộng sau M7: multi-view retrieval hoặc viewer GLB. Trịnh Thị Thu Huyền data, Lê Thị Linh Chi retrieval, Vũ Nguyễn Quỳnh Anh API, Nguyễn Văn Duy UI, Đoàn Thị Minh Khuê benchmark/E2E. W10 dành sửa lỗi và phát hành. Nếu không đủ thời gian, giữ bản 8 tuần.
 
 ## 7. Git và review
 
@@ -194,7 +194,7 @@ Chọn **một** mở rộng sau M7: multi-view retrieval hoặc viewer GLB. TV2
 - Nhánh nhiệm vụ từ `develop`: `feat/<issue>-<task>`, `fix/`, `test/`, `chore/`, `docs/`.
 - Chủ nhánh làm code; PR → develop cần một reviewer khác tác giả + CI đạt + comments giải quyết.
 - Sau điều kiện đạt, tác giả hoặc người tích hợp merge; ưu tiên squash cho PR nhiệm vụ.
-- PR develop → main do TV1/TV5 điều phối; dùng merge commit; người khác review; tạo release tag.
+- PR develop → main do Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê điều phối; dùng merge commit; người khác review; tạo release tag.
 - PR nhỏ thường 1-3 ngày; reviewer phản hồi trong một ngày làm việc; người khác thay nếu vắng.
 - Chủ nhánh cập nhật develop và xử lý conflict cùng người sửa vùng liên quan.
 - Không force push nhánh chung, không reset lịch sử để bỏ lỗi. Revert bằng PR nếu cần.
@@ -211,7 +211,7 @@ Mục tiêu mỗi người có một PR thực chất/tuần và một review h�
 
 | Tuần | Thành viên | Issue/PR | Kết quả + kiểm thử | Review/hỗ trợ | Blocker/tải tuần tới |
 |---|---|---|---|---|---|
-| W1 | TV1-TV5, mỗi người một dòng | Link thật | Bằng chứng thật | Link/ghi nhận | Ghi thực tế |
+| W1 | Vũ Nguyễn Quỳnh Anh; Trịnh Thị Thu Huyền; Lê Thị Linh Chi; Nguyễn Văn Duy; Đoàn Thị Minh Khuê (mỗi người một dòng) | Link thật | Bằng chứng thật | Link/ghi nhận | Ghi thực tế |
 
 Không đánh dấu milestone hoàn thành nếu chưa có code/test/demo. Codex hỗ trợ kỹ thuật; mỗi người phải hiểu, kiểm tra và trình bày phần mình. Không giả danh người khác trong commit.
 

@@ -13,7 +13,7 @@ Giao tiếp, báo cáo và tài liệu người dùng bằng tiếng Việt; tê
 ## 2. Kiểm tra trước khi bắt đầu
 
 1. Đọc `git status --short`, nhánh hiện tại và diff liên quan. Tôn trọng thay đổi chưa commit của người khác.
-2. Xác định Issue, owner TV1-TV5, acceptance criteria và vùng file.
+2. Xác định Issue, người phụ trách trong bảng phân công ở mục 4, acceptance criteria và vùng file.
 3. Đọc implementation hiện có trước khi thêm abstraction/dependency.
 4. Kiểm tra manifest/script/lockfile để biết lệnh và môi trường thực tế.
 5. Repo mới: chỉ scaffold phần được giao; không tạo module rỗng để trông đầy đủ.
@@ -37,11 +37,11 @@ Không đổi stack, nguồn dataset, default model hay cấu trúc repo lớn c
 
 | Vùng | Chủ trì | Quy tắc |
 |---|---|---|
-| `backend/app/api/`, `schemas/`, `core/`, `db/`, `services/`, `backend/migrations/` | TV1 | Contract, nghiệp vụ, persistence |
-| `backend/app/ingestion/`, `data/manifests/` | TV2 | Source/download/normalize/retry/dedup |
-| `backend/app/embedding/`, `search/` | TV3 | Encoders, Qdrant, filters, retrieval/fusion |
-| `frontend/src/features/search/`, `assets/`, `feedback/`, UI chung | TV4 | UI và API client |
-| `evaluation/`, admin UI, E2E, CI/Docker | TV5 | Tooling, metric, vận hành/tích hợp |
+| `backend/app/api/`, `schemas/`, `core/`, `db/`, `services/`, `backend/migrations/` | Vũ Nguyễn Quỳnh Anh | Contract, nghiệp vụ, persistence |
+| `backend/app/ingestion/`, `data/manifests/` | Trịnh Thị Thu Huyền | Source/download/normalize/retry/dedup |
+| `backend/app/embedding/`, `search/` | Lê Thị Linh Chi | Encoders, Qdrant, filters, retrieval/fusion |
+| `frontend/src/features/search/`, `assets/`, `feedback/`, UI chung | Nguyễn Văn Duy | UI và API client |
+| `evaluation/`, admin UI, E2E, CI/Docker | Đoàn Thị Minh Khuê | Tooling, metric, vận hành/tích hợp |
 | `docs/`, module tests | Cả nhóm | Cập nhật phần thực sự thay đổi |
 
 Owner là người phối hợp/review, không phải ACL. Hạn chế diff ngoài module được giao. Shared contracts, migrations, lockfiles, compose và components chung cần ghi ảnh hưởng cho owner review.
@@ -189,7 +189,7 @@ Nếu nhiệm vụ tạo ra file cần loại khỏi Git, cập nhật `.gitigno
 | Kiểm thử | `test/<issue>-<task>` | `develop` |
 | Cấu hình, CI/Docker/dependencies, refactor bảo trì | `chore/<issue>-<task>` | `develop` |
 | Tài liệu, quy tắc trong `AGENTS.md` | `docs/<issue>-<task>` | `develop` |
-| Release do TV1/TV5 điều phối | Không tạo commit/push trực tiếp lên hai nhánh chung | `develop → main`, qua PR đã review và dùng merge commit |
+| Release do Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê điều phối | Không tạo commit/push trực tiếp lên hai nhánh chung | `develop → main`, qua PR đã review và dùng merge commit |
 
 Nhánh nhiệm vụ tạo từ `develop` hiện có; `<issue>` phải là Issue thật, `<task>` mô tả ngắn bằng chữ thường/số/gạch ngang. Không push vào nhánh cá nhân dài hạn, nhánh của thành viên khác, `main` hay `develop`. Không tự tạo luồng hotfix đi thẳng vào `main` để bỏ qua quy trình tích hợp.
 
@@ -242,7 +242,7 @@ Definition of Done: acceptance criteria đạt, kiểm thử phù hợp, docs li
 
 ```text
 Đọc AGENTS.md và ROADMAP.md.
-Tôi là TV2, thực hiện Issue #<ID thật>: ingestion idempotent thuộc W2.
+Tôi là Trịnh Thị Thu Huyền, thực hiện Issue #<ID thật>: ingestion idempotent thuộc W2.
 Phạm vi: backend/app/ingestion/ và tests tương ứng.
 Giữ nguyên API contract, encoder và dependency files trừ khi cần và nêu rõ lý do.
 Tiêu chí: nhập lại không trùng; asset lỗi có trạng thái; retry có giới hạn.
