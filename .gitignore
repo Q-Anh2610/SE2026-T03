@@ -22,6 +22,7 @@ __pycache__/
 dist/
 build/
 coverage/
+.vitest/
 .coverage
 htmlcov/
 playwright-report/

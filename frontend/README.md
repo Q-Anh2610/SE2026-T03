@@ -38,9 +38,15 @@ Production build luôn gọi HTTP API, không bật mock dù đặt `VITE_SEARCH
 npm run lint
 npm run typecheck
 npm run build
+npm test
+npm run test:coverage
 ```
 
-Repo chưa có test runner component/E2E; nhiệm vụ này không thêm framework kiểm thử riêng. Kiểm tra thủ công thêm: truy vấn trống, có kết quả, rỗng, lỗi và retry; chuyển query nhanh bằng gợi ý; bàn phím; mobile; production không fallback mock khi API lỗi. Không coi mock smoke là benchmark hoặc CI đã xanh.
+Unit/component tests dùng Vitest + React Testing Library + jsdom. `npm test` chạy một lượt; `npm run test:watch` theo dõi thay đổi; `npm run test:coverage` kiểm tra tối thiểu 95% statements/lines/branches/functions cho từng file source được đo, ghi báo cáo vào `coverage/` (không commit).
+
+Tests nằm cạnh source, gồm contract, mock, API client, trang tìm kiếm và card. Bao phủ Unicode/limit/filters, metadata/URL không hợp lệ, abort/timeout, lựa chọn mock/API/production, loading/empty/error/retry, bàn phím, thay request và cleanup khi unmount. Fixtures kiểm thử tự tạo trong `src/test/fixtures.ts`; không tải model/dataset hoặc gọi API thật.
+
+Coverage đo `App`, `SearchPage`, `AssetCard`, contract, mock và API client; không đo bootstrap `main.tsx`, khai báo types, CSS hoặc config. Bộ tests jsdom không xác nhận layout trình duyệt; smoke Chrome desktop/mobile và production được ghi riêng trong báo cáo W1. Chưa có suite E2E/backend thật hoặc workflow CI. Không coi mock tests là benchmark hoặc CI đã xanh.
 
 Xem [báo cáo kiểm tra W1](../docs/guides/frontend-w1-verification.md) để biết môi trường, smoke đã chạy và giới hạn.
 
