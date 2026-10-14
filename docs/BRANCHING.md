@@ -2,7 +2,7 @@
 
 | Nhánh | Người dùng và quy tắc |
 | --- | --- |
-| `main` | Bản demo/nộp ổn định. TV1/TV5 điều phối release. Chỉ nhận PR từ `develop`; không push trực tiếp. |
+| `main` | Bản demo/nộp ổn định. Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê điều phối release. Chỉ nhận PR từ `develop`; không push trực tiếp. |
 | `develop` | Bản tích hợp chung. Cả 5 thành viên gửi PR từ nhánh nhiệm vụ. CI phải xanh và ít nhất một người khác approve. |
 | `feat/<issue>-<task>` | Tính năng mới; tạo từ `develop`, PR về `develop`. |
 | `fix/<issue>-<task>` | Sửa lỗi; cùng luồng PR. |
@@ -25,7 +25,7 @@ Trong một bản clone Git hợp lệ, có working tree sạch:
 3. Tạo Issue cho việc thiết lập quy trình; lấy số Issue thật. Số `1` ở bước dưới chỉ là ví dụ, phải thay bằng ID của Issue đó.
 4. Chạy `bash /duong-dan/ban-file-da-chuan-bi/scripts/new-task-branch.sh chore 1 branching-workflow`.
 5. Sau khi tạo nhánh, sao chép các file đã chuẩn bị vào bản clone. Commit `README.md`, `CONTRIBUTING.md`, `docs/BRANCHING.md`, `.github/`, `scripts/`; push nhánh nhiệm vụ và mở PR về `develop`.
-6. Người khác review, CI xanh rồi merge PR. TV1/TV5 mở PR `develop → main` để đưa quy trình vào bản ổn định.
+6. Người khác review, CI xanh rồi merge PR. Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê mở PR `develop → main` để đưa quy trình vào bản ổn định.
 7. Chủ repo bật bảo vệ hai nhánh theo hướng dẫn dưới đây.
 
 Không chạy `git init` để thay thế bản clone, không commit hoặc push trực tiếp vào `main`.
@@ -48,12 +48,12 @@ Workflow kiểm tra PR vào `main` phải đến từ `develop` của chính rep
 CI hiện kiểm tra quy trình nhánh vì repo chưa có mã ứng dụng; cần bổ sung build/lint/test và đặt chúng thành required checks khi có mã.
 File workflow một mình không chặn push trực tiếp: phải bật bảo vệ nhánh.
 
-TV1/TV5 là vai trò điều phối; chưa có GitHub username tương ứng nên chưa cấu hình quyền riêng cho hai người này.
+Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê phụ trách điều phối; chưa có GitHub username tương ứng nên chưa cấu hình quyền riêng cho hai người này.
 Với repo cá nhân, tổ chức việc merge release theo quy ước nhóm; nếu cần cưỡng chế quyền theo thành viên, chủ repo cấu hình ruleset/quyền phù hợp hoặc dùng repo tổ chức.
 
 ## Release và dọn nhánh
 
-TV1/TV5 kiểm tra demo, CI và review rồi mở PR `develop → main`:
+Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê kiểm tra demo, CI và review rồi mở PR `develop → main`:
 
 ```bash
 gh pr create --base main --head develop --title "Release: bản demo" --body "Mô tả các Issue đã hoàn thành và kết quả kiểm thử/demo."

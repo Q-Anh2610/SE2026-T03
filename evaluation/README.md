@@ -1,4 +1,4 @@
-# Evaluation — TV5 phối hợp TV3
+# Evaluation — Đoàn Thị Minh Khuê phối hợp Lê Thị Linh Chi
 
 - `metrics/`: công thức metric thuần và có tests bằng ví dụ biết đáp án.
 - `configs/`: cấu hình benchmark có phiên bản.
