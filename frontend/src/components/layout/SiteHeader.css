@@ -1,0 +1,108 @@
+/* Scoped selectors keep the header independent of the legacy App header styles. */
+.site-header.connected-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
+  padding: 0 max(48px, calc((100% - 1264px) / 2));
+  background: var(--page);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.connected-header__brand {
+  flex-shrink: 0;
+  color: inherit;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.connected-header__brand span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .02em;
+}
+
+.connected-header__actions,
+.connected-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.connected-header__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  text-underline-offset: 6px;
+}
+
+.connected-header__nav a:hover,
+.connected-header__nav a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.connected-header__theme {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm, 12px);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.connected-header__theme:hover {
+  background: var(--wash);
+  border-color: var(--muted);
+}
+
+.connected-header a:focus-visible,
+.connected-header button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1000px) {
+  .site-header.connected-header { padding-inline: 32px; }
+}
+
+@media (max-width: 700px) {
+  .site-header.connected-header { height: 72px; padding-inline: 24px; gap: 16px; }
+  .connected-header__brand { font-size: 22px; }
+  .connected-header__actions,
+  .connected-header__nav { gap: 16px; }
+  .connected-header__nav a { font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  .site-header.connected-header { padding-inline: 16px; gap: 8px; }
+  .connected-header__brand { font-size: 20px; }
+  .connected-header__brand span { font-size: 10px; }
+  .connected-header__actions { gap: 12px; }
+  .connected-header__nav { gap: 8px; }
+  .connected-header__nav a { font-size: 12px; }
+}
