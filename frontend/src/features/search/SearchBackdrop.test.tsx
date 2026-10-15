@@ -1,6 +1,12 @@
 import { act, fireEvent, render } from '@testing-library/react'
+import { useRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { SearchBackdrop } from './SearchBackdrop'
+
+vi.mock('react', async (importOriginal) => {
+  const react = await importOriginal<typeof import('react')>()
+  return { ...react, useRef: vi.fn(react.useRef) }
+})
 
 function setupMotion(reduced = false) {
   const motion = { matches: reduced, addEventListener: vi.fn(), removeEventListener: vi.fn() }
@@ -15,6 +21,17 @@ function setupMotion(reduced = false) {
 }
 
 describe('landscape motion lifecycle', () => {
+  it('does not subscribe to browser events when the background host is unavailable', () => {
+    setupMotion()
+    // Simulate an unavailable host: attaching the DOM ref cannot provide an element.
+    const unavailableHost = { get current() { return null }, set current(_value: unknown) {} }
+    vi.mocked(useRef).mockReturnValueOnce(unavailableHost)
+    const subscribe = vi.spyOn(window, 'addEventListener')
+    const { unmount } = render(<SearchBackdrop />)
+    expect(subscribe.mock.calls.filter(([event]) => event === 'scroll' || event === 'resize')).toEqual([])
+    unmount()
+  })
+
   it('batches scroll events, clamps the offset and cancels pending work on unmount', () => {
     const { frames, request, cancel } = setupMotion()
     const { container, unmount } = render(<SearchBackdrop />)
