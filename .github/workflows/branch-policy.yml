@@ -1,0 +1,70 @@
+name: Branch policy
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+      - ready_for_review
+
+permissions:
+  contents: read
+
+jobs:
+  branch-policy:
+    name: branch-policy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check pull request branches
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+
+          with open(os.environ["GITHUB_EVENT_PATH"]) as f:
+              event = json.load(f)
+
+          pr = event["pull_request"]
+          base = pr["base"]["ref"]
+          head = pr["head"]["ref"]
+          head_repo = pr["head"].get("repo") or {}
+          same_repo = (
+              head_repo.get("full_name")
+              == event["repository"]["full_name"]
+          )
+
+          if base == "main":
+              valid = head == "develop" and same_repo
+              message = "PR vào main phải từ develop của chính repo."
+
+          elif base == "develop":
+              pattern = (
+                  r"(feat|fix|test|chore|docs)/"
+                  r"[1-9][0-9]*-[a-z0-9]+(?:-[a-z0-9]+)*"
+              )
+              # Ngoại lệ theo tên nhánh được giao trong Issue #1.
+              srs_exception = same_repo and head == "docs/srs-use-cases"
+              valid = bool(re.fullmatch(pattern, head)) or srs_exception
+              message = (
+                  "PR vào develop cần nhánh dạng "
+                  "docs/1-ten-cong-viec, feat/2-ten-cong-viec..."
+              )
+          else:
+              valid = False
+              message = "Nhánh đích không được hỗ trợ."
+
+          if not valid:
+              print(f"::error::{message}")
+              sys.exit(1)
+
+          print(f"Branch policy passed: {head} -> {base}")
+          PY
