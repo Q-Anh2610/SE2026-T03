@@ -68,3 +68,10 @@ Các package này là dev dependencies; audit production sạch không đồng n
 - Coverage v4: lines/statements/functions **100%**, branches **99,07%**, từng file runtime đạt ngưỡng 95%. V8 remapping thay đổi giữa Vitest 3 và 4 nên không so sánh trực tiếp phần trăm branches giữa hai bản; không hạ threshold, không thêm loại trừ hay bỏ test.
 
 Kết quả này thay thế tình trạng bốn cảnh báo dev dependencies trong lần kiểm tra UI trước đó. Không có thay đổi contract/API/schema/index hoặc hình thức UI.
+
+## Rà soát PR #18 — 16/10/2026
+
+- Bỏ hai component header/footer cũ không được `App` import, CSS và sáu test riêng của chúng; giữ nguyên header/footer đang hiển thị trong `App`.
+- Bổ sung một test tích hợp trên `App` để kiểm tra header/footer thực tế, tên thư viện và link điều hướng. Không bỏ assertion hoặc thay coverage threshold để che lỗi.
+- Bản hiện tại: **189/189 unit/component**, 10 file test; **28/28 E2E**. Số test giảm ròng năm do loại sáu test của code không dùng và thêm một test ứng dụng thật.
+- Lint, typecheck, build đạt. Coverage lines/statements/functions **100%**, branches **99,06%**, từng file runtime đạt 95%. CI `branch-policy` được theo dõi riêng trên PR; chưa có approval của thành viên khác hoặc merge.

@@ -68,6 +68,6 @@ Unit/component test kiểm tra validator, mock, HTTP client, loading/error/retry
 - `src/features/assets/`, `feedback/`, `admin/`, `src/components/`: vị trí module theo phân công; chỉ triển khai khi nhiệm vụ cần.
 - Tests nằm cạnh source và tại `tests/`; E2E dùng Page Object trong `tests/e2e/`.
 
-Source HTTP/contract và các test tương ứng được tái sử dụng từ nhánh `feat/6-w1-search-mock`, kết hợp với bố cục và thiết kế mới. Chưa push, mở PR hoặc merge. Xem [kế hoạch kiểm thử UI](tests/UI_ACCEPTANCE.md).
+Source HTTP/contract và các test tương ứng được tái sử dụng từ nhánh `feat/6-w1-search-mock`, kết hợp với bố cục và thiết kế mới. Bản UI đang được review tại [PR #18](https://github.com/Q-Anh2610/SE2026-T03/pull/18), chưa merge. Xem [kế hoạch kiểm thử UI](tests/UI_ACCEPTANCE.md).
 
 Thanh tìm kiếm giới hạn 640px, gồm ô nhập, nút tìm và biểu tượng xóa khi có query. Không hiển thị gợi ý mẫu, hướng dẫn độ dài hoặc bộ chọn trạng thái phát triển; lỗi validation chỉ xuất hiện khi nhập không hợp lệ. Bộ chọn số kết quả chỉ xuất hiện cạnh tiêu đề kết quả sau khi gửi truy vấn.

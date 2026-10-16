@@ -15,6 +15,19 @@ afterEach(() => {
 })
 
 describe('theme preference', () => {
+  it('renders one actual header and footer with the current navigation and no stale slogan', () => {
+    render(<App />)
+    expect(screen.getAllByRole('banner')).toHaveLength(1)
+    expect(screen.getAllByRole('contentinfo')).toHaveLength(1)
+    expect(screen.getByRole('link', { name: 'Connected, trang chủ' })).toHaveAttribute('href', './')
+    const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' })
+    expect(navigation.querySelectorAll('a')).toHaveLength(1)
+    expect(screen.getByRole('link', { name: 'Khám phá asset' })).toHaveAttribute('href', '#search-panel')
+    expect(screen.getByRole('link', { name: 'Đến nội dung chính' })).toHaveAttribute('href', '#main')
+    expect(screen.queryByText('Không gian cho ý tưởng tiếp theo.')).not.toBeInTheDocument()
+    expect(screen.getByRole('contentinfo')).toHaveTextContent('Thư viện 3D')
+  })
+
   it('uses the system preference when no choice is saved', () => {
     vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: true })))
     render(<App />)
