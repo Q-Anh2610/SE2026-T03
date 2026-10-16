@@ -15,20 +15,16 @@ Ví dụ: `feat/12-login-form`, `fix/18-empty-cart`, `docs/21-api-guide`.
 Không tạo nhánh có tên chỉ là `feat`, `fix`, `test`, `chore`, `docs` hoặc 5 nhánh cá nhân tồn tại suốt kỳ.
 Mỗi nhánh kéo dài 1–3 ngày. Tính năng dài chia thành các Issue nhỏ, có thể review và kiểm thử độc lập; dùng Draft PR khi chưa hoàn tất.
 
-## Đưa quy trình vào repo
+## Áp dụng quy trình
 
-Các file hiện được chuẩn bị trong workspace; chưa được đưa lên GitHub.
-Trong một bản clone Git hợp lệ, có working tree sạch:
+Repo đã có `main`, `develop` và workflow kiểm tra nhánh. Dùng bản clone có remote `origin` đúng repo; không chạy `git init` để thay thế bản clone hoặc tạo lại nhánh chung.
 
-1. Repo GitHub đã có `main` và `develop`. Dùng bản clone có remote `origin` đúng repo; đăng nhập `gh auth login` bằng tài khoản có quyền ghi repo nếu dùng GitHub CLI.
-2. Chạy `git fetch origin` và kiểm tra `git branch -r` có `origin/develop`; không cần tạo lại nhánh chung.
-3. Tạo Issue cho việc thiết lập quy trình; lấy số Issue thật. Số `1` ở bước dưới chỉ là ví dụ, phải thay bằng ID của Issue đó.
-4. Chạy `bash /duong-dan/ban-file-da-chuan-bi/scripts/new-task-branch.sh chore 1 branching-workflow`.
-5. Sau khi tạo nhánh, sao chép các file đã chuẩn bị vào bản clone. Commit `README.md`, `CONTRIBUTING.md`, `docs/BRANCHING.md`, `.github/`, `scripts/`; push nhánh nhiệm vụ và mở PR về `develop`.
-6. Người khác review, CI xanh rồi merge PR. Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê mở PR `develop → main` để đưa quy trình vào bản ổn định.
-7. Chủ repo bật bảo vệ hai nhánh theo hướng dẫn dưới đây.
-
-Không chạy `git init` để thay thế bản clone, không commit hoặc push trực tiếp vào `main`.
+1. Fetch `origin` và kiểm tra `origin/develop`.
+2. Tạo/nhận Issue thật. Khi working tree sạch, chạy `bash scripts/new-task-branch.sh <type> <issue> <task>` với giá trị thật.
+3. Thực hiện thay đổi và kiểm thử phù hợp theo [hướng dẫn đóng góp](../CONTRIBUTING.md).
+4. Push nhánh nhiệm vụ cùng tên và mở PR về `develop` bằng [mẫu chung](../.github/PULL_REQUEST_TEMPLATE.md).
+5. Cập nhật checklist theo bằng chứng. Một thành viên khác review; required checks hiện có đạt và các trao đổi chặn được xử lý trước merge.
+6. Người có quyền và được giao thực hiện merge. Chủ repo cấu hình bảo vệ nhánh; nội dung tài liệu không phải bằng chứng protections đã bật.
 
 ## Bảo vệ nhánh trên GitHub
 
@@ -45,11 +41,15 @@ Chủ repo vào **Settings → Branches → Add branch protection rule**, tạo 
 
 Bảo vệ nhánh cần quyền admin/owner. Xem [GitHub branch protection](https://docs.github.com/en/rest/branches/branch-protection#update-branch-protection).
 Workflow kiểm tra PR vào `main` phải đến từ `develop` của chính repo; PR vào `develop` phải đúng tên nhánh nhiệm vụ.
-CI hiện kiểm tra quy trình nhánh vì repo chưa có mã ứng dụng; cần bổ sung build/lint/test và đặt chúng thành required checks khi có mã.
+Workflow `branch-policy` chỉ kiểm tra tên nhánh và nhánh đích PR, không thay cho lint/build/test ứng dụng. Kiểm tra trạng thái từng lần chạy trên PR; các bài test chỉ chạy local phải được ghi rõ là local, không gọi là CI frontend xanh.
 File workflow một mình không chặn push trực tiếp: phải bật bảo vệ nhánh.
 
 Vũ Nguyễn Quỳnh Anh và Đoàn Thị Minh Khuê phụ trách điều phối; chưa có GitHub username tương ứng nên chưa cấu hình quyền riêng cho hai người này.
 Với repo cá nhân, tổ chức việc merge release theo quy ước nhóm; nếu cần cưỡng chế quyền theo thành viên, chủ repo cấu hình ruleset/quyền phù hợp hoặc dùng repo tổ chức.
+
+## Checklist trước review và merge
+
+Dùng [PR template](../.github/PULL_REQUEST_TEMPLATE.md) và tuân thủ [AGENTS.md mục 8.4](../AGENTS.md#84-checklist-issue-và-pull-request). Tác giả cập nhật bằng chứng triển khai/kiểm chứng và checklist Issue; để trống phần chưa được reviewer hoặc GitHub xác nhận. Các điều kiện approval, required checks và quyền merge ở trên vẫn giữ nguyên. Không tích mục merge trước khi PR thực sự được merge.
 
 ## Release và dọn nhánh
 
@@ -61,4 +61,4 @@ gh pr create --base main --head develop --title "Release: bản demo" --body "M�
 
 Merge PR release bằng **Create a merge commit** để giữ lịch sử chung giữa `main` và `develop`.
 Xóa nhánh nhiệm vụ sau khi merge; giữ `main` và `develop`.
-Không squash/rebase PR release. PR nhiệm vụ có thể squash nếu nhóm thống nhất.
+Không squash/rebase PR release. PR nhiệm vụ mặc định squash theo quy trình nhóm.
