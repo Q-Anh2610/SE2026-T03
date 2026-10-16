@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8f8f6" />
+    <script>
+      // Apply the theme before rendering to avoid a bright flash on dark-mode visits.
+      try {
+        const saved = localStorage.getItem('connected-theme');
+        document.documentElement.dataset.theme = saved === 'light' || saved === 'dark'
+          ? saved : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      } catch {
+        document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    </script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%233156aa' d='m16 2 14 8v12l-14 8-14-8V10z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' d='m2 10 14 8 14-8M16 18v12'/%3E%3C/svg%3E" />
+    <meta name="description" content="Connected — Thư viện asset 3D." />
+    <title>Connected — Thư viện 3D</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

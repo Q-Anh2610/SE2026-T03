@@ -1,0 +1,208 @@
+/* Scoped specificity also isolates cards from the legacy shared stylesheet. */
+.asset-card.asset-gallery-card {
+  --card-surface: #fff;
+  --card-preview: #f8f8f6;
+  --card-ink: #202020;
+  --card-muted: #747470;
+  --card-line: #e5e5e0;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--card-ink);
+  box-shadow: none;
+  transform: none;
+  transition: border-color 180ms ease;
+}
+
+:root[data-theme='dark'] .asset-card.asset-gallery-card {
+  --card-surface: #232323;
+  --card-preview: #1c1c1c;
+  --card-ink: #f3f3ef;
+  --card-muted: #b1b1aa;
+  --card-line: #393936;
+}
+
+.asset-card.asset-gallery-card .asset-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 16px;
+  background: var(--card-preview);
+}
+
+.asset-card.asset-gallery-card .asset-preview img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  object-fit: contain;
+  transform: none;
+  transition: none;
+}
+
+.asset-card.asset-gallery-card .placeholder-object {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  transition: none;
+  color: var(--card-muted);
+}
+
+.asset-card.asset-gallery-card .placeholder-object span:first-child,
+.asset-card.asset-gallery-card .placeholder-object span:nth-child(2) {
+  width: clamp(32px, 12vw, 56px);
+  height: clamp(32px, 12vw, 56px);
+  border-color: var(--card-line);
+}
+
+.asset-card.asset-gallery-card .placeholder-object span:nth-child(3) {
+  display: none;
+}
+
+.asset-card.asset-gallery-card .preview-caption {
+  position: absolute;
+  bottom: 16px;
+  inset-inline: 12px;
+  color: var(--card-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.asset-card.asset-gallery-card .rank {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card-surface);
+  color: var(--card-muted);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.asset-card.asset-gallery-card .asset-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0 0;
+}
+
+.asset-card.asset-gallery-card .asset-category {
+  margin: 0 0 6px;
+  color: var(--card-muted);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.asset-card.asset-gallery-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -.02em;
+  overflow-wrap: anywhere;
+}
+
+.asset-card.asset-gallery-card .asset-details {
+  margin-top: auto;
+  border-top: 0;
+}
+
+.asset-card.asset-gallery-card .asset-details summary {
+  min-height: 44px;
+  padding: 12px 0;
+  color: var(--card-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.asset-card.asset-gallery-card .asset-details summary:focus-visible,
+.asset-card.asset-gallery-card a:focus-visible {
+  outline: 2px solid var(--card-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.asset-card.asset-gallery-card .asset-details[open] summary {
+  color: var(--card-ink);
+}
+
+.asset-card.asset-gallery-card .asset-description,
+.asset-card.asset-gallery-card .retrieval-note,
+.asset-card.asset-gallery-card .retrieval-source {
+  min-height: 0;
+  margin: 8px 0 16px;
+  padding: 0;
+  color: var(--card-muted);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.asset-card.asset-gallery-card .asset-metadata {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0 0 16px;
+  border: 0;
+  border-radius: 0;
+  font-size: 13px;
+}
+
+.asset-card.asset-gallery-card .asset-metadata > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 12px;
+  min-width: 0;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--card-line);
+}
+
+.asset-card.asset-gallery-card dt,
+.asset-card.asset-gallery-card dd {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.asset-card.asset-gallery-card dt { color: var(--card-muted); }
+.asset-card.asset-gallery-card dd { color: var(--card-ink); }
+.asset-card.asset-gallery-card .retrieval-source { margin-bottom: 0; }
+
+@media (hover: hover) {
+  .asset-card.asset-gallery-card:hover,
+  .asset-card.asset-gallery-card:focus-within {
+    border-color: var(--card-muted);
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .asset-card.asset-gallery-card .asset-content { padding: 16px 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asset-card.asset-gallery-card { transition: none; }
+}
