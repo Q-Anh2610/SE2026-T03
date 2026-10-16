@@ -211,6 +211,7 @@ Không tự push tags, dùng `--tags`/`--follow-tags`, xóa nhánh remote hoặc
 ### 8.4. Checklist Issue và pull request
 
 - Mọi PR dùng [template chung](.github/PULL_REQUEST_TEMPLATE.md), liên kết Issue thật và có checklist riêng cho triển khai/kiểm chứng và review/tích hợp. PR nhiệm vụ vào `develop`; PR release vẫn theo mục 8.3.
+- Khi được giao rà soát/cập nhật một PR đang mở, chuẩn hóa mô tả PR đó theo template mới, không chỉ áp dụng cho PR tạo sau này. Giữ nguyên mục tiêu, acceptance criteria, bằng chứng và các việc còn chờ; không tự sửa PR ngoài phạm vi được giao hoặc viết lại lịch sử PR đã đóng/merge.
 - Chỉ đánh dấu `[x]` khi mục đó đã hoàn thành và có bằng chứng phù hợp: file/commit, lệnh kèm kết quả, report hoặc phản hồi review. Chưa làm, bị chặn hoặc chưa xác minh thì giữ `[ ]` và nêu việc còn thiếu. Không áp dụng: ghi `N/A` cùng lý do cạnh ô chưa tích; không tạo việc giả để tích đủ các ô.
 - Kiểm thử local, trạng thái CI, review của thành viên khác và merge là các việc riêng. Không dùng test local để tích CI xanh; không tự tích approve/merge thay reviewer. Chỉ cập nhật trạng thái đã quan sát được trên GitHub.
 - Sau khi sửa code, cập nhật bằng chứng và checklist theo commit mới; chạy lại kiểm tra bị ảnh hưởng. Không bỏ test, giảm coverage hoặc che lỗi để đủ ô tích. Nếu bỏ code không còn dùng cùng test riêng của nó, nêu lý do và kiểm tra hành vi ứng dụng còn lại.

@@ -27,6 +27,8 @@ Mọi PR sử dụng [mẫu chung](.github/PULL_REQUEST_TEMPLATE.md). Quy địn
 
 Giữ tách biệt các ô triển khai/kiểm chứng với review/tích hợp. Tích theo bằng chứng thực tế; việc không áp dụng ghi N/A và lý do cạnh ô chưa tích. Bổ sung lệnh, kết quả và giới hạn kiểm tra để reviewer đối chiếu. Khi bàn giao, cập nhật checklist của Issue cùng liên kết PR; giữ nguyên các tiêu chí đã thống nhất.
 
+Khi rà soát/cập nhật PR đang mở trong phạm vi được giao, áp dụng lại cấu trúc template cho chính PR đó; giữ nguyên tiêu chí và bằng chứng, không tự sửa các PR ngoài phạm vi hoặc PR đã đóng/merge.
+
 Các mục chờ reviewer, chốt contract hoặc merge tiếp tục để trống. Thực hiện theo [quy trình nhánh](docs/BRANCHING.md); checklist không phải approval và không tự cho phép merge.
 
 GitHub chỉ tự nạp PR template khi file đã có trên default branch của repo (hiện là `main`), theo [GitHub Docs](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/creating-a-pull-request-template-for-your-repository). Trước khi template được đưa từ `develop` lên `main` qua PR release, tác giả lấy mẫu từ nhánh đã cập nhật, điền nội dung vào một file tạm rồi dùng `gh pr create --body-file <file-da-dien>` hoặc dán vào mô tả PR. Không push trực tiếp `main` để bật template.

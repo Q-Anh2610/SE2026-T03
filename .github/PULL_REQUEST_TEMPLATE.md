@@ -1,6 +1,7 @@
 ## Mục tiêu
 
-<!-- Mô tả vấn đề và hành vi sau thay đổi. Thay ID bên dưới bằng Issue thật. -->
+<!-- Mô tả vấn đề và hành vi sau thay đổi. Thay ID bên dưới bằng Issue thật.
+Khi chuẩn hóa PR đang mở, giữ nguyên phạm vi, tiêu chí nghiệm thu và bằng chứng đã có. -->
 Refs #
 
 ## Thay đổi
