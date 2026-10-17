@@ -1,6 +1,12 @@
-# AGENTS.md - Hướng dẫn Codex cho AI-04
+# AGENTS.md - Luật chung Codex và Claude cho AI-04
 
-> File bàn giao có tên `AGENT.md` theo yêu cầu. **Đổi tên thành `AGENTS.md` và đặt ở gốc repository** để Codex tự khám phá theo quy ước mặc định. Nếu giữ tên AGENT.md, phải yêu cầu Codex đọc file này rõ ràng; không giả định tự nạp. Không giữ hai bản hướng dẫn độc lập dễ lệch nhau.
+`AGENTS.md` là nguồn luật chung; `CLAUDE.md` nạp file này và `CONTRIBUTING.md`, không duy trì một bộ luật sao chép độc lập hoặc import ngược.
+
+## 0. Đồng bộ luật
+
+- Codex và Claude cùng tuân thủ các quy tắc phạm vi, Git, kiểm thử và bảo mật dưới đây; chi tiết riêng công cụ chỉ áp dụng cho công cụ tương ứng.
+- Khi sửa luật chung, kiểm tra cả `AGENTS.md` lẫn `CLAUDE.md` và giữ `CONTRIBUTING.md`, `docs/BRANCHING.md`, PR template nhất quán. Chỉ sửa file có nội dung/tham chiếu bị ảnh hưởng, không tạo diff vô nghĩa.
+- Bàn giao luật bằng đường dẫn và SHA hoặc diff local; agent đang chạy phải đọc lại trước phần việc phụ thuộc. Quy tắc này không tự cấp quyền spawn agent, commit/push, approve hoặc merge.
 
 ## 1. Mục tiêu và cách làm việc
 
@@ -201,6 +207,16 @@ Khi đã được giao push:
 4. Nếu mở PR đã được giao, PR nhiệm vụ có base `develop`; chỉ PR release được giao riêng mới có base `main`, head `develop`. Không tự approve/merge. Chỉ báo push thành công khi lệnh thành công; chỉ báo CI xanh khi đã kiểm tra kết quả CI thật.
 
 Không tự push tags, dùng `--tags`/`--follow-tags`, xóa nhánh remote hoặc phát hành release khi chỉ được giao push nhánh nhiệm vụ. Việc xóa nhánh nhiệm vụ sau merge và tạo release tag thực hiện khi được giao hoặc nhóm đã cho phép trong phạm vi phiên.
+
+### 8.4. Checklist Issue và pull request
+
+- Mọi PR dùng [template chung](.github/PULL_REQUEST_TEMPLATE.md), liên kết Issue thật và có checklist riêng cho triển khai/kiểm chứng và review/tích hợp. PR nhiệm vụ vào `develop`; PR release vẫn theo mục 8.3.
+- Khi được giao rà soát/cập nhật một PR đang mở, chuẩn hóa mô tả PR đó theo template mới, không chỉ áp dụng cho PR tạo sau này. Giữ nguyên mục tiêu, acceptance criteria, bằng chứng và các việc còn chờ; không tự sửa PR ngoài phạm vi được giao hoặc viết lại lịch sử PR đã đóng/merge.
+- Chỉ đánh dấu `[x]` khi mục đó đã hoàn thành và có bằng chứng phù hợp: file/commit, lệnh kèm kết quả, report hoặc phản hồi review. Chưa làm, bị chặn hoặc chưa xác minh thì giữ `[ ]` và nêu việc còn thiếu. Không áp dụng: ghi `N/A` cùng lý do cạnh ô chưa tích; không tạo việc giả để tích đủ các ô.
+- Kiểm thử local, trạng thái CI, review của thành viên khác và merge là các việc riêng. Không dùng test local để tích CI xanh; không tự tích approve/merge thay reviewer. Chỉ cập nhật trạng thái đã quan sát được trên GitHub.
+- Sau khi sửa code, cập nhật bằng chứng và checklist theo commit mới; chạy lại kiểm tra bị ảnh hưởng. Không bỏ test, giảm coverage hoặc che lỗi để đủ ô tích. Nếu bỏ code không còn dùng cùng test riêng của nó, nêu lý do và kiểm tra hành vi ứng dụng còn lại.
+- Khi bàn giao PR, cập nhật checklist acceptance criteria trong Issue liên quan và liên kết PR, giữ nguyên tiêu chí đã thống nhất. Mục cần owner review/chốt contract phải để chưa tích đến khi có xác nhận; không tự đóng Issue hoặc đánh dấu cả milestone xong chỉ vì có PR.
+- Trước merge: required checks hiện có đạt, ít nhất một thành viên khác approve và các trao đổi chặn được xử lý; người có quyền và được giao mới merge. Checklist là công cụ theo dõi, không thay thế branch protection hoặc quyền review/merge.
 
 ## 9. Kiểm thử và lệnh
 
