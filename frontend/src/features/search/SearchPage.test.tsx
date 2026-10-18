@@ -1,0 +1,290 @@
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { App } from '../../app/App'
+import { deferred, makeRequest, makeResponse } from '../../test/fixtures'
+import type { SearchClient, SearchResponse } from './types'
+
+const api = vi.hoisted(() => ({ mockMode: true, getSearchClient: vi.fn() }))
+
+vi.mock('../../lib/api/search', () => ({
+  getSearchClient: api.getSearchClient,
+  get isMockMode() { return api.mockMode },
+}))
+
+describe('search page behavior', () => {
+  const searchMock = vi.fn<SearchClient['search']>()
+
+  beforeEach(() => {
+    api.mockMode = true
+    api.getSearchClient.mockReset()
+    searchMock.mockReset()
+    searchMock.mockImplementation(async (request) => makeResponse(request.query))
+    api.getSearchClient.mockResolvedValue({ search: searchMock })
+  })
+
+  it('centers the search content without a showcase, sample aside or initial results', () => {
+    render(<App />)
+    const hero = screen.getByRole('region', { name: 'Thư viện 3D' })
+    expect(screen.queryByText('Khám phá thư viện 3D bằng mô tả của bạn.')).not.toBeInTheDocument()
+    expect(within(hero).getByRole('search')).toBeVisible()
+    expect(screen.getByRole('searchbox')).toHaveAttribute('placeholder', 'Tìm asset 3D…')
+    expect(screen.queryByRole('heading', { name: 'Bắt đầu từ một mô tả' })).not.toBeInTheDocument()
+    expect(screen.getByRole('searchbox', { name: 'Bạn đang tìm asset nào?' })).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Tìm kiếm' })).toBeEnabled()
+    expect(screen.queryByLabelText('Chế độ dữ liệu')).not.toBeInTheDocument()
+    expect(screen.queryByText('Chế độ mẫu')).not.toBeInTheDocument()
+    expect(screen.queryByText('Góc trưng bày')).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Kết quả tìm kiếm' })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Số kết quả')).not.toBeInTheDocument()
+    expect(within(screen.getByRole('region', { name: 'Hình ảnh 3D' })).getAllByRole('img')).toHaveLength(6)
+    expect(screen.queryByRole('list', { name: 'Kết quả asset' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Đến nội dung chính' })).toHaveAttribute('href', '#main')
+    expect(api.getSearchClient).not.toHaveBeenCalled()
+  })
+
+  it('blocks an empty query, focuses the field and clears the error when edited', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'Tìm kiếm' }))
+    const query = screen.getByLabelText('Bạn đang tìm asset nào?')
+    expect(screen.getByRole('alert')).toHaveTextContent('1 đến 500 ký tự')
+    expect(query).toHaveFocus()
+    expect(query).toHaveAttribute('aria-invalid', 'true')
+    expect(api.getSearchClient).not.toHaveBeenCalled()
+    await user.type(query, 'ghế')
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(query).toHaveAttribute('aria-invalid', 'false')
+  })
+
+  it('blocks an oversized query without starting a search', async () => {
+    render(<App />)
+    fireEvent.change(screen.getByLabelText('Bạn đang tìm asset nào?'), { target: { value: 'a'.repeat(501) } })
+    fireEvent.submit(screen.getByRole('button', { name: 'Tìm kiếm' }).closest('form')!)
+    expect(screen.getByRole('alert')).toHaveTextContent('1 đến 500 ký tự')
+    expect(searchMock).not.toHaveBeenCalled()
+  })
+
+  it('submits normalized query and limit, shows loading, then renders metadata and session details', async () => {
+    const pending = deferred<SearchResponse>()
+    searchMock.mockReturnValueOnce(pending.promise)
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText('Bạn đang tìm asset nào?'), '  ghế gỗ  ')
+    await user.click(screen.getByRole('button', { name: 'Tìm kiếm' }))
+    expect(screen.getByRole('button', { name: 'Đang tìm…' })).toBeDisabled()
+    expect(screen.getByRole('status')).toHaveTextContent('Đang tìm kết quả cho “ghế gỗ”')
+    expect(screen.getByText('Đang tìm asset…')).toBeVisible()
+    expect(screen.getByRole('region', { name: 'Kết quả tìm kiếm' })).toHaveAttribute('aria-busy', 'true')
+    expect(searchMock.mock.calls[0]?.[0]).toEqual(makeRequest('ghế gỗ', 12))
+    expect(screen.queryByRole('region', { name: 'Hình ảnh 3D' })).not.toBeInTheDocument()
+    expect(searchMock.mock.calls[0]?.[1].aborted).toBe(false)
+    await act(async () => { pending.resolve(makeResponse()); await pending.promise })
+    expect(screen.getByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+    expect(screen.getByRole('status')).toHaveTextContent('Có 1 kết quả cho “ghế gỗ”')
+    expect(screen.getByRole('button', { name: 'Tìm kiếm' })).toBeEnabled()
+    expect(screen.getByText('Thông tin phiên tìm kiếm').closest('details')).not.toHaveAttribute('open')
+    expect(screen.getByText('test-query-01')).not.toBeVisible()
+    await user.click(screen.getByText('Thông tin phiên tìm kiếm'))
+    expect(screen.getByText('test-query-01')).toBeVisible()
+    expect(screen.getByText('test-event-01')).toBeVisible()
+    expect(screen.getByText('test-model')).toBeVisible()
+    expect(screen.getByText('test-index')).toBeVisible()
+    expect(screen.getByText('test-config')).toBeVisible()
+  })
+
+  it('applies the chosen limit to the next search without silently rerunning the current query', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'ghế gỗ{Enter}')
+    await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })
+    await user.selectOptions(screen.getByLabelText('Số kết quả'), '6')
+    expect(searchMock).toHaveBeenCalledTimes(1)
+    await user.click(screen.getByRole('button', { name: 'Tìm kiếm' }))
+    await waitFor(() => expect(searchMock).toHaveBeenCalledTimes(2))
+    expect(searchMock.mock.calls[1][0]).toEqual(makeRequest('ghế gỗ', 6))
+  })
+
+  it('supports keyboard submission from the search button', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.tab()
+    expect(screen.getByRole('link', { name: 'Đến nội dung chính' })).toHaveFocus()
+    await user.click(screen.getByLabelText('Bạn đang tìm asset nào?'))
+    await user.keyboard('chair')
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Xóa truy vấn' })).toHaveFocus()
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Tìm kiếm' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+    expect(searchMock.mock.calls[0]?.[0].query).toBe('chair')
+  })
+
+  it('filters received results locally and preserves the filter when clearing the query', async () => {
+    const response = makeResponse()
+    response.results[0].asset.category = 'Nội thất'
+    response.results.push({
+      ...response.results[0], rank: 2,
+      asset: { ...response.results[0].asset, asset_id: 'test-lamp', name: 'Đèn kiểm thử', category: 'Chiếu sáng' },
+    })
+    searchMock.mockResolvedValueOnce(response)
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'ghế gỗ{Enter}')
+    const filters = await screen.findByRole('group', { name: 'Lọc danh mục trong kết quả' })
+    await user.click(within(filters).getByRole('button', { name: 'Nội thất' }))
+    expect(screen.getAllByRole('listitem')).toHaveLength(1)
+    expect(screen.getByRole('status')).toHaveTextContent('Có 1 kết quả')
+    expect(within(filters).getByRole('button', { name: 'Nội thất' })).toHaveAttribute('aria-pressed', 'true')
+    expect(searchMock).toHaveBeenCalledTimes(1)
+    expect(searchMock.mock.calls[0]?.[0].filters).toEqual({})
+    await user.click(within(filters).getByRole('button', { name: 'Tất cả' }))
+    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+    await user.click(within(filters).getByRole('button', { name: 'Nội thất' }))
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    expect(screen.getByRole('searchbox')).toHaveValue('')
+    expect(screen.getByRole('searchbox')).toHaveFocus()
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Hình ảnh 3D' })).toBeVisible()
+    expect(screen.getByText(/chỉ trong kết quả đã nhận/)).toHaveTextContent('Nội thất')
+    await user.click(screen.getByRole('button', { name: 'Xóa bộ lọc' }))
+    expect(screen.queryByText(/Đang lọc:/)).not.toBeInTheDocument()
+    expect(screen.getByRole('searchbox')).toHaveFocus()
+  })
+
+  it('clears a pending search and ignores its late result', async () => {
+    const pending = deferred<SearchResponse>()
+    searchMock.mockReturnValueOnce(pending.promise)
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'ghế gỗ{Enter}')
+    const signal = searchMock.mock.calls[0]![1]
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    expect(signal.aborted).toBe(true)
+    expect(screen.getByRole('searchbox')).toHaveFocus()
+    await act(async () => { pending.resolve(makeResponse()); await pending.promise })
+    expect(screen.queryByRole('heading', { name: 'Bắt đầu từ một mô tả' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+  })
+
+  it('omits suggestions, usage hints and development scenario controls', () => {
+    render(<App />)
+    expect(screen.queryByText('Thử với')).not.toBeInTheDocument()
+    expect(screen.queryByText('Thử trạng thái giao diện')).not.toBeInTheDocument()
+    expect(screen.getByRole('searchbox')).not.toHaveAttribute('aria-describedby')
+  })
+
+  it('presents empty results as a successful search with guidance', async () => {
+    searchMock.mockResolvedValueOnce({ ...makeResponse(), results: [] })
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText('Bạn đang tìm asset nào?'), 'ghế gỗ')
+    await user.click(screen.getByRole('button', { name: 'Tìm kiếm' }))
+    expect(await screen.findByRole('heading', { name: 'Chưa có asset phù hợp' })).toBeVisible()
+    expect(screen.getByRole('status')).toHaveTextContent('Có 0 kết quả')
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Xóa tìm kiếm và bộ lọc' }))
+    expect(screen.getByRole('searchbox')).toHaveValue('')
+    expect(screen.getByRole('searchbox')).toHaveFocus()
+    expect(screen.queryByText('Thông tin phiên tìm kiếm')).not.toBeInTheDocument()
+  })
+
+  it('retries the previous request after an error', async () => {
+    searchMock.mockRejectedValueOnce(new Error('Sự cố kiểm thử'))
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText('Bạn đang tìm asset nào?'), 'ghế gỗ')
+    await user.click(screen.getByRole('button', { name: 'Tìm kiếm' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Sự cố kiểm thử')
+    expect(api.getSearchClient).toHaveBeenLastCalledWith('success')
+    await user.clear(screen.getByLabelText('Bạn đang tìm asset nào?'))
+    await user.type(screen.getByLabelText('Bạn đang tìm asset nào?'), 'query mới chưa gửi')
+    await user.click(screen.getByRole('button', { name: 'Thử lại' }))
+    expect(await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+    expect(searchMock.mock.calls[1]?.[0]).toEqual(makeRequest())
+    expect(api.getSearchClient).toHaveBeenLastCalledWith('success')
+  })
+
+  it('keeps production errors visible without showing mock controls or results', async () => {
+    api.mockMode = false
+    searchMock.mockRejectedValue(new Error('API chưa sẵn sàng'))
+    const user = userEvent.setup()
+    render(<App />)
+    expect(screen.queryByLabelText('Chế độ dữ liệu')).not.toBeInTheDocument()
+    expect(screen.queryByText('Thử trạng thái giao diện')).not.toBeInTheDocument()
+    await user.type(screen.getByRole('searchbox'), 'Ghế gỗ{Enter}')
+    expect(await screen.findByRole('alert')).toHaveTextContent('API chưa sẵn sàng')
+    expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Thử lại' }))
+    await waitFor(() => expect(searchMock).toHaveBeenCalledTimes(2))
+    expect(screen.getByRole('alert')).toHaveTextContent('API chưa sẵn sàng')
+  })
+
+  it('renders a generic safe error when a client rejects with a non-Error value', async () => {
+    api.getSearchClient.mockRejectedValueOnce('untrusted failure details')
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'Ghế gỗ{Enter}')
+    expect(await screen.findByRole('alert')).toHaveTextContent('Không thể tìm kiếm. Hãy thử lại.')
+    expect(screen.queryByText('untrusted failure details')).not.toBeInTheDocument()
+  })
+
+  it('cancels an older request and ignores its late successful response', async () => {
+    const first = deferred<SearchResponse>()
+    searchMock.mockReturnValueOnce(first.promise)
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'Ghế gỗ{Enter}')
+    const originalSignal = searchMock.mock.calls[0]![1]
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    await user.type(screen.getByRole('searchbox'), 'Thùng gỗ{Enter}')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Có 1 kết quả cho “Thùng gỗ”'))
+    expect(originalSignal.aborted).toBe(true)
+    await act(async () => { first.resolve(makeResponse('Ghế gỗ')); await first.promise })
+    expect(screen.getByRole('status')).toHaveTextContent('Có 1 kết quả cho “Thùng gỗ”')
+    expect(screen.getAllByRole('listitem')).toHaveLength(1)
+  })
+
+  it('ignores errors from a replaced request', async () => {
+    const first = deferred<SearchResponse>()
+    searchMock.mockReturnValueOnce(first.promise)
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'Ghế gỗ{Enter}')
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    await user.type(screen.getByRole('searchbox'), 'Thùng gỗ{Enter}')
+    await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })
+    await act(async () => { first.reject(new Error('Stale error')); await first.promise.catch(() => undefined) })
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('Thùng gỗ')
+  })
+
+  it('does not start a replaced request whose client is still loading', async () => {
+    const firstClient = deferred<SearchClient>()
+    const staleSearch = vi.fn<SearchClient['search']>()
+    api.getSearchClient.mockReturnValueOnce(firstClient.promise)
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'Ghế gỗ{Enter}')
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    await user.type(screen.getByRole('searchbox'), 'Đèn bàn{Enter}')
+    await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })
+    await act(async () => { firstClient.resolve({ search: staleSearch }); await firstClient.promise })
+    expect(staleSearch).not.toHaveBeenCalled()
+    expect(screen.getByRole('status')).toHaveTextContent('Đèn bàn')
+  })
+
+  it('aborts an in-flight request when the page unmounts', async () => {
+    const pending = deferred<SearchResponse>()
+    searchMock.mockReturnValueOnce(pending.promise)
+    const user = userEvent.setup()
+    const { unmount } = render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'Ghế gỗ{Enter}')
+    const signal = searchMock.mock.calls[0]![1]
+    unmount()
+    expect(signal.aborted).toBe(true)
+    await act(async () => { pending.resolve(makeResponse('Ghế gỗ')); await pending.promise })
+  })
+})
