@@ -1,0 +1,4 @@
+# Runtime dependencies; requirements.txt pins the resolved dependency tree.
+fastapi==0.143.3
+uvicorn==0.54.0
+pydantic-settings==2.16.0

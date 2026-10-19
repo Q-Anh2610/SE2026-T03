@@ -13,7 +13,7 @@ SE2026-T03/
 │   │   └── types/
 │   └── tests/e2e/
 ├── backend/
-│   ├── app/{api,schemas,core,db,services,ingestion,embedding,search}/
+│   ├── app/{api,schemas,core,models,db,services,ingestion,embedding,search}/
 │   ├── migrations/
 │   └── tests/{unit,integration}/
 ├── evaluation/{metrics,configs,results,tests}/
@@ -26,6 +26,7 @@ SE2026-T03/
 ├── docs/{requirements,architecture,contracts,adr,guides,evaluation}/
 ├── .github/workflows/
 ├── .env.example
+├── docker-compose.yml
 ├── .gitignore
 ├── AGENTS.md
 ├── CONTRIBUTING.md
@@ -37,4 +38,4 @@ Ký hiệu `{a,b}` trong sơ đồ là các thư mục riêng `a/`, `b/`, không
 
 Frontend → HTTP API; API → services/persistence/search; ingestion và search → encoder chung. Evaluation dùng search của sản phẩm. Metadata nghiệp vụ nằm ở PostgreSQL, vector ở Qdrant; không dùng file trong `data/` thay thế persistence nghiệp vụ.
 
-Không tạo sẵn entrypoints, endpoint giả, migration rỗng, package manifests hoặc lockfiles khi chưa triển khai module. `compose.yaml` ở gốc sẽ được Đoàn Thị Minh Khuê phối hợp Vũ Nguyễn Quỳnh Anh thêm khi có cấu hình khởi chạy thật. Reviewer cụ thể/CODEOWNERS cần GitHub usernames thật; không dùng họ tên thay cho GitHub username.
+Backend có entrypoint `app/main.py`, router `/healthz`, `app/core/config.py`, requirements, tests và Dockerfile. `docker-compose.yml` ở gốc khởi chạy backend thật; Quỳnh Anh phối hợp Khuê khi thêm các dịch vụ khác. Không tạo migration hoặc service giả khi chưa triển khai module. Reviewer cụ thể/CODEOWNERS cần GitHub usernames thật; không dùng họ tên thay cho GitHub username.
