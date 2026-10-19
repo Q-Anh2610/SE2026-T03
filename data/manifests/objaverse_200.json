@@ -1,0 +1,22 @@
+[
+  {
+    "asset_id": "objaverse_001",
+    "source": "objaverse",
+    "source_id": "000021c1729048a1a36720f4c0b6b0c3",
+    "source_url": "https://objaverse.allenai.org/explore?id=000021c1729048a1a36720f4c0b6b0c3",
+    "author": "Sketchfab Artist",
+    "license": "CC-BY-4.0",
+    "name": "Modern Wooden Chair",
+    "description": "Minimalist wooden dining chair for living room",
+    "tags": ["chair", "furniture", "wooden"],
+    "category": "furniture",
+    "thumbnail_path": "https://raw.githubusercontent.com/allenai/objaverse-xl/main/data/thumbnails/000021c1729048a1a36720f4c0b6b0c3.jpg",
+    "model_path": null,
+    "formats": ["glb"],
+    "face_count": 12500,
+    "checksum": null,
+    "ingestion_status": "PENDING",
+    "model_version": null,
+    "index_version": null
+  }
+]
