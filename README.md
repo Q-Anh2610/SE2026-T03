@@ -29,8 +29,14 @@ Semantic Search cho thư viện 3D assets: tìm bằng văn bản/ảnh, sử d�
 
 Xem [sơ đồ thư mục và ranh giới module](docs/STRUCTURE.md), [kế hoạch](ROADMAP.md) và [hướng dẫn Codex](AGENTS.md).
 
-Hiện repository mới có khung thư mục và quy trình Git; chưa có ứng dụng, dependencies hoặc lệnh chạy backend/frontend.
-`compose.yaml` sẽ được bổ sung ở nhiệm vụ CI/Docker khi có cấu hình dịch vụ thực tế; không tạo file Compose rỗng để giả định hệ thống đã chạy được.
+Backend có FastAPI skeleton, `GET /healthz`, cấu hình `.env`, pytest và Dockerfile.
+Xem [hướng dẫn cài đặt, chạy và kiểm thử backend](backend/README.md).
+Backend mock có 5 endpoints tại `/api/v1` để phát triển UI, xem
+[API contract v1](docs/contracts/api-v1.md) và `docs/openapi.json`; chờ frontend review.
+`docker-compose.yml` khởi chạy backend và PostgreSQL. Xem
+[hướng dẫn ORM, Alembic và seed](docs/guides/database.md).
+Qdrant và tìm kiếm semantic thật chưa được triển khai; các API mock chưa ghi database.
+Xem [hướng dẫn frontend](frontend/README.md) cho giao diện hiện có.
 
 ## Quy trình Git
 

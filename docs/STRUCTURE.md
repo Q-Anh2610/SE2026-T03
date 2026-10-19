@@ -13,8 +13,9 @@ SE2026-T03/
 │   │   └── types/
 │   └── tests/e2e/
 ├── backend/
-│   ├── app/{api,schemas,core,db,services,ingestion,embedding,search}/
-│   ├── migrations/
+│   ├── app/{api,schemas,core,models,db,services,ingestion,embedding,search}/
+│   ├── alembic/versions/
+│   ├── alembic.ini
 │   └── tests/{unit,integration}/
 ├── evaluation/{metrics,configs,results,tests}/
 ├── data/
@@ -26,6 +27,7 @@ SE2026-T03/
 ├── docs/{requirements,architecture,contracts,adr,guides,evaluation}/
 ├── .github/workflows/
 ├── .env.example
+├── docker-compose.yml
 ├── .gitignore
 ├── AGENTS.md
 ├── CONTRIBUTING.md
@@ -37,4 +39,4 @@ Ký hiệu `{a,b}` trong sơ đồ là các thư mục riêng `a/`, `b/`, không
 
 Frontend → HTTP API; API → services/persistence/search; ingestion và search → encoder chung. Evaluation dùng search của sản phẩm. Metadata nghiệp vụ nằm ở PostgreSQL, vector ở Qdrant; không dùng file trong `data/` thay thế persistence nghiệp vụ.
 
-Không tạo sẵn entrypoints, endpoint giả, migration rỗng, package manifests hoặc lockfiles khi chưa triển khai module. `compose.yaml` ở gốc sẽ được Đoàn Thị Minh Khuê phối hợp Vũ Nguyễn Quỳnh Anh thêm khi có cấu hình khởi chạy thật. Reviewer cụ thể/CODEOWNERS cần GitHub usernames thật; không dùng họ tên thay cho GitHub username.
+Backend có entrypoint `app/main.py`, router `/healthz`, settings, ORM models, Alembic, seed, tests và Dockerfile. `docker-compose.yml` khởi chạy backend và PostgreSQL. Alembic dùng `backend/alembic` theo Issue #8, thay khung `backend/migrations` ban đầu. Xem `docs/guides/database.md` để chạy migration/seed. Quỳnh Anh phối hợp Khuê khi thêm dịch vụ; reviewer cụ thể/CODEOWNERS cần GitHub usernames thật.

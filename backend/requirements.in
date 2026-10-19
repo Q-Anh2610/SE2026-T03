@@ -1,0 +1,9 @@
+# Runtime dependencies; requirements.txt pins the resolved dependency tree.
+fastapi==0.143.3
+uvicorn==0.54.0
+pydantic-settings==2.16.0
+SQLAlchemy==2.1.5
+alembic==1.20.0
+psycopg[binary]==3.3.6
+python-multipart==0.0.32
+Pillow==13.0.0
