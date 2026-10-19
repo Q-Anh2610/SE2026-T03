@@ -20,6 +20,8 @@ markupsafe==3.0.4
     # via mako
 opentelemetry-api==1.45.1
     # via fastapi
+pillow==13.0.0
+    # via -r backend/requirements.in
 psycopg==3.3.6
     # via -r backend/requirements.in
 psycopg-binary==3.3.6 ; implementation_name != 'pypy'
@@ -34,6 +36,8 @@ pydantic-settings==2.16.0
     # via -r backend/requirements.in
 python-dotenv==1.2.4
     # via pydantic-settings
+python-multipart==0.0.32
+    # via -r backend/requirements.in
 sqlalchemy==2.1.5
     # via
     #   -r backend/requirements.in

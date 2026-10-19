@@ -21,6 +21,23 @@ Linux/macOS: tạo bằng `python3.13 -m venv .venv`, dùng `.venv/bin/python`.
 - `http://127.0.0.1:8000/docs`: Swagger UI.
 - Nhấn Ctrl+C để dừng Uvicorn.
 
+## API contract mock (Issue #9)
+
+Swagger `/docs` có đủ GET assets/list-detail, POST search/text, search/image và
+feedback dưới `/api/v1`. Xem [contract mock v1](../docs/contracts/api-v1.md) và
+`docs/openapi.json`. Text chỉ khớp từ khóa fixture, ảnh trả dữ liệu mẫu cố định;
+feedback lưu trong RAM, không ghi PostgreSQL. Các thay đổi contract chờ Duy review.
+
+Mock chỉ bật khi `APP_MOCK_API_ENABLED=true` và `APP_ENV` khác `production`.
+Mặc định CORS cho Vite localhost:5173; cấu hình `APP_CORS_ORIGINS` bằng mảng JSON.
+Giữ `APP_DEBUG=false` để lỗi 500 dùng JSON chuẩn thay traceback debug.
+
+Export lại spec sau khi sửa schemas/routes, từ backend/:
+
+```powershell
+.\.venv\Scripts\python.exe -m app.export_openapi
+```
+
 `/healthz` là liveness probe, không kết nối DB, Qdrant hoặc nạp model;
 response thành công không có nghĩa các thành phần này đã sẵn sàng.
 
@@ -122,4 +139,5 @@ khi được triển khai; không cài thêm dependencies ML chỉ để chạy 
 Ingestion và search tái sử dụng encoder trong `app/embedding/`. Router giữ mỏng;
 không thêm pipeline thứ hai vào API. Schema PostgreSQL, migration đầu và seed
 được mô tả tại [hướng dẫn database](../docs/guides/database.md). Chưa triển khai
-authentication, search hoặc API nghiệp vụ; giữ code có sẵn của các thành viên.
+authentication hoặc tìm kiếm semantic thật; API mock của Issue #9 chưa ghi
+PostgreSQL. Giữ code có sẵn của các thành viên.
