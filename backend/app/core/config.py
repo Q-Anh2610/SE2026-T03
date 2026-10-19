@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,3 +18,9 @@ class Settings(BaseSettings):
     name: str = Field(default="3D Asset Semantic Search API", min_length=1)
     env: Literal["development", "test", "production"] = "development"
     debug: bool = False
+    database_url: SecretStr | None = Field(default=None, validation_alias="DATABASE_URL")
+    postgres_host: str = Field(default="localhost", validation_alias="POSTGRES_HOST")
+    postgres_port: int = Field(default=5432, ge=1, le=65535, validation_alias="POSTGRES_PORT")
+    postgres_db: str = Field(default="semantic_search", min_length=1, validation_alias="POSTGRES_DB")
+    postgres_user: str = Field(default="semantic", min_length=1, validation_alias="POSTGRES_USER")
+    postgres_password: SecretStr | None = Field(default=None, validation_alias="POSTGRES_PASSWORD")

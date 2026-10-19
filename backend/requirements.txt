@@ -1,3 +1,5 @@
+alembic==1.20.0
+    # via -r backend/requirements.in
 annotated-doc==0.0.5
     # via fastapi
 annotated-types==0.8.0
@@ -12,8 +14,16 @@ h11==0.16.0
     # via uvicorn
 idna==3.20
     # via anyio
+mako==1.4.3
+    # via alembic
+markupsafe==3.0.4
+    # via mako
 opentelemetry-api==1.45.1
     # via fastapi
+psycopg==3.3.6
+    # via -r backend/requirements.in
+psycopg-binary==3.3.6 ; implementation_name != 'pypy'
+    # via psycopg
 pydantic==2.14.1
     # via
     #   fastapi
@@ -24,21 +34,29 @@ pydantic-settings==2.16.0
     # via -r backend/requirements.in
 python-dotenv==1.2.4
     # via pydantic-settings
+sqlalchemy==2.1.5
+    # via
+    #   -r backend/requirements.in
+    #   alembic
 starlette==1.9.0
     # via fastapi
 typing-extensions==4.16.0
     # via
+    #   alembic
     #   anyio
     #   fastapi
     #   opentelemetry-api
     #   pydantic
     #   pydantic-core
     #   pydantic-settings
+    #   sqlalchemy
     #   typing-inspection
 typing-inspection==0.4.4
     # via
     #   fastapi
     #   pydantic
     #   pydantic-settings
+tzdata==2026.5 ; sys_platform == 'win32'
+    # via psycopg
 uvicorn==0.54.0
     # via -r backend/requirements.in

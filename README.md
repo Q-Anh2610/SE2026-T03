@@ -31,7 +31,8 @@ Xem [sơ đồ thư mục và ranh giới module](docs/STRUCTURE.md), [kế ho�
 
 Backend có FastAPI skeleton, `GET /healthz`, cấu hình `.env`, pytest và Dockerfile.
 Xem [hướng dẫn cài đặt, chạy và kiểm thử backend](backend/README.md).
-`docker-compose.yml` khởi chạy backend; PostgreSQL, Qdrant và API nghiệp vụ chưa nằm trong skeleton này.
+`docker-compose.yml` khởi chạy backend và PostgreSQL; Qdrant và API nghiệp vụ chưa được triển khai.
+Xem [hướng dẫn ORM, Alembic và seed](docs/guides/database.md).
 Xem [hướng dẫn frontend](frontend/README.md) cho giao diện hiện có.
 
 ## Quy trình Git
