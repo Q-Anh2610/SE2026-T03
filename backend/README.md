@@ -68,7 +68,8 @@ Từ `backend/` sau khi cài requirements-dev:
 
 Tests kiểm tra health status/body/content type, HTTP method không hỗ trợ,
 OpenAPI và settings: dotenv UTF-8, thứ tự ưu tiên, default và validation.
-Không cần Docker, database, dataset hoặc tải model để chạy test này.
+Unit tests không cần DB/model; integration tests dùng PostgreSQL thật qua
+`TEST_DATABASE_URL`. Xem [hướng dẫn database](../docs/guides/database.md).
 
 ## Docker
 
@@ -83,7 +84,9 @@ Invoke-RestMethod http://127.0.0.1:8000/healthz
 
 Nếu đổi `BACKEND_PORT` trong `.env`, dùng cổng đó trong URL.
 Container chạy user non-root, có healthcheck và publish lên localhost.
-Compose hiện chỉ khởi chạy backend; các dịch vụ khác thuộc đầu việc tiếp theo.
+Compose khởi chạy backend và PostgreSQL 17. Bổ sung các biến POSTGRES_* từ
+`.env.example` vào `.env` có sẵn, đổi mật khẩu mẫu trước khi chạy. Backend chờ
+PostgreSQL healthy; migration và seed chạy riêng theo hướng dẫn database.
 
 ```powershell
 docker compose -f docker-compose.yml logs backend
@@ -124,15 +127,17 @@ khi được triển khai; không cài thêm dependencies ML chỉ để chạy 
 | `app/api/` | Router, validation đầu vào, gọi nghiệp vụ | Vũ Nguyễn Quỳnh Anh |
 | `app/schemas/` | Request/response DTO và contract | Vũ Nguyễn Quỳnh Anh |
 | `app/core/` | Cấu hình dùng chung | Vũ Nguyễn Quỳnh Anh |
-| `app/models/` | DB models cho đầu việc schema tiếp theo | Vũ Nguyễn Quỳnh Anh |
+| `app/models/` | ORM Asset, SearchEvent, Feedback | Vũ Nguyễn Quỳnh Anh |
 | `app/db/` | Kết nối PostgreSQL và persistence | Vũ Nguyễn Quỳnh Anh |
 | `app/services/` | Nghiệp vụ và điều phối | Vũ Nguyễn Quỳnh Anh |
 | `app/ingestion/` | Source adapter, download, normalize, retry, dedup | Trịnh Thị Thu Huyền |
 | `app/embedding/` | Encoder và preprocessing dùng chung | Lê Thị Linh Chi |
 | `app/search/` | Vector store, retrieval, filters, fusion | Lê Thị Linh Chi |
-| `migrations/` | Migrations có phiên bản; nằm ngoài `app/` | Vũ Nguyễn Quỳnh Anh |
+| `alembic/` | Migrations có phiên bản; cấu hình tại alembic.ini | Vũ Nguyễn Quỳnh Anh |
 | `tests/unit/`, `tests/integration/` | Tests module và tích hợp | Chủ module + Đoàn Thị Minh Khuê |
 
 Ingestion và search tái sử dụng encoder trong `app/embedding/`. Router giữ mỏng;
-không thêm pipeline thứ hai vào API. Skeleton không triển khai schema DB,
-authentication, search hoặc API nghiệp vụ. Giữ các thư mục/code có sẵn của nhóm.
+không thêm pipeline thứ hai vào API. Schema PostgreSQL, migration đầu và seed
+được mô tả tại [hướng dẫn database](../docs/guides/database.md). Chưa triển khai
+authentication hoặc tìm kiếm semantic thật; API mock của Issue #9 chưa ghi
+PostgreSQL. Giữ code có sẵn của các thành viên.
