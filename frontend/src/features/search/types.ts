@@ -1,6 +1,15 @@
+export interface AssetFilters {
+  category?: string | null
+  license?: string | null
+  format?: string | null
+  face_count_min?: number | null
+  face_count_max?: number | null
+}
+
 export interface SearchRequest {
   query: string
-  filters: Record<string, never>
+  filters: AssetFilters
+  page?: number
   limit: number
 }
 
@@ -28,6 +37,7 @@ export interface SearchResult {
 }
 
 export interface SearchResponse {
+  pagination: { page: number; limit: number; total: number; pages: number; has_next: boolean }
   query_id: string
   search_event_id: string
   query: string

@@ -28,9 +28,11 @@ export function createHttpSearchClient(baseUrl = ''): SearchClient {
         throw new Error('Không kết nối được dịch vụ tìm kiếm. Kiểm tra kết nối rồi thử lại.', { cause: error })
       }
       if (!response.ok) {
-        throw new Error(response.status === 422
-          ? 'API chưa chấp nhận yêu cầu này. Kiểm tra contract và nội dung tìm kiếm.'
-          : 'Dịch vụ tìm kiếm chưa sẵn sàng. Hãy thử lại sau.')
+        throw new Error(response.status === 400 || response.status === 422
+          ? 'Yêu cầu tìm kiếm không hợp lệ. Kiểm tra nội dung và bộ lọc.'
+          : response.status === 404
+            ? 'Không tìm thấy dịch vụ tìm kiếm. Kiểm tra địa chỉ API.'
+            : 'Dịch vụ tìm kiếm chưa sẵn sàng. Hãy thử lại sau.')
       }
       let payload: unknown
       try {

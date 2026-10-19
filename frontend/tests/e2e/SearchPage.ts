@@ -12,7 +12,7 @@ export class SearchPage {
   async showAssetDetails() { await this.results.first().getByText('Chi tiết', { exact: true }).click() }
   async search(value: string) { await this.query.fill(value); await this.query.press('Enter') }
   async clearQuery() { await this.page.getByRole('button', { name: 'Xóa truy vấn' }).click() }
-  async filter(value: string) { await this.page.getByRole('group', { name: 'Lọc danh mục trong kết quả' }).getByRole('button', { name: value, exact: true }).click() }
+  async filter(value: string) { await this.page.getByRole('group', { name: 'Lọc danh mục trong trang' }).getByRole('button', { name: value, exact: true }).click() }
   async clearFilter() { await this.page.getByRole('button', { name: 'Xóa bộ lọc' }).click() }
   async retry() { await this.page.getByRole('button', { name: 'Thử lại' }).click() }
   async chooseLimit(value: string) { await this.page.getByLabel('Số kết quả').selectOption(value) }

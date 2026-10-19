@@ -8,10 +8,26 @@ export function validateRequest(request: SearchRequest): SearchRequest {
   if (!Number.isInteger(request.limit) || request.limit < 1 || request.limit > 50) {
     throw new Error('Số kết quả phải là số nguyên từ 1 đến 50.')
   }
-  if (!isRecord(request.filters) || Object.keys(request.filters).length > 0) {
-    throw new Error('Bộ lọc chưa được hỗ trợ trong bản tuần 1.')
+  const page = request.page === undefined ? 1 : request.page
+  if (!Number.isSafeInteger(page) || page < 1) throw new Error('Trang phải là số nguyên từ 1.')
+  validateFilters(request.filters)
+  const filters = Object.fromEntries(Object.entries(request.filters).map(([key, value]) =>
+    [key, typeof value === 'string' ? value.trim() : value]))
+  return { ...request, query, page, filters }
+}
+
+export function validateFilters(filters: SearchRequest['filters']): void {
+  const invalid = () => new Error('Bộ lọc không hợp lệ. Kiểm tra danh mục, định dạng, license và khoảng số mặt.')
+  if (!isRecord(filters)) throw invalid()
+  for (const [key, value] of Object.entries(filters)) {
+    if (!['category', 'license', 'format', 'face_count_min', 'face_count_max'].includes(key)) throw invalid()
+    if (value === null) continue
+    if (['category', 'license', 'format'].includes(key)) {
+      if (typeof value !== 'string' || !value.trim()) throw invalid()
+    } else if (!Number.isSafeInteger(value) || (value as number) < 0) throw invalid()
   }
-  return { ...request, query }
+  if (filters.face_count_min != null && filters.face_count_max != null
+    && filters.face_count_min > filters.face_count_max) throw invalid()
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -61,6 +77,13 @@ export function parseResponse(value: unknown, request: SearchRequest): SearchRes
     ) || !Array.isArray(value.results) || value.results.length > request.limit) {
     throw invalid()
   }
+  const pagination = value.pagination
+  if (!isRecord(pagination) || pagination.page !== (request.page ?? 1) || pagination.limit !== request.limit
+    || !Number.isSafeInteger(pagination.total) || (pagination.total as number) < 0
+    || pagination.pages !== Math.ceil((pagination.total as number) / request.limit)
+    || pagination.has_next !== ((request.page ?? 1) < (pagination.pages as number))
+    || value.results.length !== Math.min(request.limit, Math.max(0,
+      (pagination.total as number) - ((request.page ?? 1) - 1) * request.limit))) throw invalid()
   const identifiers = new Set<string>()
   for (const [position, result] of value.results.entries()) {
     if (!isRecord(result) || result.rank !== position + 1 || !isAsset(result.asset)
