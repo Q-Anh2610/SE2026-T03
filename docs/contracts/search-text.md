@@ -1,4 +1,8 @@
-# Contract nháp: tìm kiếm văn bản W1
+# Contract nháp W1 (đã có bản đối chiếu Issue #9)
+
+> Khi tích hợp backend PR #24, dùng [đối chiếu frontend–backend v1](frontend-api-v1.md).
+> Bản nháp dưới đây giữ làm tham chiếu W1; quy ước filters chỉ `{}`, thiếu pagination
+> và lỗi 422 đã được thay bằng filters có kiểu, pagination và validation 400 trong #9.
 
 > Bản W1 bên dưới được giữ để đối chiếu frontend hiện có. Backend mock Issue #9
 > triển khai tại [API contract v1](api-v1.md) và `docs/openapi.json`: validation

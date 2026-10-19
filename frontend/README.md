@@ -54,8 +54,8 @@ Unit/component test kiểm tra validator, mock, HTTP client, loading/error/retry
 ## Contract và phạm vi
 
 - [Draft contract canonical](../docs/contracts/search-text.md), DTO tại `src/features/search/types.ts`. `src/types/search.ts` chỉ re-export để các import cũ dùng cùng một nguồn.
-- Query 1–500 Unicode code points sau trim; limit 1–50 (UI chọn 6/12/24). Ban đầu idle; không gửi query trống.
-- Danh mục chỉ lọc kết quả đã nhận; chưa gửi filters HTTP. Nhãn đang lọc và số hiển thị/tổng kết quả thể hiện phạm vi này.
+- Query 1–500 Unicode code points sau trim; limit 1–50 (UI chọn 2/6/12/24). Ban đầu idle; không gửi query trống.
+- Nhóm danh mục chỉ lọc trang đã nhận; mục Bộ lọc gửi filters HTTP theo contract #9. Nhãn đang lọc và số hiển thị/tổng kết quả thể hiện phạm vi này.
 - Xóa truy vấn giữ danh mục và trả focus về ô nhập. Nút “Xóa bộ lọc” xóa danh mục độc lập. Reset ở empty state xóa cả hai.
 - Preview thật dùng `thumbnail_url`, lazy loading và fallback khi lỗi; hình ghế ở intro là minh họa giao diện tự tạo. Metadata thiếu để null, không bịa license/tác giả/số mặt. `description`/`category` null hiện “Chưa có thông tin”.
 - Chưa có tìm ảnh, detail, feedback, backend/index thật hoặc contract được backend owner chốt.
@@ -71,3 +71,28 @@ Unit/component test kiểm tra validator, mock, HTTP client, loading/error/retry
 Source HTTP/contract và các test tương ứng được tái sử dụng từ nhánh `feat/6-w1-search-mock`, kết hợp với bố cục và thiết kế mới. Bản UI đang được review tại [PR #18](https://github.com/Q-Anh2610/SE2026-T03/pull/18), chưa merge. Xem [kế hoạch kiểm thử UI](tests/UI_ACCEPTANCE.md).
 
 Thanh tìm kiếm giới hạn 640px, gồm ô nhập, nút tìm và biểu tượng xóa khi có query. Không hiển thị gợi ý mẫu, hướng dẫn độ dài hoặc bộ chọn trạng thái phát triển; lỗi validation chỉ xuất hiện khi nhập không hợp lệ. Bộ chọn số kết quả chỉ xuất hiện cạnh tiêu đề kết quả sau khi gửi truy vấn.
+# Tích hợp contract Issue #9
+
+Client hỗ trợ validation HTTP 400 (422 chỉ tương thích bản cũ), `page`/`limit` và
+`pagination`. Bộ lọc trong mục **Bộ lọc** gửi category, format, license và khoảng số
+mặt lên API; các trường trống được bỏ. Rank bắt đầu từ 1 mỗi trang. Nút chuyển trang
+giữ request đã gửi, không dùng query hoặc limit đang chỉnh. Nhóm danh mục trên kết
+quả chỉ lọc cục bộ trong trang; muốn lọc toàn bộ tập kết quả dùng mục Bộ lọc.
+Chi tiết và giới hạn: [đối chiếu contract](../docs/contracts/frontend-api-v1.md).
+
+## Kiểm thử với backend thật của PR #24
+
+Trước khi backend merge, dùng checkout riêng của commit
+`575cee46150c76c34d1b080d099654ae07fb09fd`, cài `backend/requirements-dev.txt`
+vào virtualenv Python 3.13. Từ frontend/:
+
+```bash
+BACKEND_CONTRACT_DIR=/duong-dan/checkout/backend BACKEND_PYTHON=/duong-dan/venv/bin/python npm run test:integration
+```
+
+Sau khi backend có trong nhánh tích hợp, biến `BACKEND_CONTRACT_DIR` mặc định là
+`../backend`; `BACKEND_PYTHON` mặc định `python3`. Bộ test tự khởi động/dừng FastAPI
+và Vite trên 5196/5197, không dùng dịch vụ chia sẻ. Dùng
+`PLAYWRIGHT_BROWSER_CHANNEL=chromium` nếu cài Chromium qua Playwright.
+Tests chạy frontend–FastAPI HTTP thật nhưng backend trả fixture; không đo semantic
+retrieval. Upload và feedback được kiểm tra qua HTTP, chưa có UI cho hai tính năng.
