@@ -14,6 +14,8 @@ idna==3.20
     # via anyio
 opentelemetry-api==1.45.1
     # via fastapi
+pillow==13.0.0
+    # via -r backend/requirements.in
 pydantic==2.14.1
     # via
     #   fastapi
@@ -24,6 +26,8 @@ pydantic-settings==2.16.0
     # via -r backend/requirements.in
 python-dotenv==1.2.4
     # via pydantic-settings
+python-multipart==0.0.32
+    # via -r backend/requirements.in
 starlette==1.9.0
     # via fastapi
 typing-extensions==4.16.0

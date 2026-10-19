@@ -1,5 +1,11 @@
 # Contract nháp: tìm kiếm văn bản W1
 
+> Bản W1 bên dưới được giữ để đối chiếu frontend hiện có. Backend mock Issue #9
+> triển khai tại [API contract v1](api-v1.md) và `docs/openapi.json`: validation
+> dùng 400 thay 422, bổ sung pagination/mock và filters tùy chọn. Các điểm thay đổi
+> đang chờ Nguyễn Văn Duy review; phần ghi "chưa có endpoint" bên dưới mô tả thời
+> điểm lập nháp W1, không phải trạng thái backend mock hiện tại.
+
 Trạng thái: **đề xuất cho mock frontend của Issue [#6](https://github.com/Q-Anh2610/SE2026-T03/issues/6)**. Nguyễn Văn Duy triển khai mock; Vũ Nguyễn Quỳnh Anh cần review trước khi chốt schema/OpenAPI backend. Chưa có endpoint backend, encoder hoặc index thật. Contract này không thay thế OpenAPI khi backend được triển khai.
 
 ## Request

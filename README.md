@@ -31,6 +31,8 @@ Xem [sơ đồ thư mục và ranh giới module](docs/STRUCTURE.md), [kế ho�
 
 Backend có FastAPI skeleton, `GET /healthz`, cấu hình `.env`, pytest và Dockerfile.
 Xem [hướng dẫn cài đặt, chạy và kiểm thử backend](backend/README.md).
+Backend mock có 5 endpoints tại `/api/v1` để phát triển UI, xem
+[API contract v1](docs/contracts/api-v1.md) và `docs/openapi.json`; chờ frontend review.
 `docker-compose.yml` khởi chạy backend; PostgreSQL, Qdrant và API nghiệp vụ chưa nằm trong skeleton này.
 Xem [hướng dẫn frontend](frontend/README.md) cho giao diện hiện có.
 

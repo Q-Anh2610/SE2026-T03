@@ -18,3 +18,7 @@ class Settings(BaseSettings):
     name: str = Field(default="3D Asset Semantic Search API", min_length=1)
     env: Literal["development", "test", "production"] = "development"
     debug: bool = False
+    mock_api_enabled: bool = True
+    cors_origins: list[str] = Field(default_factory=lambda: [
+        "http://localhost:5173", "http://127.0.0.1:5173",
+    ])
