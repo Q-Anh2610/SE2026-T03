@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { AssetCard } from './AssetCard'
 import { makeResponse } from '../../test/fixtures'
 
@@ -98,5 +98,17 @@ describe('asset result card', () => {
     expect(placeholders[1]).not.toBeVisible()
     fireEvent.click(screen.getByText('Chi tiết'))
     for (const placeholder of placeholders) expect(placeholder).toBeVisible()
+  })
+
+  it('renders a catalog asset without rank/retrieval fields and triggers onOpenDetail', async () => {
+    const user = userEvent.setup()
+    const onOpenDetail = vi.fn()
+    const asset = makeResponse().results[0]!.asset
+    render(<ul><AssetCard asset={asset} onOpenDetail={onOpenDetail} /></ul>)
+    expect(screen.queryByText(/Hạng/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Nguồn truy xuất/)).not.toBeInTheDocument()
+    const openBtn = screen.getByRole('button', { name: `Xem chi tiết ${asset.name}` })
+    await user.click(openBtn)
+    expect(onOpenDetail).toHaveBeenCalledWith(asset.asset_id)
   })
 })

@@ -28,7 +28,7 @@ Mở URL Vite in trong terminal, mặc định `http://localhost:5173`. Chế đ
 npm run dev:api
 ```
 
-Chế độ API gọi `POST /api/v1/search/text` cùng origin, hoặc origin `VITE_API_BASE_URL` trong `.env.local` (xem `.env.example`). Backend khác origin cần CORS/reverse proxy; hiện chưa có backend thực thi. Không tự fallback mock khi HTTP lỗi.
+Chế độ API gọi `POST /api/v1/search/text`, `GET /api/v1/assets` và `GET /api/v1/assets/{asset_id}` cùng origin, hoặc origin `VITE_API_BASE_URL` trong `.env.local` (xem `.env.example`). Backend khác origin cần CORS/reverse proxy. Không tự fallback mock khi HTTP lỗi.
 
 `npm run build` luôn dùng HTTP API ở production; `npm run preview` chỉ phục vụ bản build đã tạo. Preview sẽ hiện lỗi nếu chưa có backend, thay vì giả kết quả thành công.
 
@@ -49,49 +49,47 @@ npx playwright install chromium
 PLAYWRIGHT_BROWSER_CHANNEL=chromium npm run test:e2e
 ```
 
-Unit/component test kiểm tra validator, mock, HTTP client, loading/error/retry, timeout, request race, metadata null, ảnh lỗi, bộ lọc và focus. E2E chạy desktop/mobile, giả lập HTTP để kiểm tra UI API và production; không chứng minh backend thật hoặc retrieval quality. Report/trace/coverage là output local, được ignore.
+Unit/component test kiểm tra validator, mock, HTTP client, loading/error/retry, timeout, request race, metadata null, ảnh lỗi, bộ lọc, danh sách asset, chi tiết asset (kể cả 404) và focus. E2E chạy desktop/mobile, giả lập HTTP để kiểm tra UI API và production; không chứng minh backend thật hoặc retrieval quality. Report/trace/coverage là output local, được ignore.
 
 ## Contract và phạm vi
 
-- [Draft contract canonical](../docs/contracts/search-text.md), DTO tại `src/features/search/types.ts`. `src/types/search.ts` chỉ re-export để các import cũ dùng cùng một nguồn.
-- Query 1–500 Unicode code points sau trim; limit 1–50 (UI chọn 2/6/12/24). Ban đầu idle; không gửi query trống.
-- Nhóm danh mục chỉ lọc trang đã nhận; mục Bộ lọc gửi filters HTTP theo contract #9. Nhãn đang lọc và số hiển thị/tổng kết quả thể hiện phạm vi này.
-- Xóa truy vấn giữ danh mục và trả focus về ô nhập. Nút “Xóa bộ lọc” xóa danh mục độc lập. Reset ở empty state xóa cả hai.
+- [Contract backend](../docs/contracts/api-v1.md) và [Draft contract canonical](../docs/contracts/search-text.md), DTO tại `src/features/search/types.ts`. `src/types/search.ts` chỉ re-export để các import cũ dùng cùng một nguồn.
+- Query 1–500 Unicode code points sau trim; limit 1–50 (UI chọn 2/6/12/24). Không gửi query trống cho text search; nút “Danh sách asset” hoặc gửi bộ lọc khi chưa nhập query sẽ gọi `GET /api/v1/assets`.
+- Nhóm danh mục trên kết quả chỉ lọc trang đã nhận; mục Bộ lọc gửi filters HTTP (`category`, `format`, `license`, `face_count_min`, `face_count_max`) theo contract #9 và có nút “Đặt lại bộ lọc API”. Nhãn đang lọc và số hiển thị/tổng kết quả thể hiện phạm vi này.
+- Xóa truy vấn giữ danh mục cục bộ và trả focus về ô nhập. Nút “Xóa bộ lọc” xóa danh mục cục bộ độc lập. Reset ở empty state xóa cả truy vấn lẫn bộ lọc.
+- Mở chi tiết asset từ thẻ trong danh sách hoặc kết quả tìm kiếm sẽ gọi `GET /api/v1/assets/{asset_id}`, hiển thị đầy đủ metadata thực tế, xử lý loading/404/lỗi mạng/retry/ảnh hỏng và quay lại giữ nguyên filters, `page` và `limit`.
 - Preview thật dùng `thumbnail_url`, lazy loading và fallback khi lỗi; hình ghế ở intro là minh họa giao diện tự tạo. Metadata thiếu để null, không bịa license/tác giả/số mặt. `description`/`category` null hiện “Chưa có thông tin”.
-- Chưa có tìm ảnh, detail, feedback, backend/index thật hoặc contract được backend owner chốt.
+- Chưa có UI tìm ảnh hoặc UI gửi feedback.
 
 ## Cấu trúc
 
 - `src/app/`: App/layout và CSS.
 - `src/features/search/`: page/card, DTO, validation và mock development.
-- `src/lib/api/`: HTTP client, timeout và kiểm tra response.
-- `src/features/assets/`, `feedback/`, `admin/`, `src/components/`: vị trí module theo phân công; chỉ triển khai khi nhiệm vụ cần.
+- `src/features/assets/`: màn hình chi tiết asset (`AssetDetailView`).
+- `src/lib/api/`: HTTP client dùng chung (`http.ts`), client search/asset (`search.ts`), timeout và kiểm tra response.
+- `src/features/feedback/`, `admin/`, `src/components/`: vị trí module theo phân công; chỉ triển khai khi nhiệm vụ cần.
 - Tests nằm cạnh source và tại `tests/`; E2E dùng Page Object trong `tests/e2e/`.
 
-Source HTTP/contract và các test tương ứng được tái sử dụng từ nhánh `feat/6-w1-search-mock`, kết hợp với bố cục và thiết kế mới. Bản UI đang được review tại [PR #18](https://github.com/Q-Anh2610/SE2026-T03/pull/18), chưa merge. Xem [kế hoạch kiểm thử UI](tests/UI_ACCEPTANCE.md).
+Source HTTP/contract và các test tương ứng được tái sử dụng từ nhánh `feat/6-w1-search-mock`, kết hợp với bố cục và thiết kế mới. Xem [kế hoạch kiểm thử UI](tests/UI_ACCEPTANCE.md).
 
-Thanh tìm kiếm giới hạn 640px, gồm ô nhập, nút tìm và biểu tượng xóa khi có query. Không hiển thị gợi ý mẫu, hướng dẫn độ dài hoặc bộ chọn trạng thái phát triển; lỗi validation chỉ xuất hiện khi nhập không hợp lệ. Bộ chọn số kết quả chỉ xuất hiện cạnh tiêu đề kết quả sau khi gửi truy vấn.
-# Tích hợp contract Issue #9
+Thanh tìm kiếm giới hạn 640px, gồm ô nhập, nút tìm và biểu tượng xóa khi có query. Không hiển thị gợi ý mẫu, hướng dẫn độ dài hoặc bộ chọn trạng thái phát triển; lỗi validation chỉ xuất hiện khi nhập không hợp lệ. Bộ chọn số kết quả xuất hiện cạnh tiêu đề khi duyệt danh sách hoặc kết quả tìm kiếm.
+# Tích hợp contract Issue #9 & W2/M1
 
-Client hỗ trợ validation HTTP 400 (422 chỉ tương thích bản cũ), `page`/`limit` và
-`pagination`. Bộ lọc trong mục **Bộ lọc** gửi category, format, license và khoảng số
-mặt lên API; các trường trống được bỏ. Rank bắt đầu từ 1 mỗi trang. Nút chuyển trang
-giữ request đã gửi, không dùng query hoặc limit đang chỉnh. Nhóm danh mục trên kết
-quả chỉ lọc cục bộ trong trang; muốn lọc toàn bộ tập kết quả dùng mục Bộ lọc.
+Client hỗ trợ `POST /api/v1/search/text`, `GET /api/v1/assets` và `GET /api/v1/assets/{asset_id}`, validation HTTP 400 (422 chỉ tương thích bản cũ), 404 `ASSET_NOT_FOUND`, `page`/`limit` và `pagination`. Bộ lọc trong mục **Bộ lọc** gửi `category`, `format`, `license` và khoảng số mặt lên API; các trường trống được bỏ. Thay bộ lọc, đặt lại bộ lọc hoặc đổi `limit` khi duyệt danh sách đều đưa về trang 1. Rank trong kết quả tìm kiếm bắt đầu từ 1 mỗi trang. Nút chuyển trang giữ request đã gửi; quay lại từ màn chi tiết giữ nguyên `filters`, `page` và `limit`. Nhóm danh mục trên kết quả chỉ lọc cục bộ trong trang; muốn lọc toàn bộ tập dữ liệu dùng mục Bộ lọc.
 Chi tiết và giới hạn: [đối chiếu contract](../docs/contracts/frontend-api-v1.md).
 
-## Kiểm thử với backend thật của PR #24
+## Kiểm thử với backend FastAPI trong repo
 
-Trước khi backend merge, dùng checkout riêng của commit
-`575cee46150c76c34d1b080d099654ae07fb09fd`, cài `backend/requirements-dev.txt`
-vào virtualenv Python 3.13. Từ frontend/:
+Backend mock của PR #24 đã merge vào `develop`; bộ tích hợp dùng `../backend` của
+chính commit đang kiểm tra, không checkout commit backend riêng. Cài
+`backend/requirements-dev.txt` vào virtualenv Python 3.13. Từ frontend/:
 
 ```bash
-BACKEND_CONTRACT_DIR=/duong-dan/checkout/backend BACKEND_PYTHON=/duong-dan/venv/bin/python npm run test:integration
+BACKEND_PYTHON=/duong-dan/venv/bin/python npm run test:integration
 ```
 
-Sau khi backend có trong nhánh tích hợp, biến `BACKEND_CONTRACT_DIR` mặc định là
-`../backend`; `BACKEND_PYTHON` mặc định `python3`. Bộ test tự khởi động/dừng FastAPI
+`BACKEND_PYTHON` mặc định `python3`; `BACKEND_CONTRACT_DIR` chỉ dùng khi cần ghi đè
+thư mục backend lúc gỡ lỗi local. Bộ test tự khởi động/dừng FastAPI
 và Vite trên 5196/5197, không dùng dịch vụ chia sẻ. Dùng
 `PLAYWRIGHT_BROWSER_CHANNEL=chromium` nếu cài Chromium qua Playwright.
 Tests chạy frontend–FastAPI HTTP thật nhưng backend trả fixture; không đo semantic

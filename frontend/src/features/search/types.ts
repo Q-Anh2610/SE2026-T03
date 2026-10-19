@@ -36,8 +36,16 @@ export interface SearchResult {
   score: number | null
 }
 
+export interface Pagination {
+  page: number
+  limit: number
+  total: number
+  pages: number
+  has_next: boolean
+}
+
 export interface SearchResponse {
-  pagination: { page: number; limit: number; total: number; pages: number; has_next: boolean }
+  pagination: Pagination
   query_id: string
   search_event_id: string
   query: string
@@ -49,8 +57,30 @@ export interface SearchResponse {
   }
 }
 
+export interface AssetListQuery {
+  filters: AssetFilters
+  page?: number
+  limit: number
+}
+
+export interface AssetListResponse {
+  items: AssetMetadata[]
+  pagination: Pagination
+  mock?: boolean
+}
+
+export interface AssetDetailResponse {
+  asset: AssetMetadata
+  mock?: boolean
+}
+
 export type MockScenario = 'success' | 'empty' | 'error'
 
 export interface SearchClient {
   search(request: SearchRequest, signal: AbortSignal): Promise<SearchResponse>
+}
+
+export interface AssetClient {
+  listAssets(query: AssetListQuery, signal: AbortSignal): Promise<AssetListResponse>
+  getAsset(assetId: string, signal: AbortSignal): Promise<AssetDetailResponse>
 }

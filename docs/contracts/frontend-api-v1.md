@@ -1,10 +1,10 @@
 # Đối chiếu frontend–backend: Issue #9
 
 Frontend triển khai theo backend PR [#24](https://github.com/Q-Anh2610/SE2026-T03/pull/24),
-commit `575cee46150c76c34d1b080d099654ae07fb09fd`.
-[Contract backend và OpenAPI](https://github.com/Q-Anh2610/SE2026-T03/blob/575cee46150c76c34d1b080d099654ae07fb09fd/docs/contracts/api-v1.md)
+commit `575cee46150c76c34d1b080d099654ae07fb09fd`, đã merge vào `develop` ngày 19/10/2026
+(merge commit `1a97247`). [Contract backend](api-v1.md) và `docs/openapi.json` trong repo
 là nguồn đối chiếu. **Phía frontend đã chốt các quy ước dưới đây cho API mock v1**,
-bao gồm feedback Boolean, RAM và quan hệ event–asset. Approval của thành viên khác
+bao gồm feedback Boolean, RAM và quan hệ event–asset. Approval của PR frontend #25
 và merge vẫn là bước riêng; tài liệu này không thay thế GitHub review.
 
 | Nội dung | Quy ước triển khai |
@@ -30,9 +30,13 @@ contract mới sử dụng 400. Mạng/timeout/HTTP lỗi không tự fallback s
 ## Hành vi UI
 
 - Bộ lọc trong disclosure **Bộ lọc** được gửi lên API trước phân trang; bỏ trường trống,
-  trim chuỗi, giữ giá trị số 0. Áp dụng bộ lọc/tìm kiếm mới luôn về trang 1.
+  trim chuỗi, giữ giá trị số 0. Áp dụng bộ lọc, đặt lại bộ lọc API hoặc tìm kiếm mới luôn về trang 1.
+- Khi chưa nhập query hoặc bấm **Danh sách asset**, UI gọi `GET /api/v1/assets` kèm `page`, `limit`
+  và các trường filters không rỗng; đổi `limit` trong chế độ danh sách sẽ tải lại từ trang 1.
 - Nút Trang trước/sau dùng query, filters và limit của request đã gửi, không dùng bản nhập
-  đang sửa. Đổi limit áp dụng ở lần tìm kiếm tiếp theo; retry giữ nguyên request bị lỗi.
+  đang sửa. Trong chế độ tìm kiếm văn bản, đổi limit áp dụng ở lần tìm kiếm tiếp theo; retry giữ nguyên request bị lỗi.
+- Mở **Xem chi tiết** trên thẻ gọi `GET /api/v1/assets/{asset_id}`, hiển thị đầy đủ metadata theo contract,
+  xử lý 404 `ASSET_NOT_FOUND`, lỗi mạng/5xx, retry và ảnh lỗi; bấm **Quay lại danh sách** giữ nguyên filters, `page` và `limit`.
 - Nhóm danh mục trên kết quả là bộ lọc cục bộ **trong trang đã nhận**, có nhãn phạm vi rõ;
   không thay thế bộ lọc API. Xóa query giữ lựa chọn, reset kết quả rỗng xóa các filters.
 - UI upload ảnh và UI feedback chưa được thêm trong thay đổi này. Contract các endpoint
@@ -47,10 +51,10 @@ trong request để FastAPI tự trả 400. Kiểm tra hai viewport 1280x900 và
 Ảnh fixture là PNG 2x2 tự tạo, inline; không dùng asset tải ngoài.
 
 Workflow `.github/workflows/frontend-contract.yml` có job lint/typecheck/coverage/build/E2E
-và job backend tests + frontend–backend integration. Vì PR #24 chưa merge, job tích hợp
-checkout **commit backend cố định** ở trên; không chạy code từ ref PR tùy ý, không dùng
-`pull_request_target` hoặc secret. Sau khi backend merge/cập nhật contract, cần cập nhật
-commit đối chiếu hoặc chuyển sang backend/ của nhánh tích hợp và chạy lại tests.
+và job backend tests + frontend–backend integration. Sau khi PR #24 merge, job tích hợp
+chạy `backend/` của **cùng commit** với frontend (không checkout commit backend riêng);
+không dùng `pull_request_target` hoặc secret. Khi backend đổi contract, bộ tích hợp
+tự kiểm tra phiên bản backend mới trong cùng nhánh.
 
 Checklist PR/Issue phân biệt kiểm thử local, CI trên GitHub, xác nhận contract, approval
 và merge; không tích thay các việc chờ thành viên khác.

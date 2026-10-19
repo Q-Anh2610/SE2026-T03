@@ -155,3 +155,95 @@ it('accepts missing description and category represented as null', () => {
   response.results[0]!.asset.category = null
   expect(parseResponse(response, makeRequest())).toEqual(response)
 })
+
+describe('asset list and detail contract', () => {
+  it('builds a filter draft omitting empty fields and parsing non-negative integer face counts', async () => {
+    const { buildFilterDraft, EMPTY_FILTER_FORM } = await import('./contract')
+    expect(buildFilterDraft(EMPTY_FILTER_FORM)).toEqual({})
+    expect(buildFilterDraft({
+      category: '  Nội thất ',
+      format: ' glb ',
+      license: ' CC0 ',
+      face_count_min: '0',
+      face_count_max: ' 250 ',
+    })).toEqual({
+      category: 'Nội thất',
+      format: 'glb',
+      license: 'CC0',
+      face_count_min: 0,
+      face_count_max: 250,
+    })
+  })
+
+  it.each(['-1', '1.5', 'abc', '1e2'])('marks non-integer face count input %s as invalid for validateFilters', async (invalidCount) => {
+    const { buildFilterDraft, EMPTY_FILTER_FORM, validateFilters } = await import('./contract')
+    const draft = buildFilterDraft({ ...EMPTY_FILTER_FORM, face_count_min: invalidCount })
+    expect(() => validateFilters(draft)).toThrow('Bộ lọc không hợp lệ')
+  })
+
+  it('normalizes asset list queries, defaults page to 1 and strips null/undefined filters', async () => {
+    const { validateListQuery } = await import('./contract')
+    expect(validateListQuery({
+      limit: 6,
+      filters: { category: ' Nội thất ', license: null, format: undefined, face_count_min: 0 },
+    })).toEqual({
+      page: 1,
+      limit: 6,
+      filters: { category: 'Nội thất', face_count_min: 0 },
+    })
+  })
+
+  it.each(['mock-chair-01', '  asset_01  '])('validates asset ID %s', async (assetId) => {
+    const { validateAssetId } = await import('./contract')
+    expect(validateAssetId(assetId)).toBe(assetId.trim())
+  })
+
+  it.each(['', '   ', '.', '..', 'a/b'])('rejects invalid asset ID %j', async (assetId) => {
+    const { validateAssetId } = await import('./contract')
+    expect(() => validateAssetId(assetId)).toThrow('Mã asset không hợp lệ')
+  })
+
+  it('parses valid asset list responses including empty pages and optional mock flag', async () => {
+    const { parseAssetListResponse } = await import('./contract')
+    const asset = makeResponse().results[0]!.asset
+    const valid = {
+      items: [asset],
+      pagination: { page: 1, limit: 12, total: 1, pages: 1, has_next: false },
+      mock: true,
+    }
+    expect(parseAssetListResponse(valid, { filters: {}, limit: 12 })).toEqual(valid)
+    const empty = {
+      items: [],
+      pagination: { page: 2, limit: 2, total: 2, pages: 1, has_next: false },
+    }
+    expect(parseAssetListResponse(empty, { filters: {}, page: 2, limit: 2 }).items).toEqual([])
+  })
+
+  it.each([
+    null,
+    {},
+    { items: 'bad', pagination: { page: 1, limit: 12, total: 0, pages: 0, has_next: false } },
+    { items: [], pagination: { page: 1, limit: 12, total: 0, pages: 0, has_next: false }, mock: 'yes' },
+    { items: [], pagination: { page: 1, limit: 12, total: 1, pages: 1, has_next: false } },
+    { items: [makeResponse().results[0]!.asset, makeResponse().results[0]!.asset], pagination: { page: 1, limit: 12, total: 2, pages: 1, has_next: false } },
+    { items: [{ asset_id: '' }], pagination: { page: 1, limit: 12, total: 1, pages: 1, has_next: false } },
+  ])('rejects invalid asset list payload %j', async (payload) => {
+    const { parseAssetListResponse } = await import('./contract')
+    expect(() => parseAssetListResponse(payload, { filters: {}, page: 1, limit: 12 })).toThrow('Dữ liệu danh sách asset không đúng contract')
+  })
+
+  it('parses valid asset detail responses and rejects mismatched or malformed payloads', async () => {
+    const { parseAssetDetailResponse } = await import('./contract')
+    const asset = makeResponse().results[0]!.asset
+    expect(parseAssetDetailResponse({ asset, mock: true }, asset.asset_id)).toEqual({ asset, mock: true })
+    expect(parseAssetDetailResponse({ asset }, asset.asset_id)).toEqual({ asset })
+    for (const bad of [
+      null,
+      {},
+      { asset: { ...asset, asset_id: 'other-id' } },
+      { asset, mock: 'true' },
+    ]) {
+      expect(() => parseAssetDetailResponse(bad, asset.asset_id)).toThrow('Dữ liệu chi tiết asset không đúng contract')
+    }
+  })
+})

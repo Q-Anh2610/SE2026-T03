@@ -32,19 +32,17 @@ jobs:
   api-contract:
     runs-on: ubuntu-latest
     steps:
+      # Backend from PR #24 is merged into develop; test the backend/ of the
+      # same commit as the frontend instead of a separately pinned checkout.
       - uses: actions/checkout@v4
-      # PR #24 is not merged yet. Pin the backend tested with this frontend;
-      # after integration replace this checkout with the repository's backend/.
-      - uses: actions/checkout@v4
-        with:
-          ref: 575cee46150c76c34d1b080d099654ae07fb09fd
-          path: .contract-backend
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: python -m pip install -r .contract-backend/backend/requirements-dev.txt
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+      - run: python -m pip install -r backend/requirements-dev.txt
       - run: python -m pytest
-        working-directory: .contract-backend/backend
+        working-directory: backend
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -57,6 +55,5 @@ jobs:
       - run: npm run test:integration
         working-directory: frontend
         env:
-          BACKEND_CONTRACT_DIR: ../.contract-backend/backend
           BACKEND_PYTHON: python
           PLAYWRIGHT_BROWSER_CHANNEL: chromium

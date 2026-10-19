@@ -3,12 +3,13 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '../../app/App'
 import { deferred, makeRequest, makeResponse } from '../../test/fixtures'
-import type { SearchClient, SearchResponse } from './types'
+import type { AssetClient, AssetDetailResponse, AssetListResponse, SearchClient, SearchResponse } from './types'
 
-const api = vi.hoisted(() => ({ mockMode: true, getSearchClient: vi.fn() }))
+const api = vi.hoisted(() => ({ mockMode: true, getSearchClient: vi.fn(), getAssetClient: vi.fn() }))
 
 vi.mock('../../lib/api/search', () => ({
   getSearchClient: api.getSearchClient,
+  getAssetClient: api.getAssetClient,
   get isMockMode() { return api.mockMode },
 }))
 
@@ -56,13 +57,28 @@ describe('search page behavior', () => {
     expect(searchMock.mock.calls[2][0]).toEqual(makeRequest())
   })
   const searchMock = vi.fn<SearchClient['search']>()
+  const listAssetsMock = vi.fn<AssetClient['listAssets']>()
+  const getAssetMock = vi.fn<AssetClient['getAsset']>()
 
   beforeEach(() => {
     api.mockMode = true
     api.getSearchClient.mockReset()
+    api.getAssetClient.mockReset()
     searchMock.mockReset()
+    listAssetsMock.mockReset()
+    getAssetMock.mockReset()
     searchMock.mockImplementation(async (request) => makeResponse(request.query))
+    listAssetsMock.mockImplementation(async (query) => ({
+      items: [makeResponse().results[0]!.asset],
+      pagination: { page: query.page ?? 1, limit: query.limit, total: 1, pages: 1, has_next: false },
+      mock: true,
+    }))
+    getAssetMock.mockImplementation(async (assetId) => ({
+      asset: { ...makeResponse().results[0]!.asset, asset_id: assetId },
+      mock: true,
+    }))
     api.getSearchClient.mockResolvedValue({ search: searchMock })
+    api.getAssetClient.mockResolvedValue({ listAssets: listAssetsMock, getAsset: getAssetMock })
   })
 
   it('centers the search content without a showcase, sample aside or initial results', () => {
@@ -328,5 +344,148 @@ describe('search page behavior', () => {
     unmount()
     expect(signal.aborted).toBe(true)
     await act(async () => { pending.resolve(makeResponse('Ghế gỗ')); await pending.promise })
+  })
+
+  it('browses the asset catalog, paginates, changes limit to page 1, applies/resets API filters and preserves state when opening detail and returning', async () => {
+    const user = userEvent.setup()
+    listAssetsMock.mockImplementation(async (query) => ({
+      items: [{ ...makeResponse().results[0]!.asset, asset_id: `chair-p${query.page}`, name: `Ghế trang ${query.page}` }],
+      pagination: { page: query.page ?? 1, limit: query.limit, total: 13, pages: 2, has_next: (query.page ?? 1) < 2 },
+      mock: true,
+    }))
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'Danh sách asset' }))
+    expect(await screen.findByRole('heading', { name: 'Danh sách asset' })).toBeVisible()
+    expect(screen.getByText('1 / 1 asset trong trang')).toBeVisible()
+    expect(listAssetsMock.mock.calls[0]?.[0]).toEqual({ page: 1, limit: 12, filters: {} })
+
+    await user.click(screen.getByRole('button', { name: 'Trang sau' }))
+    await waitFor(() => expect(screen.getByText('Trang 2 / 2 · 13 kết quả')).toBeVisible())
+    expect(screen.getByRole('heading', { name: 'Ghế trang 2' })).toBeVisible()
+
+    // Open detail from page 2 and return: keeps page 2, limit and filters
+    await user.click(screen.getByRole('button', { name: 'Xem chi tiết Ghế trang 2' }))
+    expect(await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+    expect(getAssetMock).toHaveBeenCalledWith('chair-p2', expect.any(AbortSignal))
+    await user.click(screen.getByRole('button', { name: 'Quay lại danh sách' }))
+    expect(screen.getByText('Trang 2 / 2 · 13 kết quả')).toBeVisible()
+    expect(screen.getByRole('heading', { name: 'Ghế trang 2' })).toBeVisible()
+
+    // Changing limit in catalog reloads page 1
+    await user.selectOptions(screen.getByLabelText('Số kết quả'), '6')
+    await waitFor(() => expect(listAssetsMock).toHaveBeenLastCalledWith({ page: 1, limit: 6, filters: {} }, expect.any(AbortSignal)))
+
+    // Applying API filter without text query reloads catalog at page 1
+    await user.click(screen.getByText('Bộ lọc', { exact: true }))
+    await user.type(screen.getByLabelText('Danh mục', { exact: true }), 'Nội thất')
+    await user.click(screen.getByRole('button', { name: 'Áp dụng bộ lọc' }))
+    await waitFor(() => expect(listAssetsMock).toHaveBeenLastCalledWith({ page: 1, limit: 6, filters: { category: 'Nội thất' } }, expect.any(AbortSignal)))
+
+    // Resetting API filters reloads catalog at page 1 with empty filters
+    await user.click(screen.getByRole('button', { name: 'Đặt lại bộ lọc API' }))
+    await waitFor(() => expect(listAssetsMock).toHaveBeenLastCalledWith({ page: 1, limit: 6, filters: {} }, expect.any(AbortSignal)))
+
+    // Navigating back to page 1 from page 2 in catalog
+    await user.click(screen.getByRole('button', { name: 'Trang sau' }))
+    await waitFor(() => expect(screen.getByText('Trang 2 / 2 · 13 kết quả')).toBeVisible())
+    await user.click(screen.getByRole('button', { name: 'Trang trước' }))
+    await waitFor(() => expect(screen.getByText('Trang 1 / 2 · 13 kết quả')).toBeVisible())
+  })
+
+  it('handles catalog validation error, API error/retry, late response cancellation and search filter reset', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByText('Bộ lọc', { exact: true }))
+    await user.type(screen.getByLabelText('Số mặt tối thiểu'), '20')
+    await user.type(screen.getByLabelText('Số mặt tối đa'), '5')
+    await user.click(screen.getByRole('button', { name: 'Danh sách asset' }))
+    expect(screen.getByRole('alert')).toHaveTextContent('Bộ lọc không hợp lệ')
+    expect(listAssetsMock).not.toHaveBeenCalled()
+
+    await user.click(screen.getByRole('button', { name: 'Đặt lại bộ lọc API' }))
+    listAssetsMock.mockRejectedValueOnce(new Error('Dịch vụ asset chưa sẵn sàng.'))
+    await user.click(screen.getByRole('button', { name: 'Danh sách asset' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Dịch vụ asset chưa sẵn sàng.')
+    await user.click(screen.getByRole('button', { name: 'Thử lại' }))
+    expect(await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+
+    // Non-Error rejection in catalog
+    listAssetsMock.mockRejectedValueOnce('raw catalog error')
+    await user.click(screen.getByRole('button', { name: 'Danh sách asset' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Không thể tải danh sách asset. Hãy thử lại.')
+
+    // Client loading aborted before listAssets runs
+    const slowAssetClient = deferred<AssetClient>()
+    api.getAssetClient.mockReturnValueOnce(slowAssetClient.promise)
+    await user.type(screen.getByRole('searchbox'), 'ghế')
+    await user.click(screen.getByRole('button', { name: 'Danh sách asset' }))
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    await act(async () => {
+      slowAssetClient.resolve({ listAssets: listAssetsMock, getAsset: getAssetMock })
+      await slowAssetClient.promise
+    })
+    await user.type(screen.getByRole('searchbox'), 'ghế{Enter}')
+    await screen.findByRole('heading', { name: 'Kết quả tìm kiếm' })
+
+    // Resetting API filters while in search success state reruns search with empty filters at page 1
+    await user.click(screen.getByRole('button', { name: 'Đặt lại bộ lọc API' }))
+    await waitFor(() => expect(searchMock).toHaveBeenLastCalledWith({ query: 'ghế', filters: {}, limit: 12, page: 1 }, expect.any(AbortSignal)))
+  })
+
+  it('handles detail view 404, error, retry, late responses and opening detail from search results', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'ghế gỗ{Enter}')
+    await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })
+
+    // 404 in detail view
+    getAssetMock.mockRejectedValueOnce({ kind: 'not_found', message: 'Không tìm thấy asset trong thư viện.' })
+    await user.click(screen.getByRole('button', { name: 'Xem chi tiết Ghế gỗ kiểm thử' }))
+    expect(await screen.findByRole('heading', { name: 'Không tìm thấy asset' })).toBeVisible()
+    await user.click(screen.getAllByRole('button', { name: 'Quay lại danh sách' })[0]!)
+    expect(screen.getByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+
+    // Error + Retry in detail view
+    getAssetMock.mockRejectedValueOnce('unexpected detail failure')
+    await user.click(screen.getByRole('button', { name: 'Xem chi tiết Ghế gỗ kiểm thử' }))
+    expect(await screen.findByRole('heading', { name: 'Chưa thể tải chi tiết asset' })).toBeVisible()
+    expect(screen.getByRole('alert')).toHaveTextContent('Không thể tải chi tiết asset. Hãy thử lại.')
+    await user.click(screen.getByRole('button', { name: 'Thử lại' }))
+    expect(await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+
+    // Aborting detail load by clicking back before getAsset resolves
+    await user.click(screen.getByRole('button', { name: 'Quay lại danh sách' }))
+    const pendingDetail = deferred<AssetDetailResponse>()
+    getAssetMock.mockReturnValueOnce(pendingDetail.promise)
+    await user.click(screen.getByRole('button', { name: 'Xem chi tiết Ghế gỗ kiểm thử' }))
+    const detailSignal = getAssetMock.mock.calls.at(-1)![1]
+    await user.click(screen.getByRole('button', { name: 'Quay lại danh sách' }))
+    expect(detailSignal.aborted).toBe(true)
+    await act(async () => {
+      pendingDetail.resolve({ asset: makeResponse().results[0]!.asset, mock: true })
+      await pendingDetail.promise
+    })
+
+    // Aborting detail client load before getAsset is invoked
+    const pendingClient = deferred<AssetClient>()
+    api.getAssetClient.mockReturnValueOnce(pendingClient.promise)
+    await user.click(screen.getByRole('button', { name: 'Xem chi tiết Ghế gỗ kiểm thử' }))
+    await user.click(screen.getByRole('button', { name: 'Quay lại danh sách' }))
+    await act(async () => {
+      pendingClient.resolve({ listAssets: listAssetsMock, getAsset: getAssetMock })
+      await pendingClient.promise
+    })
+
+    // Late catalog response ignored when superseded by another request
+    const slowCatalog = deferred<AssetListResponse>()
+    listAssetsMock.mockReturnValueOnce(slowCatalog.promise)
+    await user.click(screen.getByRole('button', { name: 'Danh sách asset' }))
+    const catalogSignal = listAssetsMock.mock.calls.at(-1)![1]
+    await user.click(screen.getByRole('button', { name: 'Xóa truy vấn' }))
+    expect(catalogSignal.aborted).toBe(true)
+    await act(async () => {
+      slowCatalog.reject(new Error('late catalog error'))
+      await slowCatalog.promise.catch(() => undefined)
+    })
   })
 })

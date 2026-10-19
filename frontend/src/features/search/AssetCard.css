@@ -121,8 +121,34 @@
   overflow-wrap: anywhere;
 }
 
-.asset-card.asset-gallery-card .asset-details {
+.asset-card.asset-gallery-card .asset-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   margin-top: auto;
+}
+
+.asset-card.asset-gallery-card .asset-open-detail {
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1px solid var(--card-line);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--card-ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.asset-card.asset-gallery-card .asset-open-detail:hover {
+  border-color: var(--card-ink);
+  background: var(--card-preview);
+}
+
+.asset-card.asset-gallery-card .asset-details {
+  margin-top: 0;
   border-top: 0;
 }
 
@@ -136,6 +162,7 @@
 }
 
 .asset-card.asset-gallery-card .asset-details summary:focus-visible,
+.asset-card.asset-gallery-card .asset-open-detail:focus-visible,
 .asset-card.asset-gallery-card a:focus-visible {
   outline: 2px solid var(--card-ink);
   outline-offset: 3px;
