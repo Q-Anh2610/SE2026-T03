@@ -30,9 +30,9 @@ describe('HTTP search client', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it.each([422, 503, 500, 404])('maps HTTP %s to a safe message without returning fixtures', async (status) => {
+  it.each([400, 422, 503, 500, 404])('maps HTTP %s to a safe message without returning fixtures', async (status) => {
     fetchMock.mockResolvedValue(new Response('private server detail', { status }))
-    const expected = status === 422 ? 'API chưa chấp nhận yêu cầu này' : 'Dịch vụ tìm kiếm chưa sẵn sàng'
+    const expected = [400, 422].includes(status) ? 'Yêu cầu tìm kiếm không hợp lệ' : status === 404 ? 'Không tìm thấy dịch vụ tìm kiếm' : 'Dịch vụ tìm kiếm chưa sẵn sàng'
     await expect(createHttpSearchClient().search(makeRequest(), new AbortController().signal)).rejects.toThrow(expected)
     expect(fetchMock).toHaveBeenCalledOnce()
   })

@@ -1,8 +1,33 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createMockSearchClient } from './mock'
+import { createMockSearchClient, createMockSearchResponse, mockAssets } from './mock'
 import { makeRequest } from '../../test/fixtures'
 
 describe('development search mock', () => {
+  it('applies filters before pagination and starts each page at rank one', () => {
+    const first = createMockSearchResponse('glb', 2, 'success', 1, { category: 'Nội thất', format: 'glb' })
+    const second = createMockSearchResponse('glb', 2, 'success', 2, { category: 'Nội thất' })
+    expect(first.pagination).toEqual({ page: 1, limit: 2, total: 3, pages: 2, has_next: true })
+    expect(second.results.map(result => result.rank)).toEqual([1])
+    expect(second.results[0].asset.asset_id).toBe('mock-table-01')
+    expect(createMockSearchResponse('glb', 2, 'success', 3).results).toEqual([expect.objectContaining({ rank: 1 }), expect.objectContaining({ rank: 2 })])
+    expect(createMockSearchResponse('glb', 2, 'success', 99).results).toEqual([])
+    expect(createMockSearchResponse('glb', 12, 'success', 1, { format: 'obj' }).results).toEqual([])
+    expect(createMockSearchResponse('glb', 12, 'success', 1, { license: 'CC0' }).results).toEqual([])
+    expect(createMockSearchResponse('glb', 12, 'success', 1, { face_count_min: 0 }).results).toEqual([])
+    expect(createMockSearchResponse('glb', 12, 'success', 1, { face_count_max: 10 }).results).toEqual([])
+  })
+
+  it('matches known numeric metadata inclusively and excludes unknown values', () => {
+    const original = { ...mockAssets[0] }
+    try {
+      Object.assign(mockAssets[0], { face_count: 100, license: 'CC0' })
+      for (const filters of [{ face_count_min: 100 }, { face_count_max: 100 }, { license: 'CC0' }, { category: null, format: null, face_count_min: null, face_count_max: null }]) {
+        expect(createMockSearchResponse('glb', 12, 'success', 1, filters).results.some(result => result.asset.asset_id === original.asset_id)).toBe(true)
+      }
+      expect(createMockSearchResponse('glb', 12, 'success', 1, { face_count_min: 101 }).results).toEqual([])
+      expect(createMockSearchResponse('glb', 12, 'success', 1, { face_count_max: 99 }).results).toEqual([])
+    } finally { Object.assign(mockAssets[0], original) }
+  })
   beforeEach(() => { vi.useFakeTimers() })
 
   it.each([

@@ -1,11 +1,12 @@
 import type { SearchRequest, SearchResponse } from '../features/search/types'
 
 export function makeRequest(query = 'ghế gỗ', limit = 12): SearchRequest {
-  return { query, filters: {}, limit }
+  return { query, filters: {}, limit, page: 1 }
 }
 
 export function makeResponse(query = 'ghế gỗ'): SearchResponse {
   return {
+    pagination: { page: 1, limit: 12, total: 1, pages: 1, has_next: false },
     query_id: 'test-query-01',
     search_event_id: 'test-event-01',
     query,
