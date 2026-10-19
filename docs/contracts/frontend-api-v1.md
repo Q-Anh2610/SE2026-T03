@@ -3,8 +3,9 @@
 Frontend triển khai theo backend PR [#24](https://github.com/Q-Anh2610/SE2026-T03/pull/24),
 commit `575cee46150c76c34d1b080d099654ae07fb09fd`.
 [Contract backend và OpenAPI](https://github.com/Q-Anh2610/SE2026-T03/blob/575cee46150c76c34d1b080d099654ae07fb09fd/docs/contracts/api-v1.md)
-là nguồn đối chiếu. Các lựa chọn dưới đây đã được triển khai/kiểm thử từ phía frontend;
-**còn chờ Quỳnh Anh và reviewer xác nhận**, không thay thế approval của nhóm.
+là nguồn đối chiếu. **Phía frontend đã chốt các quy ước dưới đây cho API mock v1**,
+bao gồm feedback Boolean, RAM và quan hệ event–asset. Approval của thành viên khác
+và merge vẫn là bước riêng; tài liệu này không thay thế GitHub review.
 
 | Nội dung | Quy ước triển khai |
 |---|---|
@@ -53,3 +54,19 @@ commit đối chiếu hoặc chuyển sang backend/ của nhánh tích hợp và
 
 Checklist PR/Issue phân biệt kiểm thử local, CI trên GitHub, xác nhận contract, approval
 và merge; không tích thay các việc chờ thành viên khác.
+
+## Chốt feedback mock v1 — 19/10/2026
+
+- `relevance` chỉ nhận JSON `true`/`false`; số 0/1 hoặc chuỗi bị từ chối HTTP 400.
+- Thành công trả HTTP 201, echo đúng event ID, asset ID và Boolean, có feedback ID,
+  created_at, `storage=memory`, `mock=true`.
+- Event phải có trong process hiện tại và asset phải thuộc đúng trang kết quả của
+  event đó. Event/asset không tồn tại trả 404; asset tồn tại nhưng ngoài event trả
+  400 `EVENT_ASSET_MISMATCH`.
+- Restart process mất event/feedback. Tối đa 256 event và 1000 feedback gần nhất;
+  không thử luồng mock với nhiều worker hoặc coi đây là persistence production.
+- Chưa có idempotency: gửi lại hợp lệ tạo feedback mới. UI feedback vẫn ngoài phạm vi.
+
+Kiểm chứng lại trên backend `575cee4`: `pytest tests/unit/test_mock_api.py -k
+'feedback or not_durable'` đạt 4/4; integration `--grep 'checks list/detail'`
+đạt 2/2 desktop/mobile, gọi FastAPI thật. Không cần đổi schemas hoặc code để chốt.

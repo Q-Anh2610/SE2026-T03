@@ -29,5 +29,9 @@ filters JSON hỏng, feedback true/false và từ chối số/chuỗi/asset ngo�
 DB/index thật hoặc phép đo retrieval. Những kiểm tra này không xác nhận API production.
 
 Workflow mới kiểm tra frontend và backend contract trên GitHub; kết quả CI phải xem
-ở PR/run tương ứng, không suy ra từ bảng local này. Formal contract sign-off,
-approval của thành viên khác và merge vẫn là các bước chờ review.
+ở PR/run tương ứng, không suy ra từ bảng local này. Approval của thành viên khác và merge vẫn là các bước chờ review.
+
+Đối chiếu/chốt phía frontend cho contract mock v1 đã hoàn tất, gồm feedback Boolean,
+RAM và event/asset của đúng trang. Chạy lại riêng feedback và mất trạng thái giữa
+process: 4/4 backend tests đạt; nhóm HTTP list/detail/upload/feedback: 2/2 integration
+desktop/mobile đạt. Xem quy ước chốt trong `docs/contracts/frontend-api-v1.md`.
