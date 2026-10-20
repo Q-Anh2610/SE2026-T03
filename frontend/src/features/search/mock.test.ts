@@ -118,4 +118,30 @@ describe('development search mock', () => {
     expect(nextResponse.results[0]!.asset.tags).not.toContain('changed')
     expect(nextResponse.results[0]!.asset.formats).toEqual(['glb'])
   })
+
+  it('lists and filters mock assets before pagination and supports detail lookup', async () => {
+    const { createMockAssetClient, createMockAssetDetailResponse, createMockAssetListResponse } = await import('./mock')
+    const page1 = createMockAssetListResponse({ filters: { category: 'Nội thất' }, page: 1, limit: 2 })
+    expect(page1.pagination).toEqual({ page: 1, limit: 2, total: 3, pages: 2, has_next: true })
+    expect(page1.items.map((item) => item.asset_id)).toEqual(['mock-chair-01', 'mock-chair-02'])
+    expect(createMockAssetListResponse({ filters: {}, page: 1, limit: 12 }, 'empty').items).toEqual([])
+    expect(createMockAssetDetailResponse('mock-chair-01').asset.name).toBe('Ghế gỗ đơn giản')
+    expect(() => createMockAssetDetailResponse('missing-id')).toThrow('Không tìm thấy asset')
+
+    const client = createMockAssetClient('success')
+    const listPending = client.listAssets({ filters: { format: 'glb' }, page: 1, limit: 6 }, new AbortController().signal)
+    const detailPending = client.getAsset('mock-lamp-01', new AbortController().signal)
+    await vi.advanceTimersByTimeAsync(450)
+    expect((await listPending).items).toHaveLength(6)
+    expect((await detailPending).asset.name).toBe('Đèn bàn')
+
+    const errorClient = createMockAssetClient('error')
+    const errList = errorClient.listAssets({ filters: {}, page: 1, limit: 6 }, new AbortController().signal)
+    const errListAssert = expect(errList).rejects.toThrow('Lỗi kết nối minh họa')
+    const errDetail = errorClient.getAsset('mock-lamp-01', new AbortController().signal)
+    const errDetailAssert = expect(errDetail).rejects.toThrow('Lỗi kết nối minh họa')
+    await vi.advanceTimersByTimeAsync(450)
+    await errListAssert
+    await errDetailAssert
+  })
 })

@@ -136,4 +136,100 @@ describe('search client mode selection', () => {
     await expect(client.search(makeRequest(), new AbortController().signal)).rejects.toThrow('chưa sẵn sàng')
     expect(fetchMock.mock.calls[0]?.[0]).toBe('/api/v1/search/text')
   })
+
+  it('fetches asset list and detail over HTTP, handles 404 ASSET_NOT_FOUND vs route 404, 400, 503, network and invalid JSON', async () => {
+    const { ApiError, createHttpAssetClient } = await import('./search')
+    const fetchMock = vi.fn<typeof fetch>()
+    vi.stubGlobal('fetch', fetchMock)
+    const asset = makeResponse().results[0]!.asset
+    const listPayload = {
+      items: [asset],
+      pagination: { page: 2, limit: 2, total: 3, pages: 2, has_next: false },
+      mock: true,
+    }
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(listPayload), { status: 200 }))
+    const client = createHttpAssetClient('https://api.example.com/')
+    const listResult = await client.listAssets({
+      page: 2,
+      limit: 2,
+      filters: { category: 'Nội thất', format: 'glb', face_count_min: 0 },
+    }, new AbortController().signal)
+    expect(listResult).toEqual(listPayload)
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      'https://api.example.com/api/v1/assets?page=2&limit=2&category=N%E1%BB%99i+th%E1%BA%A5t&format=glb&face_count_min=0',
+    )
+
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ asset, mock: true }), { status: 200 }))
+    expect(await client.getAsset('test-chair-01', new AbortController().signal)).toEqual({ asset, mock: true })
+    expect(fetchMock.mock.calls[1]?.[0]).toBe('https://api.example.com/api/v1/assets/test-chair-01')
+
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ error: { code: 'ASSET_NOT_FOUND' } }), { status: 404 }))
+    await expect(client.getAsset('missing', new AbortController().signal)).rejects.toMatchObject({
+      kind: 'not_found',
+      status: 404,
+      code: 'ASSET_NOT_FOUND',
+      message: 'Không tìm thấy asset trong thư viện.',
+    })
+
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ error: { code: 'HTTP_404' } }), { status: 404 }))
+    await expect(client.getAsset('missing', new AbortController().signal)).rejects.toMatchObject({
+      kind: 'unavailable',
+      status: 404,
+      message: 'Không tìm thấy dịch vụ asset. Kiểm tra địa chỉ API.',
+    })
+
+    fetchMock.mockResolvedValueOnce(new Response('not-json-400', { status: 400 }))
+    await expect(client.listAssets({ filters: {}, limit: 12 }, new AbortController().signal)).rejects.toMatchObject({
+      kind: 'invalid',
+      status: 400,
+    })
+
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ error: 123 }), { status: 503 }))
+    await expect(client.listAssets({ filters: {}, limit: 12 }, new AbortController().signal)).rejects.toMatchObject({
+      kind: 'unavailable',
+      status: 503,
+    })
+
+    fetchMock.mockResolvedValueOnce(new Response('broken json', { status: 200 }))
+    await expect(client.listAssets({ filters: {}, limit: 12 }, new AbortController().signal)).rejects.toMatchObject({
+      kind: 'contract',
+    })
+
+    const netFailure = new TypeError('down')
+    fetchMock.mockRejectedValueOnce(netFailure)
+    await expect(client.getAsset('test-chair-01', new AbortController().signal)).rejects.toMatchObject({
+      kind: 'network',
+      cause: netFailure,
+    })
+
+    const abortedController = new AbortController()
+    abortedController.abort()
+    const abortErr = new DOMException('Aborted', 'AbortError')
+    fetchMock.mockRejectedValueOnce(abortErr)
+    await expect(client.getAsset('test-chair-01', abortedController.signal)).rejects.toBe(abortErr)
+    expect(new ApiError('config', 'msg')).toBeInstanceOf(Error)
+  })
+
+  it('selects mock or HTTP asset client according to environment mode', async () => {
+    vi.useFakeTimers()
+    vi.stubEnv('DEV', true)
+    vi.stubEnv('MODE', 'development')
+    vi.stubEnv('VITE_SEARCH_MODE', '')
+    vi.resetModules()
+    const { getAssetClient: getMockAssetClient } = await import('./search')
+    const mockClient = await getMockAssetClient('empty')
+    const pending = mockClient.listAssets({ filters: {}, limit: 12 }, new AbortController().signal)
+    await vi.advanceTimersByTimeAsync(450)
+    expect((await pending).items).toEqual([])
+
+    vi.stubEnv('DEV', false)
+    vi.stubEnv('MODE', 'production')
+    vi.stubEnv('VITE_API_BASE_URL', undefined)
+    vi.resetModules()
+    const fetchMock = vi.fn().mockResolvedValue(new Response('err', { status: 503 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const { getAssetClient: getHttpAssetClient } = await import('./search')
+    const httpClient = await getHttpAssetClient()
+    await expect(httpClient.listAssets({ filters: {}, limit: 12 }, new AbortController().signal)).rejects.toThrow('chưa sẵn sàng')
+  })
 })

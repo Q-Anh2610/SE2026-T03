@@ -6,10 +6,18 @@ export class SearchPage {
   get results() { return this.page.getByRole('list', { name: 'Kết quả asset' }).getByRole('listitem') }
   get gallery() { return this.page.getByRole('region', { name: 'Hình ảnh 3D' }) }
   get resultsRegion() { return this.page.getByRole('region', { name: 'Kết quả tìm kiếm' }) }
+  get catalogRegion() { return this.page.getByRole('region', { name: 'Danh sách asset' }) }
+  get detailRegion() { return this.page.getByRole('region', { name: 'Chi tiết asset' }) }
   async open() { await this.page.goto('/') }
   async explore() { await this.page.getByRole('navigation', { name: 'Điều hướng chính' }).getByRole('link', { name: 'Khám phá asset' }).click() }
   async toggleTheme() { await this.page.getByRole('button', { name: 'Chế độ tối' }).click() }
   async showAssetDetails() { await this.results.first().getByText('Chi tiết', { exact: true }).click() }
+  async browseCatalog() { await this.page.getByRole('button', { name: 'Danh sách asset' }).click() }
+  async openFirstAssetDetail() { await this.results.first().getByRole('button', { name: /^Xem chi tiết / }).click() }
+  async backToList() { await this.page.getByRole('button', { name: 'Quay lại danh sách' }).first().click() }
+  async openApiFilters() { await this.page.getByText('Bộ lọc', { exact: true }).click() }
+  async applyApiFilters() { await this.page.getByRole('button', { name: 'Áp dụng bộ lọc' }).click() }
+  async resetApiFilters() { await this.page.getByRole('button', { name: 'Đặt lại bộ lọc API' }).click() }
   async search(value: string) { await this.query.fill(value); await this.query.press('Enter') }
   async clearQuery() { await this.page.getByRole('button', { name: 'Xóa truy vấn' }).click() }
   async filter(value: string) { await this.page.getByRole('group', { name: 'Lọc danh mục trong trang' }).getByRole('button', { name: value, exact: true }).click() }

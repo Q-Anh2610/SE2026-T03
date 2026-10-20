@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test'
 import { resolve } from 'node:path'
 
-// Before PR #24 is merged, point this at its exact checkout (see frontend/README.md).
+// Uses the repository's merged backend/ by default; override only for local debugging.
 const backend = resolve(process.env.BACKEND_CONTRACT_DIR || '../backend')
 const python = process.env.BACKEND_PYTHON || 'python3'
 
