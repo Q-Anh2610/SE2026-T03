@@ -1,5 +1,5 @@
 import { parseResponse, validateRequest } from './contract'
-import type { AssetMetadata, MockScenario, SearchClient } from './types'
+import type { AssetFilters, AssetMetadata, MockScenario, SearchClient } from './types'
 
 const fixtureDescriptions = [
   { asset_id: 'mock-chair-01', name: 'Ghế gỗ đơn giản', category: 'Nội thất', tags: ['ghế', 'gỗ', 'chair', 'wood'] },
@@ -50,7 +50,7 @@ export function createMockSearchClient(scenario: MockScenario): SearchClient {
       const request = validateRequest(input)
       await waitForMock(signal)
       if (scenario === 'error') throw new Error('Lỗi kết nối minh họa. Chọn Thử lại để chạy mock bình thường.')
-      return createMockSearchResponse(request.query, request.limit, scenario)
+      return createMockSearchResponse(request.query, request.limit, scenario, request.page, request.filters)
     },
   }
 }
@@ -64,13 +64,21 @@ export function findMockAssets(query: string): AssetMetadata[] {
   })
 }
 
-export function createMockSearchResponse(query: string, limit = 12, scenario: MockScenario = 'success') {
-  const request = validateRequest({ query, filters: {}, limit })
-  const selected = scenario === 'empty' ? [] : findMockAssets(request.query).slice(0, request.limit)
+export function createMockSearchResponse(query: string, limit = 12, scenario: MockScenario = 'success', page = 1, filters: AssetFilters = {}) {
+  const request = validateRequest({ query, filters, limit, page })
+  filters = request.filters
+  const matching = scenario === 'empty' ? [] : findMockAssets(request.query).filter((asset) =>
+    (filters.category == null || asset.category === filters.category)
+    && (filters.license == null || asset.license === filters.license)
+    && (filters.format == null || asset.formats.includes(filters.format))
+    && (filters.face_count_min == null || (asset.face_count !== null && asset.face_count >= filters.face_count_min))
+    && (filters.face_count_max == null || (asset.face_count !== null && asset.face_count <= filters.face_count_max)))
+  const selected = matching.slice((page - 1) * request.limit, page * request.limit)
   return parseResponse({
     query_id: `mock-query-${crypto.randomUUID()}`,
     search_event_id: `mock-event-${crypto.randomUUID()}`,
     query: request.query,
+    pagination: { page, limit, total: matching.length, pages: Math.ceil(matching.length / limit), has_next: page * limit < matching.length },
     results: selected.map((asset, position) => ({
       rank: position + 1,
       asset: { ...asset, tags: [...asset.tags], formats: [...asset.formats] },

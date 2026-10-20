@@ -63,6 +63,7 @@ test('keeps preview images aligned from loading to results and records the UI', 
       rank: index + 1,
       asset: { ...template.asset, asset_id: `ui-fixture-${file}`, name, thumbnail_url: new URL(`/images/discovery/${file}.webp`, page.url()).href },
     }))
+    response.pagination.total = response.results.length
     await route.fulfill({ json: response })
   })
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
