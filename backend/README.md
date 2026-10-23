@@ -73,7 +73,18 @@ Unit tests không cần DB/model; integration tests dùng PostgreSQL thật qua
 
 ## Docker
 
-Mở Docker Desktop với Linux Engine. Từ gốc repository, tạo `.env` nếu chưa có:
+Yêu cầu Docker Desktop đang chạy với Linux Engine. Chạy các lệnh sau từ gốc
+repository. Tạo `.env` từ mẫu chỉ khi chưa có; không ghi đè cấu hình local đang
+dùng:
+
+```powershell
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+```
+
+Nếu `.env` đã tồn tại, giữ nguyên các giá trị hiện có và bổ sung thủ công những
+biến Compose còn thiếu từ `.env.example`. Đặt `POSTGRES_PASSWORD` thành mật khẩu
+local giả; không dùng hoặc chia sẻ credentials thật. Sau đó xác minh cấu hình và
+khởi chạy backend cùng PostgreSQL:
 
 ```powershell
 docker compose -f docker-compose.yml config --quiet
@@ -82,16 +93,23 @@ docker compose -f docker-compose.yml ps
 Invoke-RestMethod http://127.0.0.1:8000/healthz
 ```
 
-Nếu đổi `BACKEND_PORT` trong `.env`, dùng cổng đó trong URL.
-Container chạy user non-root, có healthcheck và publish lên localhost.
-Compose khởi chạy backend và PostgreSQL 17. Bổ sung các biến POSTGRES_* từ
-`.env.example` vào `.env` có sẵn, đổi mật khẩu mẫu trước khi chạy. Backend chờ
-PostgreSQL healthy; migration và seed chạy riêng theo hướng dẫn database.
+`/healthz` trả `{"status":"ok"}` là liveness check; nó không xác nhận migration,
+search hoặc Qdrant hoạt động. Nếu `docker compose up` báo cổng 8000 đã được sử
+dụng, kiểm tra tiến trình/container đang giữ cổng trước khi dừng nó, hoặc đặt
+`BACKEND_PORT` thành cổng host còn trống trong `.env`. Khi đổi cổng, dùng cổng
+đó trong URL health check, ví dụ `http://127.0.0.1:<BACKEND_PORT>/healthz`.
+
+Compose khởi chạy backend và PostgreSQL 17; backend chờ PostgreSQL healthy.
+Container chạy user non-root, có healthcheck và chỉ publish lên localhost.
+Migration và seed chạy riêng theo [hướng dẫn database](../docs/guides/database.md).
 
 ```powershell
 docker compose -f docker-compose.yml logs backend
-docker compose -f docker-compose.yml stop backend
+docker compose -f docker-compose.yml stop
 ```
+
+Lệnh `stop` dừng backend và PostgreSQL, giữ nguyên volume/database. Không dùng
+`down -v` hoặc lệnh prune khi chỉ cần dừng stack.
 
 Để build/run Dockerfile riêng, cũng chạy từ gốc repository:
 
