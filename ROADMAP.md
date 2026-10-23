@@ -203,6 +203,8 @@ Chọn **một** mở rộng sau M7: multi-view retrieval hoặc viewer GLB. Tr�
 
 ## 8. Điều phối tải và bằng chứng
 
+Theo dõi thực hiện: [Tiến độ và điều phối theo tuần](docs/weekly-progress.md).
+
 Ước lượng 1/2/3/5 points; >5 chia nhỏ. Mục tiêu khoảng 20% tải/người, cân theo thực tế; review/test/documentation được tính. Mỗi tuần: đầu tuần chọn việc, giữa tuần xử lý blocker, cuối tuần demo và cân lại.
 
 Mục tiêu mỗi người có một PR thực chất/tuần và một review hữu ích khi có PR phù hợp. Không đếm commit làm KPI cứng, không tạo commit rỗng. Task dài dùng Draft PR, issue updates và pair work có ghi nhận.
