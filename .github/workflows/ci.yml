@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend tests and health smoke
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install backend development dependencies
+        working-directory: backend
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run backend tests
+        working-directory: backend
+        run: python -m pytest
+
+      - name: Smoke test /healthz
+        working-directory: backend
+        shell: bash
+        run: |
+          python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 \
+            > "$RUNNER_TEMP/uvicorn.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          python - <<'PY'
+          import json
+          import time
+          from urllib.error import URLError
+          from urllib.request import urlopen
+
+          url = "http://127.0.0.1:8000/healthz"
+
+          for attempt in range(20):
+              try:
+                  with urlopen(url, timeout=2) as response:
+                      payload = json.load(response)
+                      if response.status != 200 or payload.get("status") != "ok":
+                          raise SystemExit(
+                              f"Unexpected health response: "
+                              f"HTTP {response.status}, body={payload}"
+                          )
+                      print("GET /healthz: HTTP 200, status=ok")
+                      break
+              except (URLError, TimeoutError, OSError) as exc:
+                  if attempt == 19:
+                      raise SystemExit(f"Backend health check failed: {exc}") from exc
+                  time.sleep(1)
+          PY
+
+      - name: Show backend log on failure
+        if: failure()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/uvicorn.log" ]; then
+            cat "$RUNNER_TEMP/uvicorn.log"
+          fi
+
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22.12.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit and component tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
