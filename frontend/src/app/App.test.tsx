@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from './App'
@@ -10,6 +10,7 @@ beforeEach(() => {
 })
 afterEach(() => {
   localStorage.clear()
+  window.location.hash = ''
   delete document.documentElement.dataset.theme
   document.querySelector('meta[name="theme-color"]')?.remove()
 })
@@ -21,7 +22,11 @@ describe('theme preference', () => {
     expect(screen.getAllByRole('contentinfo')).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Connected, trang chủ' })).toHaveAttribute('href', './')
     const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' })
-    expect(navigation.querySelectorAll('a')).toHaveLength(1)
+    expect(navigation.querySelectorAll('a')).toHaveLength(2)
+    expect(screen.getByRole('link', { name: 'Trạng thái job' })).toHaveAttribute(
+      'href',
+      '#admin-status',
+    )
     expect(screen.getByRole('link', { name: 'Khám phá asset' })).toHaveAttribute('href', '#search-panel')
     expect(screen.getByRole('link', { name: 'Đến nội dung chính' })).toHaveAttribute('href', '#main')
     expect(screen.queryByText('Không gian cho ý tưởng tiếp theo.')).not.toBeInTheDocument()
@@ -79,5 +84,40 @@ describe('theme preference', () => {
     render(<App />)
     await userEvent.setup().click(screen.getByRole('button', { name: 'Chế độ tối' }))
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+  })
+})
+
+describe('admin status routing', () => {
+  it('renders the admin status page when loaded with the admin hash', () => {
+    window.location.hash = '#admin-status'
+
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: 'Trạng thái job' })).toBeInTheDocument()
+  })
+
+  it('switches to the admin status page when the hash changes', async () => {
+    window.location.hash = '#search-panel'
+    render(<App />)
+
+    window.location.hash = '#admin-status'
+    window.dispatchEvent(new Event('hashchange'))
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Trạng thái job' })).toBeInTheDocument()
+    })
+  })
+
+  it('switches back to the search page when leaving the admin hash', async () => {
+    window.location.hash = '#admin-status'
+    render(<App />)
+
+    window.location.hash = '#search-panel'
+    window.dispatchEvent(new Event('hashchange'))
+
+    await waitFor(() => {
+      expect(document.querySelector('#search-panel')).toBeInTheDocument()
+      expect(screen.queryByRole('heading', { name: 'Trạng thái job' })).not.toBeInTheDocument()
+    })
   })
 })
