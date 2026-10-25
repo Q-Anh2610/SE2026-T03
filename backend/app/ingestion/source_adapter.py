@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -89,7 +90,7 @@ class SourceAdapter:
         try:
             with self.manifest_path.open("r", encoding="utf-8") as file:
                 data = json.load(file)
-        except json.JSONDecodeError as exc:
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
             raise ValueError(
                 f"File manifest không đúng định dạng JSON: {exc}"
             ) from exc
@@ -119,6 +120,7 @@ class SourceAdapter:
         valid_assets: list[dict[str, Any]] = []
         invalid_assets: list[dict[str, Any]] = []
         seen_ids: set[str] = set()
+        seen_sources: set[tuple[str, str]] = set()
 
         if not isinstance(raw_data, list):
             raise ValueError("raw_data phải là một danh sách.")
@@ -137,6 +139,12 @@ class SourceAdapter:
                 )
                 continue
 
+            raw_item = item
+            # So sánh định danh sau trim, không sửa dictionary của caller.
+            item = {
+                key: value.strip() if isinstance(value, str) else value
+                for key, value in item.items()
+            }
             errors: list[str] = []
             asset_id = item.get("asset_id")
 
@@ -154,8 +162,11 @@ class SourceAdapter:
             if isinstance(asset_id, str) and asset_id.strip():
                 if asset_id in seen_ids:
                     errors.append(f"Trùng lặp asset_id: '{asset_id}'")
-                else:
-                    seen_ids.add(asset_id)
+
+            source_key = (item.get("source"), item.get("source_id"))
+            if all(isinstance(value, str) and value for value in source_key):
+                if source_key in seen_sources:
+                    errors.append("Trùng lặp source/source_id.")
 
             # 3. Kiểm tra source_url.
             source_url = item.get("source_url")
@@ -239,6 +250,10 @@ class SourceAdapter:
                     "Trường 'ingestion_status' phải là chuỗi hoặc null."
                 )
 
+            checksum = item.get("checksum")
+            if isinstance(checksum, str) and not re.fullmatch(r"[0-9a-fA-F]{64}", checksum):
+                errors.append("Trường 'checksum' phải là SHA-256 hex 64 ký tự hoặc null.")
+
             # Có lỗi thì không đưa bản ghi vào danh sách hợp lệ.
             if errors:
                 invalid_assets.append(
@@ -250,7 +265,7 @@ class SourceAdapter:
                             else f"unknown_{index}"
                         ),
                         "errors": errors,
-                        "raw_item": item,
+                        "raw_item": raw_item,
                     }
                 )
                 continue
@@ -262,8 +277,12 @@ class SourceAdapter:
             }
 
             # Giá trị mặc định được quy định rõ.
-            normalized_record["tags"] = item.get("tags") or []
-            normalized_record["formats"] = item.get("formats") or []
+            normalized_record["tags"] = list(dict.fromkeys(
+                value.strip() for value in (item.get("tags") or []) if value.strip()
+            ))
+            normalized_record["formats"] = list(dict.fromkeys(
+                value.strip() for value in (item.get("formats") or []) if value.strip()
+            ))
 
             status = item.get("ingestion_status")
             normalized_record["ingestion_status"] = (
@@ -272,6 +291,9 @@ class SourceAdapter:
             )
 
             valid_assets.append(normalized_record)
+            # Bản ghi lỗi không được chiếm ID của bản ghi hợp lệ phía sau.
+            seen_ids.add(asset_id)
+            seen_sources.add(source_key)
 
         return valid_assets, invalid_assets
 
@@ -287,12 +309,19 @@ class SourceAdapter:
             return False
 
         try:
-            parsed = urlparse(url_string.strip())
+            if any(char.isspace() or ord(char) < 32 for char in url_string):
+                return False
+            parsed = urlparse(url_string)
+            # Truy cập port để bắt cả URL có port sai định dạng/ngoài khoảng.
+            port = parsed.port
 
             return (
                 parsed.scheme.lower() in {"http", "https"}
                 and bool(parsed.netloc)
                 and parsed.hostname is not None
+                and parsed.username is None
+                and parsed.password is None
+                and port != 0
             )
         except (ValueError, TypeError):
             return False

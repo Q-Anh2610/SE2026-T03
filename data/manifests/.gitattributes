@@ -1,0 +1,2 @@
+# Hash provenance phải ổn định khi checkout trên Windows/Linux.
+objaverse_200*.json text eol=lf

@@ -93,12 +93,77 @@ def test_normalize_and_validate(sample_manifest_file: Path):
 
 def test_real_manifest_200_records():
     """Test đọc file manifest 200 records thực tế trong dự án."""
-    real_manifest_path = Path("data/manifests/objaverse_200.json")
-    if real_manifest_path.exists():
-        adapter = SourceAdapter(real_manifest_path)
-        data = adapter.load_manifest()
-        valid, invalid = adapter.normalize_and_validate(data)
+    real_manifest_path = Path(__file__).resolve().parents[4] / "data/manifests/objaverse_200.json"
+    adapter = SourceAdapter(real_manifest_path)
+    data = adapter.load_manifest()
+    valid, invalid = adapter.normalize_and_validate(data)
+    assert len(data) == 200
+    assert len(valid) == 200, invalid
+    assert len(invalid) == 0
 
-        assert len(data) == 200
-        assert len(valid) == 200
-        assert len(invalid) == 0
+
+def asset(**changes):
+    return {"asset_id": "a1", "source": "objaverse", "source_id": "uid1",
+            "source_url": "https://example.org/model", "name": "Chair",
+            "license": "by", **changes}
+
+
+def test_invalid_record_does_not_reserve_id_or_source():
+    valid, invalid = SourceAdapter("").normalize_and_validate([asset(name=None), asset()])
+    assert len(valid) == len(invalid) == 1
+    assert valid[0]["asset_id"] == "a1"
+
+
+def test_duplicate_source_with_different_asset_id():
+    valid, invalid = SourceAdapter("").normalize_and_validate([asset(), asset(asset_id="a2")])
+    assert len(valid) == len(invalid) == 1
+    assert "source/source_id" in " ".join(invalid[0]["errors"])
+
+
+def test_trim_dedup_and_preserve_input():
+    original = asset(asset_id=" a1 ", tags=[" chair ", "chair", ""], formats=[" glb "])
+    valid, invalid = SourceAdapter("").normalize_and_validate([original, asset()])
+    assert len(valid) == len(invalid) == 1
+    assert valid[0]["asset_id"] == "a1"
+    assert valid[0]["tags"] == ["chair"]
+    assert valid[0]["formats"] == ["glb"]
+    assert original["asset_id"] == " a1 "
+    valid[0]["tags"].append("table")
+    assert original["tags"] == [" chair ", "chair", ""]
+
+
+@pytest.mark.parametrize("url", ["https://", "ftp://example.org/a", "https://exa mple.org/a",
+                                     "https://example.org:bad/a", "https://example.org:65536/a",
+                                     "https://user:password@example.org/a", "https://example.org/a\nb"])
+def test_invalid_urls_are_reported(url):
+    valid, invalid = SourceAdapter("").normalize_and_validate([asset(source_url=url), asset(asset_id="a2")])
+    assert len(valid) == len(invalid) == 1
+
+
+@pytest.mark.parametrize("changes", [{"face_count": True}, {"face_count": -1},
+                                    {"tags": [1]}, {"formats": "glb"}, {"checksum": "fake"},
+                                    {"source_id": []}, {"license": None}, {"ingestion_status": 1}])
+def test_invalid_fields_do_not_abort_batch(changes):
+    valid, invalid = SourceAdapter("").normalize_and_validate([asset(**changes), asset()])
+    assert len(valid) == len(invalid) == 1
+
+
+@pytest.mark.parametrize("content", ["{", "{}", "null", "123"])
+def test_malformed_or_non_array_manifest(tmp_path, content):
+    path = tmp_path / "manifest.json"
+    path.write_text(content, encoding="utf-8")
+    with pytest.raises(ValueError):
+        SourceAdapter(path).load_manifest()
+
+
+def test_non_objects_are_reported_and_raw_preserved():
+    original = asset(name=" ")
+    valid, invalid = SourceAdapter("").normalize_and_validate([None, [], original, asset()])
+    assert len(valid) == 1
+    assert len(invalid) == 3
+    assert invalid[2]["raw_item"] == original
+
+
+def test_directory_is_not_manifest(tmp_path):
+    with pytest.raises(ValueError):
+        SourceAdapter(tmp_path).load_manifest()

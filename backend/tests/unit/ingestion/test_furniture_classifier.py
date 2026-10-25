@@ -1,4 +1,3 @@
-
 """
 Unit tests cho furniture_classifier.py.
 
@@ -285,3 +284,8 @@ def test_classifier_does_not_use_unconfigured_description_field():
     }
 
     assert is_furniture(metadata) is False
+
+
+def test_objaverse_tag_uri_is_not_used_as_a_label():
+    assert not is_furniture({"tags": [{"name": "vehicle", "uri": "https://example.org/chair"}]})
+    assert is_furniture({"tags": [{"name": "wooden-chair", "uri": "https://example.org/123"}]})
