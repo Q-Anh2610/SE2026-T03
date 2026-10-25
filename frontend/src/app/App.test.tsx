@@ -21,7 +21,11 @@ describe('theme preference', () => {
     expect(screen.getAllByRole('contentinfo')).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Connected, trang chủ' })).toHaveAttribute('href', './')
     const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' })
-    expect(navigation.querySelectorAll('a')).toHaveLength(1)
+    expect(navigation.querySelectorAll('a')).toHaveLength(2)
+    expect(screen.getByRole('link', { name: 'Trạng thái job' })).toHaveAttribute(
+      'href',
+      '#admin-status',
+    )
     expect(screen.getByRole('link', { name: 'Khám phá asset' })).toHaveAttribute('href', '#search-panel')
     expect(screen.getByRole('link', { name: 'Đến nội dung chính' })).toHaveAttribute('href', '#main')
     expect(screen.queryByText('Không gian cho ý tưởng tiếp theo.')).not.toBeInTheDocument()
