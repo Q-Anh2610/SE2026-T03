@@ -7,6 +7,7 @@ from pathlib import Path
 from .config import load_config, resolve_repo_path
 from .errors import EvaluationError
 from .metrics.recall import recall_at_k
+from .metrics.ranking import hit_at_k, ndcg_at_k
 from .results import make_run, read_run, write_run
 from .runner import load_queries, run_benchmark
 from .search import HttpProductSearch
@@ -20,9 +21,14 @@ def _parser() -> argparse.ArgumentParser:
     benchmark.add_argument("--config", default="example.json", help="Tên config trong evaluation/configs/ hoặc đường dẫn JSON.")
     benchmark.add_argument("--output", help="File JSON kết quả; mặc định evaluation/results/<timestamp>.json.")
 
-    metrics = commands.add_parser("metrics", help="Tính Recall@k từ kết quả benchmark.")
+    metrics = commands.add_parser("metrics", help="Tính các metric xếp hạng từ kết quả benchmark.")
     metrics.add_argument("--input", required=True, help="File kết quả JSON.")
-    metrics.add_argument("--k", type=int, default=10, help="Cutoff k của Recall@k (mặc định 10).")
+    metrics.add_argument(
+        "--k",
+        action="append",
+        type=int,
+        help="Cutoff k; có thể lặp lại (mặc định Recall/Hit @5 và @10, nDCG@10).",
+    )
     metrics.add_argument("--output", help="Ghi report JSON ra file thay vì stdout.")
 
     writer = commands.add_parser("write-results", help="Chuẩn hóa/ghi một file kết quả JSON.")
@@ -49,13 +55,29 @@ def _benchmark(config_value: str, output_value: str | None) -> int:
     return 0
 
 
-def _metrics(input_value: str, k: int, output_value: str | None) -> int:
+def _metrics(input_value: str, k_values: list[int] | None, output_value: str | None) -> int:
     path = Path(input_value).resolve()
     run = read_run(path)
     records = run.get("records")
     if not isinstance(records, list):
         raise EvaluationError(f"File '{path}' không có mảng records hợp lệ.")
-    report = recall_at_k(records, k)
+    cutoffs = k_values or [5, 10]
+    reports = {
+        **{f"recall@{k}": recall_at_k(records, k) for k in cutoffs},
+        **{f"hit@{k}": hit_at_k(records, k) for k in cutoffs},
+    }
+    if 10 in cutoffs or k_values is None:
+        reports["ndcg@10"] = ndcg_at_k(records, 10)
+    elif len(cutoffs) == 1:
+        reports[f"ndcg@{cutoffs[0]}"] = ndcg_at_k(records, cutoffs[0])
+
+    if len(cutoffs) == 1:
+        report = reports[f"recall@{cutoffs[0]}"]
+        report["additional_metrics"] = {
+            name: value for name, value in reports.items() if name != f"recall@{cutoffs[0]}"
+        }
+    else:
+        report = {"name": "ranking_metrics", "cutoffs": cutoffs, "metrics": reports}
     serialized = json.dumps(report, ensure_ascii=False, indent=2)
     if output_value:
         metrics_result = {"provenance": run.get("provenance", {}), "metrics": report}

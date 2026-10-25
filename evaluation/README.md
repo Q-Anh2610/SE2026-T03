@@ -64,8 +64,24 @@ cung cấp dữ liệu benchmark thật trước khi chạy.
 ## Lệnh
 
 - `benchmark`: chạy queries qua adapter sản phẩm, ghi JSON vào `results/`.
-- `metrics`: tính macro Recall@k và điểm từng query; metric mở rộng thuộc W2.
+- `metrics`: tính Recall@5, Recall@10, nDCG@10 và Hit@5/10 từ kết quả benchmark. Có thể lặp lại `--k` để chạy các cutoff khác.
 - `write-results`: đọc và ghi lại object JSON kết quả.
+
+### Metric ranking
+
+Mặc định, lệnh `metrics` tính các cutoff theo phạm vi benchmark:
+
+- Recall@5 và Recall@10: tỷ lệ asset liên quan xuất hiện trong top K.
+- Hit@5 và Hit@10: tỷ lệ query có ít nhất một asset liên quan trong top K.
+- nDCG@10: đánh giá chất lượng thứ hạng, trong đó asset liên quan ở vị trí cao hơn được điểm cao hơn.
+
+Có thể truyền một hoặc nhiều cutoff tùy ý bằng cách lặp `--k`, ví dụ:
+
+```powershell
+python -m evaluation metrics --input evaluation/results/sample-run.json --k 5 --k 10
+```
+
+Kết quả gồm `macro_average` và điểm `per_query`. Các metric dùng trường `query_id`, `relevant_asset_ids` và `retrieved_asset_ids`; dữ liệu thiếu hoặc sai kiểu sẽ trả lỗi và mã thoát khác 0. CLI chỉ báo cáo metric, chưa đặt ngưỡng chất lượng.
 
 ## Kiểm thử
 
