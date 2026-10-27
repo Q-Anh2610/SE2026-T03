@@ -36,7 +36,9 @@ Backend mock có 5 endpoints tại `/api/v1` để phát triển UI, xem
 `docker-compose.yml` khởi chạy backend và PostgreSQL. Xem
 [hướng dẫn ORM, Alembic và seed](docs/guides/database.md).
 `GET /api/v1/assets` mặc định đọc PostgreSQL (Issue #47); detail/search/feedback
-vẫn mock. Qdrant và tìm kiếm semantic thật chưa được triển khai.
+vẫn mock. Đã có các module CLIP batch, Qdrant store và keyword baseline
+của Issue #39; chưa tích hợp vào Search API. Xem
+[hướng dẫn baseline W2](docs/guides/search-baseline-w2.md).
 Xem [hướng dẫn frontend](frontend/README.md) cho giao diện hiện có.
 
 ## Quy trình Git
