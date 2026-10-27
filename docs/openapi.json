@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "3D Asset Semantic Search API",
-    "description": "Contract mock v1 cho phát triển frontend. Không chạy semantic search hoặc lưu feedback vào database.",
+    "description": "Danh sách asset đọc PostgreSQL. Detail/search/feedback hiện là mock phục vụ phát triển; chưa semantic search.",
     "version": "0.1.0"
   },
   "paths": {
@@ -36,8 +36,9 @@
         "tags": [
           "assets"
         ],
-        "summary": "[Mock] Danh sách asset",
-        "operationId": "list_assets_api_v1_assets_get",
+        "summary": "Danh sách asset từ PostgreSQL",
+        "description": "Filters AND trước phân trang; sắp xếp asset_id tăng dần. Không fallback mock khi DB lỗi.",
+        "operationId": "get_assets_api_v1_assets_get",
         "parameters": [
           {
             "name": "category",
@@ -159,7 +160,7 @@
                 "example": {
                   "items": [
                     {
-                      "asset_id": "mock-chair-01",
+                      "asset_id": "mock-asset-001",
                       "name": "Ghế gỗ đơn giản",
                       "description": "Bản ghi minh họa tự tạo; không có file asset 3D thật.",
                       "category": "Nội thất",
@@ -174,7 +175,7 @@
                       ],
                       "face_count": null,
                       "thumbnail_url": null,
-                      "source": "fixture",
+                      "source": "mock",
                       "source_url": null,
                       "author": null,
                       "license": null
@@ -187,7 +188,7 @@
                     "pages": 1,
                     "has_next": false
                   },
-                  "mock": true
+                  "mock": false
                 }
               }
             }
@@ -831,9 +832,8 @@
           },
           "mock": {
             "type": "boolean",
-            "const": true,
             "title": "Mock",
-            "default": true
+            "default": false
           }
         },
         "type": "object",

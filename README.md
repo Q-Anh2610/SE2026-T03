@@ -35,7 +35,8 @@ Backend mock có 5 endpoints tại `/api/v1` để phát triển UI, xem
 [API contract v1](docs/contracts/api-v1.md) và `docs/openapi.json`; chờ frontend review.
 `docker-compose.yml` khởi chạy backend và PostgreSQL. Xem
 [hướng dẫn ORM, Alembic và seed](docs/guides/database.md).
-Qdrant và tìm kiếm semantic thật chưa được triển khai; các API mock chưa ghi database.
+`GET /api/v1/assets` mặc định đọc PostgreSQL (Issue #47); detail/search/feedback
+vẫn mock. Qdrant và tìm kiếm semantic thật chưa được triển khai.
 Xem [hướng dẫn frontend](frontend/README.md) cho giao diện hiện có.
 
 ## Quy trình Git

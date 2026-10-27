@@ -1,4 +1,26 @@
-# API contract v1 - mock endpoints, Issue #9
+# API contract v1 - asset list PostgreSQL và các API mock
+
+## Cập nhật Issue #47
+
+- `GET /api/v1/assets` mặc định đọc PostgreSQL và trả `mock=false`; các keys
+  `items`/`pagination` và filters giữ nguyên. Không fallback fixture khi DB lỗi.
+- `APP_ASSET_LIST_SOURCE=fixture` chọn bộ fixture cũ một cách tường minh, chỉ có
+  hiệu lực khi bật mock ở development/test. Production luôn dùng list DB.
+- List DB lọc AND trước phân trang, ORDER BY asset_id ASC; count và items cùng
+  transaction REPEATABLE READ. Các request khác nhau có thể thấy dữ liệu mới.
+- List hiện liệt kê mọi ingestion_status, không đồng nghĩa asset đã searchable.
+- Name null dùng asset_id làm nhãn hiển thị để tương thích frontend; không sửa
+  metadata gốc trong DB. Các metadata nullable khác giữ null.
+- thumbnail_url chỉ lấy từ thumbnail_path nếu là HTTP(S) URL không kèm credentials;
+  đường dẫn local trả null. Chưa triển khai phục vụ file preview trong issue này.
+- `mock=false` chỉ xác định nguồn đọc DB: bản ghi seed vẫn có source=mock.
+- Detail/search/feedback vẫn là mock; detail chưa đọc các ID trong DB nên có thể
+  trả 404 khi mở từ list DB. Cần nối detail ở issue tiếp theo trước khi nghiệm thu
+  luồng UI list → detail dùng DB đầy đủ.
+- OpenAPI xuất mặc định mô tả list DB và các route mock còn lại. Chế độ fixture
+  có Swagger runtime riêng. Các quy ước mock bên dưới chỉ áp dụng khi dùng fixture.
+
+## Contract mock gốc (Issue #9)
 
 Trạng thái: backend đã có contract/mock để review; **chờ Nguyễn Văn Duy xác nhận**
 request/response, lỗi và phân trang. Không coi tài liệu này là bằng chứng hai phía

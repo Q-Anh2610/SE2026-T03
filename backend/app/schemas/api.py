@@ -70,7 +70,7 @@ class Pagination(BaseModel):
 class AssetListResponse(BaseModel):
     items: list[AssetMetadata]
     pagination: Pagination
-    mock: Literal[True] = True
+    mock: bool = False
 
 
 class AssetDetailResponse(BaseModel):

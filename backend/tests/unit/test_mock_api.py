@@ -13,7 +13,7 @@ from app.services.mock_api import matches
 
 @pytest.fixture
 def client():
-    application = create_app(Settings(_env_file=None, env="test", debug=False, mock_api_enabled=True))
+    application = create_app(Settings(_env_file=None, env="test", debug=False, mock_api_enabled=True, asset_list_source="fixture"))
     with TestClient(application, raise_server_exceptions=False) as value:
         yield value
 
@@ -178,7 +178,8 @@ def test_mock_state_is_not_durable_between_app_instances(client):
 def test_mock_routes_are_disabled_outside_explicit_development_mode(values):
     with TestClient(create_app(Settings(_env_file=None, **values))) as client:
         assert client.get("/healthz").status_code == 200
-        assert client.get("/api/v1/assets").status_code == 404
+        assert client.get("/api/v1/assets/mock-chair-01").status_code == 404
+        assert "/api/v1/assets" in client.get("/openapi.json").json()["paths"]
 
 
 def test_internal_error_does_not_expose_exception_message(client, monkeypatch):
