@@ -32,7 +32,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     application = FastAPI(
         title=settings.name, debug=settings.debug,
-        description="Danh sách asset đọc PostgreSQL. Detail/search/feedback hiện là mock phục vụ phát triển; chưa semantic search.",
+        description="Danh sách và chi tiết asset đọc PostgreSQL. Search/feedback hiện là mock phục vụ phát triển; chưa semantic search.",
         lifespan=lifespan,
     )
     application.state.settings = settings

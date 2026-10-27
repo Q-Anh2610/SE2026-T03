@@ -6,7 +6,8 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import Asset
-from app.schemas.api import AssetListQuery, AssetListResponse, AssetMetadata, Pagination
+from app.core.errors import api_error
+from app.schemas.api import AssetDetailResponse, AssetListQuery, AssetListResponse, AssetMetadata, Pagination
 
 
 def public_thumbnail(value: str | None) -> str | None:
@@ -31,8 +32,15 @@ def asset_metadata(asset: Asset) -> AssetMetadata:
         description=asset.description, category=asset.category,
         tags=asset.tags, formats=asset.formats, face_count=asset.face_count,
         thumbnail_url=public_thumbnail(asset.thumbnail_path), source=asset.source,
-        source_url=asset.source_url, author=asset.author, license=asset.license,
+        source_url=public_thumbnail(asset.source_url), author=asset.author, license=asset.license,
     )
+
+
+def get_asset(session: Session, asset_id: str) -> AssetDetailResponse:
+    asset = session.get(Asset, asset_id)
+    if asset is None:
+        raise api_error(404, "ASSET_NOT_FOUND", "Không tìm thấy asset.")
+    return AssetDetailResponse(asset=asset_metadata(asset), mock=False)
 
 
 def list_assets(session: Session, params: AssetListQuery) -> AssetListResponse:
