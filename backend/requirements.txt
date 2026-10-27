@@ -5,23 +5,123 @@ annotated-doc==0.0.5
 annotated-types==0.8.0
     # via pydantic
 anyio==4.15.1
-    # via starlette
+    # via
+    #   httpx
+    #   starlette
+certifi==2026.10.23
+    # via
+    #   httpcore
+    #   httpx
+    #   requests
+charset-normalizer==3.5.2
+    # via requests
 click==8.5.0
     # via uvicorn
+colorama==0.4.6 ; sys_platform == 'win32'
+    # via tqdm
 fastapi==0.143.3
     # via -r backend/requirements.in
+filelock==4.2.4
+    # via
+    #   huggingface-hub
+    #   torch
+    #   transformers
+fsspec==2026.9.0
+    # via
+    #   huggingface-hub
+    #   torch
+grpcio==1.84.1
+    # via qdrant-client
 h11==0.16.0
-    # via uvicorn
+    # via
+    #   httpcore
+    #   uvicorn
+h2==4.4.1
+    # via httpx
+hf-xet==1.7.0 ; platform_machine == 'aarch64' or platform_machine == 'amd64' or platform_machine == 'arm64' or platform_machine == 'x86_64'
+    # via huggingface-hub
+hpack==4.2.0
+    # via h2
+httpcore==1.0.9
+    # via httpx
+httpx==0.28.1
+    # via qdrant-client
+huggingface-hub==0.36.2
+    # via
+    #   tokenizers
+    #   transformers
+hyperframe==6.1.0
+    # via h2
 idna==3.20
-    # via anyio
+    # via
+    #   anyio
+    #   httpx
+    #   requests
+jinja2==3.1.6
+    # via torch
 mako==1.4.3
     # via alembic
 markupsafe==3.0.4
-    # via mako
+    # via
+    #   jinja2
+    #   mako
+mpmath==1.3.0
+    # via sympy
+networkx==3.7
+    # via torch
+numpy==2.5.4
+    # via
+    #   qdrant-client
+    #   transformers
+nvidia-cublas-cu12==12.8.4.1 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via
+    #   nvidia-cudnn-cu12
+    #   nvidia-cusolver-cu12
+    #   torch
+nvidia-cuda-cupti-cu12==12.8.90 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cuda-nvrtc-cu12==12.8.93 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cuda-runtime-cu12==12.8.90 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cudnn-cu12==9.10.2.21 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cufft-cu12==11.3.3.83 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cufile-cu12==1.13.1.3 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-curand-cu12==10.3.9.90 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cusolver-cu12==11.7.3.90 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-cusparse-cu12==12.5.8.93 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via
+    #   nvidia-cusolver-cu12
+    #   torch
+nvidia-cusparselt-cu12==0.7.1 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-nccl-cu12==2.27.3 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
+nvidia-nvjitlink-cu12==12.8.93 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via
+    #   nvidia-cufft-cu12
+    #   nvidia-cusolver-cu12
+    #   nvidia-cusparse-cu12
+    #   torch
+nvidia-nvtx-cu12==12.8.90 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
 opentelemetry-api==1.45.1
     # via fastapi
+packaging==26.3
+    # via
+    #   huggingface-hub
+    #   transformers
 pillow==13.0.0
     # via -r backend/requirements.in
+portalocker==3.2.0
+    # via qdrant-client
+protobuf==7.36.2
+    # via qdrant-client
 psycopg==3.3.6
     # via -r backend/requirements.in
 psycopg-binary==3.3.6 ; implementation_name != 'pypy'
@@ -30,6 +130,7 @@ pydantic==2.14.1
     # via
     #   fastapi
     #   pydantic-settings
+    #   qdrant-client
 pydantic-core==2.50.1
     # via pydantic
 pydantic-settings==2.16.0
@@ -38,22 +139,59 @@ python-dotenv==1.2.4
     # via pydantic-settings
 python-multipart==0.0.32
     # via -r backend/requirements.in
+pywin32==312 ; sys_platform == 'win32'
+    # via portalocker
+pyyaml==6.0.3
+    # via
+    #   huggingface-hub
+    #   transformers
+qdrant-client==1.15.1
+    # via -r backend/requirements.in
+regex==2026.9.29
+    # via transformers
+requests==2.34.2
+    # via
+    #   huggingface-hub
+    #   transformers
+safetensors==0.8.0
+    # via transformers
+setuptools==84.2.1
+    # via
+    #   torch
+    #   triton
 sqlalchemy==2.1.5
     # via
     #   -r backend/requirements.in
     #   alembic
 starlette==1.9.0
     # via fastapi
+sympy==1.14.0
+    # via torch
+tokenizers==0.22.2
+    # via transformers
+torch==2.8.0
+    # via -r backend/requirements.in
+tqdm==4.70.1
+    # via
+    #   huggingface-hub
+    #   transformers
+transformers==4.57.1
+    # via -r backend/requirements.in
+triton==3.4.0 ; platform_machine == 'x86_64' and sys_platform == 'linux'
+    # via torch
 typing-extensions==4.16.0
     # via
     #   alembic
     #   anyio
     #   fastapi
+    #   grpcio
+    #   huggingface-hub
     #   opentelemetry-api
     #   pydantic
     #   pydantic-core
     #   pydantic-settings
     #   sqlalchemy
+    #   torch
     #   typing-inspection
 typing-inspection==0.4.4
     # via
@@ -62,5 +200,9 @@ typing-inspection==0.4.4
     #   pydantic-settings
 tzdata==2026.5 ; sys_platform == 'win32'
     # via psycopg
+urllib3==2.8.0
+    # via
+    #   qdrant-client
+    #   requests
 uvicorn==0.54.0
     # via -r backend/requirements.in

@@ -188,3 +188,12 @@ không thêm pipeline thứ hai vào API. Schema PostgreSQL, migration đầu v�
 được mô tả tại [hướng dẫn database](../docs/guides/database.md). Chưa triển khai
 authentication hoặc tìm kiếm semantic thật; API mock của Issue #9 chưa ghi
 PostgreSQL. Giữ code có sẵn của các thành viên.
+
+## Baseline tìm kiếm W2 — Issue #39
+
+Đã có CLIP batch encoder, batch runner cho ảnh local, Qdrant store và
+keyword baseline. Xem [hướng dẫn baseline W2](../docs/guides/search-baseline-w2.md)
+để biết đầu vào, versioning, cách chạy Qdrant và bằng chứng kiểm chứng.
+
+Các module chưa nối vào HTTP Search API hoặc cập nhật trạng thái PostgreSQL.
+Việc index 200 asset thật còn chờ bộ ảnh đã xử lý từ ingestion.
