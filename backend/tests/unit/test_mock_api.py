@@ -178,8 +178,9 @@ def test_mock_state_is_not_durable_between_app_instances(client):
 def test_mock_routes_are_disabled_outside_explicit_development_mode(values):
     with TestClient(create_app(Settings(_env_file=None, **values))) as client:
         assert client.get("/healthz").status_code == 200
-        assert client.get("/api/v1/assets/mock-chair-01").status_code == 404
-        assert "/api/v1/assets" in client.get("/openapi.json").json()["paths"]
+        assert client.post("/api/v1/search/text", json={"query": "chair"}).status_code == 404
+        paths = client.get("/openapi.json").json()["paths"]
+        assert "/api/v1/assets" in paths and "/api/v1/assets/{asset_id}" in paths
 
 
 def test_internal_error_does_not_expose_exception_message(client, monkeypatch):

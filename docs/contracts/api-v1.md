@@ -1,4 +1,23 @@
-# API contract v1 - asset list PostgreSQL và các API mock
+# API contract v1 - list/detail PostgreSQL và các API mock
+
+## Cập nhật Issue #48
+
+- `GET /api/v1/assets/{asset_id}` đọc cùng PostgreSQL và dùng cùng mapping metadata
+  với list; response giữ `{asset, mock}` và trả `mock=false`.
+- Asset không có trả 404 `ASSET_NOT_FOUND`; DB lỗi trả 500 chuẩn, không fallback
+  fixture. ID dài hơn 128 ký tự trả 400 trước khi khởi tạo kết nối DB.
+- `APP_ASSET_LIST_SOURCE` hiện chọn nguồn cho cả list/detail. Chế độ fixture chỉ
+  có hiệu lực khi bật mock ở development/test; production luôn có cả hai API DB.
+- thumbnail_path là HTTP(S) URL không chứa credentials thì dùng làm thumbnail_url;
+  thiếu, sai định dạng, hoặc là đường dẫn file local thì trả null. source_url cũng
+  chỉ trả HTTP(S) URL không kèm credentials để giữ contract Frontend và không lộ
+  đường dẫn riêng. API không tải URL để kiểm tra ảnh và không phục vụ file local.
+- Name null/rỗng vẫn hiển thị asset_id theo quy ước #47; các metadata thiếu khác
+  giữ null. Không sửa thông tin nguồn, tác giả/license hay metadata gốc trong DB.
+- Search/feedback còn mock, nên ID từ search fixture không mặc định có trong DB.
+  Đối chiếu UI list → detail phải dùng cùng chế độ nguồn dữ liệu.
+- Quy ước preview tái sử dụng #47, cần Huyền/Duy review khi bàn giao dữ liệu thật;
+  kiểm thử tự động không thay cho xác nhận của hai thành viên.
 
 ## Cập nhật Issue #47
 
@@ -14,9 +33,7 @@
 - thumbnail_url chỉ lấy từ thumbnail_path nếu là HTTP(S) URL không kèm credentials;
   đường dẫn local trả null. Chưa triển khai phục vụ file preview trong issue này.
 - `mock=false` chỉ xác định nguồn đọc DB: bản ghi seed vẫn có source=mock.
-- Detail/search/feedback vẫn là mock; detail chưa đọc các ID trong DB nên có thể
-  trả 404 khi mở từ list DB. Cần nối detail ở issue tiếp theo trước khi nghiệm thu
-  luồng UI list → detail dùng DB đầy đủ.
+- Detail trước đây còn mock ở #47; từ #48 đã đọc DB như phần cập nhật phía trên.
 - OpenAPI xuất mặc định mô tả list DB và các route mock còn lại. Chế độ fixture
   có Swagger runtime riêng. Các quy ước mock bên dưới chỉ áp dụng khi dùng fixture.
 

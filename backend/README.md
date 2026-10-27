@@ -21,9 +21,10 @@ Linux/macOS: tạo bằng `python3.13 -m venv .venv`, dùng `.venv/bin/python`.
 - `http://127.0.0.1:8000/docs`: Swagger UI.
 - Nhấn Ctrl+C để dừng Uvicorn.
 
-## API danh sách PostgreSQL (Issue #47)
+## API asset PostgreSQL (Issues #47, #48)
 
-`GET /api/v1/assets` mặc định đọc PostgreSQL, trả `mock=false`. Dùng cấu hình
+`GET /api/v1/assets` và `GET /api/v1/assets/{asset_id}` mặc định đọc PostgreSQL,
+trả `mock=false`. Dùng cấu hình
 POSTGRES_* trong `.env`, chạy Alembic trước; xem [database](../docs/guides/database.md).
 Từ backend/:
 
@@ -38,19 +39,22 @@ asset thật hoặc đã searchable. List lọc AND trước phân trang, sắp 
 tăng dần; chưa ẩn asset theo ingestion_status. Không fallback khi DB lỗi.
 
 Để thử fixture cũ một cách tường minh, đặt `APP_ASSET_LIST_SOURCE=fixture` cùng
-`APP_MOCK_API_ENABLED=true` ở development/test. Production luôn dùng list DB.
+`APP_MOCK_API_ENABLED=true` ở development/test. Biến này chọn nguồn cho cả list
+và detail để hai API dùng cùng bộ dữ liệu. Production luôn dùng DB.
 Tests Frontend–FastAPI cũ chọn fixture riêng; chưa thay thế kiểm chứng UI với DB.
-Detail vẫn mock trong issue này, nên ID từ DB có thể trả 404 ở detail; phần nối
-detail DB thực hiện ở issue tiếp theo. Name null được hiển thị bằng asset_id
+Detail dùng cùng DB session và mapping với list; ID không có trả 404
+`ASSET_NOT_FOUND`, không tìm thêm trong MockStore. Name null được hiển thị bằng asset_id
 để giữ contract frontend; DB không bị sửa. Preview chỉ trả HTTP(S) URL không
 chứa user/password; đường dẫn file local trả null cho đến khi có cách phục vụ ảnh.
+source_url không hợp lệ hoặc chứa credentials cũng trả null; không sửa dữ liệu
+gốc trong DB. Xem [bàn giao asset API](../docs/guides/asset-api.md).
 
 ## Các API mock còn lại (Issue #9)
 
 Swagger `/docs` có đủ GET assets/list-detail, POST search/text, search/image và
 feedback dưới `/api/v1`. Xem [contract mock v1](../docs/contracts/api-v1.md) và
 `docs/openapi.json`. Text chỉ khớp từ khóa fixture, ảnh trả dữ liệu mẫu cố định;
-feedback lưu trong RAM, không ghi PostgreSQL. Ngoại lệ: list mặc định đọc DB như trên.
+feedback lưu trong RAM, không ghi PostgreSQL. List/detail mặc định đọc DB như trên.
 
 Mock chỉ bật khi `APP_MOCK_API_ENABLED=true` và `APP_ENV` khác `production`.
 Mặc định CORS cho Vite localhost:5173; cấu hình `APP_CORS_ORIGINS` bằng mảng JSON.
@@ -77,7 +81,7 @@ Các biến dành cho dịch vụ khác trong `.env` chung được bỏ qua.
 | `APP_NAME` | `3D Asset Semantic Search API` | Tiêu đề FastAPI/OpenAPI |
 | `APP_ENV` | `development` | `development`, `test` hoặc `production` |
 | `APP_DEBUG` | `false` | Debug FastAPI, không bật ở production |
-| `APP_ASSET_LIST_SOURCE` | `database` | `fixture` chỉ dùng khi bật mock ở development/test |
+| `APP_ASSET_LIST_SOURCE` | `database` | Nguồn list/detail; `fixture` chỉ dùng khi bật mock ở development/test |
 | `BACKEND_PORT` | `8000` | Cổng host của Compose, không thay cổng Uvicorn local |
 
 `.env.example` là cấu hình mẫu; `.env` không được commit hay đưa vào image.
