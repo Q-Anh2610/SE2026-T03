@@ -75,7 +75,7 @@ class AssetListResponse(BaseModel):
 
 class AssetDetailResponse(BaseModel):
     asset: AssetMetadata
-    mock: Literal[True] = True
+    mock: bool = False
 
 
 class Versions(BaseModel):

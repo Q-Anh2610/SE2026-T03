@@ -43,10 +43,10 @@ async def list_assets(request: Request, params: Annotated[AssetListQuery, Query(
     return AssetListResponse(items=items, pagination=pagination, mock=True)
 
 
-@router.get("/assets/{asset_id}", response_model=AssetDetailResponse, tags=["assets"], summary="[Mock] Chi tiết asset",
+@list_router.get("/assets/{asset_id}", response_model=AssetDetailResponse, tags=["assets"], summary="[Mock] Chi tiết asset",
             responses={200: response_example({"asset": ASSET_EXAMPLE, "mock": True})})
 async def get_asset(request: Request, asset_id: str):
-    return AssetDetailResponse(asset=store(request).asset(asset_id))
+    return AssetDetailResponse(asset=store(request).asset(asset_id), mock=True)
 
 
 @router.post("/search/text", response_model=SearchResponse, tags=["search"], summary="[Mock] Tìm kiếm văn bản",

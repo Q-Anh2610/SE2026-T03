@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "3D Asset Semantic Search API",
-    "description": "Danh sách asset đọc PostgreSQL. Detail/search/feedback hiện là mock phục vụ phát triển; chưa semantic search.",
+    "description": "Danh sách và chi tiết asset đọc PostgreSQL. Search/feedback hiện là mock phục vụ phát triển; chưa semantic search.",
     "version": "0.1.0"
   },
   "paths": {
@@ -252,8 +252,9 @@
         "tags": [
           "assets"
         ],
-        "summary": "[Mock] Chi tiết asset",
-        "operationId": "get_asset_api_v1_assets__asset_id__get",
+        "summary": "Chi tiết asset từ PostgreSQL",
+        "description": "Tra cứu asset_id chính xác. Metadata và preview dùng cùng quy ước với list; không fallback fixture.",
+        "operationId": "get_asset_detail_api_v1_assets__asset_id__get",
         "parameters": [
           {
             "name": "asset_id",
@@ -261,6 +262,8 @@
             "required": true,
             "schema": {
               "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
               "title": "Asset Id"
             }
           }
@@ -275,7 +278,7 @@
                 },
                 "example": {
                   "asset": {
-                    "asset_id": "mock-chair-01",
+                    "asset_id": "mock-asset-001",
                     "name": "Ghế gỗ đơn giản",
                     "description": "Bản ghi minh họa tự tạo; không có file asset 3D thật.",
                     "category": "Nội thất",
@@ -290,12 +293,12 @@
                     ],
                     "face_count": null,
                     "thumbnail_url": null,
-                    "source": "fixture",
+                    "source": "mock",
                     "source_url": null,
                     "author": null,
                     "license": null
                   },
-                  "mock": true
+                  "mock": false
                 }
               }
             }
@@ -740,9 +743,8 @@
           },
           "mock": {
             "type": "boolean",
-            "const": true,
             "title": "Mock",
-            "default": true
+            "default": false
           }
         },
         "type": "object",
