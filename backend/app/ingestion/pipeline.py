@@ -1,4 +1,4 @@
-"""Điều phối tải preview theo manifest và xuất báo cáo local."""
+"""Điều phối preview và persistence tùy chọn theo từng asset."""
 
 import hashlib
 import json
@@ -6,12 +6,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .cache import reusable_preview
+from .db_writer import PersistenceError
 from .downloader import PreviewDownloadError, download_preview_with_retry
 from .source_adapter import SourceAdapter
 
 
 def load_previous_results(report_path):
-    """Đọc báo cáo cũ và lập bảng tra theo định danh asset."""
+    """Lập bảng tra kết quả thành công từ báo cáo trước."""
     if report_path is None:
         return {}
 
@@ -58,8 +59,9 @@ def run_batch(
     max_attempts: int = 3,
     limit: int | None = None,
     previous_report_path: str | Path | None = None,
+    persist_asset=None,
 ) -> dict:
-    """Xử lý từng asset; tái sử dụng preview local đã kiểm tra."""
+    """Xử lý preview, rồi ghi DB nếu có hàm persistence."""
     if limit is not None and (type(limit) is not int or limit < 1):
         raise ValueError("limit phải là số nguyên dương hoặc None.")
 
@@ -79,8 +81,6 @@ def run_batch(
             raise ValueError("Không được ghi đè báo cáo lần chạy trước.")
 
     started_at = datetime.now(timezone.utc).isoformat()
-
-    # Hash trước khi xử lý để ghi nhận manifest đầu vào.
     manifest_sha256 = hashlib.sha256(
         manifest_path.read_bytes()
     ).hexdigest()
@@ -173,6 +173,26 @@ def run_batch(
                 error_message=str(exc),
             )
 
+        if (
+            persist_asset is not None
+            and result["status"] in {"downloaded", "skipped"}
+        ):
+            # Giữ kết quả preview riêng nếu bước DB thất bại.
+            result["preview_status"] = result["status"]
+
+            try:
+                persist_asset(asset, result)
+                result["database_status"] = "saved"
+
+            except PersistenceError as exc:
+                result.update(
+                    status="failed",
+                    stage="persistence",
+                    database_status="failed",
+                    error_type="PersistenceError",
+                    error_message=str(exc),
+                )
+
         results.append(result)
 
     succeeded = sum(
@@ -199,7 +219,11 @@ def run_batch(
                 else None
             ),
         },
-        "persistence": "local_files_only",
+        "persistence": (
+            "postgresql"
+            if persist_asset is not None
+            else "local_files_only"
+        ),
         "summary": {
             "input_count": len(raw_records),
             "succeeded": succeeded,

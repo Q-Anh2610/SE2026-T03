@@ -131,3 +131,75 @@ def test_cli_rejects_invalid_positive_arguments(
         ])
 
     assert caught.value.code == 2
+
+def test_cli_uses_database_writer_when_requested(
+    tmp_path, monkeypatch, capsys
+):
+    received = {}
+    lifecycle = []
+    writer = object()
+
+    class FakeDatabaseWriter:
+        def __enter__(self):
+            lifecycle.append("opened")
+            return writer
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            lifecycle.append("closed")
+            return False
+
+    def fake_run_batch(**kwargs):
+        received.update(kwargs)
+        return {
+            "summary": {
+                "input_count": 1,
+                "succeeded": 0,
+                "failed": 0,
+                "skipped": 1,
+            },
+            "results": [{
+                "database_status": "saved",
+            }],
+        }
+
+    monkeypatch.setattr(cli, "DatabaseWriter", FakeDatabaseWriter)
+    monkeypatch.setattr(cli, "run_batch", fake_run_batch)
+
+    exit_code = cli.main([
+        "--report", str(tmp_path / "report.json"),
+        "--persist-db",
+    ])
+
+    assert exit_code == 0
+    assert received["persist_asset"] is writer
+    assert lifecycle == ["opened", "closed"]
+    assert "Database saved: 1" in capsys.readouterr().out
+
+
+def test_cli_local_mode_does_not_open_database(
+    tmp_path, monkeypatch
+):
+    def unexpected_database_writer():
+        pytest.fail("Local mode must not open a database writer.")
+
+    def fake_run_batch(**kwargs):
+        assert "persist_asset" not in kwargs
+        return {
+            "summary": {
+                "input_count": 1,
+                "succeeded": 1,
+                "failed": 0,
+                "skipped": 0,
+            },
+        }
+
+    monkeypatch.setattr(
+        cli, "DatabaseWriter", unexpected_database_writer
+    )
+    monkeypatch.setattr(cli, "run_batch", fake_run_batch)
+
+    exit_code = cli.main([
+        "--report", str(tmp_path / "report.json"),
+    ])
+
+    assert exit_code == 0

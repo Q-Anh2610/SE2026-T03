@@ -1,13 +1,12 @@
-"""Tests pipeline dùng manifest tạm và downloader giả, không gọi mạng."""
+"""Kiểm thử pipeline bằng dữ liệu tạm, không gọi mạng hoặc database."""
 
 import hashlib
 import json
-
 from io import BytesIO
 from pathlib import Path
+from urllib.error import URLError
 
 from PIL import Image
-from urllib.error import URLError
 
 from backend.app.ingestion import pipeline
 from backend.app.ingestion.downloader import PreviewDownloadError
@@ -40,6 +39,7 @@ def write_manifest(tmp_path, records):
 
 
 def fake_success(url, output_dir, *, max_attempts):
+    """Giả lập kết quả downloader để kiểm tra điều phối."""
     return {
         "preview_source_url": url,
         "preview_local_path": "fixture/preview.png",
@@ -83,6 +83,7 @@ def test_successful_batch_writes_report_and_keeps_manifest(
         original_content
     ).hexdigest()
     assert report["persistence"] == "local_files_only"
+
     assert all(
         item["status"] == "downloaded"
         for item in report["results"]
@@ -183,7 +184,9 @@ def test_invalid_metadata_is_reported_without_download(
     assert "license" in failed["error_message"]
 
 
-def test_duplicate_id_is_not_downloaded_twice(tmp_path, monkeypatch):
+def test_duplicate_id_is_not_downloaded_twice(
+    tmp_path, monkeypatch
+):
     asset = make_asset(1)
     manifest = write_manifest(tmp_path, [asset, dict(asset)])
     calls = []
@@ -213,7 +216,9 @@ def test_duplicate_id_is_not_downloaded_twice(tmp_path, monkeypatch):
     }
 
 
-def test_limit_only_processes_selected_records(tmp_path, monkeypatch):
+def test_limit_only_processes_selected_records(
+    tmp_path, monkeypatch
+):
     manifest = write_manifest(
         tmp_path,
         [make_asset(1), make_asset(2), make_asset(3)],
@@ -240,6 +245,7 @@ def test_limit_only_processes_selected_records(tmp_path, monkeypatch):
     assert len(calls) == 2
     assert report["summary"]["input_count"] == 2
     assert report["summary"]["succeeded"] == 2
+
 
 def test_rerun_reuses_preview_without_downloading(
     tmp_path, monkeypatch
@@ -309,3 +315,160 @@ def test_rerun_reuses_preview_without_downloading(
     }
     assert report["results"][0]["attempts"] == 0
     assert len(list(output_dir.iterdir())) == 1
+
+def test_pipeline_saves_downloaded_asset_to_database(
+    tmp_path, monkeypatch
+):
+    asset = make_asset(1)
+    manifest = write_manifest(tmp_path, [asset])
+    saved = []
+
+    monkeypatch.setattr(
+        pipeline, "download_preview_with_retry", fake_success
+    )
+
+    def fake_persist(asset_record, preview_result):
+        saved.append({
+            "asset_id": asset_record["asset_id"],
+            "checksum": preview_result["checksum"],
+        })
+
+    report = pipeline.run_batch(
+        manifest,
+        tmp_path / "previews",
+        tmp_path / "report.json",
+        persist_asset=fake_persist,
+    )
+
+    assert saved == [{
+        "asset_id": asset["asset_id"],
+        "checksum": "a" * 64,
+    }]
+    assert report["persistence"] == "postgresql"
+    assert report["summary"]["succeeded"] == 1
+    assert report["summary"]["failed"] == 0
+
+    result = report["results"][0]
+    assert result["database_status"] == "saved"
+    assert result["preview_status"] == "downloaded"
+
+
+def test_database_failure_does_not_stop_remaining_assets(
+    tmp_path, monkeypatch
+):
+    assets = [make_asset(1), make_asset(2), make_asset(3)]
+    manifest = write_manifest(tmp_path, assets)
+    attempted = []
+    saved = []
+
+    monkeypatch.setattr(
+        pipeline, "download_preview_with_retry", fake_success
+    )
+
+    def fake_persist(asset_record, preview_result):
+        asset_id = asset_record["asset_id"]
+        attempted.append(asset_id)
+
+        if asset_id == assets[1]["asset_id"]:
+            raise pipeline.PersistenceError(
+                "Simulated database failure."
+            )
+
+        saved.append(asset_id)
+
+    report = pipeline.run_batch(
+        manifest,
+        tmp_path / "previews",
+        tmp_path / "report.json",
+        persist_asset=fake_persist,
+    )
+
+    assert attempted == [asset["asset_id"] for asset in assets]
+    assert saved == [
+        assets[0]["asset_id"],
+        assets[2]["asset_id"],
+    ]
+    assert report["summary"] == {
+        "input_count": 3,
+        "succeeded": 2,
+        "failed": 1,
+        "skipped": 0,
+    }
+
+    failed = next(
+        item for item in report["results"]
+        if item["status"] == "failed"
+    )
+
+    assert failed["stage"] == "persistence"
+    assert failed["database_status"] == "failed"
+    assert failed["preview_status"] == "downloaded"
+    assert failed["error_type"] == "PersistenceError"
+    assert failed["checksum"] == "a" * 64
+
+
+def test_skipped_preview_is_still_saved_to_database(
+    tmp_path, monkeypatch
+):
+    asset = make_asset(1)
+    manifest = write_manifest(tmp_path, [asset])
+    output_dir = tmp_path / "previews"
+    output_dir.mkdir()
+
+    buffer = BytesIO()
+    Image.new("RGB", (16, 12), color="blue").save(
+        buffer, format="PNG"
+    )
+    content = buffer.getvalue()
+    checksum = hashlib.sha256(content).hexdigest()
+    image_path = output_dir / f"{checksum}.png"
+    image_path.write_bytes(content)
+
+    previous_report = tmp_path / "previous.json"
+    previous_report.write_text(
+        json.dumps({
+            "results": [{
+                "asset_id": asset["asset_id"],
+                "source": asset["source"],
+                "source_id": asset["source_id"],
+                "status": "downloaded",
+                "preview_source_url": asset["thumbnail_path"],
+                "preview_local_path": image_path.as_posix(),
+                "checksum": checksum,
+                "checksum_resource": "preview",
+            }]
+        }),
+        encoding="utf-8",
+    )
+
+    def unexpected_download(*args, **kwargs):
+        raise AssertionError("Must not download a valid cached preview.")
+
+    monkeypatch.setattr(
+        pipeline,
+        "download_preview_with_retry",
+        unexpected_download,
+    )
+
+    saved = []
+
+    def fake_persist(asset_record, preview_result):
+        saved.append(asset_record["asset_id"])
+
+    report = pipeline.run_batch(
+        manifest,
+        output_dir,
+        tmp_path / "report.json",
+        previous_report_path=previous_report,
+        persist_asset=fake_persist,
+    )
+
+    assert saved == [asset["asset_id"]]
+    assert report["summary"] == {
+        "input_count": 1,
+        "succeeded": 0,
+        "failed": 0,
+        "skipped": 1,
+    }
+    assert report["results"][0]["database_status"] == "saved"
+    assert report["results"][0]["attempts"] == 0

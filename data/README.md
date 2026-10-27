@@ -104,7 +104,9 @@ Source Adapter:
 Người thực hiện: Trịnh Thị Thu Huyền (@TrinhHuyen05).
 
 Phát triển từ Source Adapter và manifest W1 để xử lý preview theo batch.
-Pipeline hiện lưu file và báo cáo local; chưa tích hợp persistence PostgreSQL.
+Pipeline lưu preview và báo cáo local, đồng thời hỗ trợ ghi metadata vào
+PostgreSQL bằng `--persist-db`. Đã kiểm chứng nhập và chạy lại 200 asset
+trên PostgreSQL local; các quyết định tích hợp vẫn cần owner review.
 
 ### Các module
 
@@ -116,6 +118,8 @@ Pipeline hiện lưu file và báo cáo local; chưa tích hợp persistence Pos
 | `backend/app/ingestion/cache.py` | Kiểm tra preview local trước khi tái sử dụng |
 | `backend/app/ingestion/pipeline.py` | Điều phối batch và tổng hợp kết quả |
 | `backend/app/ingestion/cli.py` | Nhận tham số và chạy pipeline từ terminal |
+| `backend/app/ingestion/repository.py` | Upsert metadata, kiểm tra định danh và bảo vệ asset đã index |
+| `backend/app/ingestion/db_writer.py` | Quản lý kết nối và transaction PostgreSQL cho từng asset |
 
 ### Chuẩn bị môi trường
 
@@ -133,7 +137,9 @@ Cài dependencies:
 .\backend\.venv\Scripts\python.exe -m pip install -r backend/requirements-dev.txt
 ```
 
-Pipeline preview local không cần Docker hoặc PostgreSQL.
+Chế độ preview local không cần Docker hoặc PostgreSQL.
+Chế độ `--persist-db` cần PostgreSQL đang chạy và cấu hình kết nối hợp lệ.
+Có thể dùng PostgreSQL cài trực tiếp trên Windows; không bắt buộc Docker Desktop.
 Cần kết nối Internet khi tải preview mới.
 
 ### Xem tham số CLI
@@ -150,6 +156,7 @@ Cần kết nối Internet khi tải preview mới.
 | `--previous-report` | Báo cáo cũ dùng để kiểm tra và tái sử dụng preview |
 | `--max-attempts` | Tổng số lần tải tối đa mỗi asset, bao gồm lần đầu; mặc định 3 |
 | `--limit` | Chỉ xử lý số bản ghi đầu được chỉ định; bỏ qua để xử lý toàn manifest |
+| `--persist-db` | Ghi metadata vào PostgreSQL theo cấu hình hiện tại; mặc định tắt |
 
 ### Chạy thử 5 asset
 
@@ -204,6 +211,105 @@ Asset lỗi ở lần trước được thử xử lý lại.
 Nếu không truyền `--previous-report`, pipeline không sử dụng
 báo cáo cũ để bỏ qua tải.
 
+### Ghi metadata vào PostgreSQL
+
+Chạy các lệnh từ gốc repository. Tạo `.env` nếu chưa có:
+
+```powershell
+if (!(Test-Path .env)) { Copy-Item .env.example .env }
+```
+
+Mở `.env` và sửa các giá trị theo database local. Đây là nội dung file,
+không phải lệnh PowerShell:
+
+```dotenv
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=semantic_search
+POSTGRES_USER=semantic
+POSTGRES_PASSWORD="REPLACE_WITH_YOUR_LOCAL_PASSWORD"
+```
+
+Thay mật khẩu mẫu bằng mật khẩu của role `semantic`. Role và database
+phải được tạo trước bằng tài khoản PostgreSQL có quyền phù hợp.
+Giữ nguyên các cấu hình ứng dụng khác, không ghi đè `.env` đang dùng.
+`DATABASE_URL` nếu được cấu hình sẽ ưu tiên hơn các biến `POSTGRES_*`;
+comment biến đó nếu muốn sử dụng cấu hình thành phần phía trên.
+Không commit `.env` hoặc chia sẻ mật khẩu.
+
+Áp dụng và kiểm tra migration:
+
+```powershell
+.\backend\.venv\Scripts\python.exe -m alembic -c backend/alembic.ini upgrade head
+.\backend\.venv\Scripts\python.exe -m alembic -c backend/alembic.ini current
+.\backend\.venv\Scripts\python.exe -m alembic -c backend/alembic.ini check
+```
+
+Chỉ áp dụng migration trên database local đã xác nhận đúng cấu hình.
+Không cần chạy seed để nhập Objaverse; seed tạo fixture riêng.
+
+Sau khi có báo cáo local `example-200-repeat.json` từ các ví dụ trên:
+
+```powershell
+.\backend\.venv\Scripts\python.exe -m backend.app.ingestion.cli `
+  --manifest data/manifests/objaverse_200.json `
+  --output-dir data/raw/objaverse/previews `
+  --report data/processed/ingestion/example-db-200.json `
+  --previous-report data/processed/ingestion/example-200-repeat.json `
+  --max-attempts 3 `
+  --persist-db
+```
+
+Chạy lại có ghi DB:
+
+```powershell
+.\backend\.venv\Scripts\python.exe -m backend.app.ingestion.cli `
+  --manifest data/manifests/objaverse_200.json `
+  --output-dir data/raw/objaverse/previews `
+  --report data/processed/ingestion/example-db-200-repeat.json `
+  --previous-report data/processed/ingestion/example-db-200.json `
+  --max-attempts 3 `
+  --persist-db
+```
+
+Thay đường dẫn báo cáo trước bằng báo cáo thực tế đang có nếu dùng tên khác.
+Mỗi báo cáo đầu ra phải dùng tên mới.
+
+Quy tắc persistence hiện tại:
+
+- Không truyền `--persist-db`: chỉ xử lý file và báo cáo local.
+- Có `--persist-db`: ghi cả asset vừa tải và asset tái sử dụng preview.
+- Mỗi asset có transaction riêng; commit thành công mới ghi `database_status=saved`.
+- Upsert theo `asset_id`; database bảo vệ unique theo `(source, source_id)`.
+- Từ chối đổi định danh hoặc tự cập nhật asset đã có `index_version`.
+- Asset ghi thành công có `ingestion_status=downloaded` theo quy ước triển khai
+  hiện tại, còn chờ review contract từ Vũ Nguyễn Quỳnh Anh (@Q-Anh2610).
+- `thumbnail_path` trong DB giữ URL preview nguồn; đường dẫn local và checksum
+  preview nằm riêng trong báo cáo.
+- Không ghi checksum preview đè lên `assets.checksum` và không ghi đè
+  `model_path`, `model_version`, `index_version`.
+- Lỗi ghi DB rollback transaction asset đó, ghi `stage=persistence`
+  và tiếp tục asset kế tiếp. Báo cáo không đưa SQL hoặc credentials từ lỗi DB ra ngoài.
+- Chưa lưu lịch sử lỗi/retry theo asset vào bảng PostgreSQL riêng.
+
+Để đối chiếu trên database, có thể chạy các câu SQL sau bằng psql hoặc pgAdmin:
+
+```sql
+SELECT COUNT(*) AS total,
+       COUNT(DISTINCT asset_id) AS unique_ids,
+       COUNT(DISTINCT (source, source_id)) AS unique_sources
+FROM assets
+WHERE source = 'objaverse';
+
+SELECT ingestion_status, COUNT(*)
+FROM assets
+WHERE source = 'objaverse'
+GROUP BY ingestion_status;
+```
+
+Trong lần kiểm chứng với riêng bộ 200 asset này, cả ba số đếm đều là 200,
+và trạng thái `downloaded` có 200 bản ghi sau khi chạy lại.
+
 ### Kiểm tra preview và checksum
 
 - Chỉ chấp nhận URL HTTPS từ `media.sketchfab.com`.
@@ -245,9 +351,9 @@ kết quả tổng hợp và danh sách kết quả từng bản ghi.
 | Trường tổng hợp | Ý nghĩa |
 |---|---|
 | `input_count` | Số bản ghi đầu vào được chọn xử lý |
-| `succeeded` | Số asset tải và kiểm tra preview thành công trong lần chạy |
-| `failed` | Số bản ghi thất bại |
-| `skipped` | Số asset tái sử dụng preview local hợp lệ |
+| `succeeded` | Preview tải mới thành công; nếu bật DB thì bước ghi DB cũng thành công |
+| `failed` | Số bản ghi lỗi validation, preview hoặc persistence |
+| `skipped` | Preview được tái sử dụng; nếu bật DB thì bước ghi DB cũng thành công |
 
 Quy tắc đối chiếu:
 
@@ -264,7 +370,14 @@ không phải `skipped`.
 | `failed` | Bản ghi lỗi; xem stage, error_type và error_message |
 | `skipped` | Preview local được kiểm tra và tái sử dụng, attempts=0 |
 
-`skipped` là kết quả của lần chạy, không phải trạng thái DB đã thống nhất.
+`skipped` là kết quả tái sử dụng preview trong lần chạy, không phải trạng thái DB.
+Khi bật persistence, asset `skipped` vẫn được upsert. Nếu ghi DB thất bại,
+`status` chuyển thành `failed`; `preview_status` giữ kết quả xử lý preview.
+
+Báo cáo ghi `persistence=postgresql` khi bật `--persist-db`, ngược lại là
+`local_files_only`. `database_status` có giá trị `saved` hoặc `failed`
+khi asset đã đi đến bước ghi DB. CLI hiển thị `Database saved` là số asset
+đã ghi thành công, gồm cả upsert bản ghi có sẵn; đây không phải số dòng mới.
 
 Xem các bản ghi lỗi bằng PowerShell, thay đường dẫn bằng báo cáo cần đọc:
 
@@ -301,21 +414,71 @@ Phạm vi đã kiểm tra gồm:
 - Cache từ chối file mất, nội dung thay đổi hoặc ảnh hỏng.
 - Không tái sử dụng file ngoài output directory.
 - CLI truyền đúng tham số, từ chối ghi đè báo cáo và báo mã thoát lỗi.
+- CLI chỉ mở DatabaseWriter khi có `--persist-db`.
+- Pipeline ghi DB cho cả preview mới và preview tái sử dụng.
+- Một lỗi persistence không làm dừng xử lý các asset còn lại.
+
+### Kiểm thử PostgreSQL
+
+Integration tests dùng PostgreSQL thật qua `TEST_DATABASE_URL`.
+Database test phải riêng biệt và có tên bắt đầu bằng `test_`, ví dụ
+`test_semantic_search`. Không dùng database phát triển `semantic_search`.
+Database test cần được tạo trước, với quyền phù hợp cho role chạy tests.
+
+Nhập mật khẩu ẩn để cấu hình cho phiên PowerShell hiện tại:
+
+```powershell
+$testPassword = Read-Host "Nhap mat khau cua tai khoan semantic" -AsSecureString
+$testCredential = [System.Net.NetworkCredential]::new("", $testPassword)
+$encodedTestPassword = [System.Uri]::EscapeDataString($testCredential.Password)
+$env:TEST_DATABASE_URL = "postgresql+psycopg://semantic:${encodedTestPassword}@localhost:5432/test_semantic_search"
+Remove-Variable testPassword, testCredential, encodedTestPassword
+```
+
+Chạy tests tích hợp và dọn biến kết nối:
+
+```powershell
+try {
+    .\backend\.venv\Scripts\python.exe -m pytest -c backend/pytest.ini backend/tests/integration/ -q
+}
+finally {
+    Remove-Item Env:TEST_DATABASE_URL -ErrorAction SilentlyContinue
+}
+```
+
+Không cấu hình kết nối test thì integration tests có thể bị skip;
+skip không phải bằng chứng kiểm chứng DB đạt.
+
+`test_ingestion_repository.py` kiểm tra nhập lại không tăng số record,
+cập nhật metadata nhưng giữ trường model, xung đột định danh theo hai chiều
+và từ chối ghi đè asset đã index. Tests sử dụng transaction rollback
+trên database test qua fixture `migrated_database`.
 
 ### Bằng chứng kiểm chứng local
 
-Kết quả đã ghi nhận trong quá trình triển khai:
+Kết quả đã ghi nhận từ các lần chạy trên máy của Trịnh Thị Thu Huyền (@TrinhHuyen05):
 
-- Bộ tests ingestion: 133 passed.
-- Đã xử lý toàn manifest 200 asset.
-- Đã đối chiếu SHA-256 preview: 200/200 asset khớp.
-- Lần chạy lại: input_count=200, succeeded=0, failed=0, skipped=200.
-- Báo cáo local lần chạy lại:
-  `data/processed/ingestion/run-200-repeat.json`.
+- 138 unit tests ingestion pass.
+- 20 integration tests PostgreSQL pass, gồm 5 tests repository ingestion.
+- Đã xử lý toàn manifest 200 asset và đối chiếu SHA-256 preview khớp 200/200.
+- Chạy lại local: `input_count=200`, `succeeded=0`, `failed=0`, `skipped=200`.
+- Đã nhập và chạy lại với PostgreSQL: 200 kết quả `database_status=saved`.
+- SQL xác nhận `total=200`, `unique_ids=200`, `unique_sources=200`.
+- Cả 200 bản ghi PostgreSQL có `ingestion_status=downloaded`.
+- CLI với `--persist-db`: `failed=0`, `skipped=200`, `Database saved: 200`.
+- Migration local ở `0001 (head)`; lần kiểm tra schema đã ghi nhận
+  `No new upgrade operations detected.`
 
-Báo cáo runtime và preview không được commit.
-Kết quả trên là bằng chứng local, không thay thế trạng thái CI
-hoặc kiểm chứng PostgreSQL.
+Báo cáo local đã dùng:
+
+- `data/processed/ingestion/run-200-repeat.json`.
+- `data/processed/ingestion/run-db-200-repeat.json`.
+- `data/processed/ingestion/run-db-cli-200.json`.
+
+Các số tests là kết quả của hai bộ lệnh riêng; không phải tổng tests toàn backend.
+Toàn bộ backend tests đã chạy sau tích hợp: 227 passed, không có test bị skip.
+Báo cáo runtime và preview không được commit. Bằng chứng local không thay thế
+CI, approval hoặc nghiệm thu toàn bộ Issue #41.
 
 ### Bàn giao dữ liệu
 
@@ -353,14 +516,14 @@ Tuân thủ license từng asset khi chia sẻ hoặc phân phối dữ liệu.
 
 ### Giới hạn và việc còn lại
 
-- Persistence hiện là `local_files_only`.
-- Chưa ghi metadata/trạng thái vào PostgreSQL.
-- Chưa kiểm chứng chạy lại không tạo bản ghi PostgreSQL trùng.
-- Cần thống nhất ingestion status, ý nghĩa checksum và thumbnail_path
-  với Vũ Nguyễn Quỳnh Anh (@Q-Anh2610).
-- API hiện chưa phục vụ file preview local; cần phối hợp
-  Vũ Nguyễn Quỳnh Anh (@Q-Anh2610) và Nguyễn Văn Duy (@nvndy27) để tích hợp.
+- `downloaded` chỉ xác nhận preview đã xử lý, chưa xác nhận asset searchable.
+- Lỗi từng asset và số lần thử hiện lưu trong báo cáo local; chưa có persistence
+  riêng cho lịch sử lỗi/retry trong PostgreSQL.
+- Quy ước ingestion status, ý nghĩa checksum và thumbnail_path cần được
+  Vũ Nguyễn Quỳnh Anh (@Q-Anh2610) review trước khi tích hợp vào nhánh chung.
+- Chưa triển khai phục vụ preview local qua HTTP; phối hợp
+  Vũ Nguyễn Quỳnh Anh (@Q-Anh2610) và Nguyễn Văn Duy (@nvndy27) khi tích hợp API/UI.
 - Chưa tạo embedding hoặc index Qdrant.
-- Không đánh dấu asset searchable trước khi index thành công.
-- Chưa coi toàn bộ Issue #41 hoàn thành khi phần PostgreSQL
-  và các tiêu chí tích hợp còn chưa được kiểm chứng.
+- Cần Lê Thị Linh Chi (@LLC536) xác nhận tiếp nhận và dùng được bộ bàn giao.
+- Cần kiểm tra CI, review và merge PR sau khi push thay đổi mới nhất.
+- Chưa coi toàn bộ Issue #41 hoàn thành khi các tiêu chí còn lại chưa có bằng chứng.
