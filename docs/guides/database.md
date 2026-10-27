@@ -1,7 +1,7 @@
 # PostgreSQL, ORM models và Alembic - Issue #8
 
 Quỳnh Anh phụ trách. Schema dưới đây phục vụ persistence. API mock của Issue #9
-đã có; list asset (Issue #47) đọc bảng assets, detail/search/feedback còn mock,
+đã có; list/detail asset (Issues #47/#48) đọc bảng assets, search/feedback còn mock,
 feedback vẫn lưu RAM. Chưa chốt
 thay đổi contract frontend và không tạo index Qdrant.
 
