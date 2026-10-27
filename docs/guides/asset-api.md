@@ -1,5 +1,7 @@
 # Bàn giao list/detail asset — Issues #47 và #48
 
+Kiểm chứng tổng thể: [Migration, lỗi và Frontend/PostgreSQL — Issue #49](asset-api-verification.md).
+
 ## Chạy và thử API
 
 Theo [backend README](../../backend/README.md), cấu hình PostgreSQL và chạy migration.

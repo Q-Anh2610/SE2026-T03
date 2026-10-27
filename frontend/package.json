@@ -17,7 +17,8 @@
     "dev:api": "vite --mode api",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run build && playwright test",
-    "test:integration": "playwright test --config playwright.integration.config.ts"
+    "test:integration": "playwright test --config playwright.integration.config.ts",
+    "test:database": "playwright test --config playwright.database.config.ts"
   },
   "dependencies": {
     "react": "^19.2.0",

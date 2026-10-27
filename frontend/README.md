@@ -75,6 +75,11 @@ Source HTTP/contract và các test tương ứng được tái sử dụng từ 
 Thanh tìm kiếm giới hạn 640px, gồm ô nhập, nút tìm và biểu tượng xóa khi có query. Không hiển thị gợi ý mẫu, hướng dẫn độ dài hoặc bộ chọn trạng thái phát triển; lỗi validation chỉ xuất hiện khi nhập không hợp lệ. Bộ chọn số kết quả xuất hiện cạnh tiêu đề khi duyệt danh sách hoặc kết quả tìm kiếm.
 # Tích hợp contract Issue #9 & W2/M1
 
+Issue #49 bổ sung kiểm thử giao diện với PostgreSQL thật bằng
+`python -m scripts.verify_asset_api --ui` từ gốc repo. Xem
+[hướng dẫn kiểm chứng](../docs/guides/asset-api-verification.md).
+Lệnh chuẩn bị DB/server rồi gọi `npm run test:database`; không dùng MockStore.
+
 Client hỗ trợ `POST /api/v1/search/text`, `GET /api/v1/assets` và `GET /api/v1/assets/{asset_id}`, validation HTTP 400 (422 chỉ tương thích bản cũ), 404 `ASSET_NOT_FOUND`, `page`/`limit` và `pagination`. Bộ lọc trong mục **Bộ lọc** gửi `category`, `format`, `license` và khoảng số mặt lên API; các trường trống được bỏ. Thay bộ lọc, đặt lại bộ lọc hoặc đổi `limit` khi duyệt danh sách đều đưa về trang 1. Rank trong kết quả tìm kiếm bắt đầu từ 1 mỗi trang. Nút chuyển trang giữ request đã gửi; quay lại từ màn chi tiết giữ nguyên `filters`, `page` và `limit`. Nhóm danh mục trên kết quả chỉ lọc cục bộ trong trang; muốn lọc toàn bộ tập dữ liệu dùng mục Bộ lọc.
 Chi tiết và giới hạn: [đối chiếu contract](../docs/contracts/frontend-api-v1.md).
 

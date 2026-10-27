@@ -89,6 +89,9 @@ Các biến dành cho dịch vụ khác trong `.env` chung được bỏ qua.
 
 ## Kiểm thử
 
+Quy trình kiểm chứng migration, lỗi và Frontend–PostgreSQL của Issue #49:
+[hướng dẫn và lệnh chạy lại](../docs/guides/asset-api-verification.md).
+
 Từ `backend/` sau khi cài requirements-dev:
 
 ```powershell
