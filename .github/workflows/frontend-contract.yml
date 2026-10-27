@@ -31,6 +31,20 @@ jobs:
 
   api-contract:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_asset_contract
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test_user -d test_asset_contract"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://test_user:test_password@127.0.0.1:5432/test_asset_contract
     steps:
       # Backend from PR #24 is merged into develop; test the backend/ of the
       # same commit as the frontend instead of a separately pinned checkout.
@@ -56,4 +70,8 @@ jobs:
         working-directory: frontend
         env:
           BACKEND_PYTHON: python
+          PLAYWRIGHT_BROWSER_CHANNEL: chromium
+      - name: Verify asset UI against PostgreSQL
+        run: python -m scripts.verify_asset_api --ui
+        env:
           PLAYWRIGHT_BROWSER_CHANNEL: chromium
