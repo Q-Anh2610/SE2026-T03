@@ -1,6 +1,8 @@
 """ASGI entrypoint cho Uvicorn."""
 
 from copy import deepcopy
+from contextlib import asynccontextmanager
+from threading import Lock
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,19 +13,37 @@ from app.api.health import router as health_router
 from app.core.config import Settings
 from app.core.errors import install_error_handlers
 from app.api.mock import router as mock_router
+from app.api.mock import list_router as mock_list_router
+from app.api.assets import router as assets_router
 from app.services.mock_api import MockStore
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     if settings is None:
         settings = Settings()
+
+    @asynccontextmanager
+    async def lifespan(application):
+        try:
+            yield
+        finally:
+            if application.state.db_engine is not None:
+                application.state.db_engine.dispose()
+
     application = FastAPI(
         title=settings.name, debug=settings.debug,
-        description="Contract mock v1 cho phát triển frontend. Không chạy semantic search hoặc lưu feedback vào database.",
+        description="Danh sách asset đọc PostgreSQL. Detail/search/feedback hiện là mock phục vụ phát triển; chưa semantic search.",
+        lifespan=lifespan,
     )
+    application.state.settings = settings
+    application.state.db_engine = None
+    application.state.db_engine_lock = Lock()
     install_error_handlers(application)
     application.include_router(health_router)
-    if settings.mock_api_enabled and settings.env != "production":
+    mocks_enabled = settings.mock_api_enabled and settings.env != "production"
+    list_router = mock_list_router if mocks_enabled and settings.asset_list_source == "fixture" else assets_router
+    application.include_router(list_router)
+    if mocks_enabled:
         application.state.mock_store = MockStore()
         application.include_router(mock_router)
     if settings.cors_origins:
@@ -46,7 +66,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 schema.get("components", {}).get("schemas", {}).pop(name, None)
             # FastAPI excludes None while encoding OpenAPI metadata. Preserve
             # explicit nulls in examples: frontend requires nullable keys present.
-            for route in mock_router.routes:
+            for route in [*list_router.routes, *(mock_router.routes if mocks_enabled else [])]:
                 if not isinstance(route, APIRoute):
                     continue
                 for method in route.methods:

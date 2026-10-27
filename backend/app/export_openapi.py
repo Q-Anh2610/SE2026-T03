@@ -10,7 +10,7 @@ from app.main import create_app
 def contract_app():
     return create_app(Settings(
         _env_file=None, name="3D Asset Semantic Search API", env="development",
-        debug=False, mock_api_enabled=True, cors_origins=[],
+        debug=False, mock_api_enabled=True, asset_list_source="database", cors_origins=[],
     ))
 
 

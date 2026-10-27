@@ -17,7 +17,7 @@ export default defineConfig({
   ],
   webServer: [
     { command: `${python} -m uvicorn app.main:app --host 127.0.0.1 --port 5196`, cwd: backend,
-      env: { APP_ENV: 'test', APP_DEBUG: 'false', APP_MOCK_API_ENABLED: 'true', APP_CORS_ORIGINS: '["http://127.0.0.1:5197"]' },
+      env: { APP_ENV: 'test', APP_DEBUG: 'false', APP_MOCK_API_ENABLED: 'true', APP_ASSET_LIST_SOURCE: 'fixture', APP_CORS_ORIGINS: '["http://127.0.0.1:5197"]' },
       url: 'http://127.0.0.1:5196/healthz', reuseExistingServer: false },
     { command: 'npm run dev:api -- --host 127.0.0.1 --port 5197 --strictPort',
       env: { VITE_API_BASE_URL: 'http://127.0.0.1:5196' }, url: 'http://127.0.0.1:5197', reuseExistingServer: false },

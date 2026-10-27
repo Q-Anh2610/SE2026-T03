@@ -28,18 +28,19 @@ ERROR_RESPONSES = {
     ]
 }
 router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
+list_router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
 
 
 def store(request: Request) -> MockStore:
     return request.app.state.mock_store
 
 
-@router.get("/assets", response_model=AssetListResponse, tags=["assets"], summary="[Mock] Danh sách asset",
+@list_router.get("/assets", response_model=AssetListResponse, tags=["assets"], summary="[Mock] Danh sách asset",
             responses={200: response_example({"items": [ASSET_EXAMPLE], "pagination": PAGINATION_EXAMPLE, "mock": True})})
 async def list_assets(request: Request, params: Annotated[AssetListQuery, Query()]):
     selected = store(request).filtered(AssetFilters.model_validate(params.model_dump(exclude={"page", "limit"})))
     items, pagination = page_of(selected, params.page, params.limit)
-    return AssetListResponse(items=items, pagination=pagination)
+    return AssetListResponse(items=items, pagination=pagination, mock=True)
 
 
 @router.get("/assets/{asset_id}", response_model=AssetDetailResponse, tags=["assets"], summary="[Mock] Chi tiết asset",
