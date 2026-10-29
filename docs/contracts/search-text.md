@@ -1,5 +1,8 @@
 # Contract nháp W1 (đã có bản đối chiếu Issue #9)
 
+> Trước W3, xem [bản rà soát tích hợp thật](w3-text-search-review.md).
+> Đây là đề xuất chờ Quỳnh Anh/Linh Chi xác nhận, chưa thay thế contract mock v1.
+
 > Khi tích hợp backend PR #24, dùng [đối chiếu frontend–backend v1](frontend-api-v1.md).
 > Bản nháp dưới đây giữ làm tham chiếu W1; quy ước filters chỉ `{}`, thiếu pagination
 > và lỗi 422 đã được thay bằng filters có kiểu, pagination và validation 400 trong #9.

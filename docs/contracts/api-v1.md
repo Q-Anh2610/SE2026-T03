@@ -19,6 +19,9 @@
 - Quy ước preview tái sử dụng #47, cần Huyền/Duy review khi bàn giao dữ liệu thật;
   kiểm thử tự động không thay cho xác nhận của hai thành viên.
 
+Rà soát trước tích hợp thật W3: xem [bảng đối chiếu và đề xuất chờ owner xác nhận](w3-text-search-review.md).
+Tài liệu này mô tả API hiện có; chưa phải contract retrieval thật đã chốt.
+
 ## Cập nhật Issue #47
 
 - `GET /api/v1/assets` mặc định đọc PostgreSQL và trả `mock=false`; các keys
@@ -103,7 +106,8 @@ cần Duy và owner search review trước ghép nối tính năng thật.
 
 List nhận filter qua query parameters; text search qua object filters; image
 search qua **JSON string** ở field filters trong form.
-Frontend W1 vẫn chỉ gửi filters={} nên không cần đổi DTO frontend trong PR này.
+Tại thời điểm mock W1, frontend chỉ gửi filters={}. Frontend hiện có DTO và
+validator cho các filters ở trên; xem [đối chiếu Issue #9](frontend-api-v1.md).
 
 ## Text search
 
@@ -153,9 +157,11 @@ tham chiếu hash và response mock. Không coi hash là kết quả nhận di�
 | 500 | INTERNAL_ERROR | Lỗi nội bộ, không trả exception message/stack trace |
 
 Validation trả **400 theo Issue #9**, thay 422 trong nháp W1. Swagger/OpenAPI
-không quảng bá response 422 tự sinh. Client frontend hiện xử lý mọi non-2xx là
-lỗi, nhưng nhánh thông báo riêng 422 trong search.ts cần Duy review để đổi sang
-400/đọc code khi tích hợp; PR này không tự sửa module frontend của Duy.
+không quảng bá response 422 tự sinh. Client search hiện xử lý 400 và 422 bằng
+thông báo invalid cố định; 422 được giữ cho tương thích lịch sử. Client search
+không đọc error.code/message từ body; client asset có đọc code để phân biệt
+ASSET_NOT_FOUND với route không tồn tại. 503 cho search thật còn chờ owner xác nhận,
+chưa được router/OpenAPI search hiện tại khai báo.
 
 Giữ APP_DEBUG=false khi kiểm tra contract lỗi 500; chế độ debug của framework có
 thể trả traceback thay handler 500. CORS preflight là phản hồi middleware riêng,

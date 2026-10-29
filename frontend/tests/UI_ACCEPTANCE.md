@@ -1,5 +1,66 @@
 # Kiểm thử chốt UI tìm kiếm — Issue #6
 
+## Rà soát trạng thái và detail W3 — Issue #54, 29/10/2026
+
+Nhánh `feat/54-w3-text-search`, nền `develop` tại `65ce583`; thay đổi local chưa
+commit. Kết quả khối 4 và giới hạn retrieval nằm trong [README](../README.md#kiểm-chứng-w3--issue-54).
+Giữ bố cục hiện tại, không đổi API/schema/dependencies. Các kết quả lịch sử W1
+bên dưới không phải bằng chứng nghiệm thu W3.
+
+| Acceptance W3 | Hành vi và bằng chứng local |
+|---|---|
+| Loading/empty | UI có loading, `aria-busy`, nút gửi disabled; không hiện empty ở idle/loading. Test HTTP qua UI giữ response pending rồi trả empty thành công. |
+| Error/retry | Lỗi HTTP, mạng, timeout hiện lỗi, không có kết quả giả. Test UI qua HTTP client kiểm tra retry giữ query đã trim, filters, page, limit dù bản nhập đã đổi. |
+| Request race | Tests HTTP mô phỏng cả thành công và lỗi của request cũ đến sau request mới; trạng thái mới không bị ghi đè. |
+| Detail | Tests có loading, 404, lỗi/retry, quay lại và response trễ; không lấy metadata search thay cho detail lỗi. |
+| Nguồn thiếu | `source`, `author`, `license` rỗng/toàn khoảng trắng được hiển thị “Chưa có thông tin”; giữ placeholders null và nhãn fixture hiện có. Không suy URL tác giả/license từ tên. |
+| Link nguồn | Dùng lại `isHttpUrl` trước khi render link HTTP(S), không có credentials; test từ chối javascript/file/relative/credentials. HTTP validator vẫn từ chối response sai contract, không nới schema. |
+| Backend/index thật | Chưa nghiệm thu: API search vẫn gọi MockStore, chưa có contract retrieval thật đã được owner xác nhận hoặc môi trường smoke được bàn giao. |
+
+File kiểm chứng: `src/features/search/SearchPage.test.tsx`,
+`tests/components/SearchPage.http.test.tsx`, `src/lib/api/search.test.ts`,
+`src/features/assets/AssetDetailView.test.tsx`. Tests HTTP mới dùng fetch giả lập;
+không phải smoke retrieval thật. E2E giữ nguyên kịch bản hiện có; Minh Khuê có thể
+review ảnh hưởng giới hạn ở placeholders nguồn và điều kiện tạo link detail.
+Không tích checklist CI, owner review hoặc tích hợp thật từ kết quả local.
+
+Kết quả sau sửa UI: `npm test` **276/276**, 13 files; `npm run lint` và
+`npm run typecheck` đạt. `npm run test:e2e` chạy build production thành công và
+**30/30 E2E** đạt, Chrome headless desktop/mobile. Lint ban đầu phát hiện cách
+xuống dòng trong test mới, đã sửa và chạy lại đạt. Không sửa tests E2E, không chạy
+smoke backend/index thật hoặc xác nhận CI remote. Môi trường: Linux, Node.js
+22.22.1, npm 9.2.0, Vitest 4.1.11; dùng dependencies/lockfile hiện có.
+
+Rà soát lại tests HTTP W3: sửa mock timeout từ trả chung một signal sang chỉ
+giả lập signal của request đầu (`mockReturnValueOnce`). Trước sửa, assertion mới
+phát hiện retry dùng signal đã abort nhưng fetch giả vẫn trả thành công (1/8 test
+HTTP thất bại). Giữ assertion retry có signal chưa abort; không nới contract hoặc
+đổi HTTP client để làm test đạt. Không phát hiện lỗi UI mới trong phạm vi rà soát.
+
+Kiểm chứng sau sửa mock: `npm run lint`, `npm run typecheck` đạt;
+`npm run test:coverage` chạy đủ **276/276 tests, 13 files** và đạt ngưỡng từng file
+95% đã cấu hình. Tổng coverage: lines/functions 100%, statements 99,78%, branches
+98,03%. `npm run test:e2e` build production đạt và **30/30 E2E** đạt (36,2 giây).
+E2E dùng mock/HTTP interception; chưa kiểm chứng backend/index thật. Diff check
+đạt; không đổi cấu hình test, không sửa E2E hoặc cập nhật GitHub.
+
+### Bàn giao phần còn thiếu cho khối 2
+
+Đầu vào frontend cần để nghiệm thu #54:
+
+- Xác nhận contract retrieval thật với owner API/search: pagination/total, rank,
+  vòng đời query/event IDs, versions và lỗi dependency chưa sẵn sàng.
+- Nối `POST /api/v1/search/text` vào encoder text và retrieval/index thật, lưu
+  search event theo quyết định đã chốt; search IDs phải mở được qua detail DB.
+- Bàn giao origin API, cấu hình chạy, commit backend và manifest model/revision,
+  preprocessing, dataset snapshot/index/config versions; xác nhận index sẵn sàng.
+- Chuẩn bị smoke cùng Minh Khuê: query → response từ retrieval thật → detail →
+  quay lại, ghi IDs/versions và bằng chứng phía backend về encoder/index đã dùng.
+
+Đây là danh sách phụ thuộc để phối hợp, không tự mở rộng scope frontend hoặc
+xác nhận owner đã chốt. Không dùng fixtures, HTTP 200 hoặc riêng cờ mock=false
+để nghiệm thu. Không gửi tin nhắn/cập nhật GitHub trong lượt rà soát này.
+
 Phạm vi: trang đầu, gallery và giao diện sau tìm kiếm của [Issue #6](https://github.com/Q-Anh2610/SE2026-T03/issues/6). API/encoder/index thật chưa được tích hợp; các phản hồi mạng trong E2E là fixture kiểm thử.
 
 ## Chạy bản kiểm tra
