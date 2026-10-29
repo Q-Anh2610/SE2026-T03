@@ -20,7 +20,9 @@
   kiểm thử tự động không thay cho xác nhận của hai thành viên.
 
 Rà soát trước tích hợp thật W3: xem [bảng đối chiếu và đề xuất chờ owner xác nhận](w3-text-search-review.md).
-Tài liệu này mô tả API hiện có; chưa phải contract retrieval thật đã chốt.
+Đối chiếu tĩnh code/OpenAPI lưu sẵn tại `65ce5839576949dc5633c05c745887c20913d79a`
+ngày 29/10/2026; chưa sinh lại spec runtime. Tài liệu mô tả API hiện có; chưa phải
+contract retrieval thật đã được Quỳnh Anh/Linh Chi xác nhận.
 
 ## Cập nhật Issue #47
 
@@ -37,7 +39,7 @@ Tài liệu này mô tả API hiện có; chưa phải contract retrieval thật
   đường dẫn local trả null. Chưa triển khai phục vụ file preview trong issue này.
 - `mock=false` chỉ xác định nguồn đọc DB: bản ghi seed vẫn có source=mock.
 - Detail trước đây còn mock ở #47; từ #48 đã đọc DB như phần cập nhật phía trên.
-- OpenAPI xuất mặc định mô tả list DB và các route mock còn lại. Chế độ fixture
+- OpenAPI xuất mặc định mô tả list/detail DB và search/image/feedback mock. Chế độ fixture
   có Swagger runtime riêng. Các quy ước mock bên dưới chỉ áp dụng khi dùng fixture.
 
 ## Contract mock gốc (Issue #9)
@@ -120,7 +122,17 @@ nguyên, không nhận boolean hoặc chuỗi số. Ví dụ:
 
 Response giữ query đã trim, IDs mock duy nhất, results không trùng asset_id,
 score=null, explanation nêu rõ chỉ khớp metadata. Metadata/versions dùng đúng
-shape đang có ở `frontend/src/features/search/types.ts`.
+shape đang có ở `frontend/src/features/search/types.ts`. Runtime mock dùng
+`model_version=mock-no-encoder`, `index_version=mock-w1`,
+`config_version=mock-contract-v1` (khác ví dụ lịch sử W1 `mock-text-v1`).
+Mỗi request, kể cả retry/đổi trang, tạo query_id và search_event_id mới; event
+chỉ giữ response trang trong RAM, chưa dùng ORM SearchEvent.
+
+Frontend yêu cầu query echo, rank 1..N theo trang, ID không trùng trong trang và
+số phần tử đúng `min(limit,max(0,total-(page-1)*limit))`. Schema backend chưa
+enforce đầy đủ các quan hệ này. Search schema có mock const=true/default=true
+nhưng OpenAPI không đánh dấu required; DTO/validator frontend chưa kiểm tra cờ.
+Các invariants và semantics total cho retrieval thật còn chờ review W3.
 
 ## Image search
 
