@@ -199,4 +199,7 @@ keyword baseline. Xem [hướng dẫn baseline W2](../docs/guides/search-baselin
 để biết đầu vào, versioning, cách chạy Qdrant và bằng chứng kiểm chứng.
 
 Các module chưa nối vào HTTP Search API hoặc cập nhật trạng thái PostgreSQL.
-Việc index 200 asset thật còn chờ bộ ảnh đã xử lý từ ingestion.
+Đã kiểm chứng 200 asset thật từ ingestion: embedding/index 200 thành công,
+0 lỗi; chạy lại vẫn 200 point và giữ nguyên tập point ID.
+Script và cấu hình tái lập: `scripts/verify_issue39_real_assets.py`;
+xem phần kiểm chứng dữ liệu thật trong hướng dẫn baseline W2.
