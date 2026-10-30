@@ -1,0 +1,71 @@
+query_id,query_type,query_group_id,split,language,query_text,query_image_path,image_source,source_asset_id,notes
+q0001,text,g0001,test,en,a desk lamp with a shade,,,objaverse_0002e50309b44e409c96f440202d90b3,draft from manifest name; verify against ready snapshot and preview
+q0002,text,g0002,test,en,a nonwoven carry bag with handles,,,objaverse_000a3d9fa4ff4c888e71e698694eb0b0,draft from manifest description; verify wording against ready snapshot
+q0003,text,g0003,test,en,a model of a duck,,,objaverse_00130eea9e884209be92f68378a817e8,draft from manifest name; verify against ready snapshot and preview
+q0004,text,g0004,validation,en,a simple eight-ball pool table,,,objaverse_001a994fe20b48739e18cf8a4e9d6fa7,draft from manifest name and description; verify against ready snapshot
+q0005,text,g0005,test,en,a vintage-style lamp,,,objaverse_00365fead4044f2a8ae896a68159625b,draft from manifest name; verify against ready snapshot and preview
+q0006,text,g0006,validation,en,a low-poly windmill building,,,objaverse_0046f208ef8d4988ba7bb9d297f29ec7,draft from manifest name and description; verify against ready snapshot
+q0007,text,g0007,test,en,a worn black dresser,,,objaverse_005121da5ed340b4aedd168e33d56714,draft from manifest name and tags; verify against ready snapshot and preview
+q0008,text,g0008,test,en,a chair for sitting,,,objaverse_0060af6f4da24224a4770eea54685ecf,draft from manifest name; verify against ready snapshot and preview
+q0009,text,g0009,test,en,a tabletop coffee scene with a mug books and eyeglasses,,,objaverse_0061788e0741400c82289337a24af4f6,draft from manifest tags; verify all objects against ready snapshot and preview
+q0010,text,g0010,validation,en,a small table,,,objaverse_006373e3885b472cb5538fc570235fcf,draft from manifest name; verify against ready snapshot and preview
+q0011,text,g0011,validation,en,a drinking glass or tumbler,,,objaverse_00785dade17c470c90a14c90b75b896c,draft from manifest name and tags; verify against ready snapshot and preview
+q0012,text,g0012,validation,en,a cookie,,,objaverse_00880e3095534192973a34ba730c45c9,draft from manifest name and description; verify against ready snapshot and preview
+q0013,text,g0013,test,en,suits hanging on display,,,objaverse_008a72f0e6be408cbf90c81966789547,draft from manifest name and tags; verify against ready snapshot and preview
+q0014,text,g0014,test,en,a bed,,,objaverse_009de5b694dd4aac9c5a760d544046d1,draft from manifest name and tags; verify against ready snapshot and preview
+q0015,text,g0015,test,en,an elongated two-piece toilet,,,objaverse_00b360de1846428eb5c23464824c5fc8,draft from manifest description; verify attributes against ready snapshot
+q0016,text,g0016,validation,en,block-style books from a Minecraft scene,,,objaverse_00c86cb620a743cc81d9cb87ad4d8696,draft from manifest name and description; verify against ready snapshot and preview
+q0017,text,g0017,validation,en,a bloodied pillow prop,,,objaverse_00d835ea93204b64bd3acbc80945eb12,draft from manifest name and tags; verify against ready snapshot and preview
+q0018,text,g0018,test,en,a plain black computer keyboard,,,objaverse_00e242aa87fb4bd98c15c0ab5bf9bd00,draft from manifest name and description; verify against ready snapshot
+q0019,text,g0019,validation,en,a stand for displaying a book,,,objaverse_00e4a92210b04f4a9707cc89ddac0e63,draft from manifest name; verify intended use against ready snapshot and preview
+q0020,text,g0020,test,en,a vintage steampunk chronometer,,,objaverse_00f6c41165624415b20445a1fcc38247,draft from manifest name and tags; verify against ready snapshot and preview
+q0021,text,g0021,test,en,a bottle of cognac extract,,,objaverse_00fd0618c93b4979b258f25df0109a6a,draft from manifest name and description; verify against ready snapshot and preview
+q0022,text,g0022,validation,en,an old camera,,,objaverse_04383a7164f643e8b1a5378fa7398010,draft from manifest name; verify against ready snapshot and preview
+q0023,text,g0023,test,en,daffodils growing in a pot,,,objaverse_01146261d288473f84208b818579e3c5,draft from manifest name and tags; verify against ready snapshot and preview
+q0024,text,g0024,validation,en,a traditional low stool used for sitting,,,objaverse_0115bca2d7bf45f092e9e93064ffada8,draft from manifest name and description; verify against ready snapshot
+q0025,text,g0025,test,en,a computer monitor,,,objaverse_011f2cd821e94596863378daa134cf0e,draft from manifest name and description; verify against ready snapshot and preview
+q0026,text,g0026,validation,en,a low-poly barrel,,,objaverse_01474f78a328473b8d99ded65effb2cc,draft from manifest name and description; verify against ready snapshot and preview
+q0027,text,g0027,test,en,an ashtray,,,objaverse_0149261afb9040a18d99c348e2e13d62,draft from manifest name and tags; verify against ready snapshot and preview
+q0028,text,g0028,test,en,a stone fireplace point-cloud scan,,,objaverse_0153947acdd34b0ab8e2a0877982dc29,draft from manifest name and description; verify against ready snapshot
+q0029,text,g0029,test,en,a low-poly piggy bank,,,objaverse_0155d77767024adbbe2c5c9b9bfd2c81,draft from manifest name and description; verify against ready snapshot
+q0030,text,g0030,test,en,a violin,,,objaverse_0162dea1b1044cd281c57af5e5fc2046,draft from manifest name and description; verify against ready snapshot and preview
+q0031,text,g0031,validation,en,a Japanese floor cushion for sitting,,,objaverse_016627cce41a42cfb48db34becd7cbd8,draft from manifest name and description; verify against ready snapshot
+q0032,text,g0032,test,en,a microwave oven,,,objaverse_016957e17edb48edae14c59b005c2ad3,draft from manifest name and tags; verify against ready snapshot and preview
+q0033,text,g0033,test,en,a wall-mounted chrome single-lever sink faucet,,,objaverse_01816801a27444cbb5cfb934de39d483,draft from manifest description; verify attributes against ready snapshot
+q0034,text,g0034,test,en,a stylized fire hydrant,,,objaverse_018644330f9c44dcb49ade255b281a52,draft from manifest name and description; verify against ready snapshot and preview
+q0035,text,g0035,test,en,a toilet with its seat raised,,,objaverse_01b31c7fb7bd41ac8019ffc994b22b60,draft from manifest name and description; verify against ready snapshot and preview
+q0036,text,g0036,test,en,a red chair,,,objaverse_01b79647e6e442989fda47ff20cabdc9,draft from manifest name; verify color against ready snapshot and preview
+q0037,text,g0037,test,en,a street lamp,,,objaverse_01c53767c1f84f55ad9f46eb89949cf9,draft from manifest name and tags; verify against ready snapshot and preview
+q0038,text,g0038,test,en,a dart board for playing darts,,,objaverse_01c7918e11c646b4886d43c45dc323a3,draft from manifest name and description; verify against ready snapshot and preview
+q0039,text,g0039,validation,en,a low-poly candle,,,objaverse_0202ec72baf548bb957406ed2d88961d,draft from manifest name; verify against ready snapshot and preview
+q0040,text,g0040,test,en,a wall socket plug,,,objaverse_0206790a2fe84bf4a2e4d46adfe2dc40,draft from manifest name; verify against ready snapshot and preview
+q0041,text,g0041,validation,en,a classic television with no signal,,,objaverse_020a2199c72a4f8eaea8f1212271a1b0,draft from manifest name; verify against ready snapshot and preview
+q0042,text,g0042,test,en,a sewing machine,,,objaverse_021fc6dda14f4801a8772a9a3380caba,draft from manifest name; verify against ready snapshot and preview
+q0043,text,g0043,validation,en,an ottoman,,,objaverse_022f2092ded7436ca793f1948d7db12f,draft from manifest name; verify against ready snapshot and preview
+q0044,text,g0044,test,en,a round table from a Norse-themed scene,,,objaverse_02302fca239e4d7a9d26ce5cc46225e5,draft from manifest name; verify attributes against ready snapshot and preview
+q0045,text,g0045,test,en,a simple calendar,,,objaverse_023e3d2170f54b219d4d44bea2075f36,draft from manifest name; verify against ready snapshot and preview
+q0046,text,g0046,test,en,an embossed footstool,,,objaverse_0248669cbdc140ab90d55ad1d346fc96,draft from manifest name; verify against ready snapshot and preview
+q0047,text,g0047,validation,en,a simple room scene,,,objaverse_02543290444e41a3babfbb894e7d0909,draft from manifest name; verify against ready snapshot and preview
+q0048,text,g0048,validation,en,a wall lamp inspired by a museum setting,,,objaverse_0256779d7f5d4aeaadc15f89ab24fb0a,draft from manifest name; verify against ready snapshot and preview
+q0049,text,g0049,test,en,an antique globe,,,objaverse_0269763acb7a4ab880a09bef35217e79,draft from manifest name; verify against ready snapshot and preview
+q0050,text,g0050,test,en,an Italian coffee machine,,,objaverse_028ceba3e34a4ebeacb4bd5f81cc251a,draft from manifest name; verify against ready snapshot and preview
+q0051,text,g0051,test,en,a storage cabinet with animation,,,objaverse_02959ad818784bac87a52f4f4c966b4d,draft from manifest name; verify against ready snapshot and preview
+q0052,text,g0052,test,en,a low stool,,,objaverse_0297ffd148ff48c1b02d32457be0387d,draft from manifest name; verify translation of source title against ready snapshot and preview
+q0053,text,g0053,validation,en,a lamp,,,objaverse_02a8266c929f4c05b6e5dc1867fb719d,draft from manifest name; verify against ready snapshot and preview
+q0054,text,g0054,validation,en,a petroleum lamp,,,objaverse_02ab281f551a402ca72bda6531d26430,draft from manifest name; verify against ready snapshot and preview
+q0055,text,g0055,test,en,a 1970s retro lamp,,,objaverse_02c4ee90724144fba9cb896602318f2d,draft from manifest name; verify against ready snapshot and preview
+q0056,text,g0056,validation,en,a bed made of hay,,,objaverse_02edc0ded21f49f2a60c6949661c4843,draft from manifest name; confirm interpretation against ready snapshot and preview
+q0057,text,g0057,validation,en,an air conditioning unit,,,objaverse_02f13c9007ae4d5ab6c861f26341f441,draft from manifest name; verify against ready snapshot and preview
+q0058,text,g0058,test,en,a table with a mirror,,,objaverse_02f2bd71a28a421c87288b35524df8d0,draft from manifest name; verify against ready snapshot and preview
+q0059,text,g0059,test,en,a post-apocalyptic sofa,,,objaverse_031574a75f51411b9d73c386893ca7a6,draft from manifest name; verify style against ready snapshot and preview
+q0060,text,g0060,validation,en,a floor-standing globe,,,objaverse_0318ad51a7294885b452ff4f408353ba,draft from manifest name; verify against ready snapshot and preview
+q0061,text,g0061,test,en,a deck with stairs and guardrails,,,objaverse_051a6c98878c4fa485de5c1c4a4a7465,draft from manifest name; verify against ready snapshot and preview
+q0062,text,g0062,validation,en,a low-poly balloon,,,objaverse_033a61d66f7646ceaac357b502a5f5dc,draft from manifest name; verify against ready snapshot and preview
+q0063,text,g0063,test,en,a green chair,,,objaverse_033baf0ff0a94657841230587ad3e67b,draft from manifest name; verify color against ready snapshot and preview
+q0064,text,g0064,validation,en,a mug,,,objaverse_033c946a91ee401db2d7d5391ba5b036,draft from manifest name; verify against ready snapshot and preview
+q0065,text,g0065,validation,en,a divan,,,objaverse_0341835032024be3bd7022a64038b0a4,draft from manifest name; verify against ready snapshot and preview
+q0066,text,g0066,test,en,a wooden cart,,,objaverse_034e31bc4b8a471699c3056b671b97b3,draft from manifest name; verify against ready snapshot and preview
+q0067,text,g0067,validation,en,a hammer,,,objaverse_035efce4fae546009802ce2199e86d58,draft from manifest name; verify against ready snapshot and preview
+q0068,text,g0068,validation,en,a copper olive oil bottle,,,objaverse_03625ebdd8b34cef85eb9cb3a099497f,draft from manifest name; verify attributes against ready snapshot and preview
+q0069,text,g0069,test,en,a wine glass,,,objaverse_0367336574904207b7386f39f631750f,draft from manifest name; verify against ready snapshot and preview
+q0070,text,g0070,validation,en,a low-poly outdoor litter bin,,,objaverse_038108ec3b03444ebda00e7fc2611bdd,draft from manifest name; verify against ready snapshot and preview

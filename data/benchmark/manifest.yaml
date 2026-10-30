@@ -1,0 +1,76 @@
+benchmark_version: w2-text-draft-v1
+status: draft
+created_at: 2026-10-30T01:25:29Z
+query_count: 70
+query_counts_by_type:
+  text: 70
+language_policy: English text-query draft; image-query collection is outside this W2 task.
+split_seed: 42
+split_version: w2-text-draft-v1
+split_method: >-
+  Fisher-Yates shuffle of query groups using a 32-bit LCG (a=1664525,
+  c=1013904223, initial state=42); first 28 groups assigned validation,
+  remaining 42 assigned test. Group IDs are currently one-to-one with query IDs.
+validation_query_ids:
+  - q0004
+  - q0006
+  - q0010
+  - q0011
+  - q0012
+  - q0016
+  - q0017
+  - q0019
+  - q0022
+  - q0024
+  - q0026
+  - q0031
+  - q0039
+  - q0041
+  - q0043
+  - q0047
+  - q0048
+  - q0053
+  - q0054
+  - q0056
+  - q0057
+  - q0060
+  - q0062
+  - q0064
+  - q0065
+  - q0067
+  - q0068
+  - q0070
+locked_at: null
+locked_revision: null
+annotators:
+  - Doan Thi Minh Khue
+  - Trinh Thi Thu Huyen
+candidate_assets:
+  file: data/benchmark/candidate_assets.csv
+  count: 200
+  source_manifest: data/manifests/objaverse_200.json
+  processed_ready_manifest: data/processed/ingestion/objaverse_200.ready.json
+  ready_snapshot_verified: false
+  checksum_verified: false
+  provenance_file: data/manifests/objaverse_200.provenance.json
+  provenance_sha256: 91d21b9ae38f7772842f23ac743b609d31fa66774439bf5572325e1f4a98611d
+  source_manifest_sha256: b37947fd1f2201dacf92e657d0580981315dd6252ad785e60657f4c1fe595e4a
+  source_annotations_sha256: b81c11a12d7b7b5cdf67df3652adfe62b2c73b80ccd954d3a9073ec729e76479
+  preview_available_count: 200
+  candidate_preview_missing_count: 0
+  provenance_preview_failure_records: 11
+  preview_files_local: false
+annotation_templates:
+  blinded_queries: data/benchmark/queries_for_labeling.csv
+  khue_pairs: data/benchmark/annotator_templates/labels_khue.template.csv
+  huyen_pairs: data/benchmark/annotator_templates/labels_huyen.template.csv
+  pairs_per_annotator: 14000
+  labels_filled: false
+notes:
+  - Queries are draft prompts derived from the versioned Objaverse manifest metadata.
+  - Review all query wording against the processed ready snapshot and previews before annotation.
+  - Hide source_asset_id and notes from annotators during independent scoring to avoid anchoring.
+  - Do not treat source_asset_id as an adjudicated relevant label.
+  - Candidate IDs and provenance hashes match the committed 200-asset source manifest; local processed ready snapshot and local preview files are not present in this checkout.
+  - Provenance lists 200 preview records for the 200 selected candidates; its 11 HTTP failure records refer to IDs outside this candidate manifest.
+  - Each annotator has a separate blank template with all query-candidate pairs; do not exchange filled templates before independent scoring is complete.
