@@ -1,0 +1,177 @@
+{
+  "schema_version": "issue39-shared-evidence-v1",
+  "issue": "https://github.com/Q-Anh2610/SE2026-T03/issues/39",
+  "handoff_issue": "https://github.com/Q-Anh2610/SE2026-T03/issues/41",
+  "implementation_pr": "https://github.com/Q-Anh2610/SE2026-T03/pull/53",
+  "handoff_zip": "objaverse200-handoff-20261029-231353.zip",
+  "handoff_zip_sha256": "6f7b5dcccbf2d942569016883bcb7f75c7563ef0602233470e4ce2fc0dfd53e5",
+  "shared_config": {
+    "code_commit": "65ce5839576949dc5633c05c745887c20913d79a",
+    "runner_sha256": "299335ba4be1a5d54154631044a75b77b3562b0b09463e3f37a251ce2546aafd",
+    "module_sha256": {
+      "backend/app/embedding/clip_encoder.py": "dd5c5a87c66022f4e44b766b1953970a53e4f89c84fb607ec23fb633ed81f14b",
+      "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+      "backend/app/search/qdrant_store.py": "ca7060c9ae362520a6bfef0f3ef56db3bf202237a2f44bbbc46014570b27c636"
+    },
+    "environment": {
+      "python": "3.13.7",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "torch_build": "2.8.0+cpu",
+      "packages": {
+        "torch": "2.8.0",
+        "transformers": "4.57.1",
+        "qdrant-client": "1.15.1",
+        "Pillow": "13.0.0"
+      }
+    },
+    "input": {
+      "asset_count": 200,
+      "distinct_preview_files": 200,
+      "w1_preview_hashes_match": true,
+      "manifest_sha256": "b37947fd1f2201dacf92e657d0580981315dd6252ad785e60657f4c1fe595e4a",
+      "ready_manifest_sha256": "915af02b2a7942040d38b07af62dbe2053143c0e8d9d11992253637f9e6f870d",
+      "handoff_json_sha256": "1f9c0aacd44e5dc4bcb30eb7a01c63680462058d785f37c413c1df26a0114714",
+      "sender_source_commit": "65ce5839576949dc5633c05c745887c20913d79a",
+      "ingestion_report_sha256": "45ca71497ee755158b441cebf38197ae6c80756ee49bd901e34c15950cb60d5a",
+      "ingestion_summary": {
+        "input_count": 200,
+        "succeeded": 0,
+        "failed": 0,
+        "skipped": 200
+      }
+    },
+    "index_config": {
+      "model_id": "openai/clip-vit-base-patch32",
+      "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "dimension": 512,
+      "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+      "dataset_snapshot": "objaverse200-w1-sha256:b37947fd1f2201dacf92e657d0580981315dd6252ad785e60657f4c1fe595e4a",
+      "index_version": "issue39-objaverse200-clip-v1"
+    },
+    "processor_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "similarity": "Cosine",
+    "normalization": "L2",
+    "device": "cpu",
+    "seed": 0,
+    "batch_size": 8,
+    "collection": "issue39_objaverse200_clip_v1",
+    "vector_name": "clip_c243769d0cc6846b",
+    "qdrant_server": {
+      "title": "qdrant - vector search engine",
+      "version": "1.15.1",
+      "commit": "af7ab5b192f01c9d9cd7fff119eab2ae73755cc0"
+    },
+    "limits": "Embedding/index verification only; no PostgreSQL/searchable-state update or retrieval benchmark."
+  },
+  "runs": [
+    {
+      "phase": "first",
+      "raw_report": "data/processed/issue39/real-assets-first.json",
+      "raw_report_sha256": "8c93182e4fe6a9eea6b34064b8f0e7657afe7a1032d01833e2e05e29a1af4603",
+      "started_at_utc": "2026-10-29T16:54:56.812748+00:00",
+      "finished_at_utc": "2026-10-29T16:55:23.174432+00:00",
+      "before": {
+        "exact_point_count": 0,
+        "scrolled_point_count": 0,
+        "unique_point_ids": 0,
+        "unique_payload_asset_ids": 0,
+        "duplicate_asset_ids": [],
+        "invalid_payload_or_point_ids": [],
+        "verified_indexed_asset_count": 0,
+        "point_id_set_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "after": {
+        "exact_point_count": 200,
+        "scrolled_point_count": 200,
+        "unique_point_ids": 200,
+        "unique_payload_asset_ids": 200,
+        "duplicate_asset_ids": [],
+        "invalid_payload_or_point_ids": [],
+        "verified_indexed_asset_count": 200,
+        "point_id_set_sha256": "3a601d261c8b21c70496bac3cfd720ef3b28efdac8d7e22863f430e3d997baf1"
+      },
+      "embedding": {
+        "embedded": 200,
+        "failed": 0,
+        "skipped": 0,
+        "not_processed": 0
+      },
+      "upsert_acknowledged": 200,
+      "indexing": {
+        "verified_indexed": 200,
+        "not_verified_indexed": 0
+      },
+      "vector_norm": {
+        "min": 0.9999997673108157,
+        "max": 1.0000001901667783
+      },
+      "acceptance": {
+        "passed": true,
+        "checks": {
+          "embedded_all_200": true,
+          "all_upserts_acknowledged": true,
+          "no_runtime_errors": true,
+          "exactly_200_verified_points": true
+        }
+      },
+      "errors": [],
+      "elapsed_seconds": 26.362
+    },
+    {
+      "phase": "repeat",
+      "raw_report": "data/processed/issue39/real-assets-repeat.json",
+      "raw_report_sha256": "0f7211eff03ee7b94247d3c0f5d4c9e2ff9edb2cb85df120a4a5d11859f96166",
+      "started_at_utc": "2026-10-29T16:56:08.865639+00:00",
+      "finished_at_utc": "2026-10-29T16:56:28.684759+00:00",
+      "before": {
+        "exact_point_count": 200,
+        "scrolled_point_count": 200,
+        "unique_point_ids": 200,
+        "unique_payload_asset_ids": 200,
+        "duplicate_asset_ids": [],
+        "invalid_payload_or_point_ids": [],
+        "verified_indexed_asset_count": 200,
+        "point_id_set_sha256": "3a601d261c8b21c70496bac3cfd720ef3b28efdac8d7e22863f430e3d997baf1"
+      },
+      "after": {
+        "exact_point_count": 200,
+        "scrolled_point_count": 200,
+        "unique_point_ids": 200,
+        "unique_payload_asset_ids": 200,
+        "duplicate_asset_ids": [],
+        "invalid_payload_or_point_ids": [],
+        "verified_indexed_asset_count": 200,
+        "point_id_set_sha256": "3a601d261c8b21c70496bac3cfd720ef3b28efdac8d7e22863f430e3d997baf1"
+      },
+      "embedding": {
+        "embedded": 200,
+        "failed": 0,
+        "skipped": 0,
+        "not_processed": 0
+      },
+      "upsert_acknowledged": 200,
+      "indexing": {
+        "verified_indexed": 200,
+        "not_verified_indexed": 0
+      },
+      "vector_norm": {
+        "min": 0.9999997673108157,
+        "max": 1.0000001901667783
+      },
+      "acceptance": {
+        "passed": true,
+        "checks": {
+          "embedded_all_200": true,
+          "all_upserts_acknowledged": true,
+          "no_runtime_errors": true,
+          "exactly_200_verified_points": true,
+          "point_count_unchanged_on_repeat": true,
+          "point_ids_unchanged_on_repeat": true
+        }
+      },
+      "errors": [],
+      "elapsed_seconds": 19.819
+    }
+  ],
+  "provenance_note": "Measured against code_commit plus the uncommitted runner identified by runner_sha256; raw reports stay local. This summary omits vectors, images, asset metadata and local absolute paths."
+}
