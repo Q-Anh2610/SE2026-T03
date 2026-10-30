@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmark labeler</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.45 system-ui, Segoe UI, sans-serif; color: #1b2430; background: #f2f4f7; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { background: #172b4d; color: white; padding: 14px 22px; }
+    header h1 { margin: 0; font-size: 1.2rem; }
+    main { max-width: 1120px; margin: 20px auto; padding: 0 16px 32px; }
+    .panel { background: white; border: 1px solid #d7dce3; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .files { display: grid; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); gap: 14px; align-items: end; }
+    label { display: block; font-weight: 650; }
+    input[type=file] { display: block; margin-top: 6px; max-width: 100%; font-weight: 400; }
+    button { font: inherit; border: 1px solid #aeb7c2; border-radius: 7px; background: white; padding: 8px 13px; cursor: pointer; }
+    button:hover { background: #edf3fa; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .primary { background: #1769aa; border-color: #1769aa; color: white; font-weight: 650; }
+    .primary:hover { background: #12588f; }
+    .hidden { display: none !important; }
+    .muted { color: #526172; font-size: .92rem; }
+    .error { color: #a32020; white-space: pre-wrap; }
+    .bar { height: 9px; background: #e4e8ed; border-radius: 9px; overflow: hidden; margin: 10px 0 5px; }
+    .bar > div { height: 100%; background: #16805d; width: 0; transition: width .15s; }
+    .topline,.nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .query { font-size: 1.35rem; margin: 8px 0 14px; }
+    .asset { display: grid; grid-template-columns: minmax(280px, 1.1fr) minmax(280px, .9fr); gap: 18px; }
+    .preview { background: #eef1f4; min-height: 300px; display: grid; place-items: center; border-radius: 8px; overflow: hidden; }
+    .preview img { max-width: 100%; max-height: 65vh; object-fit: contain; }
+    .preview .placeholder { padding: 22px; text-align: center; color: #526172; }
+    .asset-id { font: 600 1.05rem ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
+    .note { width: 100%; min-height: 88px; resize: vertical; margin: 8px 0 10px; padding: 10px; font: inherit; border: 1px solid #aeb7c2; border-radius: 7px; }
+    .scores { display: flex; gap: 9px; margin: 14px 0 6px; }
+    .score { min-width: 62px; font-size: 1.15rem; font-weight: 700; }
+    .score.selected { outline: 3px solid #1769aa; background: #e8f3fc; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    kbd { font: 600 .85rem ui-monospace, monospace; padding: 1px 5px; border: 1px solid #aeb7c2; border-radius: 4px; background: #f8fafc; }
+    @media (max-width: 720px) { .asset { grid-template-columns: 1fr; } .preview { min-height: 220px; } }
+  </style>
+</head>
+<body>
+  <header><h1>Gán nhãn benchmark — chế độ cục bộ</h1></header>
+  <main>
+    <section class="panel">
+      <p class="muted">Chọn ba CSV dưới đây. Dữ liệu chỉ được xử lý trong trình duyệt này; trang không gửi nhãn đi đâu. Preview lấy từ URL nên cần kết nối Internet.</p>
+      <div class="files">
+        <label>Query đã ẩn nguồn<input id="queriesFile" type="file" accept=".csv,text/csv"></label>
+        <label>Danh sách asset / preview<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
+        <label>Mẫu nhãn của bạn<input id="labelsFile" type="file" accept=".csv,text/csv"></label>
+        <button class="primary" id="loadButton">Nạp dữ liệu</button>
+      </div>
+      <div id="loadError" class="error" role="alert"></div>
+    </section>
+
+    <section id="workspace" class="hidden">
+      <section class="panel">
+        <div class="topline"><strong id="progressText">Chưa chấm</strong><div class="actions"><button id="downloadButton">Tải CSV đã chấm</button></div></div>
+        <div class="bar"><div id="progressBar"></div></div>
+        <div class="muted" id="saveStatus">Bản nháp được tự lưu trong trình duyệt này; hãy tải CSV định kỳ để sao lưu.</div>
+      </section>
+
+      <section class="panel">
+        <div class="topline"><span id="positionText" class="muted"></span><span id="splitText" class="muted"></span></div>
+        <div id="queryText" class="query"></div>
+        <div class="asset">
+          <div class="preview" id="previewBox"><div class="placeholder">Đang tải preview…</div></div>
+          <div>
+            <div class="muted">Asset ID</div><div id="assetId" class="asset-id"></div>
+            <p class="muted" id="assetInfo"></p>
+            <a id="openImage" target="_blank" rel="noopener noreferrer">Mở ảnh ở tab mới</a>
+            <div class="scores" aria-label="Điểm relevance">
+              <button class="score" data-score="0" title="Phím 0">0</button>
+              <button class="score" data-score="1" title="Phím 1">1</button>
+              <button class="score" data-score="2" title="Phím 2">2</button>
+            </div>
+            <div class="muted">0 = không phù hợp · 1 = liên quan một phần · 2 = đáp ứng trực tiếp</div>
+            <label for="evidenceNote">Ghi chú bằng chứng (bắt buộc để lưu điểm)</label>
+            <textarea id="evidenceNote" class="note" placeholder="Ví dụ: ảnh cho thấy ghế có tay cong như query yêu cầu."></textarea>
+            <div class="actions">
+              <button class="primary" id="saveNextButton">Lưu điểm và tiếp tục <kbd>Enter</kbd></button>
+              <button id="skipButton">Bỏ qua chưa chấm <kbd>S</kbd></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel nav">
+        <button id="previousButton">← Cặp trước <kbd>←</kbd></button>
+        <span class="muted">Chấm: <kbd>0</kbd> <kbd>1</kbd> <kbd>2</kbd> · Bỏ qua: <kbd>S</kbd> · Di chuyển: <kbd>←</kbd>/<kbd>→</kbd></span>
+        <button id="nextButton">Cặp tiếp theo <kbd>→</kbd> →</button>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const state = { queries: [], candidates: new Map(), rows: [], cursor: 0, storageKey: "" };
+      const csvEscape = (value) => '"' + String(value ?? "").replaceAll('"', '""') + '"';
+
+      function parseCSV(text) {
+        const rows = [];
+        let row = [], field = "", quoted = false;
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i];
+          if (quoted) {
+            if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+            else if (ch === '"') quoted = false;
+            else field += ch;
+          } else if (ch === '"') quoted = true;
+          else if (ch === ',') { row.push(field); field = ""; }
+          else if (ch === '\n') { row.push(field.replace(/\r$/, "")); rows.push(row); row = []; field = ""; }
+          else field += ch;
+        }
+        if (field.length || row.length) { row.push(field.replace(/\r$/, "")); rows.push(row); }
+        if (!rows.length) return [];
+        const headers = rows.shift().map((header) => header.replace(/^\uFEFF/, "").trim());
+        return rows.filter((record) => record.some((cell) => cell !== "")).map((record) => Object.fromEntries(headers.map((header, i) => [header, record[i] ?? ""])));
+      }
+
+      function fingerprint(text) {
+        let hash = 2166136261;
+        for (let i = 0; i < text.length; i++) { hash ^= text.charCodeAt(i); hash = Math.imul(hash, 16777619); }
+        return (hash >>> 0).toString(16);
+      }
+
+      function persist() {
+        try {
+          localStorage.setItem(state.storageKey, JSON.stringify({ cursor: state.cursor, rows: state.rows }));
+          $("saveStatus").textContent = "Đã tự lưu bản nháp trong trình duyệt này. Hãy tải CSV định kỳ để có bản sao ngoài trình duyệt.";
+        } catch (error) {
+          $("saveStatus").textContent = "Không tự lưu được vào trình duyệt (có thể hết dung lượng). Hãy tải CSV để sao lưu.";
+        }
+      }
+
+      function current() { return state.rows[state.cursor]; }
+
+      function render() {
+        if (!state.rows.length) return;
+        const row = current();
+        const query = state.queries.find((item) => item.query_id === row.query_id);
+        const asset = state.candidates.get(row.asset_id);
+        $("positionText").textContent = `Cặp ${state.cursor + 1} / ${state.rows.length}`;
+        $("splitText").textContent = query?.split ? `Split: ${query.split}` : "";
+        $("queryText").textContent = query ? `${query.query_id} · ${query.query_text}` : `${row.query_id} · query không tìm thấy`;
+        $("assetId").textContent = row.asset_id;
+        const dimensions = asset?.preview_dimensions ? ` · ${asset.preview_dimensions}` : "";
+        const checksum = asset?.preview_sha256 ? ` · SHA-256 ${asset.preview_sha256}` : "";
+        $("assetInfo").textContent = `${asset?.preview_status || "không có trạng thái preview"}${dimensions}${checksum}`;
+        $("openImage").href = asset?.preview_url || "#";
+        $("openImage").classList.toggle("hidden", !asset?.preview_url);
+        const box = $("previewBox");
+        box.replaceChildren();
+        if (asset?.preview_url) {
+          const image = new Image();
+          image.alt = `Preview của ${row.asset_id}`;
+          image.onload = () => { box.replaceChildren(image); };
+          image.onerror = () => { const message = document.createElement("div"); message.className = "placeholder"; message.textContent = "Không tải được ảnh. Thử mở ảnh ở tab mới hoặc ghi chú để rà soát sau."; box.replaceChildren(message); };
+          image.src = asset.preview_url;
+        } else {
+          const message = document.createElement("div"); message.className = "placeholder"; message.textContent = "Không có preview URL cho asset này."; box.append(message);
+        }
+        $("evidenceNote").value = row.evidence_note || "";
+        document.querySelectorAll(".score").forEach((button) => button.classList.toggle("selected", button.dataset.score === String(row.relevance)));
+        const completed = state.rows.filter((item) => item.annotated_at_utc && item.relevance !== "").length;
+        $("progressText").textContent = `${completed.toLocaleString()} / ${state.rows.length.toLocaleString()} cặp đã lưu điểm`;
+        $("progressBar").style.width = `${100 * completed / state.rows.length}%`;
+        $("previousButton").disabled = state.cursor === 0;
+        $("nextButton").disabled = state.cursor >= state.rows.length - 1;
+        $("saveNextButton").disabled = !["0", "1", "2"].includes(String(row.relevance)) || !$("evidenceNote").value.trim();
+      }
+
+      async function loadFiles() {
+        $("loadError").textContent = "";
+        try {
+          const queryFile = $("queriesFile").files[0];
+          const candidateFile = $("candidatesFile").files[0];
+          const labelFile = $("labelsFile").files[0];
+          if (!queryFile || !candidateFile || !labelFile) throw new Error("Hãy chọn đủ ba tệp CSV.");
+          const [queryText, candidateText, labelText] = await Promise.all([queryFile.text(), candidateFile.text(), labelFile.text()]);
+          const queries = parseCSV(queryText);
+          const candidates = parseCSV(candidateText);
+          const labels = parseCSV(labelText);
+          if (!queries.length || !candidates.length || !labels.length) throw new Error("Một trong các CSV không có dữ liệu.");
+          if (!("query_text" in queries[0]) || !("preview_url" in candidates[0]) || !("relevance" in labels[0])) throw new Error("CSV không đúng schema. Chọn queries_for_labeling.csv, candidate_assets.csv và template nhãn của bạn.");
+          const queryMap = new Map(queries.map((item) => [item.query_id, item]));
+          const candidateMap = new Map(candidates.map((item) => [item.asset_id, item]));
+          const missingQueries = labels.filter((item) => !queryMap.has(item.query_id)).length;
+          const missingAssets = labels.filter((item) => !candidateMap.has(item.asset_id)).length;
+          if (missingQueries || missingAssets) throw new Error(`Template có ID không có trong danh sách đã chọn (query lỗi: ${missingQueries}, asset lỗi: ${missingAssets}).`);
+          const annotator = labels[0].annotator || "annotator";
+          state.queries = queries;
+          state.candidates = candidateMap;
+          state.rows = labels.map((item) => ({ ...item }));
+          state.storageKey = `benchmark-labeler-v1:${annotator}:${fingerprint(queryText + candidateText + labelText)}`;
+          const saved = localStorage.getItem(state.storageKey);
+          if (saved) {
+            const draft = JSON.parse(saved);
+            if (Array.isArray(draft.rows) && draft.rows.length === state.rows.length) {
+              state.rows = draft.rows;
+              state.cursor = Math.min(Number(draft.cursor) || 0, state.rows.length - 1);
+            }
+          }
+          $("workspace").classList.remove("hidden");
+          persist();
+          render();
+        } catch (error) {
+          $("loadError").textContent = error.message || String(error);
+        }
+      }
+
+      function move(delta) {
+        const next = state.cursor + delta;
+        if (next < 0 || next >= state.rows.length) return;
+        state.cursor = next;
+        persist(); render();
+      }
+
+      function saveAndNext() {
+        const row = current();
+        const note = $("evidenceNote").value.trim();
+        if (!note) { $("evidenceNote").focus(); return; }
+        if (!["0", "1", "2"].includes(String(row.relevance))) return;
+        row.evidence_note = note;
+        row.annotated_at_utc = new Date().toISOString();
+        if (state.cursor < state.rows.length - 1) state.cursor++;
+        persist(); render();
+      }
+
+      function skip() { move(1); }
+
+      function download() {
+        const header = ["query_id", "asset_id", "annotator", "relevance", "evidence_note", "annotated_at_utc"];
+        const lines = [header.join(",")];
+        for (const row of state.rows) {
+          const done = row.annotated_at_utc && ["0", "1", "2"].includes(String(row.relevance)) && row.evidence_note?.trim();
+          const values = header.map((key) => done ? row[key] : (key === "query_id" || key === "asset_id" || key === "annotator" ? row[key] : ""));
+          lines.push(values.map(csvEscape).join(","));
+        }
+        const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `labels_${(state.rows[0]?.annotator || "annotator").toLowerCase().replace(/[^a-z0-9]+/g, "_")}.csv`;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      }
+
+      $("loadButton").addEventListener("click", loadFiles);
+      $("previousButton").addEventListener("click", () => move(-1));
+      $("nextButton").addEventListener("click", () => move(1));
+      $("skipButton").addEventListener("click", skip);
+      $("saveNextButton").addEventListener("click", saveAndNext);
+      $("downloadButton").addEventListener("click", download);
+      document.querySelectorAll(".score").forEach((button) => button.addEventListener("click", () => {
+        current().relevance = button.dataset.score;
+        current().annotated_at_utc = "";
+        persist(); render(); $("evidenceNote").focus();
+      }));
+      $("evidenceNote").addEventListener("input", () => {
+        current().evidence_note = $("evidenceNote").value;
+        current().annotated_at_utc = "";
+        $("saveNextButton").disabled = !["0", "1", "2"].includes(String(current().relevance)) || !$("evidenceNote").value.trim();
+        persist();
+      });
+      document.addEventListener("keydown", (event) => {
+        if ($( "workspace").classList.contains("hidden")) return;
+        const tag = document.activeElement?.tagName;
+        if (tag === "TEXTAREA" || tag === "INPUT") {
+          if (tag === "TEXTAREA" && event.key === "Enter" && !event.shiftKey) { event.preventDefault(); saveAndNext(); }
+          return;
+        }
+        if (event.key === "0" || event.key === "1" || event.key === "2") { current().relevance = event.key; current().annotated_at_utc = ""; persist(); render(); $("evidenceNote").focus(); }
+        else if (event.key.toLowerCase() === "s") skip();
+        else if (event.key === "ArrowLeft") move(-1);
+        else if (event.key === "ArrowRight") move(1);
+      });
+    })();
+  </script>
+</body>
+</html>
