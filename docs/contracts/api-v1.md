@@ -19,6 +19,11 @@
 - Quy ước preview tái sử dụng #47, cần Huyền/Duy review khi bàn giao dữ liệu thật;
   kiểm thử tự động không thay cho xác nhận của hai thành viên.
 
+Rà soát trước tích hợp thật W3: xem [bảng đối chiếu và đề xuất chờ owner xác nhận](w3-text-search-review.md).
+Đối chiếu tĩnh code/OpenAPI lưu sẵn tại `65ce5839576949dc5633c05c745887c20913d79a`
+ngày 29/10/2026; chưa sinh lại spec runtime. Tài liệu mô tả API hiện có; chưa phải
+contract retrieval thật đã được Quỳnh Anh/Linh Chi xác nhận.
+
 ## Cập nhật Issue #47
 
 - `GET /api/v1/assets` mặc định đọc PostgreSQL và trả `mock=false`; các keys
@@ -34,7 +39,7 @@
   đường dẫn local trả null. Chưa triển khai phục vụ file preview trong issue này.
 - `mock=false` chỉ xác định nguồn đọc DB: bản ghi seed vẫn có source=mock.
 - Detail trước đây còn mock ở #47; từ #48 đã đọc DB như phần cập nhật phía trên.
-- OpenAPI xuất mặc định mô tả list DB và các route mock còn lại. Chế độ fixture
+- OpenAPI xuất mặc định mô tả list/detail DB và search/image/feedback mock. Chế độ fixture
   có Swagger runtime riêng. Các quy ước mock bên dưới chỉ áp dụng khi dùng fixture.
 
 ## Contract mock gốc (Issue #9)
@@ -103,7 +108,8 @@ cần Duy và owner search review trước ghép nối tính năng thật.
 
 List nhận filter qua query parameters; text search qua object filters; image
 search qua **JSON string** ở field filters trong form.
-Frontend W1 vẫn chỉ gửi filters={} nên không cần đổi DTO frontend trong PR này.
+Tại thời điểm mock W1, frontend chỉ gửi filters={}. Frontend hiện có DTO và
+validator cho các filters ở trên; xem [đối chiếu Issue #9](frontend-api-v1.md).
 
 ## Text search
 
@@ -116,7 +122,17 @@ nguyên, không nhận boolean hoặc chuỗi số. Ví dụ:
 
 Response giữ query đã trim, IDs mock duy nhất, results không trùng asset_id,
 score=null, explanation nêu rõ chỉ khớp metadata. Metadata/versions dùng đúng
-shape đang có ở `frontend/src/features/search/types.ts`.
+shape đang có ở `frontend/src/features/search/types.ts`. Runtime mock dùng
+`model_version=mock-no-encoder`, `index_version=mock-w1`,
+`config_version=mock-contract-v1` (khác ví dụ lịch sử W1 `mock-text-v1`).
+Mỗi request, kể cả retry/đổi trang, tạo query_id và search_event_id mới; event
+chỉ giữ response trang trong RAM, chưa dùng ORM SearchEvent.
+
+Frontend yêu cầu query echo, rank 1..N theo trang, ID không trùng trong trang và
+số phần tử đúng `min(limit,max(0,total-(page-1)*limit))`. Schema backend chưa
+enforce đầy đủ các quan hệ này. Search schema có mock const=true/default=true
+nhưng OpenAPI không đánh dấu required; DTO/validator frontend chưa kiểm tra cờ.
+Các invariants và semantics total cho retrieval thật còn chờ review W3.
 
 ## Image search
 
@@ -153,9 +169,11 @@ tham chiếu hash và response mock. Không coi hash là kết quả nhận di�
 | 500 | INTERNAL_ERROR | Lỗi nội bộ, không trả exception message/stack trace |
 
 Validation trả **400 theo Issue #9**, thay 422 trong nháp W1. Swagger/OpenAPI
-không quảng bá response 422 tự sinh. Client frontend hiện xử lý mọi non-2xx là
-lỗi, nhưng nhánh thông báo riêng 422 trong search.ts cần Duy review để đổi sang
-400/đọc code khi tích hợp; PR này không tự sửa module frontend của Duy.
+không quảng bá response 422 tự sinh. Client search hiện xử lý 400 và 422 bằng
+thông báo invalid cố định; 422 được giữ cho tương thích lịch sử. Client search
+không đọc error.code/message từ body; client asset có đọc code để phân biệt
+ASSET_NOT_FOUND với route không tồn tại. 503 cho search thật còn chờ owner xác nhận,
+chưa được router/OpenAPI search hiện tại khai báo.
 
 Giữ APP_DEBUG=false khi kiểm tra contract lỗi 500; chế độ debug của framework có
 thể trả traceback thay handler 500. CORS preflight là phản hồi middleware riêng,

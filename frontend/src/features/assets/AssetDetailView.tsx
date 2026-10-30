@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { AssetMetadata } from '../search/types'
+import { isHttpUrl } from '../search/contract'
 import './AssetDetailView.css'
 
 export type DetailState =
@@ -23,6 +24,7 @@ export function AssetDetailView({ state, onRetry, onBack }: AssetDetailViewProps
   }, [])
 
   const asset = state.status === 'success' ? state.asset : null
+  const sourceLabel = asset?.source.trim() ? asset.source : 'Chưa có thông tin'
 
   return (
     <section
@@ -97,14 +99,14 @@ export function AssetDetailView({ state, onRetry, onBack }: AssetDetailViewProps
               <div><dt>Định dạng</dt><dd>{asset.formats.join(', ').toUpperCase() || 'Chưa có'}</dd></div>
               <div><dt>Số mặt</dt><dd>{asset.face_count?.toLocaleString('vi-VN') ?? 'Chưa có'}</dd></div>
               <div><dt>Tags</dt><dd>{asset.tags.join(', ') || 'Chưa có'}</dd></div>
-              <div><dt>Tác giả</dt><dd>{asset.author ?? 'Chưa có thông tin'}</dd></div>
-              <div><dt>License</dt><dd>{asset.license ?? 'Chưa có thông tin'}</dd></div>
+              <div><dt>Tác giả</dt><dd>{asset.author?.trim() ? asset.author : 'Chưa có thông tin'}</dd></div>
+              <div><dt>License</dt><dd>{asset.license?.trim() ? asset.license : 'Chưa có thông tin'}</dd></div>
               <div>
                 <dt>Nguồn</dt>
                 <dd>
-                  {asset.source_url ? (
-                    <a href={asset.source_url} target="_blank" rel="noopener noreferrer">{asset.source}</a>
-                  ) : asset.source === 'fixture' ? 'Dữ liệu minh họa tự tạo' : asset.source}
+                  {isHttpUrl(asset.source_url) ? (
+                    <a href={asset.source_url} target="_blank" rel="noopener noreferrer">{sourceLabel}</a>
+                  ) : asset.source === 'fixture' ? 'Dữ liệu minh họa tự tạo' : sourceLabel}
                 </dd>
               </div>
             </dl>
