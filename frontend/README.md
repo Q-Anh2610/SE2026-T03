@@ -99,3 +99,54 @@ và Vite trên 5196/5197, không dùng dịch vụ chia sẻ. Dùng
 `PLAYWRIGHT_BROWSER_CHANNEL=chromium` nếu cài Chromium qua Playwright.
 Tests chạy frontend–FastAPI HTTP thật nhưng backend trả fixture; không đo semantic
 retrieval. Upload và feedback được kiểm tra qua HTTP, chưa có UI cho hai tính năng.
+
+## Kiểm chứng W3 — Issue #54
+
+Rà soát UI W3: loading/empty/error/retry giữ hành vi hiện có; bổ sung kiểm chứng
+HTTP qua UI cho timeout/mạng và retry giữ nguyên request khi bản nhập đã thay đổi.
+Detail hiển thị “Chưa có thông tin” cho nguồn/tác giả/license rỗng hoặc toàn khoảng
+trắng; chỉ tạo link nguồn qua validator HTTP(S) hiện có. Không đổi metadata gốc
+hoặc tự tạo URL tác giả/license. Xem [acceptance UI W3](tests/UI_ACCEPTANCE.md).
+Sau sửa UI: `npm test` đạt 276/276; lint, typecheck, build đạt và E2E giữ nguyên
+đạt 30/30 (29/10/2026). Đây là kiểm chứng mock/HTTP giả lập, chưa phải smoke thật.
+
+Luồng text hiện có gửi query đã trim, filters, page và limit qua HTTP client;
+giữ thứ tự kết quả, IDs và versions từ response. Detail gọi API theo asset ID;
+quay lại giữ kết quả và trang đã nhận. Không fallback mock khi API lỗi.
+`tests/components/SearchPage.http.test.tsx` kiểm tra xuyên UI → HTTP client →
+validator với **fetch giả lập**, gồm phân trang, thứ tự, IDs/versions, detail/quay
+lại, retry/empty và response cũ thành công hoặc lỗi đến sau response mới.
+
+Tại lần rà soát W3 này, [khối 3](../docs/contracts/w3-text-search-review.md)
+vẫn ghi các quyết định đang chờ xác nhận; chưa có contract retrieval thật đã chốt.
+Sau cập nhật `develop` tại `65ce583` (29/10/2026), list/detail đọc PostgreSQL
+theo #48; search vẫn gọi `MockStore` và không đăng ký khi tắt mock. ID từ search
+fixture có thể không tồn tại trong detail DB: UI hiện lỗi 404, không dùng metadata
+search thay cho detail thành công; quay lại vẫn giữ kết quả. Test HTTP mô phỏng
+kiểm tra riêng trường hợp này. Module CLIP batch/Qdrant mới của #39 chưa nối vào
+HTTP search; chưa có encode text/truy vấn vector trong các module đó.
+List/detail đọc PostgreSQL không làm search trở thành retrieval thật.
+Chạy `dev:api` chỉ chọn HTTP, không xác nhận backend dùng encoder/index thật.
+Chưa nghiệm thu acceptance criteria tìm kiếm dữ liệu/index thật của Issue #54.
+
+Kiểm tra lại ngày 29/10/2026 sau fast-forward: `npm test` đạt 267 tests/13 files;
+`npm run lint`, `npm run typecheck` và build đạt. `npm run test:e2e` đạt 30 tests
+trên desktop/mobile (bao gồm build production). E2E dùng mock development hoặc
+HTTP interception, không dùng retrieval/index thật.
+
+Khi owner bàn giao contract và môi trường retrieval thật, chạy smoke riêng:
+
+1. Chạy `npm run dev:api` với origin API được bàn giao qua `VITE_API_BASE_URL`;
+   kiểm tra CORS/reverse proxy theo hướng dẫn ở trên.
+2. Nhập query trên web, kiểm tra request `POST /api/v1/search/text` trong Network,
+   đối chiếu thứ tự asset IDs, pagination, query/event IDs và versions với response.
+3. Mở một asset, đối chiếu ID/metadata/nguồn với detail response rồi quay lại;
+   kiểm tra trang/kết quả vẫn được giữ.
+4. Ghi query, thời điểm, commit frontend/backend, IDs, versions và manifest
+   checkpoint/revision/preprocessing/dataset/index tương ứng. Đối chiếu bằng chứng
+   phía backend rằng request đi qua encoder và index thật; HTTP 200, cờ `mock=false`
+   hoặc tên version riêng lẻ chưa đủ chứng minh semantic retrieval.
+
+Không dùng bộ `test:integration` hiện tại làm smoke thật vì nó chủ động bật
+backend fixture. Không tải model/dataset hoặc rebuild index dùng chung để chạy
+smoke frontend.
