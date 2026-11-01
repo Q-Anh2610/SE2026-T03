@@ -1,0 +1,74 @@
+﻿query_id,query_type,query_group_id,split,language,query_text,query_image_path,image_source,source_asset_id,notes
+q0001,text,g0001,validation,en,"a chair for a living room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0002,text,g0001,validation,en,"an armchair with armrests",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0003,text,g0001,validation,en,"a dining chair for a table",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0004,text,g0001,validation,en,"a folding chair that can be stored away",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0005,text,g0001,validation,en,"a rocking chair for a reading corner",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0006,text,g0001,validation,en,"a stool with no backrest",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0007,text,g0001,validation,en,"a padded bench for indoor seating",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0008,text,g0001,validation,en,"a sofa for a home living space",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0009,text,g0002,validation,en,"a coffee table for a living room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0010,text,g0002,validation,en,"a dining table for several people",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0011,text,g0002,validation,en,"a small side table beside a sofa",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0012,text,g0002,validation,en,"a console table placed against a wall",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0013,text,g0002,validation,en,"a writing desk for home use",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0014,text,g0002,validation,en,"a bedside table for a bedroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0015,text,g0002,validation,en,"a kitchen table for everyday meals",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0016,text,g0002,validation,en,"a round table for an indoor room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0017,text,g0003,validation,en,"a bookcase for storing books",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0018,text,g0003,validation,en,"a freestanding shelving unit",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0019,text,g0003,validation,en,"a wall-mounted shelf for home storage",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0020,text,g0003,validation,en,"a cabinet with doors for household storage",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0021,text,g0003,validation,en,"a wardrobe for hanging clothes",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0022,text,g0003,validation,en,"a chest of drawers for a bedroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0023,text,g0003,validation,en,"a sideboard for a dining room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0024,text,g0003,validation,en,"a shoe cabinet for an entryway",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0025,text,g0004,test,en,"a single bed for a small bedroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0026,text,g0004,test,en,"a double bed for a main bedroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0027,text,g0004,test,en,"a bunk bed for a shared bedroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0028,text,g0004,test,en,"a headboard for a bed",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0029,text,g0004,test,en,"a mattress for a bedroom bed",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0030,text,g0004,test,en,"a bedroom vanity with a mirror",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0031,text,g0004,test,en,"a crib for a baby's room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0032,text,g0004,test,en,"a bedroom dresser for folded clothes",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0033,text,g0005,test,en,"a bedside lamp for reading",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0034,text,g0005,test,en,"a floor lamp for a living room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0035,text,g0005,test,en,"a pendant light hanging from the ceiling",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0036,text,g0005,test,en,"a flush ceiling light for an indoor room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0037,text,g0005,test,en,"a wall sconce for interior lighting",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0038,text,g0005,test,en,"a chandelier for a dining room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0039,text,g0005,test,en,"a desk lamp for a work surface",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0040,text,g0005,test,en,"a decorative lamp for a home interior",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0041,text,g0006,test,en,"a full-length mirror for a bedroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0042,text,g0006,test,en,"a wall mirror for an entryway",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0043,text,g0006,test,en,"a rug covering part of a living room floor",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0044,text,g0006,test,en,"a carpet for an indoor room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0045,text,g0006,test,en,"curtains hanging over a window",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0046,text,g0006,test,en,"a wall clock for a home interior",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0047,text,g0006,test,en,"a coat rack for an entryway",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0048,text,g0006,test,en,"a stand for displaying an indoor plant",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0049,text,g0007,test,en,"a bathtub for a bathroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0050,text,g0007,test,en,"a bathroom sink with a basin",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0051,text,g0007,test,en,"a toilet for a residential bathroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0052,text,g0007,test,en,"a shower enclosure for a bathroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0053,text,g0007,test,en,"a towel rack mounted in a bathroom",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0054,text,g0007,test,en,"a bathroom vanity with storage",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0055,text,g0007,test,en,"a bathroom mirror above a sink",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0056,text,g0008,test,en,"a kitchen cabinet for storing dishes",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0057,text,g0008,test,en,"a kitchen island with a worktop",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0058,text,g0008,test,en,"a kitchen counter for food preparation",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0059,text,g0008,test,en,"a dining bench for a kitchen table",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0060,text,g0008,test,en,"a refrigerator for a home kitchen",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0061,text,g0008,test,en,"an oven installed in a kitchen",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0062,text,g0008,test,en,"a toaster on a kitchen counter",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0063,text,g0009,validation,en,"a computer desk for a home office",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0064,text,g0009,validation,en,"an ergonomic office chair for working",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0065,text,g0009,validation,en,"a filing cabinet for office documents",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0066,text,g0009,validation,en,"a desk organizer for stationery",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0067,text,g0010,test,en,"a floor-standing fan for an indoor room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0068,text,g0010,test,en,"a wall-mounted air conditioner for a home",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0069,text,g0010,test,en,"a television stand for a living room",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+q0070,text,g0010,test,en,"a laundry basket for household use",,,,Reviewed by Doan Thi Minh Khue on 2026-11-01
+
+
+
