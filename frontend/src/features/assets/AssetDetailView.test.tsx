@@ -5,6 +5,24 @@ import { AssetDetailView } from './AssetDetailView'
 import { makeResponse } from '../../test/fixtures'
 
 describe('AssetDetailView', () => {
+  it.each(['', '   '])('shows placeholders for blank source, author and license (%j)', (blank) => {
+    const asset = { ...makeResponse().results[0].asset, source: blank, author: blank, license: blank }
+    render(<AssetDetailView state={{ status: 'success', asset }} onRetry={vi.fn()} onBack={vi.fn()} />)
+    for (const label of ['Nguồn', 'Tác giả', 'License']) {
+      expect(screen.getByText(label).nextElementSibling).toHaveTextContent('Chưa có thông tin')
+    }
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+  })
+
+  it.each(['javascript:alert(1)', 'file:///tmp/asset', '/relative', 'https://user:secret@example.com/asset'])(
+    'does not create a source link for an invalid URL %s', (source_url) => {
+      const asset = { ...makeResponse().results[0].asset, source: 'Nguồn kiểm thử', source_url }
+      render(<AssetDetailView state={{ status: 'success', asset }} onRetry={vi.fn()} onBack={vi.fn()} />)
+      expect(screen.getByText('Nguồn kiểm thử')).toBeVisible()
+      expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    },
+  )
+
   it('shows loading state and focuses the back button', () => {
     const onBack = vi.fn()
     render(
