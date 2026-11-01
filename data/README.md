@@ -1,3 +1,9 @@
+# Snapshot đang hoạt động: home-interior-clear-200-v3
+
+Đã thay bộ file dataset bằng 200 ảnh mới. Xem [ACTIVE_DATASET.md](ACTIVE_DATASET.md) để biết thành phần, cách tải và giới hạn của snapshot mới. Các số liệu/báo cáo W1/W2 bên dưới mô tả snapshot cũ, không phải bằng chứng của bộ mới.
+
+---
+
 # Dữ liệu — Trịnh Thị Thu Huyền (@TrinhHuyen05)
 
 Trịnh Thị Thu Huyền (@TrinhHuyen05) chủ trì source reader, manifest và
