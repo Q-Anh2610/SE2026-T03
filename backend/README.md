@@ -51,6 +51,11 @@ gốc trong DB. Xem [bàn giao asset API](../docs/guides/asset-api.md).
 
 ## Các API mock còn lại (Issue #9)
 
+Contract text search thật và search event persistence của Issue #63 đã có tại
+[bàn giao W3](../docs/contracts/text-search-w3.md). Chưa nối persistence/service
+vào route mock; JSON Schema W3 được xuất riêng bằng
+`python -m app.export_text_search_contract`, không thay OpenAPI của route đang chạy.
+
 Swagger `/docs` có đủ GET assets/list-detail, POST search/text, search/image và
 feedback dưới `/api/v1`. Xem [contract mock v1](../docs/contracts/api-v1.md) và
 `docs/openapi.json`. Text chỉ khớp từ khóa fixture, ảnh trả dữ liệu mẫu cố định;

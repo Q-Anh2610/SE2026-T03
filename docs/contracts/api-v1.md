@@ -1,5 +1,9 @@
 # API contract v1 - list/detail PostgreSQL và các API mock
 
+> Text search thật W3 được chốt riêng tại [contract Issue #63](text-search-w3.md).
+> Tài liệu này/OpenAPI vẫn mô tả route mock đang chạy; tích hợp service/persistence
+> vào HTTP và cập nhật DTO Frontend thuộc issue tiếp theo.
+
 ## Cập nhật Issue #48
 
 - `GET /api/v1/assets/{asset_id}` đọc cùng PostgreSQL và dùng cùng mapping metadata
