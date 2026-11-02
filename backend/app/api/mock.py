@@ -28,6 +28,7 @@ ERROR_RESPONSES = {
     ]
 }
 router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
+text_router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
 list_router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
 
 
@@ -49,7 +50,7 @@ async def get_asset(request: Request, asset_id: str):
     return AssetDetailResponse(asset=store(request).asset(asset_id), mock=True)
 
 
-@router.post("/search/text", response_model=SearchResponse, tags=["search"], summary="[Mock] Tìm kiếm văn bản",
+@text_router.post("/search/text", response_model=SearchResponse, tags=["search"], summary="[Mock] Tìm kiếm văn bản",
              responses={200: response_example(SEARCH_EXAMPLE)})
 async def search_text(request: Request, value: Annotated[TextSearchRequest, Body(openapi_examples={
     "text": {"summary": "Tìm ghế gỗ", "value": {"query": "ghế gỗ", "filters": {}, "page": 1, "limit": 12}},

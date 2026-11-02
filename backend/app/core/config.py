@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     postgres_password: SecretStr | None = Field(default=None, validation_alias="POSTGRES_PASSWORD")
     mock_api_enabled: bool = True
     asset_list_source: Literal["database", "fixture"] = "database"
+    text_search_source: Literal["mock", "service"] = "mock"
     cors_origins: list[str] = Field(default_factory=lambda: [
         "http://localhost:5173", "http://127.0.0.1:5173",
     ])

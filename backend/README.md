@@ -76,6 +76,13 @@ response thành công không có nghĩa các thành phần này đã sẵn sàng
 
 ## Cấu hình
 
+Phần chuẩn bị API text search #65: [hướng dẫn và phần còn chờ #60](../docs/guides/text-search-api.md).
+`APP_TEXT_SEARCH_SOURCE=service` chọn router dùng PostgreSQL và search service;
+chưa cung cấp adapter thì trả 503, không fallback mock. Mặc định `mock` giữ
+luồng phát triển cũ. Chưa có bằng chứng CLIP/Qdrant thật cho nhánh này.
+Exporter OpenAPI hiện xuất cả `docs/openapi.json` (mock mặc định) và
+`docs/openapi-text-search.json` (service). Không đổi dependencies/migrations.
+
 `app/core/config.py` dùng pydantic-settings, đọc `.env` ở gốc repository theo
 đường dẫn tuyệt đối suy ra từ file Python, không phụ thuộc working directory.
 Biến môi trường của tiến trình ưu tiên hơn file; không có file thì dùng defaults.
@@ -87,6 +94,10 @@ Các biến dành cho dịch vụ khác trong `.env` chung được bỏ qua.
 | `APP_ENV` | `development` | `development`, `test` hoặc `production` |
 | `APP_DEBUG` | `false` | Debug FastAPI, không bật ở production |
 | `APP_ASSET_LIST_SOURCE` | `database` | Nguồn list/detail; `fixture` chỉ dùng khi bật mock ở development/test |
+| `APP_TEXT_SEARCH_SOURCE` | `mock` | `service` chọn API #65; chưa có adapter #60 thì 503. `mock` chỉ có route ngoài production khi bật mock |
+
+Khi chọn text search `service`, list/detail luôn dùng PostgreSQL dù cấu hình
+asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 | `BACKEND_PORT` | `8000` | Cổng host của Compose, không thay cổng Uvicorn local |
 
 `.env.example` là cấu hình mẫu; `.env` không được commit hay đưa vào image.
