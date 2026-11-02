@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "AssetMetadata": {
+      "properties": {
+        "asset_id": {
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Description"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Category"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "formats": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Formats",
+          "type": "array"
+        },
+        "face_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Face Count"
+        },
+        "thumbnail_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Thumbnail Url"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source Url"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Author"
+        },
+        "license": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "License"
+        }
+      },
+      "required": [
+        "asset_id",
+        "name",
+        "description",
+        "category",
+        "tags",
+        "formats",
+        "face_count",
+        "thumbnail_url",
+        "source",
+        "source_url",
+        "author",
+        "license"
+      ],
+      "title": "AssetMetadata",
+      "type": "object"
+    },
+    "LiveTextSearchRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "examples": [
+            "ghế gỗ"
+          ],
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Query",
+          "type": "string"
+        },
+        "filters": {
+          "$ref": "#/$defs/TextSearchFilters"
+        },
+        "page": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "limit": {
+          "default": 12,
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "title": "LiveTextSearchRequest",
+      "type": "object"
+    },
+    "LiveTextSearchResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "query_id": {
+          "format": "uuid",
+          "title": "Query Id",
+          "type": "string"
+        },
+        "search_event_id": {
+          "format": "uuid",
+          "title": "Search Event Id",
+          "type": "string"
+        },
+        "query": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Query",
+          "type": "string"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/$defs/SearchResult"
+          },
+          "title": "Results",
+          "type": "array"
+        },
+        "versions": {
+          "$ref": "#/$defs/SearchExecutionVersions"
+        },
+        "pagination": {
+          "$ref": "#/$defs/Pagination"
+        },
+        "mock": {
+          "const": false,
+          "title": "Mock",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "query_id",
+        "search_event_id",
+        "query",
+        "results",
+        "versions",
+        "pagination",
+        "mock"
+      ],
+      "title": "LiveTextSearchResponse",
+      "type": "object"
+    },
+    "Pagination": {
+      "properties": {
+        "page": {
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "limit": {
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "total": {
+          "minimum": 0,
+          "title": "Total",
+          "type": "integer"
+        },
+        "pages": {
+          "minimum": 0,
+          "title": "Pages",
+          "type": "integer"
+        },
+        "has_next": {
+          "title": "Has Next",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "page",
+        "limit",
+        "total",
+        "pages",
+        "has_next"
+      ],
+      "title": "Pagination",
+      "type": "object"
+    },
+    "SearchExecutionVersions": {
+      "additionalProperties": false,
+      "description": "Lấy từ cấu hình thực sự dùng để retrieval, không dùng defaults mock.",
+      "properties": {
+        "model_version": {
+          "minLength": 1,
+          "title": "Model Version",
+          "type": "string"
+        },
+        "index_version": {
+          "minLength": 1,
+          "title": "Index Version",
+          "type": "string"
+        },
+        "config_version": {
+          "minLength": 1,
+          "title": "Config Version",
+          "type": "string"
+        },
+        "dataset_snapshot": {
+          "minLength": 1,
+          "title": "Dataset Snapshot",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_version",
+        "index_version",
+        "config_version",
+        "dataset_snapshot"
+      ],
+      "title": "SearchExecutionVersions",
+      "type": "object"
+    },
+    "SearchResult": {
+      "properties": {
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "asset": {
+          "$ref": "#/$defs/AssetMetadata"
+        },
+        "retrieval_sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Retrieval Sources",
+          "type": "array"
+        },
+        "explanation": {
+          "title": "Explanation",
+          "type": "string"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score"
+        }
+      },
+      "required": [
+        "rank",
+        "asset",
+        "retrieval_sources",
+        "explanation"
+      ],
+      "title": "SearchResult",
+      "type": "object"
+    },
+    "TextSearchCandidates": {
+      "additionalProperties": false,
+      "description": "Top 200 sau filters/dedup; score giảm dần, hòa score theo asset_id.",
+      "properties": {
+        "hits": {
+          "items": {
+            "$ref": "#/$defs/TextSearchHit"
+          },
+          "maxItems": 200,
+          "title": "Hits",
+          "type": "array"
+        },
+        "versions": {
+          "$ref": "#/$defs/SearchExecutionVersions"
+        }
+      },
+      "required": [
+        "hits",
+        "versions"
+      ],
+      "title": "TextSearchCandidates",
+      "type": "object"
+    },
+    "TextSearchFilters": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "license": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "License"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "face_count_min": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Face Count Min"
+        },
+        "face_count_max": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Face Count Max"
+        }
+      },
+      "title": "TextSearchFilters",
+      "type": "object"
+    },
+    "TextSearchHit": {
+      "additionalProperties": false,
+      "description": "Interface service #60 → API: ứng viên trước mapping metadata DB.",
+      "properties": {
+        "asset_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": -1,
+          "title": "Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "asset_id",
+        "score"
+      ],
+      "title": "TextSearchHit",
+      "type": "object"
+    }
+  },
+  "title": "W3 live text search contract — Issue #63"
+}

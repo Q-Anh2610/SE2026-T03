@@ -1,5 +1,10 @@
 # Rà soát contract text search W3/M2 — Issue #54
 
+> Cập nhật 02/11/2026: TV1 đã chốt các điểm mở theo ủy quyền tại Issue #63.
+> Xem [contract W3 đã chốt](text-search-w3.md) và schema bàn giao. Nội dung
+> bên dưới giữ làm lịch sử rà soát 29/10; không còn là danh sách quyết định
+> chờ TV1. Route thật, tích hợp frontend/retrieval và owner review vẫn làm riêng.
+
 Ngày lập: 27/10/2026; đối chiếu lại: 29/10/2026. Phạm vi frontend của Nguyễn Văn Duy.
 Phạm vi: [Issue #54](https://github.com/Q-Anh2610/SE2026-T03/issues/54).
 Mốc code hiện tại: `65ce5839576949dc5633c05c745887c20913d79a`, nhánh `feat/54-w3-text-search`.
