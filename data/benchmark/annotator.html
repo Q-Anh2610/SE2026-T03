@@ -46,6 +46,7 @@
       <label class="file">Queries CSV<input id="queriesFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Candidate assets CSV<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Preview images folder<input id="previewsFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
+      <label class="file">Previously saved labels CSV<input id="labelsFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Annotator<select id="annotator"><option>Doan Thi Minh Khue</option><option>Trinh Thi Thu Huyen</option></select></label>
       <label class="file"><span><input id="useSuggestions" type="checkbox" checked> Use metadata suggestions</span><span class="muted">Assisted mode; suggestions use query text and asset name only.</span></label>
     </section>
@@ -109,6 +110,18 @@
 
     function currentQuery() { return state.queries[state.queryIndex]; }
     function currentAsset() { return state.candidates[state.candidateIndex]; }
+    function resumeAtFirstUnlabeled() {
+      if (!state.queries.length || !state.candidates.length) return;
+      for (let qi = 0; qi < state.queries.length; qi++) {
+        for (let ai = 0; ai < state.candidates.length; ai++) {
+          if (!state.labels.has(keyFor(state.queries[qi].query_id, state.candidates[ai].asset_id))) {
+            state.queryIndex = qi; state.candidateIndex = ai; refresh(); return;
+          }
+        }
+      }
+      state.queryIndex = state.queries.length - 1; state.candidateIndex = state.candidates.length - 1; refresh();
+      $('status').textContent = `${state.labels.size} saved · all query/candidate pairs are labeled`;
+    }
     const ignoredWords = new Set('a an the for with to in of and or be can is that from home living room indoor small main several people everyday folded clothes hanging displaying part over above beside mounted residential household use work surface everyday meals shared baby s full length floor standing installed everyday'.split(' '));
     const aliases = [['sofa', 'couch', 'loveseat'], ['wardrobe', 'closet'], ['rug', 'carpet'], ['refrigerator', 'fridge'], ['sink', 'washbasin'], ['toilet', 'loo'], ['lamp', 'light'], ['shelving', 'shelf']];
     function contentWords(text) {
@@ -188,8 +201,19 @@
       const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `labels_${slug}${mode}.csv`; link.click(); URL.revokeObjectURL(link.href);
     }
 
-    $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_type === 'text' && row.query_id && row.query_text); state.queryIndex = 0; refresh(); });
-    $('candidatesFile').addEventListener('change', async (event) => { state.candidates = parseCsv(await event.target.files[0].text()).filter((row) => row.asset_id); state.candidateIndex = 0; refresh(); });
+    $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_type === 'text' && row.query_id && row.query_text); resumeAtFirstUnlabeled(); });
+    $('candidatesFile').addEventListener('change', async (event) => { state.candidates = parseCsv(await event.target.files[0].text()).filter((row) => row.asset_id); resumeAtFirstUnlabeled(); });
+    $('labelsFile').addEventListener('change', async (event) => {
+      const rows = parseCsv(await event.target.files[0].text());
+      const valid = rows.filter((row) => row.query_id && row.asset_id && ['0', '1', '2'].includes(row.relevance));
+      state.labels.clear();
+      for (const row of valid) state.labels.set(keyFor(row.query_id, row.asset_id), {
+        query_id: row.query_id, asset_id: row.asset_id, annotator: row.annotator || $('annotator').value,
+        relevance: row.relevance, evidence_note: row.evidence_note || '', annotated_at_utc: row.annotated_at_utc || ''
+      });
+      resumeAtFirstUnlabeled();
+      $('status').textContent = `${state.labels.size} existing labels loaded · resumed at first unlabeled pair`;
+    });
     $('previewsFolder').addEventListener('change', (event) => { state.images.clear(); for (const file of event.target.files) state.images.set(file.name.toLowerCase(), file); refresh(); });
     $('useSuggestions').addEventListener('change', refresh);
     document.querySelectorAll('[data-score]').forEach((button) => button.addEventListener('click', () => { state.selectedScore = button.dataset.score; document.querySelectorAll('[data-score]').forEach((item) => item.classList.toggle('selected', item === button)); }));
