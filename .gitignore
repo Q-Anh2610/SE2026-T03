@@ -32,6 +32,8 @@ test-results/
 /data/processed/
 /data/models/
 /data/runtime/
+/data/benchmark/objaverse/previews/
+/data/benchmark/objaverse/previews_by_candidate_order/
 
 # Local editor and temporary files
 .idea/

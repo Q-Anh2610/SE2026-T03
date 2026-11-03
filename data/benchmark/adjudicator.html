@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmark adjudicator</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.45 system-ui, sans-serif; color: #18212b; background: #f4f6f8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { padding: 18px 24px; background: #15263a; color: white; }
+    header h1 { margin: 0 0 5px; font-size: 1.3rem; }
+    header p { margin: 0; color: #d6e2ef; }
+    main { max-width: 1440px; margin: 0 auto; padding: 18px; }
+    .setup, .panel, .toolbar { background: white; border: 1px solid #d6dde5; border-radius: 10px; padding: 14px; }
+    .setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    label.file { display: grid; gap: 5px; font-weight: 650; }
+    input[type=file] { max-width: 100%; font-weight: 400; }
+    .layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 14px; }
+    .panel h2 { margin: 0 0 8px; font-size: 1.05rem; }
+    .muted { color: #536272; font-size: .92rem; }
+    #queryText { font-size: 1.25rem; font-weight: 700; margin: 14px 0; }
+    #preview { display: block; width: 100%; height: min(48vh, 460px); object-fit: contain; background: #e8edf2; border-radius: 7px; }
+    #missingPreview { display: none; min-height: 200px; padding: 40px 18px; text-align: center; background: #fff5df; border: 1px solid #eed39a; border-radius: 7px; }
+    .judgments { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .judgment { border: 1px solid #d6dde5; border-radius: 8px; padding: 10px; }
+    .judgment h3 { margin: 0 0 4px; font-size: .95rem; }
+    .score { font-size: 1.25rem; font-weight: 750; }
+    .note { min-height: 38px; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .rating { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #9eacbb; border-radius: 7px; padding: 9px 13px; background: white; color: #18212b; font: inherit; cursor: pointer; }
+    button:hover { background: #edf3f8; }
+    button.selected { outline: 3px solid #2f72bb; border-color: #2f72bb; }
+    button.primary { background: #155aa2; border-color: #155aa2; color: white; }
+    button.primary:hover { background: #0e477f; }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    input[type=text] { width: 100%; padding: 9px; font: inherit; border: 1px solid #9eacbb; border-radius: 7px; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+    #status { margin-left: auto; font-weight: 650; }
+    .warning { margin: 12px 0 0; padding: 10px 12px; border-left: 4px solid #d58a00; background: #fff5df; }
+    @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } #preview { height: 40vh; } .judgments { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Benchmark adjudicator</h1>
+    <p>Điểm của Huyền được điền sẵn; ghi chú mặc định theo điểm. Khi đổi điểm, ghi chú tự cập nhật. Bạn có thể sửa ghi chú rồi nhấn Enter để lưu.</p>
+  </header>
+  <main>
+    <section class="setup" aria-label="Tệp đầu vào">
+      <label class="file">Nhãn Khuê CSV<input id="khueFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Nhãn Huyền CSV<input id="huyenFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Queries CSV<input id="queriesFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Candidate assets CSV<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Preview images folder<input id="previewsFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
+      <div class="file"><span>qrels.csv (đọc và ghi trực tiếp)</span><button id="openQrels" type="button">Mở qrels.csv để cập nhật</button><span id="fileStatus" class="muted">Chưa mở tệp qrels.</span></div>
+    </section>
+    <p class="warning">Chỉ mở một cửa sổ adjudicator để sửa cùng một qrels.csv. Trình duyệt sẽ hỏi quyền ghi tệp. Nếu qrels.csv bị thay đổi từ cửa sổ khác, giao diện sẽ dừng ghi để tránh ghi đè cập nhật đó.</p>
+    <section class="layout">
+      <article class="panel">
+        <h2>Query <span id="queryCounter">—</span></h2>
+        <div id="queryText">Nạp hai file nhãn và qrels.csv để bắt đầu.</div>
+        <div id="queryInfo" class="muted"></div>
+        <h2 style="margin-top:18px">Hai đánh giá độc lập</h2>
+        <div class="judgments">
+          <section class="judgment"><h3>Khuê</h3><div id="khueScore" class="score">—</div><div id="khueNote" class="note muted"></div></section>
+          <section class="judgment"><h3>Huyền</h3><div id="huyenScore" class="score">—</div><div id="huyenNote" class="note muted"></div></section>
+        </div>
+      </article>
+      <article class="panel">
+        <h2>Asset <span id="pairCounter">—</span></h2>
+        <img id="preview" alt="Candidate asset preview" hidden>
+        <div id="missingPreview">Chọn thư mục chứa 200 ảnh JPEG đã xác minh. Tên ảnh có thể là asset_id.jpg hoặc SHA-256.jpg theo candidate_assets.csv.</div>
+        <p id="assetInfo" class="muted"></p>
+        <div class="rating" role="group" aria-label="Điểm adjudication (mặc định theo nhãn Huyền)">
+          <button type="button" data-score="0">0 · không liên quan</button>
+          <button type="button" data-score="1">1 · liên quan một phần</button>
+          <button type="button" data-score="2">2 · liên quan trực tiếp</button>
+        </div>
+        <label for="decisionNote">Ghi chú adjudication (tự điền theo điểm; có thể sửa)</label>
+        <input id="decisionNote" type="text" autocomplete="off" placeholder="Bắt buộc; ví dụ: đúng đối tượng và thuộc tính trong query">
+      </article>
+    </section>
+    <nav class="toolbar" aria-label="Điều khiển">
+      <button id="previous" type="button">← Bất đồng trước</button>
+      <button id="next" type="button">Bất đồng tiếp →</button>
+      <button id="saveNext" class="primary" type="button" disabled>Lưu qrels và tiếp tục (Enter)</button>
+      <span id="status">Nạp các tệp đầu vào</span>
+    </nav>
+  </main>
+  <script>
+    const HEADERS = ['query_id', 'asset_id', 'relevance', 'adjudication_status', 'adjudication_note', 'adjudicated_by', 'adjudicated_at_utc'];
+    const VALID_SCORES = new Set(['0', '1', '2']);
+    const DEFAULT_NOTES = { '0': 'Not relevant', '1': 'Partly relevant', '2': 'Directly relevant' };
+    const state = { queries: [], candidates: [], images: new Map(), khue: new Map(), huyen: new Map(), qrels: [], qrelsByKey: new Map(), disputes: [], disputeIndex: 0, selectedScore: null, fileHandle: null, lastSavedText: '', imageUrl: null };
+    const $ = (id) => document.getElementById(id);
+    const keyFor = (queryId, assetId) => `${queryId}\t${assetId}`;
+
+    function parseCsv(text) {
+      const rows = []; let row = []; let field = ''; let quoted = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (quoted) {
+          if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+          else if (ch === '"') quoted = false;
+          else field += ch;
+        } else if (ch === '"') quoted = true;
+        else if (ch === ',') { row.push(field); field = ''; }
+        else if (ch === '\n' || ch === '\r') {
+          if (ch === '\r' && text[i + 1] === '\n') i++;
+          row.push(field); field = '';
+          if (row.some((value) => value !== '')) rows.push(row);
+          row = [];
+        } else field += ch;
+      }
+      if (field !== '' || row.length) { row.push(field); rows.push(row); }
+      if (!rows.length) return [];
+      const headers = rows.shift().map((value, index) => index === 0 ? value.replace(/^\uFEFF/, '').trim() : value.trim());
+      return rows.map((values) => Object.fromEntries(headers.map((header, i) => [header, values[i] ?? ''])));
+    }
+    function csvCell(value) { const text = String(value ?? ''); return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
+    function serializeQrels() { return '\uFEFF' + [HEADERS.join(','), ...state.qrels.map((row) => HEADERS.map((header) => csvCell(row[header])).join(','))].join('\r\n') + '\r\n'; }
+    function currentKey() { return state.disputes[state.disputeIndex]; }
+    function currentQuery() { const row = state.qrelsByKey.get(currentKey()); return state.queries.find((item) => item.query_id === row?.query_id); }
+    function currentAsset() { const row = state.qrelsByKey.get(currentKey()); return state.candidates.find((item) => item.asset_id === row?.asset_id); }
+    function hasUnresolvedQrel(key) { const row = state.qrelsByKey.get(key); return !row || !row.adjudication_status || !VALID_SCORES.has(row.relevance); }
+    function setStatus(message, error = false) { $('status').textContent = message; $('status').style.color = error ? '#a32121' : ''; }
+
+    function buildDisputes() {
+      if (!state.khue.size || !state.huyen.size || !state.qrels.length) return;
+      const missingHuyen = [...state.khue.keys()].filter((key) => !state.huyen.has(key)).length;
+      const missingKhue = [...state.huyen.keys()].filter((key) => !state.khue.has(key)).length;
+      const missingQrels = [...state.khue.keys()].filter((key) => !state.qrelsByKey.has(key)).length;
+      if (missingHuyen || missingKhue || missingQrels) {
+        setStatus(`Không khớp tập cặp: thiếu ở Huyền ${missingHuyen}, ở Khuê ${missingKhue}, trong qrels ${missingQrels}`, true);
+        $('saveNext').disabled = true; return;
+      }
+      state.disputes = [...state.khue.keys()].filter((key) => state.khue.get(key).relevance !== state.huyen.get(key).relevance && hasUnresolvedQrel(key));
+      if (state.disputeIndex >= state.disputes.length) state.disputeIndex = Math.max(0, state.disputes.length - 1);
+      render();
+      const totalDisagreements = [...state.khue.keys()].filter((key) => state.khue.get(key).relevance !== state.huyen.get(key).relevance).length;
+      const done = totalDisagreements - state.disputes.length;
+      setStatus(`${state.disputes.length} bất đồng còn lại · ${done}/${totalDisagreements} đã adjudicate`);
+    }
+
+    function render() {
+      const key = currentKey(); const qrel = state.qrelsByKey.get(key); const query = currentQuery(); const asset = currentAsset();
+      if (!key || !qrel) {
+        $('queryText').textContent = state.khue.size && state.huyen.size && state.qrels.length ? 'Không còn bất đồng chưa adjudicate.' : 'Nạp hai file nhãn và mở qrels.csv để bắt đầu.';
+        $('queryInfo').textContent = ''; $('assetInfo').textContent = ''; $('queryCounter').textContent = '—'; $('pairCounter').textContent = '—';
+        $('khueScore').textContent = '—'; $('huyenScore').textContent = '—'; $('khueNote').textContent = ''; $('huyenNote').textContent = '';
+        $('preview').hidden = true; $('missingPreview').style.display = 'block'; $('saveNext').disabled = true; return;
+      }
+      const khue = state.khue.get(key); const huyen = state.huyen.get(key);
+      $('queryCounter').textContent = `${state.disputeIndex + 1}/${state.disputes.length}`;
+      $('pairCounter').textContent = `qrels row ${state.qrels.indexOf(qrel) + 2}`;
+      $('queryText').textContent = query?.query_text || qrel.query_id;
+      $('queryInfo').textContent = `${qrel.query_id} · ${query?.split || ''} · scores differ: Khuê ${khue.relevance}, Huyền ${huyen.relevance}`;
+      $('khueScore').textContent = `Điểm ${khue.relevance}`; $('khueNote').textContent = khue.evidence_note || '(không có ghi chú)';
+      $('huyenScore').textContent = `Điểm ${huyen.relevance}`; $('huyenNote').textContent = huyen.evidence_note || '(không có ghi chú)';
+      $('assetInfo').textContent = `${qrel.asset_id} · ${asset?.name || ''}${asset?.license ? ` · license: ${asset.license}` : ''}`;
+      const hash = (asset?.preview_sha256 || '').toLowerCase(); const assetId = (asset?.asset_id || '').toLowerCase();
+      const candidateOrder = state.candidates.findIndex((candidate) => candidate.asset_id === asset?.asset_id) + 1;
+      const orderedName = `${String(candidateOrder).padStart(4, '0')}_${assetId}.jpg`;
+      const image = state.images.get(orderedName) || state.images.get(`${assetId}.jpg`) || state.images.get(`${assetId}.jpeg`) || state.images.get(`${hash}.jpg`) || state.images.get(`${hash}.jpeg`);
+      if (state.imageUrl) URL.revokeObjectURL(state.imageUrl); state.imageUrl = image ? URL.createObjectURL(image) : null;
+      $('preview').hidden = !image; $('missingPreview').style.display = image ? 'none' : 'block';
+      if (image) { $('preview').src = state.imageUrl; $('preview').onerror = () => { $('preview').hidden = true; $('missingPreview').style.display = 'block'; }; }
+      state.selectedScore = huyen.relevance;
+      $('decisionNote').value = DEFAULT_NOTES[huyen.relevance];
+      document.querySelectorAll('[data-score]').forEach((button) => button.classList.toggle('selected', button.dataset.score === state.selectedScore));
+      $('saveNext').disabled = !state.fileHandle;
+    }
+
+    async function parseLabelFile(file) {
+      const rows = parseCsv(await file.text()); const map = new Map();
+      for (const row of rows) {
+        if (!row.query_id || !row.asset_id || !VALID_SCORES.has(row.relevance)) throw new Error(`${file.name}: thiếu ID hoặc relevance không thuộc 0/1/2.`);
+        const key = keyFor(row.query_id, row.asset_id); if (map.has(key)) throw new Error(`${file.name}: cặp trùng ${row.query_id}/${row.asset_id}.`);
+        map.set(key, row);
+      }
+      return map;
+    }
+
+    async function openQrels() {
+      try {
+        if (!window.showOpenFilePicker) throw new Error('Trình duyệt này không hỗ trợ ghi tệp trực tiếp. Dùng Chrome hoặc Edge bản desktop.');
+        const [handle] = await window.showOpenFilePicker({ multiple: false, types: [{ description: 'CSV files', accept: { 'text/csv': ['.csv'] } }] });
+        if (handle.name.toLowerCase() !== 'qrels.csv') throw new Error('Hãy chọn đúng file qrels.csv.');
+        const permission = await handle.requestPermission({ mode: 'readwrite' });
+        if (permission !== 'granted') throw new Error('Chưa được cấp quyền ghi qrels.csv.');
+        const file = await handle.getFile(); const text = await file.text(); const rows = parseCsv(text);
+        if (!rows.length || HEADERS.some((header) => !(header in rows[0]))) throw new Error('qrels.csv không khớp schema yêu cầu.');
+        const qrelsByKey = new Map();
+        for (const row of rows) { const key = keyFor(row.query_id, row.asset_id); if (!row.query_id || !row.asset_id || qrelsByKey.has(key)) throw new Error(`qrels.csv có ID thiếu hoặc cặp trùng: ${key}`); qrelsByKey.set(key, row); }
+        state.fileHandle = handle; state.lastSavedText = text; state.qrels = rows; state.qrelsByKey = qrelsByKey;
+        $('fileStatus').textContent = `${handle.name} · ${rows.length} cặp · quyền ghi đã cấp`;
+        buildDisputes();
+      } catch (error) { if (error.name !== 'AbortError') setStatus(error.message || String(error), true); }
+    }
+
+    async function saveCurrent() {
+      const key = currentKey(); const row = state.qrelsByKey.get(key); const note = $('decisionNote').value.trim();
+      if (!key || !row || !state.fileHandle) return;
+      if (!VALID_SCORES.has(state.selectedScore)) { setStatus('Chọn điểm đã thống nhất 0, 1 hoặc 2.', true); return; }
+      if (!note) { setStatus('Nhập ghi chú adjudication trước khi lưu.', true); $('decisionNote').focus(); return; }
+      if (!$('preview').complete || $('preview').naturalWidth === 0) { setStatus('Nạp và xem preview trước khi adjudicate cặp này.', true); return; }
+      try {
+        const currentFile = await state.fileHandle.getFile(); const actualText = await currentFile.text();
+        if (actualText !== state.lastSavedText) { setStatus('qrels.csv đã thay đổi ở nơi khác. Tải lại qrels để tránh ghi đè.', true); $('saveNext').disabled = true; return; }
+        const updated = { ...row, relevance: state.selectedScore, adjudication_status: 'Adjudicated', adjudication_note: note, adjudicated_by: 'Khue, Huyen', adjudicated_at_utc: new Date().toISOString() };
+        const index = state.qrels.indexOf(row); state.qrels[index] = updated; state.qrelsByKey.set(key, updated);
+        const stream = await state.fileHandle.createWritable(); await stream.write(serializeQrels()); await stream.close();
+        state.lastSavedText = await (await state.fileHandle.getFile()).text();
+        state.disputeIndex = Math.min(state.disputeIndex, Math.max(0, state.disputes.length - 1));
+        buildDisputes();
+      } catch (error) { setStatus(`Không ghi được qrels.csv: ${error.message || error}`, true); }
+    }
+
+    function move(direction) { if (!state.disputes.length) return; state.disputeIndex = (state.disputeIndex + direction + state.disputes.length) % state.disputes.length; render(); }
+    $('khueFile').addEventListener('change', async (event) => { try { state.khue = await parseLabelFile(event.target.files[0]); buildDisputes(); } catch (error) { setStatus(error.message, true); } });
+    $('huyenFile').addEventListener('change', async (event) => { try { state.huyen = await parseLabelFile(event.target.files[0]); buildDisputes(); } catch (error) { setStatus(error.message, true); } });
+    $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_id); render(); });
+    $('candidatesFile').addEventListener('change', async (event) => { state.candidates = parseCsv(await event.target.files[0].text()).filter((row) => row.asset_id); render(); });
+    $('previewsFolder').addEventListener('change', (event) => { state.images.clear(); for (const file of event.target.files) state.images.set(file.name.toLowerCase(), file); render(); });
+    $('openQrels').addEventListener('click', openQrels);
+    document.querySelectorAll('[data-score]').forEach((button) => button.addEventListener('click', () => {
+      state.selectedScore = button.dataset.score;
+      document.querySelectorAll('[data-score]').forEach((item) => item.classList.toggle('selected', item === button));
+      $('decisionNote').value = DEFAULT_NOTES[state.selectedScore];
+    }));
+    $('previous').addEventListener('click', () => move(-1)); $('next').addEventListener('click', () => move(1)); $('saveNext').addEventListener('click', saveCurrent);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && event.target !== $('decisionNote')) { event.preventDefault(); saveCurrent(); }
+      else if (event.key === 'Enter' && event.target === $('decisionNote')) { event.preventDefault(); saveCurrent(); }
+      else if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName) && VALID_SCORES.has(event.key)) {
+        state.selectedScore = event.key;
+        document.querySelectorAll('[data-score]').forEach((button) => button.classList.toggle('selected', button.dataset.score === event.key));
+        $('decisionNote').value = DEFAULT_NOTES[event.key];
+      }
+      else if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName) && event.key === 'ArrowLeft') move(-1);
+      else if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName) && event.key === 'ArrowRight') move(1);
+    });
+  </script>
+</body>
+</html>
