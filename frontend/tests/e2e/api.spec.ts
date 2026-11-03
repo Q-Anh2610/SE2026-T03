@@ -1,6 +1,23 @@
 import { expect, test } from '@playwright/test'
 import { SearchPage } from './SearchPage'
-import { deferred, makeResponse } from '../../src/test/fixtures'
+import { deferred, makeLiveResponse, makeResponse } from '../../src/test/fixtures'
+
+test('shows the live response snapshot and API event IDs without generating request IDs', async ({ page }) => {
+  const view = new SearchPage(page)
+  const response = makeLiveResponse('ghế')
+  await page.route('**/api/v1/search/text', async (route) => {
+    expect(route.request().postDataJSON()).toEqual({ query: 'ghế', filters: {}, page: 1, limit: 12 })
+    await route.fulfill({ json: response })
+  })
+  await view.open()
+  await view.search('  ghế  ')
+  await expect(view.results).toHaveCount(1)
+  await page.getByText('Thông tin phiên tìm kiếm').click()
+  await expect(page.getByText(response.versions.dataset_snapshot)).toBeVisible()
+  await expect(page.getByText(response.search_event_id, { exact: true })).toHaveCount(2)
+  await expect(page.getByText('API khai báo không dùng mock')).toBeVisible()
+  await view.checkWidth()
+})
 
 test('keeps HTTP failure visible and retries without mock fallback', async ({ page }) => {
   const view = new SearchPage(page)

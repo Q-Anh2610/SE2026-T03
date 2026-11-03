@@ -102,6 +102,44 @@ retrieval. Upload và feedback được kiểm tra qua HTTP, chưa có UI cho ha
 
 ## Kiểm chứng W3 — Issue #54
 
+### Tiếp nhận contract #63 — 02/11/2026
+
+Bàn giao lại ngày 03/11/2026: develop vẫn ở `529a8ca`; API #65 tại
+[Draft PR #67](https://github.com/Q-Anh2610/SE2026-T03/pull/67), HEAD `2754831`,
+chưa merge và còn chờ adapter retrieval/bootstrap, manifest cùng DB/index đồng bộ.
+CI PR #67 đã đạt nhưng tests dùng retrieval giả lập, không thay cho smoke thật.
+Phần web search → filters/phân trang → detail/quay lại và lỗi/retry trên dữ liệu
+thật vẫn bị chặn theo [#66](https://github.com/Q-Anh2610/SE2026-T03/issues/66).
+Để chạy checklist cùng Duy/Khuê cần owner bàn giao API origin/CORS, SHA đang chạy,
+index manifest/snapshot, query/case filters/empty và bằng chứng encoder/index.
+Không chạy lại model, tự rebuild index hoặc tích nghiệm thu thật bằng fixture.
+
+Contract đường thật đã được bàn giao trong [text-search-w3.md](../docs/contracts/text-search-w3.md)
+(PR #64 đã merge); các nhận định chưa chốt ở ghi nhận ngày 29/10 bên dưới là lịch sử.
+Frontend giữ request `query`, `filters`, `page`, `limit` và hành vi retry hiện có.
+Response bắt buộc có `mock` boolean; với `mock:false`, validator yêu cầu
+`versions.dataset_snapshot` cùng ba versions không rỗng/không có tiền tố `mock-`,
+`total <= 200` và `query_id == search_event_id`. Count trang và rank 1..N theo
+trang vẫn được kiểm tra. Total chỉ đếm cửa sổ ứng viên, không phải toàn collection
+hay số asset được con người xác nhận liên quan.
+
+Thông tin phiên hiển thị dataset snapshot từ response thật và trạng thái mock
+theo cờ API; UI không tạo ID/version. Response `mock:true` của route W1 vẫn được
+nhận như dữ liệu minh họa và không bị tự gắn snapshot hoặc coi là retrieval thật.
+Không fallback sang mock khi lỗi mạng/API hoặc response sai contract.
+
+Tests `live-contract.test.ts` và các tests HTTP qua UI dùng dữ liệu giả lập cho
+shape đường thật, không chạy encoder/index. E2E thêm một ca snapshot/IDs áp dụng
+API desktop và production mobile; Minh Khuê review phần thông tin phiên thay đổi.
+Route hiện vẫn mock; smoke thật còn chờ API mới, service #60 và index đúng snapshot.
+Lượt này không sửa backend/schema/dependencies hoặc chạy rebuild index.
+
+Kiểm tra local 02/11/2026: lint/typecheck đạt, unit/component và coverage
+**294/294 tests** đạt (14 files, giữ ngưỡng 95% từng file); build production và
+**32/32 E2E** đạt. Đây là kiểm chứng mock/HTTP giả lập, chưa phải smoke retrieval thật.
+
+### Bằng chứng UI đã bàn giao ngày 29/10/2026
+
 Rà soát UI W3: loading/empty/error/retry giữ hành vi hiện có; bổ sung kiểm chứng
 HTTP qua UI cho timeout/mạng và retry giữ nguyên request khi bản nhập đã thay đổi.
 Detail hiển thị “Chưa có thông tin” cho nguồn/tác giả/license rỗng hoặc toàn khoảng
@@ -117,7 +155,7 @@ quay lại giữ kết quả và trang đã nhận. Không fallback mock khi API
 validator với **fetch giả lập**, gồm phân trang, thứ tự, IDs/versions, detail/quay
 lại, retry/empty và response cũ thành công hoặc lỗi đến sau response mới.
 
-Tại lần rà soát W3 này, [khối 3](../docs/contracts/w3-text-search-review.md)
+Tại lần rà soát W3 này, [bản review contract](../docs/contracts/w3-text-search-review.md)
 vẫn ghi các quyết định đang chờ xác nhận; chưa có contract retrieval thật đã chốt.
 Sau cập nhật `develop` tại `65ce583` (29/10/2026), list/detail đọc PostgreSQL
 theo #48; search vẫn gọi `MockStore` và không đăng ký khi tắt mock. ID từ search
@@ -129,10 +167,18 @@ List/detail đọc PostgreSQL không làm search trở thành retrieval thật.
 Chạy `dev:api` chỉ chọn HTTP, không xác nhận backend dùng encoder/index thật.
 Chưa nghiệm thu acceptance criteria tìm kiếm dữ liệu/index thật của Issue #54.
 
-Kiểm tra lại ngày 29/10/2026 sau fast-forward: `npm test` đạt 267 tests/13 files;
+Mốc lịch sử sau fast-forward, trước khi hoàn thiện tests W3: `npm test` đạt 267 tests/13 files;
 `npm run lint`, `npm run typecheck` và build đạt. `npm run test:e2e` đạt 30 tests
 trên desktop/mobile (bao gồm build production). E2E dùng mock development hoặc
 HTTP interception, không dùng retrieval/index thật.
+
+Bản bàn giao W3 hiện tại là commit code/tests `277be13` và commit tài liệu
+`5bf09da`, thuộc [Draft PR #56](https://github.com/Q-Anh2610/SE2026-T03/pull/56).
+Bằng chứng cuối cho code/tests là 276/276 tests và 30/30 E2E nêu trên; mốc 267
+không thay thế kết quả này. Ngày 29/10/2026, tất cả check được GitHub báo trên
+HEAD `5bf09da` đã đạt (backend, frontend, API contract và branch policy).
+PR chưa có review/approve; CI không nghiệm thu retrieval thật. Xem
+[bàn giao phần còn thiếu](../docs/contracts/w3-text-search-review.md#bàn-giao-để-tiếp-tục-w3).
 
 Khi owner bàn giao contract và môi trường retrieval thật, chạy smoke riêng:
 

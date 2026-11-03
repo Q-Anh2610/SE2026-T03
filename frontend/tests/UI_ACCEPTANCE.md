@@ -1,5 +1,38 @@
 # Kiểm thử chốt UI tìm kiếm — Issue #6
 
+## Tiếp nhận response thật theo #63 — 02/11/2026
+
+Contract áp dụng: [text-search-w3.md](../../docs/contracts/text-search-w3.md),
+đã merge qua PR #64; các nhận định chưa chốt contract trong ghi nhận ngày 29/10
+bên dưới là lịch sử. Route HTTP vẫn mock; chưa chạy smoke thật.
+
+- `mock` phải là boolean hiện diện. DTO phân biệt `mock:true` và `mock:false`;
+  không tự đổi cờ hoặc suy dữ liệu thật chỉ từ HTTP thành công.
+- Response `mock:false` phải có `dataset_snapshot` cùng ba versions không rỗng,
+  không tiền tố `mock-`; giữ nguyên giá trị API. Total trong cửa sổ tối đa 200;
+  query/event IDs phải bằng nhau. Không tạo IDs, count hoặc snapshot phía UI.
+- Giữ kiểm tra số phần tử trang, rank 1..N mỗi trang, query echo và dedup đã có.
+  Request/retry giữ `query`, `filters`, `page`, `limit` đã chuẩn hóa.
+- Thông tin phiên hiển thị snapshot khi `mock:false`; route W1 trả `mock:true`
+  hiện nhãn minh họa, không tự thêm snapshot. Payload sai contract hiện error,
+  không chuyển sang mock.
+
+Tests mới: `live-contract.test.ts` kiểm tra cờ mock thiếu/sai kiểu, versions
+thiếu/rỗng/mock, ID khác nhau, total 0/200/201 và rank trang sau. Ca 201 vẫn có
+pagination/count nhất quán để bảo đảm bị từ chối vì vượt cửa sổ, không vì lỗi khác.
+Tests HTTP qua UI kiểm tra snapshot/IDs, nhãn mock và thiếu snapshot không fallback.
+Fixture `makeLiveResponse` chỉ mô phỏng JSON shape, không phải retrieval thật.
+E2E thêm một ca snapshot/IDs trong `api.spec.ts`, chạy trên API desktop và production
+mobile; Minh Khuê review vùng thông tin phiên. Không thêm upload/feedback hoặc đổi
+backend/schema/dependencies. Smoke thật vẫn cần API mới/service #60 và index đúng
+snapshot, sau đó chạy checklist đã có với contract mới.
+
+Kiểm chứng local 02/11/2026: `npm test` và `npm run test:coverage` đạt **294/294**,
+14 files; coverage đạt ngưỡng 95% từng file (lines/functions 100%, statements
+99,78%, branches 98,09%). `npm run lint`, `npm run typecheck` đạt.
+`npm run test:e2e` chạy build production đạt, **32/32 E2E** đạt (33,5 giây).
+Các ca API dùng HTTP giả lập; không chạy backend/index thật, không xác nhận CI.
+
 ## Rà soát trạng thái và detail W3 — Issue #54, 29/10/2026
 
 Nhánh `feat/54-w3-text-search`, nền `develop` tại `65ce583`; thay đổi local chưa
