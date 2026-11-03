@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { AdminStatusPage, type AdminJobsLoader } from './AdminStatusPage'
@@ -47,6 +47,19 @@ describe('AdminStatusPage', () => {
     expect(await screen.findByRole('status')).toHaveTextContent('Chưa có job nào để hiển thị.')
   })
 
+  it('does not show progress when a running job has no progress value', async () => {
+    const jobWithoutProgress: AdminJob = {
+      ...adminJobFixtures[1],
+      progress: undefined,
+    }
+    const loadJobs = vi.fn<AdminJobsLoader>().mockResolvedValue([jobWithoutProgress])
+
+    render(<AdminStatusPage loadJobs={loadJobs} />)
+
+    expect(await screen.findByText('job-indexing-002')).toBeInTheDocument()
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+  })
+
   it('shows an error and retries the request', async () => {
     const user = userEvent.setup()
     const deferred = createDeferred<AdminJob[]>()
@@ -74,5 +87,19 @@ describe('AdminStatusPage', () => {
     expect(await screen.findByText('job-ingestion-001')).toBeInTheDocument()
     await waitFor(() => expect(loadJobs).toHaveBeenCalledTimes(2))
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('ignores a rejected request after the page unmounts', async () => {
+    const deferred = createDeferred<AdminJob[]>()
+    const loadJobs = vi.fn<AdminJobsLoader>(() => deferred.promise)
+    const { unmount } = render(<AdminStatusPage loadJobs={loadJobs} />)
+
+    await waitFor(() => expect(loadJobs).toHaveBeenCalledOnce())
+    unmount()
+
+    await act(async () => {
+      deferred.reject(new Error('Request finished after unmount'))
+      await deferred.promise.catch(() => undefined)
+    })
   })
 })
