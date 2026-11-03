@@ -2,6 +2,35 @@ import { expect, test } from '@playwright/test'
 import { SearchPage } from './SearchPage'
 import { deferred, makeLiveResponse, makeResponse } from '../../src/test/fixtures'
 
+test('selects and previews an image, retries the fixture API and clears the image', async ({ page }) => {
+  let calls = 0
+  await page.route('**/api/v1/search/image', async route => {
+    calls++
+    expect(route.request().headers()['content-type']).toContain('multipart/form-data; boundary=')
+    if (calls === 1) await route.fulfill({ status: 503, body: 'private error' })
+    else await route.fulfill({ json: makeResponse('mock-image:fixture') })
+  })
+  await page.goto('/#image-search')
+  await expect(page.getByText(/chưa tìm theo nội dung ảnh/)).toBeVisible()
+  const upload = page.getByLabel(/Chọn hoặc thay ảnh/)
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nO8AAAAASUVORK5CYII=', 'base64')
+  await upload.setInputFiles({ name: 'query.png', mimeType: 'image/png', buffer: png })
+  await expect(page.getByRole('img', { name: 'Ảnh truy vấn: query.png' })).toBeVisible()
+  expect(calls).toBe(0)
+  await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('chưa sẵn sàng')
+  await page.getByRole('button', { name: 'Thử lại' }).click()
+  await expect(page.getByRole('list', { name: 'Kết quả ảnh' })).toBeVisible()
+  await upload.setInputFiles({ name: 'broken.png', mimeType: 'image/png', buffer: Buffer.from('invalid') })
+  await expect(page.getByRole('alert')).toBeVisible()
+  await expect(page.getByRole('list')).toHaveCount(0)
+  await upload.setInputFiles({ name: 'replacement.png', mimeType: 'image/png', buffer: png })
+  await expect(page.getByRole('img', { name: 'Ảnh truy vấn: replacement.png' })).toBeVisible()
+  await page.getByRole('button', { name: 'Xóa ảnh' }).click()
+  await expect(page.getByRole('img')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true })).toBeDisabled()
+})
+
 test('shows the live response snapshot and API event IDs without generating request IDs', async ({ page }) => {
   const view = new SearchPage(page)
   const response = makeLiveResponse('ghế')

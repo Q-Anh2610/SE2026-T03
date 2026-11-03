@@ -14,6 +14,36 @@ Sau tìm kiếm, thanh nhập gọn được căn trái, tiêu đề và số l�
 
 ## Chạy local
 
+### UI ảnh W4 — chế độ phát triển
+
+Link **Tìm bằng ảnh** mở `/#image-search`. Chọn/thay/xóa JPEG hoặc PNG; UI kiểm
+tra signature, decode được, dung lượng 1 byte–5 MiB và mỗi chiều tối đa 4096 px.
+Preview local chỉ dùng ảnh người dùng chọn, thu hồi object URL khi thay/xóa/rời
+trang. Validation frontend không thay validation backend.
+
+Gửi multipart tới `POST /api/v1/search/image` qua `VITE_API_BASE_URL` hoặc cùng
+origin: `image` là file, `filters` là JSON string `{}`, `page`, `limit=12`.
+Không đặt Content-Type thủ công để trình duyệt tự tạo boundary. Có loading,
+empty, error/retry đúng file/trang, phân trang fixture và bỏ response cũ khi ảnh
+bị thay/xóa. Chế độ này luôn gọi HTTP kể cả Vite development; cần API mock hiện
+có và CORS phù hợp. Không có fallback local khi API lỗi.
+
+**API ảnh hiện chỉ trả fixture**, được ghi rõ trên trang; không đo ảnh tương tự,
+không coi HTTP thành công là image retrieval thật. UI chỉ nhận response mock theo
+contract W1; chưa bật response ảnh thật vì chưa có contract đó. Chưa thêm feedback
+hoặc mở rộng filters. Những ghi nhận lịch sử “chưa có UI ảnh” bên dưới mô tả bản
+trước W4, không thay cho trạng thái này.
+
+Tests W4 gồm validation bytes/decode/kích thước, multipart, HTTP lỗi/sai response,
+preview/replace/clear, retry, pagination và race/unmount. Tests decode unit dùng
+Image giả; E2E desktop/mobile dùng PNG nhỏ tự tạo và HTTP interception, không phải
+smoke API ảnh hoặc retrieval thật. Minh Khuê review link điều hướng mới và luồng ảnh.
+
+Kiểm chứng 03/11/2026: lint/typecheck đạt; 319/319 unit/component và coverage đạt
+ngưỡng 95% từng file (lines/functions 100%, statements 99,82%, branches 98,31%).
+Lượt E2E đầy đủ đạt 34/34; sau thay đổi cuối về guard và thêm regression tests,
+chạy lại build + hai E2E ảnh desktop/mobile đạt 2/2. Không chạy smoke thật.
+
 Yêu cầu Node.js >= 22.12.0 và npm. Từ gốc repo:
 
 ```bash

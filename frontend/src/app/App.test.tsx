@@ -22,7 +22,8 @@ describe('theme preference', () => {
     expect(screen.getAllByRole('contentinfo')).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Connected, trang chủ' })).toHaveAttribute('href', './')
     const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' })
-    expect(navigation.querySelectorAll('a')).toHaveLength(2)
+    expect(navigation.querySelectorAll('a')).toHaveLength(3)
+    expect(screen.getByRole('link', { name: 'Tìm bằng ảnh' })).toHaveAttribute('href', '#image-search')
     expect(screen.getByRole('link', { name: 'Trạng thái job' })).toHaveAttribute(
       'href',
       '#admin-status',
