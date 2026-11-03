@@ -76,11 +76,11 @@ ID và nhãn trong dòng mẫu là giả định, không mô tả dữ liệu đ
 
 Trường: `query_id,asset_id,relevance,adjudication_status,adjudication_note,adjudicated_by,adjudicated_at_utc`
 
-Đây là nhãn cuối dùng cho đánh giá. `adjudication_status` là `agreed`, `adjudicated`, hoặc `unresolved`; chỉ `agreed` và `adjudicated` đưa vào metric chính. Giữ `unresolved` để báo cáo minh bạch, không tính là 0.
+Đây là nhãn cuối dùng cho đánh giá. `adjudication_status` là `Agreed`, `Adjudicated`, hoặc `Unresolved`; chỉ `Agreed` và `Adjudicated` đưa vào metric chính. Giữ `Unresolved` để báo cáo minh bạch, không tính là 0.
 
 ```csv
 query_id,asset_id,relevance,adjudication_status,adjudication_note,adjudicated_by,adjudicated_at_utc
-q0001,asset_example_001,2,agreed,"both annotators confirmed requested attributes",,2026-10-19T09:10:00Z
+q0001,asset_example_001,2,Agreed,"both annotators confirmed requested attributes",,2026-10-19T09:10:00Z
 ```
 
 ### `manifest.yaml`
