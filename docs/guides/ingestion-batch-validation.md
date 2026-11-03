@@ -61,3 +61,23 @@ Kết quả được chạy trên máy local của Trịnh Thị Thu Huyền (@T
 - Kết quả này không chứng minh dữ liệu thật đã tải, DB thật không trùng hoặc index đã được rebuild.
 - Chưa nghiệm thu phần mở rộng dataset, bàn giao hoặc toàn bộ Issue #62.
 - Kết quả local không thay thế trạng thái CI, review hoặc approval.
+
+## Regression tests cho snapshot mở rộng
+
+File: `backend/tests/unit/ingestion/test_interior_snapshot.py`.
+
+Bổ sung bốn tests offline:
+
+- Metadata 354 khớp annotations nguồn và được SourceAdapter chấp nhận.
+- Giữ nguyên metadata của 200 asset mốc, bổ sung đúng 154 asset duy nhất.
+- Checksum manifest/annotations và thông tin preview nhất quán với provenance.
+- Curation khớp preview, chỉ giữ quyết định keep và dùng đường dẫn portable.
+
+Kết quả do Trịnh Thị Thu Huyền (@TrinhHuyen05) chạy trên local:
+
+- File regression snapshot: 4 passed.
+- Toàn bộ unit tests ingestion sau bổ sung: 148 passed.
+
+Các tests mới chỉ đọc metadata trong repository; không gọi Internet,
+PostgreSQL, Qdrant hoặc nạp model. Chúng không decode ảnh local và không
+thay thế bằng chứng kiểm tra ảnh thật, tiếp nhận bàn giao hoặc tích hợp search.
