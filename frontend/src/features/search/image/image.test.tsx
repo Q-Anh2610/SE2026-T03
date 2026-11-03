@@ -97,4 +97,3 @@ it('paginates mock results and ignores a request after clearing the selected ima
   await act(async () => { pending.resolve(first) })
   expect(screen.queryByRole('list')).not.toBeInTheDocument()
 })
-
