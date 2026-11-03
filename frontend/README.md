@@ -150,3 +150,20 @@ Khi owner bàn giao contract và môi trường retrieval thật, chạy smoke r
 Không dùng bộ `test:integration` hiện tại làm smoke thật vì nó chủ động bật
 backend fixture. Không tải model/dataset hoặc rebuild index dùng chung để chạy
 smoke frontend.
+
+## Admin job status — Issue #70
+
+Mở `/#admin-status` (hoặc chọn **Trạng thái job** trên thanh điều hướng) để xem UI.
+Trang hiện dùng fixtures xem trước; trạng thái và progress trong đó chỉ minh họa,
+không phải contract backend. Endpoint jobs/status chưa có, nên chưa thể nghiệm thu
+việc kết nối API thật. Lỗi tải được hiển thị riêng và không thay bằng fixtures.
+
+Kiểm tra riêng các trạng thái loading, empty, danh sách fixture, lỗi và retry:
+
+```bash
+npm test -- src/features/admin/AdminStatusPage.test.tsx
+```
+
+Component nhận prop `loadJobs` để tests thay loader và điều khiển kết quả; loader
+mặc định chỉ trả fixtures. Việc nối API thật và smoke test với dữ liệu backend
+được để lại cho W5 sau khi contract và nguồn trạng thái được chốt.
