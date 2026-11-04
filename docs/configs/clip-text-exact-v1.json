@@ -1,0 +1,16 @@
+{
+  "schema_version": "clip-text-retrieval-config-v1",
+  "config_version": "clip-text-exact-all-filtered-v1-k200",
+  "candidate_limit": 200,
+  "strategy": "exact_all_filtered_points",
+  "exact": true,
+  "score_threshold": null,
+  "score_roundoff_tolerance": 0.000001,
+  "ordering": ["score_desc", "asset_id_asc"],
+  "deduplication": "max_score_per_asset",
+  "query_trim": true,
+  "query_min_characters": 1,
+  "query_max_characters": 500,
+  "text_token_policy": "truncate",
+  "text_token_limit_source": "model.config.text_config.max_position_embeddings"
+}
