@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmark labeler</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.45 system-ui, sans-serif; color: #18212b; background: #f4f6f8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { padding: 18px 24px; background: #15263a; color: white; }
+    header h1 { margin: 0 0 5px; font-size: 1.3rem; }
+    header p { margin: 0; color: #d6e2ef; }
+    main { max-width: 1320px; margin: 0 auto; padding: 18px; }
+    .setup, .panel, .toolbar { background: white; border: 1px solid #d6dde5; border-radius: 10px; padding: 14px; }
+    .setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    label.file { display: grid; gap: 5px; font-weight: 650; }
+    input[type=file] { max-width: 100%; font-weight: 400; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 14px; }
+    .panel h2 { margin: 0 0 8px; font-size: 1.05rem; }
+    .muted { color: #536272; font-size: .92rem; }
+    #queryText { font-size: 1.25rem; font-weight: 700; margin: 14px 0; }
+    #preview { display: block; width: 100%; height: min(55vh, 520px); object-fit: contain; background: #e8edf2; border-radius: 7px; }
+    #missingPreview { display: none; min-height: 240px; padding: 40px 18px; text-align: center; background: #fff5df; border: 1px solid #eed39a; border-radius: 7px; }
+    .rating { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #9eacbb; border-radius: 7px; padding: 9px 13px; background: white; color: #18212b; font: inherit; cursor: pointer; }
+    button:hover { background: #edf3f8; }
+    button.selected { outline: 3px solid #2f72bb; border-color: #2f72bb; }
+    button.primary { background: #155aa2; border-color: #155aa2; color: white; }
+    button.primary:hover { background: #0e477f; }
+    textarea { width: 100%; min-height: 86px; resize: vertical; padding: 9px; font: inherit; border: 1px solid #9eacbb; border-radius: 7px; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+    #status { margin-left: auto; font-weight: 650; }
+    .warning { margin: 12px 0 0; padding: 10px 12px; border-left: 4px solid #d58a00; background: #fff5df; }
+    .suggestion { margin: 10px 0; padding: 10px 12px; border-left: 4px solid #526b85; background: #eef3f8; }
+    @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } #preview { height: 42vh; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Benchmark labeler · human-reviewed relevance suggestions</h1>
+    <p>Review each preview and the metadata-based score/evidence suggestion. Accept with Enter or change either field before saving.</p>
+  </header>
+  <main>
+    <section class="setup" aria-label="Input files">
+      <label class="file">Queries CSV<input id="queriesFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Candidate assets CSV<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Preview images folder<input id="previewsFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
+      <label class="file">Previously saved labels CSV<input id="labelsFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Annotator<select id="annotator"><option>Doan Thi Minh Khue</option><option>Trinh Thi Thu Huyen</option></select></label>
+      <label class="file"><span><input id="useSuggestions" type="checkbox" checked> Use metadata suggestions</span><span class="muted">Assisted mode; suggestions use query text and asset name only.</span></label>
+    </section>
+    <section class="layout">
+      <article class="panel">
+        <h2>Query <span id="queryCounter">—</span></h2>
+        <div id="queryText">Load queries and candidates to begin.</div>
+        <div id="queryInfo" class="muted"></div>
+        <p id="queryNotes" class="muted"></p>
+      </article>
+      <article class="panel">
+        <h2>Candidate <span id="candidateCounter">—</span></h2>
+        <img id="preview" alt="Candidate asset preview" hidden>
+        <div id="missingPreview">Preview not loaded. Select the folder containing verified JPEG previews, named by asset ID or by the SHA-256 value in candidate_assets.csv.</div>
+        <p id="assetInfo" class="muted"></p>
+        <p id="suggestion" class="suggestion"></p>
+        <div class="rating" role="group" aria-label="Relevance">
+          <button type="button" data-score="0">0 · not relevant</button>
+          <button type="button" data-score="1">1 · partly relevant</button>
+          <button type="button" data-score="2">2 · directly relevant</button>
+        </div>
+        <label for="evidence">Evidence note (what visible feature or approved metadata supports the score)</label>
+        <textarea id="evidence" placeholder="Record a brief reason. Do not infer attributes that are not visible or supported."></textarea>
+      </article>
+    </section>
+    <nav class="toolbar" aria-label="Labeling controls">
+      <button id="previous">← Previous</button>
+      <button id="skip">Skip without label</button>
+      <button id="saveNext" class="primary">Save score and next (Enter)</button>
+      <button id="download">Download labels CSV</button>
+      <span id="status">Load input files</span>
+    </nav>
+  </main>
+  <script>
+    const state = { queries: [], candidates: [], images: new Map(), labels: new Map(), queryIndex: 0, candidateIndex: 0, selectedScore: null, suggestionScore: null, suggestionNote: '', imageUrl: null };
+    const $ = (id) => document.getElementById(id);
+    const keyFor = (queryId, assetId) => `${queryId}\t${assetId}`;
+
+    function parseCsv(text) {
+      const rows = []; let row = []; let field = ''; let quoted = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (quoted) {
+          if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+          else if (ch === '"') quoted = false;
+          else field += ch;
+        } else if (ch === '"') quoted = true;
+        else if (ch === ',') { row.push(field); field = ''; }
+        else if (ch === '\n' || ch === '\r') {
+          if (ch === '\r' && text[i + 1] === '\n') i++;
+          row.push(field); field = '';
+          if (row.some((value) => value !== '')) rows.push(row);
+          row = [];
+        } else field += ch;
+      }
+      if (field !== '' || row.length) { row.push(field); rows.push(row); }
+      if (!rows.length) return [];
+      const headers = rows.shift().map((value, index) => index === 0 ? value.replace(/^\uFEFF/, '').trim() : value.trim());
+      return rows.map((values) => Object.fromEntries(headers.map((header, i) => [header, values[i] ?? ''])));
+    }
+
+    function currentQuery() { return state.queries[state.queryIndex]; }
+    function currentAsset() { return state.candidates[state.candidateIndex]; }
+    function resumeAtFirstUnlabeled() {
+      if (!state.queries.length || !state.candidates.length) return;
+      for (let qi = 0; qi < state.queries.length; qi++) {
+        for (let ai = 0; ai < state.candidates.length; ai++) {
+          if (!state.labels.has(keyFor(state.queries[qi].query_id, state.candidates[ai].asset_id))) {
+            state.queryIndex = qi; state.candidateIndex = ai; refresh(); return;
+          }
+        }
+      }
+      state.queryIndex = state.queries.length - 1; state.candidateIndex = state.candidates.length - 1; refresh();
+      $('status').textContent = `${state.labels.size} saved · all query/candidate pairs are labeled`;
+    }
+    const ignoredWords = new Set('a an the for with to in of and or be can is that from home living room indoor small main several people everyday folded clothes hanging displaying part over above beside mounted residential household use work surface everyday meals shared baby s full length floor standing installed everyday'.split(' '));
+    const aliases = [['sofa', 'couch', 'loveseat'], ['wardrobe', 'closet'], ['rug', 'carpet'], ['refrigerator', 'fridge'], ['sink', 'washbasin'], ['toilet', 'loo'], ['lamp', 'light'], ['shelving', 'shelf']];
+    function contentWords(text) {
+      return String(text || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').match(/[a-z0-9]+/g)?.filter((word) => !ignoredWords.has(word)) || [];
+    }
+    function suggest(query, asset) {
+      const queryWords = [...new Set(contentWords(query.query_text))];
+      const titleWords = new Set(contentWords(asset.name));
+      const matches = queryWords.filter((word) => titleWords.has(word));
+      const aliasMatches = [];
+      for (const group of aliases) {
+        const qWord = group.find((word) => queryWords.includes(word));
+        const aWord = group.find((word) => titleWords.has(word));
+        if (qWord && aWord && qWord !== aWord) aliasMatches.push(`${qWord}~${aWord}`);
+      }
+      const matched = [...matches, ...aliasMatches];
+      let score = 0;
+      if (matches.length && matches.length === queryWords.length) score = 2;
+      else if (matched.length) score = 1;
+      const note = matched.length
+        ? `Metadata hint only: title “${asset.name || '(empty title)'}” overlaps query term(s) ${matched.map((word) => `“${word}”`).join(', ')}. Check the preview and edit this note to record actual evidence.`
+        : `Metadata hint only: no query term matched title “${asset.name || '(empty title)'}”. A visual or synonymous match may still exist; check the preview before accepting this suggested 0.`;
+      return { score, note };
+    }
+    function refresh() {
+      const query = currentQuery(); const asset = currentAsset();
+      if (!query || !asset) { $('status').textContent = 'Load valid query and candidate CSV files'; return; }
+      $('queryCounter').textContent = `${state.queryIndex + 1}/${state.queries.length}`;
+      $('candidateCounter').textContent = `${state.candidateIndex + 1}/${state.candidates.length}`;
+      $('queryText').textContent = query.query_text;
+      $('queryInfo').textContent = `${query.query_id} · ${query.split || 'unsplit'} · ${query.language || ''}`;
+      $('queryNotes').textContent = query.notes || '';
+      $('assetInfo').textContent = `${asset.asset_id} · ${asset.name || ''}${asset.license ? ` · license: ${asset.license}` : ''}`;
+      const hint = suggest(query, asset);
+      state.suggestionScore = hint.score;
+      state.suggestionNote = hint.note;
+      $('suggestion').textContent = `Suggested score ${hint.score}/2 · ${hint.note}`;
+      const hash = (asset.preview_sha256 || '').toLowerCase();
+      const assetId = (asset.asset_id || '').toLowerCase();
+      const candidateOrder = state.candidates.findIndex((candidate) => candidate.asset_id === asset.asset_id) + 1;
+      const orderedName = `${String(candidateOrder).padStart(4, '0')}_${assetId}.jpg`;
+      const image = state.images.get(orderedName) || state.images.get(`${assetId}.jpg`) || state.images.get(`${assetId}.jpeg`) || state.images.get(`${hash}.jpg`) || state.images.get(`${hash}.jpeg`);
+      if (state.imageUrl) URL.revokeObjectURL(state.imageUrl);
+      state.imageUrl = image ? URL.createObjectURL(image) : null;
+      $('preview').hidden = !image; $('missingPreview').style.display = image ? 'none' : 'block';
+      if (image) {
+        $('preview').src = state.imageUrl;
+        $('preview').onerror = () => { $('preview').hidden = true; $('missingPreview').style.display = 'block'; };
+      }
+      const label = state.labels.get(keyFor(query.query_id, asset.asset_id));
+      state.selectedScore = label ? String(label.relevance) : ($('useSuggestions').checked ? String(hint.score) : null);
+      $('evidence').value = label?.evidence_note || ($('useSuggestions').checked ? hint.note : '');
+      document.querySelectorAll('[data-score]').forEach((button) => button.classList.toggle('selected', button.dataset.score === state.selectedScore));
+      const doneForQuery = state.candidates.filter((candidate) => state.labels.has(keyFor(query.query_id, candidate.asset_id))).length;
+      $('status').textContent = `${state.labels.size} saved · ${doneForQuery}/${state.candidates.length} for this query`;
+    }
+    function advance(direction) {
+      state.candidateIndex += direction;
+      if (state.candidateIndex >= state.candidates.length) { state.candidateIndex = 0; state.queryIndex = (state.queryIndex + 1) % state.queries.length; }
+      if (state.candidateIndex < 0) { state.candidateIndex = state.candidates.length - 1; state.queryIndex = (state.queryIndex - 1 + state.queries.length) % state.queries.length; }
+      state.selectedScore = null; refresh();
+    }
+    function saveAndAdvance() {
+      const query = currentQuery(); const asset = currentAsset();
+      if (!query || !asset || state.selectedScore === null) { $('status').textContent = 'Select score 0, 1, or 2 first'; return; }
+      if ($('preview').hidden || !$('preview').complete || $('preview').naturalWidth === 0) { $('status').textContent = 'Load and review the candidate preview before saving this score'; return; }
+      const assisted = $('useSuggestions').checked;
+      const accepted = String(state.selectedScore) === String(state.suggestionScore);
+      const notePrefix = assisted ? (accepted ? 'Metadata suggestion accepted after preview review. ' : 'Metadata suggestion edited by reviewer after preview review. ') : '';
+      const label = { query_id: query.query_id, asset_id: asset.asset_id, annotator: $('annotator').value, relevance: state.selectedScore, evidence_note: `${notePrefix}${$('evidence').value.trim()}`, annotated_at_utc: new Date().toISOString() };
+      state.labels.set(keyFor(query.query_id, asset.asset_id), label); advance(1);
+    }
+    function csvCell(value) { const text = String(value ?? ''); return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
+    function downloadLabels() {
+      const headers = ['query_id', 'asset_id', 'annotator', 'relevance', 'evidence_note', 'annotated_at_utc'];
+      const lines = [headers.join(','), ...Array.from(state.labels.values()).map((label) => headers.map((header) => csvCell(label[header])).join(','))];
+      const blob = new Blob(['\uFEFF' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
+      const slug = $('annotator').value === 'Trinh Thi Thu Huyen' ? 'huyen' : 'khue';
+      const mode = $('useSuggestions').checked ? '_assisted' : '';
+      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `labels_${slug}${mode}.csv`; link.click(); URL.revokeObjectURL(link.href);
+    }
+
+    $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_type === 'text' && row.query_id && row.query_text); resumeAtFirstUnlabeled(); });
+    $('candidatesFile').addEventListener('change', async (event) => { state.candidates = parseCsv(await event.target.files[0].text()).filter((row) => row.asset_id); resumeAtFirstUnlabeled(); });
+    $('labelsFile').addEventListener('change', async (event) => {
+      const rows = parseCsv(await event.target.files[0].text());
+      const valid = rows.filter((row) => row.query_id && row.asset_id && ['0', '1', '2'].includes(row.relevance));
+      state.labels.clear();
+      for (const row of valid) state.labels.set(keyFor(row.query_id, row.asset_id), {
+        query_id: row.query_id, asset_id: row.asset_id, annotator: row.annotator || $('annotator').value,
+        relevance: row.relevance, evidence_note: row.evidence_note || '', annotated_at_utc: row.annotated_at_utc || ''
+      });
+      resumeAtFirstUnlabeled();
+      $('status').textContent = `${state.labels.size} existing labels loaded · resumed at first unlabeled pair`;
+    });
+    $('previewsFolder').addEventListener('change', (event) => { state.images.clear(); for (const file of event.target.files) state.images.set(file.name.toLowerCase(), file); refresh(); });
+    $('useSuggestions').addEventListener('change', refresh);
+    document.querySelectorAll('[data-score]').forEach((button) => button.addEventListener('click', () => { state.selectedScore = button.dataset.score; document.querySelectorAll('[data-score]').forEach((item) => item.classList.toggle('selected', item === button)); }));
+    $('previous').addEventListener('click', () => advance(-1));
+    $('skip').addEventListener('click', () => advance(1));
+    $('saveNext').addEventListener('click', saveAndAdvance);
+    $('download').addEventListener('click', downloadLabels);
+    document.addEventListener('keydown', (event) => {
+      if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
+      if (['0', '1', '2'].includes(event.key)) { state.selectedScore = event.key; document.querySelectorAll('[data-score]').forEach((button) => button.classList.toggle('selected', button.dataset.score === event.key)); }
+      else if (event.key === 'Enter') { event.preventDefault(); saveAndAdvance(); }
+      else if (event.key === 'ArrowLeft') advance(-1);
+      else if (event.key === 'ArrowRight') advance(1);
+    });
+  </script>
+</body>
+</html>
