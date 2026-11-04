@@ -34,6 +34,16 @@ class IndexConfig:
                     raise ValueError(f"{name} phải là chuỗi không rỗng.")
 
 
+def index_vector_name(config: IndexConfig) -> str:
+    """Named vector ổn định, dùng chung cho store và manifest."""
+    encoded = json.dumps(
+        {**asdict(config), "distance": models.Distance.COSINE.value},
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return f"clip_{sha256(encoded).hexdigest()[:16]}"
+
+
 class QdrantStore:
     def __init__(
         self,
@@ -53,12 +63,7 @@ class QdrantStore:
             "distance": models.Distance.COSINE.value,
         }
 
-        encoded = json.dumps(
-            self._versions,
-            sort_keys=True,
-            separators=(",", ":"),
-        ).encode("utf-8")
-        self.vector_name = f"clip_{sha256(encoded).hexdigest()[:16]}"
+        self.vector_name = index_vector_name(config)
 
     def ensure_collection(self) -> None:
         """Tạo collection mới hoặc kiểm tra collection hiện có."""
@@ -76,6 +81,10 @@ class QdrantStore:
                 raise RuntimeError("Chưa tạo được collection Qdrant.")
             return
 
+        self.validate_collection()
+
+    def validate_collection(self) -> None:
+        """Chỉ đọc và kiểm tra collection hiện có; không tự tạo hoặc rebuild."""
         info = self.client.get_collection(self.collection_name)
         vectors = info.config.params.vectors
 
