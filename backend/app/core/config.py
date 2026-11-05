@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     postgres_password: SecretStr | None = Field(default=None, validation_alias="POSTGRES_PASSWORD")
     mock_api_enabled: bool = True
     asset_list_source: Literal["database", "fixture"] = "database"
+    text_search_source: Literal["mock", "service"] = "mock"
+    text_index_manifest: Path | None = None
+    text_index_root: Path | None = None
+    text_qdrant_url: str = "http://127.0.0.1:6333"
+    text_qdrant_local_path: Path | None = None
+    text_qdrant_api_key: SecretStr | None = None
     cors_origins: list[str] = Field(default_factory=lambda: [
         "http://localhost:5173", "http://127.0.0.1:5173",
     ])

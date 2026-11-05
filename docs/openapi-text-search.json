@@ -1,0 +1,1398 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "3D Asset Semantic Search API",
+    "description": "Danh sách/chi tiết asset đọc PostgreSQL. Text search gọi CLIP/Qdrant theo index manifest đã cấu hình; cache/index chưa sẵn sàng trả 503. Image/feedback vẫn mock ngoài production.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Healthz",
+        "operationId": "healthz_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Healthz Healthz Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assets": {
+      "get": {
+        "tags": [
+          "assets"
+        ],
+        "summary": "Danh sách asset từ PostgreSQL",
+        "description": "Filters AND trước phân trang; sắp xếp asset_id tăng dần. Không fallback mock khi DB lỗi.",
+        "operationId": "get_assets_api_v1_assets_get",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "name": "license",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "License"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Format"
+            }
+          },
+          {
+            "name": "face_count_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Face Count Min"
+            }
+          },
+          {
+            "name": "face_count_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Face Count Max"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 12,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetListResponse"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "asset_id": "mock-asset-001",
+                      "name": "Ghế gỗ đơn giản",
+                      "description": "Bản ghi minh họa tự tạo; không có file asset 3D thật.",
+                      "category": "Nội thất",
+                      "tags": [
+                        "ghế",
+                        "gỗ",
+                        "chair",
+                        "wood"
+                      ],
+                      "formats": [
+                        "glb"
+                      ],
+                      "face_count": null,
+                      "thumbnail_url": null,
+                      "source": "mock",
+                      "source_url": null,
+                      "author": null,
+                      "license": null
+                    }
+                  ],
+                  "pagination": {
+                    "page": 1,
+                    "limit": 12,
+                    "total": 1,
+                    "pages": 1,
+                    "has_next": false
+                  },
+                  "mock": false
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ASSET_NOT_FOUND",
+                    "message": "Không tìm thấy tài nguyên.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/assets/{asset_id}": {
+      "get": {
+        "tags": [
+          "assets"
+        ],
+        "summary": "Chi tiết asset từ PostgreSQL",
+        "description": "Tra cứu asset_id chính xác. Metadata và preview dùng cùng quy ước với list; không fallback fixture.",
+        "operationId": "get_asset_detail_api_v1_assets__asset_id__get",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDetailResponse"
+                },
+                "example": {
+                  "asset": {
+                    "asset_id": "mock-asset-001",
+                    "name": "Ghế gỗ đơn giản",
+                    "description": "Bản ghi minh họa tự tạo; không có file asset 3D thật.",
+                    "category": "Nội thất",
+                    "tags": [
+                      "ghế",
+                      "gỗ",
+                      "chair",
+                      "wood"
+                    ],
+                    "formats": [
+                      "glb"
+                    ],
+                    "face_count": null,
+                    "thumbnail_url": null,
+                    "source": "mock",
+                    "source_url": null,
+                    "author": null,
+                    "license": null
+                  },
+                  "mock": false
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ASSET_NOT_FOUND",
+                    "message": "Không tìm thấy tài nguyên.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/search/text": {
+      "post": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Tìm kiếm văn bản qua search service",
+        "description": "Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
+        "operationId": "search_text_api_v1_search_text_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveTextSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveTextSearchResponse"
+                },
+                "example": {
+                  "query_id": "00000000-0000-4000-8000-000000000065",
+                  "search_event_id": "00000000-0000-4000-8000-000000000065",
+                  "query": "wooden chair",
+                  "mock": false,
+                  "versions": {
+                    "model_version": "example-clip-revision",
+                    "index_version": "example-index",
+                    "config_version": "example-top200",
+                    "dataset_snapshot": "example-snapshot"
+                  },
+                  "pagination": {
+                    "page": 1,
+                    "limit": 12,
+                    "total": 1,
+                    "pages": 1,
+                    "has_next": false
+                  },
+                  "results": [
+                    {
+                      "rank": 1,
+                      "asset": {
+                        "asset_id": "example-chair",
+                        "name": "Ghế gỗ đơn giản",
+                        "description": "Bản ghi minh họa tự tạo; không có file asset 3D thật.",
+                        "category": "Nội thất",
+                        "tags": [
+                          "ghế",
+                          "gỗ",
+                          "chair",
+                          "wood"
+                        ],
+                        "formats": [
+                          "glb"
+                        ],
+                        "face_count": null,
+                        "thumbnail_url": null,
+                        "source": "example",
+                        "source_url": null,
+                        "author": null,
+                        "license": null
+                      },
+                      "score": 0.25,
+                      "retrieval_sources": [
+                        "clip_text_to_preview"
+                      ],
+                      "explanation": "Ví dụ cấu trúc response cosine CLIP; không phải kết quả đo thật."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "SEARCH_UNAVAILABLE",
+                    "message": "Dịch vụ tìm kiếm chưa sẵn sàng. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/search/image": {
+      "post": {
+        "tags": [
+          "search"
+        ],
+        "summary": "[Mock] Upload ảnh preview",
+        "description": "JPEG/PNG decode được, tối đa 5 MiB, mỗi chiều tối đa 4096 pixel. Chỉ trả fixture cố định; chưa tìm theo nội dung ảnh.",
+        "operationId": "search_image_api_v1_search_image_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_search_image_api_v1_search_image_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                },
+                "example": {
+                  "query_id": "mock-query-example",
+                  "search_event_id": "mock-event-example",
+                  "query": "mock-image:sha256-example",
+                  "results": [
+                    {
+                      "rank": 1,
+                      "asset": {
+                        "asset_id": "mock-chair-01",
+                        "name": "Ghế gỗ đơn giản",
+                        "description": "Bản ghi minh họa tự tạo; không có file asset 3D thật.",
+                        "category": "Nội thất",
+                        "tags": [
+                          "ghế",
+                          "gỗ",
+                          "chair",
+                          "wood"
+                        ],
+                        "formats": [
+                          "glb"
+                        ],
+                        "face_count": null,
+                        "thumbnail_url": null,
+                        "source": "fixture",
+                        "source_url": null,
+                        "author": null,
+                        "license": null
+                      },
+                      "retrieval_sources": [
+                        "mock_preview_fixture"
+                      ],
+                      "explanation": "Kết quả mock cố định; chưa chạy image encoder.",
+                      "score": null
+                    }
+                  ],
+                  "versions": {
+                    "model_version": "mock-no-encoder",
+                    "index_version": "mock-w1",
+                    "config_version": "mock-contract-v1"
+                  },
+                  "pagination": {
+                    "page": 1,
+                    "limit": 12,
+                    "total": 1,
+                    "pages": 1,
+                    "has_next": false
+                  },
+                  "mock": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ASSET_NOT_FOUND",
+                    "message": "Không tìm thấy tài nguyên.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback": {
+      "post": {
+        "tags": [
+          "feedback"
+        ],
+        "summary": "[Mock] Ghi nhận phản hồi trong RAM",
+        "description": "Dùng event ID từ search response của tiến trình hiện tại. Không lưu PostgreSQL; restart sẽ mất feedback.",
+        "operationId": "send_feedback_api_v1_feedback_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              },
+              "examples": {
+                "relevant": {
+                  "summary": "Thay event ID bằng kết quả search vừa chạy",
+                  "value": {
+                    "search_event_id": "mock-event-example",
+                    "asset_id": "mock-chair-01",
+                    "relevance": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                },
+                "example": {
+                  "feedback_id": "mock-feedback-example",
+                  "search_event_id": "mock-event-example",
+                  "asset_id": "mock-chair-01",
+                  "relevance": true,
+                  "created_at": "2026-10-19T00:00:00Z",
+                  "storage": "memory",
+                  "mock": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ASSET_NOT_FOUND",
+                    "message": "Không tìm thấy tài nguyên.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssetDetailResponse": {
+        "properties": {
+          "asset": {
+            "$ref": "#/components/schemas/AssetMetadata"
+          },
+          "mock": {
+            "type": "boolean",
+            "title": "Mock",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "asset"
+        ],
+        "title": "AssetDetailResponse"
+      },
+      "AssetListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AssetMetadata"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "mock": {
+            "type": "boolean",
+            "title": "Mock",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "pagination"
+        ],
+        "title": "AssetListResponse"
+      },
+      "AssetMetadata": {
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "title": "Asset Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Formats"
+          },
+          "face_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Face Count"
+          },
+          "thumbnail_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumbnail Url"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author"
+          },
+          "license": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "License"
+          }
+        },
+        "type": "object",
+        "required": [
+          "asset_id",
+          "name",
+          "description",
+          "category",
+          "tags",
+          "formats",
+          "face_count",
+          "thumbnail_url",
+          "source",
+          "source_url",
+          "author",
+          "license"
+        ],
+        "title": "AssetMetadata"
+      },
+      "Body_search_image_api_v1_search_image_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "Image",
+            "description": "File JPEG hoặc PNG; không nhận URL ảnh"
+          },
+          "filters": {
+            "type": "string",
+            "title": "Filters",
+            "description": "JSON string, ví dụ {\"category\":\"Nội thất\"}",
+            "default": "{}"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 12
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_search_image_api_v1_search_image_post"
+      },
+      "ErrorField": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "title": "Field"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "field",
+          "message"
+        ],
+        "title": "ErrorField"
+      },
+      "ErrorInfo": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "details": {
+            "items": {
+              "$ref": "#/components/schemas/ErrorField"
+            },
+            "type": "array",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorInfo"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorInfo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse"
+      },
+      "FeedbackRequest": {
+        "properties": {
+          "search_event_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Search Event Id",
+            "examples": [
+              "mock-event-example"
+            ]
+          },
+          "asset_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Asset Id",
+            "examples": [
+              "mock-chair-01"
+            ]
+          },
+          "relevance": {
+            "type": "boolean",
+            "title": "Relevance",
+            "description": "true=phù hợp, false=không phù hợp; không phải nhãn benchmark 0/1/2"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "search_event_id",
+          "asset_id",
+          "relevance"
+        ],
+        "title": "FeedbackRequest"
+      },
+      "FeedbackResponse": {
+        "properties": {
+          "feedback_id": {
+            "type": "string",
+            "title": "Feedback Id"
+          },
+          "search_event_id": {
+            "type": "string",
+            "title": "Search Event Id"
+          },
+          "asset_id": {
+            "type": "string",
+            "title": "Asset Id"
+          },
+          "relevance": {
+            "type": "boolean",
+            "title": "Relevance"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "storage": {
+            "type": "string",
+            "const": "memory",
+            "title": "Storage",
+            "default": "memory"
+          },
+          "mock": {
+            "type": "boolean",
+            "const": true,
+            "title": "Mock",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "feedback_id",
+          "search_event_id",
+          "asset_id",
+          "relevance",
+          "created_at"
+        ],
+        "title": "FeedbackResponse"
+      },
+      "LiveTextSearchRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Query",
+            "examples": [
+              "ghế gỗ"
+            ]
+          },
+          "filters": {
+            "$ref": "#/components/schemas/TextSearchFilters"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 12
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "LiveTextSearchRequest"
+      },
+      "LiveTextSearchResponse": {
+        "properties": {
+          "query_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Query Id"
+          },
+          "search_event_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Search Event Id"
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Query"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/SearchResult"
+            },
+            "type": "array",
+            "title": "Results"
+          },
+          "versions": {
+            "$ref": "#/components/schemas/SearchExecutionVersions"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "mock": {
+            "type": "boolean",
+            "const": false,
+            "title": "Mock"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "query_id",
+          "search_event_id",
+          "query",
+          "results",
+          "versions",
+          "pagination",
+          "mock"
+        ],
+        "title": "LiveTextSearchResponse"
+      },
+      "Pagination": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Limit"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Pages"
+          },
+          "has_next": {
+            "type": "boolean",
+            "title": "Has Next"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "limit",
+          "total",
+          "pages",
+          "has_next"
+        ],
+        "title": "Pagination"
+      },
+      "SearchExecutionVersions": {
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Model Version"
+          },
+          "index_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Index Version"
+          },
+          "config_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Config Version"
+          },
+          "dataset_snapshot": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dataset Snapshot"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "model_version",
+          "index_version",
+          "config_version",
+          "dataset_snapshot"
+        ],
+        "title": "SearchExecutionVersions",
+        "description": "Lấy từ cấu hình thực sự dùng để retrieval, không dùng defaults mock."
+      },
+      "SearchResponse": {
+        "properties": {
+          "query_id": {
+            "type": "string",
+            "title": "Query Id"
+          },
+          "search_event_id": {
+            "type": "string",
+            "title": "Search Event Id"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/SearchResult"
+            },
+            "type": "array",
+            "title": "Results"
+          },
+          "versions": {
+            "$ref": "#/components/schemas/Versions"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "mock": {
+            "type": "boolean",
+            "const": true,
+            "title": "Mock",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "query_id",
+          "search_event_id",
+          "query",
+          "results",
+          "versions",
+          "pagination"
+        ],
+        "title": "SearchResponse"
+      },
+      "SearchResult": {
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Rank"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/AssetMetadata"
+          },
+          "retrieval_sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Retrieval Sources"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rank",
+          "asset",
+          "retrieval_sources",
+          "explanation"
+        ],
+        "title": "SearchResult"
+      },
+      "TextSearchFilters": {
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "license": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "License"
+          },
+          "format": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Format"
+          },
+          "face_count_min": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Face Count Min"
+          },
+          "face_count_max": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Face Count Max"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "TextSearchFilters"
+      },
+      "Versions": {
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "default": "mock-no-encoder"
+          },
+          "index_version": {
+            "type": "string",
+            "title": "Index Version",
+            "default": "mock-w1"
+          },
+          "config_version": {
+            "type": "string",
+            "title": "Config Version",
+            "default": "mock-contract-v1"
+          }
+        },
+        "type": "object",
+        "title": "Versions"
+      }
+    }
+  }
+}

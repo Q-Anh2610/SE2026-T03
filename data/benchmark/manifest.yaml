@@ -1,0 +1,95 @@
+benchmark_version: home-interior-text-v2
+status: locked_retrieval_pending
+snapshot_name: home-interior-clear-200-v3
+snapshot_manifest_sha256: 9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd
+candidate_asset_count: 200
+candidate_asset_ids_source: data/manifests/objaverse_200.json
+query_file: data/benchmark/queries.csv
+query_count: 70
+query_counts_by_type:
+  text: 70
+language: en
+split_policy: grouped by query_group_id; 28 validation / 42 test
+split_seed: 42
+split_method: sha256_seeded_exact_group_subset
+split_algorithm: >-
+  Rank groups by SHA256("<seed>|<query_group_id>") ascending. Among all subsets
+  totaling round(query_count * 0.4), choose the subset with the lowest
+  (sum_of_zero_based_hash_ranks, subset_bitmask); assign it to validation and
+  assign all remaining groups to test.
+validation_group_ids: [g0002, g0003, g0006, g0010]
+test_group_ids: [g0001, g0004, g0005, g0007, g0008, g0009]
+query_group_count: 10
+split_version: seed-42-v1
+split_review_status: approved_by_project_group
+split_reviewed_by: project_group
+split_reviewed_at_utc: 2026-11-03T14:23:32Z
+query_review_status: reviewed
+query_reviewed_by: Doan Thi Minh Khue
+query_reviewed_at_utc: 2026-11-01T13:55:42Z
+locked_at: 2026-11-03T14:23:32Z
+locked_revision: "sha256-bundle:queries.csv=f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788;qrels.csv=cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5"
+locked_files_sha256:
+  queries.csv: f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788
+  qrels.csv: cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5
+annotators:
+  - Doan Thi Minh Khue
+  - Trinh Thi Thu Huyen
+independent_label_files:
+  - data/benchmark/labels_khue.csv
+  - data/benchmark/labels_huyen.csv
+adjudicated_qrels_file: data/benchmark/qrels.csv
+judged_pair_count_per_annotator: 14000
+matching_score_pair_count: 13402
+disagreement_pair_count_total: 598
+disagreement_pair_count_adjudicated: 598
+disagreement_pair_count_pending: 0
+qrels_pair_count: 14000
+qrels_status_counts:
+  Adjudicated: 14000
+file_sha256:
+  queries.csv: f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788
+  labels_khue.csv: 011c888834d8bbdc4cc391d22b02fb27779a0f2303ea64f999ce88b4ae09c5b1
+  labels_huyen.csv: a8b7846de582174085084a55642638064583aa501847837dceae1ae9b4614882
+  qrels.csv: cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5
+  candidate_assets.csv: 260599cbf4ad9ea56777122ffdf03826ccbe6dfc0e6f0f896f00de2ffe6d785e
+updated_at_utc: 2026-11-03T14:29:24Z
+diagnostic_keyword_run:
+  result_file: evaluation/results/home-interior-text-v2-keyword-baseline.json
+  report_file: docs/evaluation/home-interior-text-v2-keyword-baseline.md
+  config_file: evaluation/configs/home-interior-text-v2-keyword.json
+  config_sha256: 340de3dc1bb42ef63ea8ac070c99cd5b238be3a74c948a485b4797e5d4974289
+  result_sha256: b81546e9209c076f91f369462dfec0e6cb82e3b2dbfb3548d9fb9e3ec3853fb9
+  search_config_version: keyword-token-overlap-v1
+  run_at_utc: 2026-11-03T14:29:24.547689Z
+  git_revision: e8b8312b245d5999a03b03192ad476f47914d7fd
+  relevance_threshold: 1
+  top_k: 10
+  filters: {}
+  validation_query_count: 28
+  test_query_count: 42
+  validation_queries_without_positive_qrels: 7
+  test_queries_without_positive_qrels: 4
+  test_set_used_for_configuration_changes: false
+  metrics:
+    validation_recall_at_5: 0.124704
+    validation_hit_at_5: 0.535714
+    validation_recall_at_10: 0.172658
+    validation_hit_at_10: 0.642857
+    validation_ndcg_at_10: 0.188325
+    test_recall_at_5: 0.138764
+    test_hit_at_5: 0.642857
+    test_recall_at_10: 0.231332
+    test_hit_at_10: 0.738095
+    test_ndcg_at_10: 0.276618
+notes:
+  - Query wording was accepted by Khuê; both annotators completed all 70 queries against the 200-asset candidate set.
+  - Independent label files contain 14,000 unique pairs each; their pair sets match qrels.csv and all pair IDs resolve to a query and candidate asset.
+  - All 598 score disagreements have been adjudicated; qrels.csv has 14,000 unique rows with valid scores and completed adjudication fields.
+  - Split was regenerated with seed 42 by query_group_id: 28 validation and 42 test; no group is split across partitions. The group approved this split before lock.
+  - Only the split column in queries.csv changed; query wording, query IDs, independent labels, and qrels remain unchanged.
+  - The restored 200-preview package passed image-map and SHA256SUMS verification on 2026-11-01.
+  - Do not use baseline results or curator labels to create or revise the query set.
+  - A W2 keyword metadata diagnostic was run once with the locked config; it is not the CLIP text-retrieval baseline requested from Chi and does not complete the retrieval-evaluation acceptance criteria. Keep its output for traceability only.
+  - Chi confirmed that no ranked results are available yet for home-interior-clear-200-v3: text retrieval/export and indexing the new snapshot remain pending. Do not substitute the old W1 index or this metadata keyword diagnostic.
+  - Eleven queries have no asset labeled relevance >= 1 (7 validation, 4 test); Recall is undefined for these queries and they are excluded from the Recall macro denominator. Review is needed before drawing broader quality conclusions; do not modify this locked benchmark based on the test results.

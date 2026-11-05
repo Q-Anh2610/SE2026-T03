@@ -1,0 +1,4159 @@
+{
+  "snapshot": "home-interior-354-v1",
+  "dataset": "Objaverse 1.0",
+  "revision": "556637099bf4fa79ea7b239d0d9c328b8a2e9ac8",
+  "count": 354,
+  "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "annotations_sha256": "8b87e969849130647ddf444add8fd6f30d9f8f311d456d66eb401c445ab4eac7",
+  "parents": [
+    {
+      "snapshot": "home-interior-clear-200-v3",
+      "manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "count": 200
+    },
+    {
+      "snapshot": "interior-additions-reviewed-v3",
+      "manifest_sha256": "ef1be537f1316926b78d8e665961e55583855959c303ed0abad221023f1d6c29",
+      "count": 154
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-000.json.gz",
+      "sha256": "299a60db6dad62e8aba63abb41c8ed41da10bbd77618632b1b5962e77f0a5318",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-001.json.gz",
+      "sha256": "93863e59e2298e5478a1a849269b5289970e2d0ca55c3dc4eb438fe2d034ac8a",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-002.json.gz",
+      "sha256": "960454d09f0ba9ea6d46a4016bf5bacb9e2f01713e305718266c019943c38abc",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-003.json.gz",
+      "sha256": "a81c8aea7da13ffb156cfe2bea5d3b24f6c71454b1aa0f10c14e439978f91a4e",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-004.json.gz",
+      "sha256": "14aff8e4390cd2ee271888f49c83f3745a2d00b02f7b44e569d68f88a9f0bebf",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-005.json.gz",
+      "sha256": "ab46e859e11272010fbcff35eadb696ce9623ddfb61c44bcc208ba94ae5fa320",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-006.json.gz",
+      "sha256": "57fcd7b1b053e59a5c55e4adcac22b93fef5d65c57c8955502867b625ed66ffd",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-007.json.gz",
+      "sha256": "5309e4d0ca7047efdfdfad8ba68b3e210470a84b17e4c4fa5d1fc125fc6f4c84",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-008.json.gz",
+      "sha256": "d02734b9318322d248c366193e25187897dfb94091e3034c86c5b43a4d641764",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-009.json.gz",
+      "sha256": "cee62d98212f33da2f5c3f299c5d0784609d1c3861f39d396348df54d17dda1c",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-010.json.gz",
+      "sha256": "84eabbb408ce0a09902183bdce9f79435700f2f6679506b79846aadcd9a32552",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-011.json.gz",
+      "sha256": "4ccfefd99e8348263643fa9ccbd9cc228b1bdcf4ee94b4ed7a9005d07ec7aea9",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-012.json.gz",
+      "sha256": "f9ce7f0ce767c30fbf8d1c0e3a5542d520587ca97b4328db0347cc43f1d4681a",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-013.json.gz",
+      "sha256": "499ddded05772356942ec99377090bbf3d68aa6cc20e89b5e63aa02f7389a0e2",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-014.json.gz",
+      "sha256": "5ea360089dd712ded220ca941043617b5d568d422e30c94bcb32c55172f12744",
+      "records": 5000
+    },
+    {
+      "url": "https://huggingface.co/datasets/allenai/objaverse/resolve/556637099bf4fa79ea7b239d0d9c328b8a2e9ac8/metadata/000-015.json.gz",
+      "sha256": "60ff99f4196cb0d1346f427479f23c5264893e81674fae1f15231f8e50d449ac",
+      "records": 5000
+    }
+  ],
+  "previews": [
+    {
+      "asset_id": "objaverse_2ba64b0c024e4661b4a896de0422e9be",
+      "url": "https://media.sketchfab.com/models/2ba64b0c024e4661b4a896de0422e9be/thumbnails/fbdd740179714fcf95e17517571c4a2c/41e039938afe4d5aa50471c05bb8a7c0.jpeg",
+      "sha256": "12d077e8c0225aff385a113eec7723491f4d516d37e6ef71d5f777b934aea46b",
+      "bytes": 13443,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/12d077e8c0225aff385a113eec7723491f4d516d37e6ef71d5f777b934aea46b.jpg"
+    },
+    {
+      "asset_id": "objaverse_a866914edde64b87acd8f5ea115a433f",
+      "url": "https://media.sketchfab.com/models/a866914edde64b87acd8f5ea115a433f/thumbnails/f75bca2ef5f9497eba0aac40dda05ba3/f26e2ef7e4124f3abbd2b0d1e13a71d7.jpeg",
+      "sha256": "ad22f8f79c2875db3a92ce7d729db0909c591c30c84312c2422929b303199e25",
+      "bytes": 13112,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ad22f8f79c2875db3a92ce7d729db0909c591c30c84312c2422929b303199e25.jpg"
+    },
+    {
+      "asset_id": "objaverse_16160a192501414dbbe4b7a96979515e",
+      "url": "https://media.sketchfab.com/models/16160a192501414dbbe4b7a96979515e/thumbnails/8a9f6e75cd144f02b2582fae6cd0d5f9/9cda1aaa3c184513a0b728899c753ed9.jpeg",
+      "sha256": "fcdf5516edadd2872dcb44df54a2e6f41c521fc449196bce1d1ebeffb8b32e49",
+      "bytes": 6081,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/fcdf5516edadd2872dcb44df54a2e6f41c521fc449196bce1d1ebeffb8b32e49.jpg"
+    },
+    {
+      "asset_id": "objaverse_00b360de1846428eb5c23464824c5fc8",
+      "url": "https://media.sketchfab.com/models/00b360de1846428eb5c23464824c5fc8/thumbnails/d266ff5681a14c03b6f2d76f5fd2efd4/720x405.jpeg",
+      "sha256": "9fecb3184dbf5f602969a4416b6003ffd99ed1b043333511037ae8002636cbbc",
+      "bytes": 10701,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9fecb3184dbf5f602969a4416b6003ffd99ed1b043333511037ae8002636cbbc.jpg"
+    },
+    {
+      "asset_id": "objaverse_132a8ee2af3a40d39d270fbed3d3666c",
+      "url": "https://media.sketchfab.com/models/132a8ee2af3a40d39d270fbed3d3666c/thumbnails/12d273ffc7d940c5bbbccba7b4fb9d46/8f21f63d367a48688062be133b3f25bb.jpeg",
+      "sha256": "4535b8bba3b298653186e48cc38519553da2200626fa4b2fa6d1aa011953b034",
+      "bytes": 13336,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4535b8bba3b298653186e48cc38519553da2200626fa4b2fa6d1aa011953b034.jpg"
+    },
+    {
+      "asset_id": "objaverse_14fa34e16090452f88098c29e1ceca32",
+      "url": "https://media.sketchfab.com/models/14fa34e16090452f88098c29e1ceca32/thumbnails/42dd406c241b4d5d9669b1910cf14fbf/f4cb111274a844018466ec2259a29f46.jpeg",
+      "sha256": "f472514c6f0dc5a3c47f049d366b51ee36a47ef0a3299f9a8810ca309a86efcb",
+      "bytes": 8231,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f472514c6f0dc5a3c47f049d366b51ee36a47ef0a3299f9a8810ca309a86efcb.jpg"
+    },
+    {
+      "asset_id": "objaverse_3013e3e0e67f427289cdd4f559af3d72",
+      "url": "https://media.sketchfab.com/models/3013e3e0e67f427289cdd4f559af3d72/thumbnails/a1504313966a45928ad08c5157eef9c0/543af6e281c9452c8a3e9a267dc14df1.jpeg",
+      "sha256": "a1bdbb1fa60876d08ea9a1951fb108739e2b2599d05eda097abc489daebf458d",
+      "bytes": 10004,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a1bdbb1fa60876d08ea9a1951fb108739e2b2599d05eda097abc489daebf458d.jpg"
+    },
+    {
+      "asset_id": "objaverse_7b1c177d4292480b85311a196e5080b0",
+      "url": "https://media.sketchfab.com/models/7b1c177d4292480b85311a196e5080b0/thumbnails/6a82bab4a62e41ce901d2f97ec2f77e3/6faf2a989716434aa22824c7a9748fc7.jpeg",
+      "sha256": "466ecef9fae4e1f929b649ec7f23fa796a6e423dae082ac0da24455b4ec6e1b8",
+      "bytes": 10649,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/466ecef9fae4e1f929b649ec7f23fa796a6e423dae082ac0da24455b4ec6e1b8.jpg"
+    },
+    {
+      "asset_id": "objaverse_15500b2788c2476a80567a9576369ce0",
+      "url": "https://media.sketchfab.com/models/15500b2788c2476a80567a9576369ce0/thumbnails/7f0299d9ca2843ba9e2746d147f5fc57/8f73ed848d3a47e4b978b14486bff1b4.jpeg",
+      "sha256": "304c2c9f98d9fe8dbefeab8a264e5de9595d741e72371340b9ae9e054ebfcdac",
+      "bytes": 21768,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/304c2c9f98d9fe8dbefeab8a264e5de9595d741e72371340b9ae9e054ebfcdac.jpg"
+    },
+    {
+      "asset_id": "objaverse_1d9aee732c50495597611151c4798ab9",
+      "url": "https://media.sketchfab.com/models/1d9aee732c50495597611151c4798ab9/thumbnails/37cec1dd2c424eb58f42d2c2c226c84c/d343489baf4c485e86c30e38abc3cad4.jpeg",
+      "sha256": "2d4c3247a52f9b077d27ada2546ebf1f39516943d454201dcdac4789a8515e65",
+      "bytes": 18935,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2d4c3247a52f9b077d27ada2546ebf1f39516943d454201dcdac4789a8515e65.jpg"
+    },
+    {
+      "asset_id": "objaverse_2dc339164cc14ff5bd6f906387ca29ff",
+      "url": "https://media.sketchfab.com/models/2dc339164cc14ff5bd6f906387ca29ff/thumbnails/55e94d87f1d54e329a686e6344d0e58a/bfe2b79996694267a99fa0f762057e05.jpeg",
+      "sha256": "4d9077db51c59aee1e5ab807564ffaee32a0fb9444eb3fb134aaab2470f99beb",
+      "bytes": 22099,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4d9077db51c59aee1e5ab807564ffaee32a0fb9444eb3fb134aaab2470f99beb.jpg"
+    },
+    {
+      "asset_id": "objaverse_0436298b8892486ca5392603bed14fd0",
+      "url": "https://media.sketchfab.com/models/0436298b8892486ca5392603bed14fd0/thumbnails/473d9f29d5704489b7c99dc9d11598c8/3b6ed36f5ec14a33b702f8523648c8aa.jpeg",
+      "sha256": "e31d19dc68a85d8269fc24554c07bcfb58238f45b6616bcfbcd73903333712a3",
+      "bytes": 11391,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e31d19dc68a85d8269fc24554c07bcfb58238f45b6616bcfbcd73903333712a3.jpg"
+    },
+    {
+      "asset_id": "objaverse_a27aa928a6664473a0ebfbe2c7f72b23",
+      "url": "https://media.sketchfab.com/models/a27aa928a6664473a0ebfbe2c7f72b23/thumbnails/91dcd96c38a443e6ae39de1535e27314/eb18f4e626e24a0abd4f28706376c8dc.jpeg",
+      "sha256": "1795dc0b5ce205ace27b4de4323ee70f8dc71dbf07ca01363620c678a740d524",
+      "bytes": 25451,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1795dc0b5ce205ace27b4de4323ee70f8dc71dbf07ca01363620c678a740d524.jpg"
+    },
+    {
+      "asset_id": "objaverse_a7fc42a0751c4be6a4cc22775b9b2cc5",
+      "url": "https://media.sketchfab.com/models/a7fc42a0751c4be6a4cc22775b9b2cc5/thumbnails/ff9514c3dd654571b8eea46c364c2d08/43b08f62e08641f98e3f22021e7734be.jpeg",
+      "sha256": "d78851e3d7d69d5ce74d90d61d2183eba900203f0c4be9685b2d359d877ee1fa",
+      "bytes": 19542,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d78851e3d7d69d5ce74d90d61d2183eba900203f0c4be9685b2d359d877ee1fa.jpg"
+    },
+    {
+      "asset_id": "objaverse_3b130f0ba4304966a101c82be2429cc7",
+      "url": "https://media.sketchfab.com/models/3b130f0ba4304966a101c82be2429cc7/thumbnails/b7768f2f5221480292c43255dd557245/df0d56be442a439aadabef4dd365bf92.jpeg",
+      "sha256": "03d53529a55883e85ec0339d72920c5f46f8ba3f6955000880ffa816cfaba9b4",
+      "bytes": 17363,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/03d53529a55883e85ec0339d72920c5f46f8ba3f6955000880ffa816cfaba9b4.jpg"
+    },
+    {
+      "asset_id": "objaverse_4c72b167c87f4fcd8d75b835a02b6e9c",
+      "url": "https://media.sketchfab.com/models/4c72b167c87f4fcd8d75b835a02b6e9c/thumbnails/5df565991bd04df6b1d1473a5c09ed20/a2e455a1c714448c9e455e978548c027.jpeg",
+      "sha256": "38713d7901eb0df1479b0b0f2c59d9e2faa906f36ae818bfe7e83818f14a27e0",
+      "bytes": 15426,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/38713d7901eb0df1479b0b0f2c59d9e2faa906f36ae818bfe7e83818f14a27e0.jpg"
+    },
+    {
+      "asset_id": "objaverse_5adb3486557b46eaab0e1ab643709a9c",
+      "url": "https://media.sketchfab.com/models/5adb3486557b46eaab0e1ab643709a9c/thumbnails/dbe34e4d98e6477fb84c124f20c6f613/720x405.jpeg",
+      "sha256": "f83bba654e31eaaeea885f1b242ce1a36fb6b5f7e018735695b696d5cfc7da8d",
+      "bytes": 23286,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f83bba654e31eaaeea885f1b242ce1a36fb6b5f7e018735695b696d5cfc7da8d.jpg"
+    },
+    {
+      "asset_id": "objaverse_dc4dc27ae6dc42dd8bd68e765f7a8a14",
+      "url": "https://media.sketchfab.com/models/dc4dc27ae6dc42dd8bd68e765f7a8a14/thumbnails/1eaccdb805df49a5bba085304bf0c82f/1ab675bb69164dbc86a1de9d50202322.jpeg",
+      "sha256": "ea624575040af3c9ed9b0789cb2d164b404390b110bbc96a8058d8e0c344e28a",
+      "bytes": 10750,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ea624575040af3c9ed9b0789cb2d164b404390b110bbc96a8058d8e0c344e28a.jpg"
+    },
+    {
+      "asset_id": "objaverse_0a9441fbe4bd47b990e17dab99267d40",
+      "url": "https://media.sketchfab.com/models/0a9441fbe4bd47b990e17dab99267d40/thumbnails/11e06f23c52c4b91a3f7d2b2967535ed/ad3a06615b0449db93845f205385ea03.jpeg",
+      "sha256": "c600f147cdab5851fd0d3e35c54f3668975305d907a5fd67dbe6c13490a78a84",
+      "bytes": 20168,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c600f147cdab5851fd0d3e35c54f3668975305d907a5fd67dbe6c13490a78a84.jpg"
+    },
+    {
+      "asset_id": "objaverse_2a725ae04a33493fad2ee6dad98a85af",
+      "url": "https://media.sketchfab.com/models/2a725ae04a33493fad2ee6dad98a85af/thumbnails/3c598f0681d548b7ad8a7ea70b2b5367/57346138b7484de694bf4b158d21affb.jpeg",
+      "sha256": "ae42d065228e1559ce42fede6f18a3dc2384f90f12dc05646572a988f9866810",
+      "bytes": 8113,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ae42d065228e1559ce42fede6f18a3dc2384f90f12dc05646572a988f9866810.jpg"
+    },
+    {
+      "asset_id": "objaverse_3d4824436000452f9d31f5a77fa43e0b",
+      "url": "https://media.sketchfab.com/models/3d4824436000452f9d31f5a77fa43e0b/thumbnails/117015fc7e9f4b9e80c2d2df28e6b763/147000545d464b6fa8d5842e063fa2ce.jpeg",
+      "sha256": "acb63c3204ddfe6fddca6807f290242281043177f6f21d4a517bdfaf66abed48",
+      "bytes": 21606,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/acb63c3204ddfe6fddca6807f290242281043177f6f21d4a517bdfaf66abed48.jpg"
+    },
+    {
+      "asset_id": "objaverse_4d6d42bdec13473786cc2d1d0442f523",
+      "url": "https://media.sketchfab.com/models/4d6d42bdec13473786cc2d1d0442f523/thumbnails/e2394586d4a04422bcd7729569fc6dc6/e00cf369185d457ca7e97502aef6de5f.jpeg",
+      "sha256": "9d583e9efeacfdf5247f2cf0c30c8db207b9f0ee0aef1c2b694f1f127cd32a7f",
+      "bytes": 18591,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9d583e9efeacfdf5247f2cf0c30c8db207b9f0ee0aef1c2b694f1f127cd32a7f.jpg"
+    },
+    {
+      "asset_id": "objaverse_01a013a027ee4e6aa324b648ab046ce6",
+      "url": "https://media.sketchfab.com/models/01a013a027ee4e6aa324b648ab046ce6/thumbnails/6784ff27eaa6471e825f64ea5be21422/dd5fafed5fee42c5996a8dfab4706aec.jpeg",
+      "sha256": "94ff6088cbf7b513078ef16e80d7de81cf0bebaf62e849994580aa6ffcfedea0",
+      "bytes": 8883,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/94ff6088cbf7b513078ef16e80d7de81cf0bebaf62e849994580aa6ffcfedea0.jpg"
+    },
+    {
+      "asset_id": "objaverse_26354cd6800744289bc1754cab8dbd4b",
+      "url": "https://media.sketchfab.com/models/26354cd6800744289bc1754cab8dbd4b/thumbnails/6e142c6e0c1546a493b42bc6dbbb94e8/4675fb0101f14095a21cb64da1820a66.jpeg",
+      "sha256": "d0be7def4adf30f210d778bbecfd64e3ffc5ebe3986f2861b2890c644e930cd8",
+      "bytes": 8296,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d0be7def4adf30f210d778bbecfd64e3ffc5ebe3986f2861b2890c644e930cd8.jpg"
+    },
+    {
+      "asset_id": "objaverse_4b01f9be8636450d99687152e945d1f0",
+      "url": "https://media.sketchfab.com/models/4b01f9be8636450d99687152e945d1f0/thumbnails/b5971d34c25e4b1bbf5b90e1e292611f/640x360.jpeg",
+      "sha256": "0c07039d3fdcaf16326f776e1dcdc6b013a685092f71e418d47c1ae85665a619",
+      "bytes": 32451,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/0c07039d3fdcaf16326f776e1dcdc6b013a685092f71e418d47c1ae85665a619.jpg"
+    },
+    {
+      "asset_id": "objaverse_64cfb7f1704148718a24b142645fe97d",
+      "url": "https://media.sketchfab.com/models/64cfb7f1704148718a24b142645fe97d/thumbnails/14e20a8c7513484986c312e3fe3773e8/cbd62166791949d29cfcd45e32a33ba2.jpeg",
+      "sha256": "c7a2ff2b7f242b7a4e3fdafc3a41e44e16bd92a23a3d2b28b7c6105c1f8bc6d6",
+      "bytes": 22993,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c7a2ff2b7f242b7a4e3fdafc3a41e44e16bd92a23a3d2b28b7c6105c1f8bc6d6.jpg"
+    },
+    {
+      "asset_id": "objaverse_9ccda2fddba846e6ba97eb774b8a09c6",
+      "url": "https://media.sketchfab.com/models/9ccda2fddba846e6ba97eb774b8a09c6/thumbnails/e71fc61ae188460fbd9674ecb56ecf5a/f7aef6c8368f40bdba38b90ea7ab8ef5.jpeg",
+      "sha256": "b3077eaa11c05491603ae8ff8f014ce3291f6e65ec9560414d2e108931438bb8",
+      "bytes": 22616,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b3077eaa11c05491603ae8ff8f014ce3291f6e65ec9560414d2e108931438bb8.jpg"
+    },
+    {
+      "asset_id": "objaverse_1e439c8c11a3416aa5e997a8e24dfe84",
+      "url": "https://media.sketchfab.com/models/1e439c8c11a3416aa5e997a8e24dfe84/thumbnails/08a57259a0cd4b5f9b3d832282f3b5cd/321212e54b9d4c6498e4d406cf0d9c5b.jpeg",
+      "sha256": "0628d8f7215a3406daa35646b5a27b24da1e7013ffc6e04e7348493d54c15df1",
+      "bytes": 20345,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0628d8f7215a3406daa35646b5a27b24da1e7013ffc6e04e7348493d54c15df1.jpg"
+    },
+    {
+      "asset_id": "objaverse_68a31a8eb07d4b84aeb3b13484d4c9e8",
+      "url": "https://media.sketchfab.com/models/68a31a8eb07d4b84aeb3b13484d4c9e8/thumbnails/eda5af835ca44dda8cc6bd9685b0eb2c/720x405.jpeg",
+      "sha256": "f588888c27309743be37f846422f676e93e04557a5ed765ddeffa822dc8cc592",
+      "bytes": 17130,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f588888c27309743be37f846422f676e93e04557a5ed765ddeffa822dc8cc592.jpg"
+    },
+    {
+      "asset_id": "objaverse_0971e0ffe40146f0b966c849746abce6",
+      "url": "https://media.sketchfab.com/models/0971e0ffe40146f0b966c849746abce6/thumbnails/825a3ba5d9d74efa9999c49097f79aea/99435ffd717442b996d047ac0c448ae4.jpeg",
+      "sha256": "ea6ca99b07477b0307601ee0eecc2911f1b2ab0a4d0ce7c588733f0a9114ea0f",
+      "bytes": 8801,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ea6ca99b07477b0307601ee0eecc2911f1b2ab0a4d0ce7c588733f0a9114ea0f.jpg"
+    },
+    {
+      "asset_id": "objaverse_339bc8f961c4479d9569e0754e35d5ae",
+      "url": "https://media.sketchfab.com/models/339bc8f961c4479d9569e0754e35d5ae/thumbnails/a08e47a18fb54071b18ee9197850099b/858dc1bf4e3247f6af13e0b0621020e0.jpeg",
+      "sha256": "f36427a7bf42df940a0125381eb71695c614da162a80439cd90e131e4bd48aa9",
+      "bytes": 6623,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f36427a7bf42df940a0125381eb71695c614da162a80439cd90e131e4bd48aa9.jpg"
+    },
+    {
+      "asset_id": "objaverse_53ace8e0663744419f0d38300e0619cf",
+      "url": "https://media.sketchfab.com/models/53ace8e0663744419f0d38300e0619cf/thumbnails/9fcff05376754e75bd80ff68643cf741/5c9057b467ce40ecac9395f9a0bc6011.jpeg",
+      "sha256": "72e8a21655f12ee65367364aeb6f2eb160adc9a8a101c3ad19e5f18e9fac64ba",
+      "bytes": 8582,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/72e8a21655f12ee65367364aeb6f2eb160adc9a8a101c3ad19e5f18e9fac64ba.jpg"
+    },
+    {
+      "asset_id": "objaverse_0d130162265746fc8667716019aa6a5a",
+      "url": "https://media.sketchfab.com/models/0d130162265746fc8667716019aa6a5a/thumbnails/e8dcf09911b24fa8b21428582d7b4b7a/50c7c37eb173446cb67d8b8f1a437454.jpeg",
+      "sha256": "2e3ce3770140dde704cb91b701c31e10fc9677c1f6f36b3e76ea0e77d783eeec",
+      "bytes": 6032,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2e3ce3770140dde704cb91b701c31e10fc9677c1f6f36b3e76ea0e77d783eeec.jpg"
+    },
+    {
+      "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+      "url": "https://media.sketchfab.com/models/4adc793119754406aa3bcd790782cd4c/thumbnails/8bc795427a7d4d0989816a520305bd6d/f9b325942afe4ee3b04bc527c9cc70ed.jpeg",
+      "sha256": "cb21b71d325304d444a832aeef2f803a785f62a7ca0b2ae0942d3cbd582c4964",
+      "bytes": 11071,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/cb21b71d325304d444a832aeef2f803a785f62a7ca0b2ae0942d3cbd582c4964.jpg"
+    },
+    {
+      "asset_id": "objaverse_539aabc6b294427e8fdea23786474c0a",
+      "url": "https://media.sketchfab.com/models/539aabc6b294427e8fdea23786474c0a/thumbnails/c64eb38fd0f6451f9a166a9b3665a874/1115a4753970473d9cb3ab278e7cc5a9.jpeg",
+      "sha256": "79e54548561606fe9be0f27f58ecdc3403781265781014a50aa3ed2da605ebf3",
+      "bytes": 6954,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/79e54548561606fe9be0f27f58ecdc3403781265781014a50aa3ed2da605ebf3.jpg"
+    },
+    {
+      "asset_id": "objaverse_a7b69dd93b284cffb69fc1a423f90c2a",
+      "url": "https://media.sketchfab.com/models/a7b69dd93b284cffb69fc1a423f90c2a/thumbnails/8c80b6c0aac8475a8b76e7f6cc58f681/921f3c842c0547d69011b6366deb93ba.jpeg",
+      "sha256": "93304e07c9269e4f3489e2470271e47ca381f41b268baad0d375e275d5c0f235",
+      "bytes": 4636,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/93304e07c9269e4f3489e2470271e47ca381f41b268baad0d375e275d5c0f235.jpg"
+    },
+    {
+      "asset_id": "objaverse_b8664947de614db1944302c43a45a4fb",
+      "url": "https://media.sketchfab.com/models/b8664947de614db1944302c43a45a4fb/thumbnails/2c46c59bce7d41758ece6dde6770e7df/4b6b098efdde4aa186981286dfad7f05.jpeg",
+      "sha256": "82e7a8fff0aee3c0fade2ca38ec91bcd5af858218aabfdf72179e5a350edafcf",
+      "bytes": 5731,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/82e7a8fff0aee3c0fade2ca38ec91bcd5af858218aabfdf72179e5a350edafcf.jpg"
+    },
+    {
+      "asset_id": "objaverse_018cff2beb324e609446af6f64d059e2",
+      "url": "https://media.sketchfab.com/models/018cff2beb324e609446af6f64d059e2/thumbnails/8c52237b625844a8964a294a70fc914e/86dee118a7bb4015877538c0a569785a.jpeg",
+      "sha256": "c2db9415079acc137c980a0a68d84a9ace144941100e754c870e84b5ff8ffbb6",
+      "bytes": 15497,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c2db9415079acc137c980a0a68d84a9ace144941100e754c870e84b5ff8ffbb6.jpg"
+    },
+    {
+      "asset_id": "objaverse_0a868fb5784348a3955607c8e8dd52fe",
+      "url": "https://media.sketchfab.com/models/0a868fb5784348a3955607c8e8dd52fe/thumbnails/355074869d8345ada8a6c502a2ee7850/c78a50176a5a4c0aa0da1ff07453a3d3.jpeg",
+      "sha256": "d8ae67c4c9100b7b371526e6e2f2adfdb695d660deda01e387e3a9ab1e9aa2fd",
+      "bytes": 4718,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d8ae67c4c9100b7b371526e6e2f2adfdb695d660deda01e387e3a9ab1e9aa2fd.jpg"
+    },
+    {
+      "asset_id": "objaverse_204a34f7c4f94da1a3c73f56679ea929",
+      "url": "https://media.sketchfab.com/models/204a34f7c4f94da1a3c73f56679ea929/thumbnails/b36027044b374e7a830b9542c406dd28/41d9dc50482e4814b54b54a99e94e3a1.jpeg",
+      "sha256": "eb59de55a1dfb3e4a6f3763002af2cef2d31e3b4a4c4fd9645fb38a821e3b9bf",
+      "bytes": 32251,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/eb59de55a1dfb3e4a6f3763002af2cef2d31e3b4a4c4fd9645fb38a821e3b9bf.jpg"
+    },
+    {
+      "asset_id": "objaverse_77f6f2f8c988472081cac4ab3aaa0146",
+      "url": "https://media.sketchfab.com/models/77f6f2f8c988472081cac4ab3aaa0146/thumbnails/c63b761b46e04796952511282487d94d/e83a1c6dd0fc4502a80d68c678ea2104.jpeg",
+      "sha256": "5b7896dd1524bf1932e964d41025fbb464f0d992c2c24871e337b91e879edbed",
+      "bytes": 6219,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5b7896dd1524bf1932e964d41025fbb464f0d992c2c24871e337b91e879edbed.jpg"
+    },
+    {
+      "asset_id": "objaverse_a9c6972337a44b2eb55b3dffaf1133bb",
+      "url": "https://media.sketchfab.com/models/a9c6972337a44b2eb55b3dffaf1133bb/thumbnails/e2208c760fbc45368dd810eef7723cf9/64430b99fd47481985373e5cc12db6ac.jpeg",
+      "sha256": "09da560364bf69cde24fb8b299e8e0f13776eb4a3e223b1b2d8dcbadd4b2fc72",
+      "bytes": 3791,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/09da560364bf69cde24fb8b299e8e0f13776eb4a3e223b1b2d8dcbadd4b2fc72.jpg"
+    },
+    {
+      "asset_id": "objaverse_03550a3529c24611a12aa158747374e0",
+      "url": "https://media.sketchfab.com/models/03550a3529c24611a12aa158747374e0/thumbnails/9636f9f3f8e94c698e63894c075da7fb/720x405.jpeg",
+      "sha256": "cff9bbc73e7b4a7bc3edf3d4504ae26af528a8588cd206369cf251f26fd65835",
+      "bytes": 21898,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/cff9bbc73e7b4a7bc3edf3d4504ae26af528a8588cd206369cf251f26fd65835.jpg"
+    },
+    {
+      "asset_id": "objaverse_03cba69a2c3140f7abc013d42d455fba",
+      "url": "https://media.sketchfab.com/models/03cba69a2c3140f7abc013d42d455fba/thumbnails/3d0e4dd099d94fc496576a9f52d848fd/8781196ed747463fb046d32fe7ae4c71.jpeg",
+      "sha256": "e76edc2c5cc4d5dac3a4e985b5d6be84c6fad417a74174c226d70dbfbf06e877",
+      "bytes": 12022,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e76edc2c5cc4d5dac3a4e985b5d6be84c6fad417a74174c226d70dbfbf06e877.jpg"
+    },
+    {
+      "asset_id": "objaverse_1374e96e6e4043cf96dbb4481a2bdf82",
+      "url": "https://media.sketchfab.com/models/1374e96e6e4043cf96dbb4481a2bdf82/thumbnails/97201088900e471196952175594b5cf5/640x360.jpeg",
+      "sha256": "e19b0b03f50b708d6064d523812ead8f5843e598e35e3ead1643eb28595f8ae3",
+      "bytes": 14046,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/e19b0b03f50b708d6064d523812ead8f5843e598e35e3ead1643eb28595f8ae3.jpg"
+    },
+    {
+      "asset_id": "objaverse_1891b143ddc44a3aa845bd421a8ae82d",
+      "url": "https://media.sketchfab.com/models/1891b143ddc44a3aa845bd421a8ae82d/thumbnails/31dc6a76c79d4eff8bce01ebb3aaf8af/4d0b1e5889fb4b01a2bf724db4aee635.jpeg",
+      "sha256": "c7ca31465c4e897dfb41da65d5a1534869b75b468f9ff02e9085e3f22f91fe7c",
+      "bytes": 14005,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c7ca31465c4e897dfb41da65d5a1534869b75b468f9ff02e9085e3f22f91fe7c.jpg"
+    },
+    {
+      "asset_id": "objaverse_49dd685a2bb34989afda9ca4471cf905",
+      "url": "https://media.sketchfab.com/models/49dd685a2bb34989afda9ca4471cf905/thumbnails/45b551f671c34196907f27059d22803c/4c67a55604b84b08acf195eda1c71526.jpeg",
+      "sha256": "8312d282ee3485c34b4438eef11a1aef80023bac687c75d4e9cece855521cd5f",
+      "bytes": 14161,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/8312d282ee3485c34b4438eef11a1aef80023bac687c75d4e9cece855521cd5f.jpg"
+    },
+    {
+      "asset_id": "objaverse_4e966fc0c95a4a698a5f10913104df43",
+      "url": "https://media.sketchfab.com/models/4e966fc0c95a4a698a5f10913104df43/thumbnails/75241dd4ee73497f9ce757d19e8b598c/792cdff929a6487d97003d4096c9c961.jpeg",
+      "sha256": "7d33ccc6da718fd0441637ea4d13df3c0022caf78b9cf73e10aba61ef4a6daf4",
+      "bytes": 9922,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7d33ccc6da718fd0441637ea4d13df3c0022caf78b9cf73e10aba61ef4a6daf4.jpg"
+    },
+    {
+      "asset_id": "objaverse_690c8fdb9c3548b89b5226a90637d41b",
+      "url": "https://media.sketchfab.com/models/690c8fdb9c3548b89b5226a90637d41b/thumbnails/f661bc4fa0af4c1a8728cc55a99f1e4d/720x405.jpeg",
+      "sha256": "fcd15d04568434350037d9a11857e5b759fbbddaed922413601ab2aace7890ab",
+      "bytes": 11843,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/fcd15d04568434350037d9a11857e5b759fbbddaed922413601ab2aace7890ab.jpg"
+    },
+    {
+      "asset_id": "objaverse_39ea36146ae34b4782734a091b43d34e",
+      "url": "https://media.sketchfab.com/models/39ea36146ae34b4782734a091b43d34e/thumbnails/97712f5e32134a1f9b5e8a928e63409d/136a80a319cb47cd813774e14cdd29c4.jpeg",
+      "sha256": "6eaf945052b7abde8921d3650bd442cae292f82c18e8b46d26acf2fb380b8b85",
+      "bytes": 14284,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6eaf945052b7abde8921d3650bd442cae292f82c18e8b46d26acf2fb380b8b85.jpg"
+    },
+    {
+      "asset_id": "objaverse_05353724b7884bfb81211c7033a57fd4",
+      "url": "https://media.sketchfab.com/models/05353724b7884bfb81211c7033a57fd4/thumbnails/96033b94ab4c4944a538e055f8f9d7ee/5f671df138a749f4847cfc9872aa9c4f.jpeg",
+      "sha256": "f076e57f5f4f0c654711f2fb11f8aa5224b9855c04a75011dc1d052c3e4f014d",
+      "bytes": 12522,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f076e57f5f4f0c654711f2fb11f8aa5224b9855c04a75011dc1d052c3e4f014d.jpg"
+    },
+    {
+      "asset_id": "objaverse_0fd1d0546f8e422b97a4fd5cfe959d2e",
+      "url": "https://media.sketchfab.com/models/0fd1d0546f8e422b97a4fd5cfe959d2e/thumbnails/36e4ad82ef1044c9bc1f5cd553897186/c420af53106d4104b4ed8590d76999ef.jpeg",
+      "sha256": "7ae32da889b997f61047a295eea6510206dfb40f7ed823e20c5a9da17d836d6f",
+      "bytes": 21292,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7ae32da889b997f61047a295eea6510206dfb40f7ed823e20c5a9da17d836d6f.jpg"
+    },
+    {
+      "asset_id": "objaverse_009de5b694dd4aac9c5a760d544046d1",
+      "url": "https://media.sketchfab.com/models/009de5b694dd4aac9c5a760d544046d1/thumbnails/37570f1b73404276aa51300f95a2cc3a/720x405.jpeg",
+      "sha256": "d3405285142c817e2292a0c050ef73a8dd51d3468f894f840f460c96c8b2a31f",
+      "bytes": 17264,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d3405285142c817e2292a0c050ef73a8dd51d3468f894f840f460c96c8b2a31f.jpg"
+    },
+    {
+      "asset_id": "objaverse_01810aab099a49569c550c646b3427cc",
+      "url": "https://media.sketchfab.com/models/01810aab099a49569c550c646b3427cc/thumbnails/2227a26df6a34aa698e336218a4ce00d/6551ed8af97b4db29fbedcf3f691754e.jpeg",
+      "sha256": "c091c3e0e4b98674f71e431349d1feaea97917f4a56fe97b878f9b1d3d137d9f",
+      "bytes": 16764,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c091c3e0e4b98674f71e431349d1feaea97917f4a56fe97b878f9b1d3d137d9f.jpg"
+    },
+    {
+      "asset_id": "objaverse_26f45c6733254144bcc20788c03ea31f",
+      "url": "https://media.sketchfab.com/models/26f45c6733254144bcc20788c03ea31f/thumbnails/77f00fd6712b49dc9021335503d903f1/4be375961ac6441d81d012b08f8df5e4.jpeg",
+      "sha256": "5472e6722d3c2dd9a6d327775ba352b1a2f3f9ee10fcee339e84705d46cd667b",
+      "bytes": 18196,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5472e6722d3c2dd9a6d327775ba352b1a2f3f9ee10fcee339e84705d46cd667b.jpg"
+    },
+    {
+      "asset_id": "objaverse_94e8a30e011a49a7a13910139d8daf8f",
+      "url": "https://media.sketchfab.com/models/94e8a30e011a49a7a13910139d8daf8f/thumbnails/b0bd56b02c634f489649a46d6f61ebbc/3587ac996bba42dea650c09b6562e55a.jpeg",
+      "sha256": "131b4709a3d5d2bac6ec43ba6f23cd58f6121aec977bb9316ad6e8a3209eebe7",
+      "bytes": 10344,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/131b4709a3d5d2bac6ec43ba6f23cd58f6121aec977bb9316ad6e8a3209eebe7.jpg"
+    },
+    {
+      "asset_id": "objaverse_c50614b6796f4357aa6d7825d86f188e",
+      "url": "https://media.sketchfab.com/models/c50614b6796f4357aa6d7825d86f188e/thumbnails/0fd7db89bf694c6991ea9c346ab71443/0140f906db174c5cb69388935eb394ae.jpeg",
+      "sha256": "d51c5e194899b4ce3bf739fda0f3c3d5f067393f3f400b1de910ee2e1ba4ae4d",
+      "bytes": 10080,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d51c5e194899b4ce3bf739fda0f3c3d5f067393f3f400b1de910ee2e1ba4ae4d.jpg"
+    },
+    {
+      "asset_id": "objaverse_7115685c28d141ffa65fecc3ee1838b1",
+      "url": "https://media.sketchfab.com/models/7115685c28d141ffa65fecc3ee1838b1/thumbnails/22e037b81cf243c696d6006d4d3b3429/75d32b03d4174283a121abeba4a43d12.jpeg",
+      "sha256": "9ac2e08ac217a47bb3ea37a7c6668710f4c3422951bef897e41bd98accda8c0e",
+      "bytes": 30144,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9ac2e08ac217a47bb3ea37a7c6668710f4c3422951bef897e41bd98accda8c0e.jpg"
+    },
+    {
+      "asset_id": "objaverse_7f9fa41bc5ae400fbd6e7c33410b776f",
+      "url": "https://media.sketchfab.com/models/7f9fa41bc5ae400fbd6e7c33410b776f/thumbnails/1f92f9c09a3f4117a9214a827e5b6dc2/720x405.jpeg",
+      "sha256": "69c2ad845f8f623dc0a03ad1e2e4d706d30dc776c50f6c8442d7376656767e62",
+      "bytes": 25621,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/69c2ad845f8f623dc0a03ad1e2e4d706d30dc776c50f6c8442d7376656767e62.jpg"
+    },
+    {
+      "asset_id": "objaverse_9ceedf3d039447628de6f498ec095468",
+      "url": "https://media.sketchfab.com/models/9ceedf3d039447628de6f498ec095468/thumbnails/aba00fb69f3b47e1820589167bae8d55/354af671e93846e9bcb8f44b89cdfa1a.jpeg",
+      "sha256": "d499a641beaf0fccfebd67a1253b9cbee3d3ca2728cb78b156c36e9d65cb22ce",
+      "bytes": 19808,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d499a641beaf0fccfebd67a1253b9cbee3d3ca2728cb78b156c36e9d65cb22ce.jpg"
+    },
+    {
+      "asset_id": "objaverse_9f31fb46d588417db5238a748131edd7",
+      "url": "https://media.sketchfab.com/models/9f31fb46d588417db5238a748131edd7/thumbnails/20a6f9c7b3a74913bef63007c0cbbf6b/ae104f3a957949c1a930ab131710ce5c.jpeg",
+      "sha256": "5a329bf7ea5a4f2203d76b958c6f032772f01abfd59db6f2a5f6222c85b47c33",
+      "bytes": 18741,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5a329bf7ea5a4f2203d76b958c6f032772f01abfd59db6f2a5f6222c85b47c33.jpg"
+    },
+    {
+      "asset_id": "objaverse_336d3327c28e4a1b905ea74f1e0b5a4b",
+      "url": "https://media.sketchfab.com/models/336d3327c28e4a1b905ea74f1e0b5a4b/thumbnails/32a27ac24cd24645942bca1838d57578/8ad2b030db6a4a03a7f7f72ae41ce1cf.jpeg",
+      "sha256": "a6774d45daf370099b6a18825b0b84522ab2eafca4efa614123883e55527f7d4",
+      "bytes": 16381,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a6774d45daf370099b6a18825b0b84522ab2eafca4efa614123883e55527f7d4.jpg"
+    },
+    {
+      "asset_id": "objaverse_401a4f488c514e418de467ba3b516871",
+      "url": "https://media.sketchfab.com/models/401a4f488c514e418de467ba3b516871/thumbnails/96503a5945fe4e6e879cd7e4d474eb91/c61f34d5d1274942a9faca13d79c1a50.jpeg",
+      "sha256": "46d7c524f293acfcc4b4e96c98e981b69671e1912ec39f642d92b69e061080ac",
+      "bytes": 13072,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/46d7c524f293acfcc4b4e96c98e981b69671e1912ec39f642d92b69e061080ac.jpg"
+    },
+    {
+      "asset_id": "objaverse_4ae15c384cb1446f86f0e0b3c019b443",
+      "url": "https://media.sketchfab.com/models/4ae15c384cb1446f86f0e0b3c019b443/thumbnails/7c4abb6cb49c4c919aadb2af9efd1547/cbdbde5672ae409b92e2c6a1f5fef0ab.jpeg",
+      "sha256": "5eac8c8ae1a7231a154533207e0dfc28a8504b98e031168dc1c522185f388415",
+      "bytes": 24330,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5eac8c8ae1a7231a154533207e0dfc28a8504b98e031168dc1c522185f388415.jpg"
+    },
+    {
+      "asset_id": "objaverse_8d041195963541c386f27426964a05d2",
+      "url": "https://media.sketchfab.com/models/8d041195963541c386f27426964a05d2/thumbnails/05ff4cebc7354156b05be868fbdddc78/e1485cf03f604306859857c9a14d9f63.jpeg",
+      "sha256": "61fe7f96dba31b3effd2471a843ff4b9db4f4092e211d9013d16cab370877feb",
+      "bytes": 17171,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/61fe7f96dba31b3effd2471a843ff4b9db4f4092e211d9013d16cab370877feb.jpg"
+    },
+    {
+      "asset_id": "objaverse_97deb26f29cf4ed79b7b0ce84b4f4794",
+      "url": "https://media.sketchfab.com/models/97deb26f29cf4ed79b7b0ce84b4f4794/thumbnails/803ac3d0b0b445afbce8cf87f04c99e2/97ed4a58bcb94c40949d1dbbe0746d62.jpeg",
+      "sha256": "d7bfcf2bde5cfa7d4ebf466f5be6ffea58dd5f32bd4e2bdf025030a44af21ea5",
+      "bytes": 21084,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d7bfcf2bde5cfa7d4ebf466f5be6ffea58dd5f32bd4e2bdf025030a44af21ea5.jpg"
+    },
+    {
+      "asset_id": "objaverse_bc25692c5a6e429997d393d6b9e08067",
+      "url": "https://media.sketchfab.com/models/bc25692c5a6e429997d393d6b9e08067/thumbnails/6504f6629eda40309ef94af6371bc489/477fbb98b58e4a378b26a39f957e2298.jpeg",
+      "sha256": "6ac444b6446e8de7d31ee9206dc936a93e79edd545acccaeebec60037de2573a",
+      "bytes": 15798,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6ac444b6446e8de7d31ee9206dc936a93e79edd545acccaeebec60037de2573a.jpg"
+    },
+    {
+      "asset_id": "objaverse_7fb1f6404d8f410885fb0e6daa3582d1",
+      "url": "https://media.sketchfab.com/models/7fb1f6404d8f410885fb0e6daa3582d1/thumbnails/d79167efa45042c5bf86efade2e038a1/640x360.jpeg",
+      "sha256": "923c8f8d39eabfb6855646728c28067535171768111aa1496a8a8610b2f773cf",
+      "bytes": 17174,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/923c8f8d39eabfb6855646728c28067535171768111aa1496a8a8610b2f773cf.jpg"
+    },
+    {
+      "asset_id": "objaverse_c6e3f5d61c4d40dda26da52a4c0315bd",
+      "url": "https://media.sketchfab.com/models/c6e3f5d61c4d40dda26da52a4c0315bd/thumbnails/e57ab5c0cd0d485cbe65afc9af702dc9/5b3e93fd04bd4171bf97efbcdb734be4.jpeg",
+      "sha256": "7e715d625890895d0372cdccc973baa29d46d1e7e334f55c29e4cdea52af36d2",
+      "bytes": 9205,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7e715d625890895d0372cdccc973baa29d46d1e7e334f55c29e4cdea52af36d2.jpg"
+    },
+    {
+      "asset_id": "objaverse_e560e55bd23a4197a256192e9f8f52f1",
+      "url": "https://media.sketchfab.com/models/e560e55bd23a4197a256192e9f8f52f1/thumbnails/cfd196ac5e934f398675588162e1d59b/78b4c5f1386949209939d50fd1b5f31e.jpeg",
+      "sha256": "17cc69ade5c5cb9dcb57db9230614741436050334ca066fec47d169ed6cd4fbe",
+      "bytes": 5668,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/17cc69ade5c5cb9dcb57db9230614741436050334ca066fec47d169ed6cd4fbe.jpg"
+    },
+    {
+      "asset_id": "objaverse_c715fad78e6c4fc79b3b54d40ab50d07",
+      "url": "https://media.sketchfab.com/models/c715fad78e6c4fc79b3b54d40ab50d07/thumbnails/f6851c6f37e440d6a7b4c45c0c3d77c1/23c3bba1ee304406b03c357d96880b9f.jpeg",
+      "sha256": "b1f85cb5b945af1552a4a827f12e89f7ff0d34b13d31a8227dbbb1811708b530",
+      "bytes": 8587,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b1f85cb5b945af1552a4a827f12e89f7ff0d34b13d31a8227dbbb1811708b530.jpg"
+    },
+    {
+      "asset_id": "objaverse_474304cb94e444e2b1127a9e9ebdc170",
+      "url": "https://media.sketchfab.com/models/474304cb94e444e2b1127a9e9ebdc170/thumbnails/7fed976687fd44b8aa27ce40c7114b14/9f5b688c38f64c1a80c58bcb7ad0e1be.jpeg",
+      "sha256": "fed6fcfe724381ab03e2dd21b8d38b032fea78416beb2c3026081dbd4050ee92",
+      "bytes": 13002,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/fed6fcfe724381ab03e2dd21b8d38b032fea78416beb2c3026081dbd4050ee92.jpg"
+    },
+    {
+      "asset_id": "objaverse_b60aa915efb34b3ebd44b18403b1b040",
+      "url": "https://media.sketchfab.com/models/b60aa915efb34b3ebd44b18403b1b040/thumbnails/5561e3bc29764ab3b0c19f82e24cbff0/9f49d6e3c70e463f9d6d9d498110e413.jpeg",
+      "sha256": "a1cbc2baac4e908abd77952ba1e81295e72ada9b89d83e1efaad844b6de5e9f7",
+      "bytes": 15506,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a1cbc2baac4e908abd77952ba1e81295e72ada9b89d83e1efaad844b6de5e9f7.jpg"
+    },
+    {
+      "asset_id": "objaverse_4548d68fc1e046e1954001b5747daaaf",
+      "url": "https://media.sketchfab.com/models/4548d68fc1e046e1954001b5747daaaf/thumbnails/34fc0255c0524b048d0da13ca7f1d407/70edaf46918f405fa438ceaafbdb15a9.jpeg",
+      "sha256": "eee4421fc418e8993fe3e63ed2943851aca0b9c236aa027f27440a4118dba6d1",
+      "bytes": 12172,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/eee4421fc418e8993fe3e63ed2943851aca0b9c236aa027f27440a4118dba6d1.jpg"
+    },
+    {
+      "asset_id": "objaverse_4b066d0f67664fc09204e73e31e788bd",
+      "url": "https://media.sketchfab.com/models/4b066d0f67664fc09204e73e31e788bd/thumbnails/5e62160dbc0c46d593a6b2353081c73e/10c20a189a9c4fbd86e298441f237ab8.jpeg",
+      "sha256": "02dc6143456473df58224545af7a4f1d762c82ac2e92bf4ff7c7e5e41438e4a1",
+      "bytes": 21629,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/02dc6143456473df58224545af7a4f1d762c82ac2e92bf4ff7c7e5e41438e4a1.jpg"
+    },
+    {
+      "asset_id": "objaverse_59fb687018f34bca8f29957352391bdc",
+      "url": "https://media.sketchfab.com/models/59fb687018f34bca8f29957352391bdc/thumbnails/d12d0358dd844a68b5f14e905e35b426/4157322ddff24582bc62f407af4f1e70.jpeg",
+      "sha256": "2cdd48bba038d7a58e78c8841341c91b7e18d8e888cd05a2de496ddbf58bd353",
+      "bytes": 28412,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2cdd48bba038d7a58e78c8841341c91b7e18d8e888cd05a2de496ddbf58bd353.jpg"
+    },
+    {
+      "asset_id": "objaverse_ccc3f77d27f94ae5acc77992b90b146b",
+      "url": "https://media.sketchfab.com/models/ccc3f77d27f94ae5acc77992b90b146b/thumbnails/67ba7504346d49cab8f5e514a0753122/b40462cf44424ae7861074305bf00f3c.jpeg",
+      "sha256": "88a5835d78150f1e280c218711276d07e72e14136b783f11d76d65e9dc2183a2",
+      "bytes": 20157,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/88a5835d78150f1e280c218711276d07e72e14136b783f11d76d65e9dc2183a2.jpg"
+    },
+    {
+      "asset_id": "objaverse_e34877c9e2794b34bff5bea846a9605e",
+      "url": "https://media.sketchfab.com/models/e34877c9e2794b34bff5bea846a9605e/thumbnails/3ca3116530874c06bf1dee9172d1dde9/9f24a24962c64ed2bd99c8a458bfa812.jpeg",
+      "sha256": "ddf7b7fc2e7ff3861bb256d6ee87a78d0859e79b6b86db590d4bdf6bc3601d95",
+      "bytes": 12054,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ddf7b7fc2e7ff3861bb256d6ee87a78d0859e79b6b86db590d4bdf6bc3601d95.jpg"
+    },
+    {
+      "asset_id": "objaverse_17b285cd0cc54edb8ef8e5fed6fc4bb2",
+      "url": "https://media.sketchfab.com/models/17b285cd0cc54edb8ef8e5fed6fc4bb2/thumbnails/9c6bee0edc8349cfac04ae4b5416df91/74e7208deea241ac99e91a2548c97559.jpeg",
+      "sha256": "b8c22333ff226156c5f0b5c06ee31108898120559f10d4e33b491cac47e3ada8",
+      "bytes": 12540,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b8c22333ff226156c5f0b5c06ee31108898120559f10d4e33b491cac47e3ada8.jpg"
+    },
+    {
+      "asset_id": "objaverse_1cdf0efe87ea4e9b8dacc0dc17935b47",
+      "url": "https://media.sketchfab.com/models/1cdf0efe87ea4e9b8dacc0dc17935b47/thumbnails/84950ca4f74345d0bbcbb44e48727b09/7bd3c1a13b3742ef846a117c8a3e02cd.jpeg",
+      "sha256": "6a945415656d2ebd2c84ff2779ee81709632f8fcdb753aea856abba715a86947",
+      "bytes": 11760,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6a945415656d2ebd2c84ff2779ee81709632f8fcdb753aea856abba715a86947.jpg"
+    },
+    {
+      "asset_id": "objaverse_20bea6eec87d40ed843701511ebfdc32",
+      "url": "https://media.sketchfab.com/models/20bea6eec87d40ed843701511ebfdc32/thumbnails/1c444c63355f4206a7150d1bdda602ae/b90e877a459d41a1bfe7099053d13acb.jpeg",
+      "sha256": "a009d47b8c1e1f61963e95acd96c42b3f32975f9c8cf855fd70548041bc856bc",
+      "bytes": 15396,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a009d47b8c1e1f61963e95acd96c42b3f32975f9c8cf855fd70548041bc856bc.jpg"
+    },
+    {
+      "asset_id": "objaverse_26d7c6f17e9a4176871967064058c5e9",
+      "url": "https://media.sketchfab.com/models/26d7c6f17e9a4176871967064058c5e9/thumbnails/13c545107ebc406a84a6c87311a3b579/96e5abc5b197408b80436ec959ed2a80.jpeg",
+      "sha256": "839dedd4cf7e831e961a95148cab2bf4251c73f2d618d145464b1f548b9f9ba4",
+      "bytes": 13566,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/839dedd4cf7e831e961a95148cab2bf4251c73f2d618d145464b1f548b9f9ba4.jpg"
+    },
+    {
+      "asset_id": "objaverse_2adc430b322c4130bdaadc4f9c92886c",
+      "url": "https://media.sketchfab.com/models/2adc430b322c4130bdaadc4f9c92886c/thumbnails/ae69ed3797ea4ab2ba5fd68cf64e3270/720x405.jpeg",
+      "sha256": "0cbf4a7fa56f032c2d8ff522faec35adde71badbca9af78b76c479681602b07e",
+      "bytes": 11361,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0cbf4a7fa56f032c2d8ff522faec35adde71badbca9af78b76c479681602b07e.jpg"
+    },
+    {
+      "asset_id": "objaverse_3a7e9021f0ed4ef9b0f2a8db2f415964",
+      "url": "https://media.sketchfab.com/models/3a7e9021f0ed4ef9b0f2a8db2f415964/thumbnails/f289d8683260458999ea17f8e0af9742/c48d075a2ab94d22b769b5d3a404ac11.jpeg",
+      "sha256": "0f914905b97d6e6d86372882f176f958a4c9cdb61901409716f62fd87d6c1315",
+      "bytes": 17668,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0f914905b97d6e6d86372882f176f958a4c9cdb61901409716f62fd87d6c1315.jpg"
+    },
+    {
+      "asset_id": "objaverse_4043b40628ea4b18b39fc033c02a91cb",
+      "url": "https://media.sketchfab.com/models/4043b40628ea4b18b39fc033c02a91cb/thumbnails/807635fb97f54a27b2cb7ec0eb3c835b/a44d0bed832f407582ab218e71040c50.jpeg",
+      "sha256": "1e1c17f00e15777dbe0ddb6bde67ec630259cf476f63d81865aa716639c12bb8",
+      "bytes": 11878,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1e1c17f00e15777dbe0ddb6bde67ec630259cf476f63d81865aa716639c12bb8.jpg"
+    },
+    {
+      "asset_id": "objaverse_447a958614524af09826c60303e445b3",
+      "url": "https://media.sketchfab.com/models/447a958614524af09826c60303e445b3/thumbnails/ef3195a3464f4812b619431f6c709acf/e0227544fa284d529b5b3b34385a4093.jpeg",
+      "sha256": "50430fb02debf62651dc20665cfc7afbcaefa3e9c4e744b85d07f0f81dfb3aea",
+      "bytes": 11307,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/50430fb02debf62651dc20665cfc7afbcaefa3e9c4e744b85d07f0f81dfb3aea.jpg"
+    },
+    {
+      "asset_id": "objaverse_53ffdb1bc1d4420da7cd3a6fe050caa3",
+      "url": "https://media.sketchfab.com/models/53ffdb1bc1d4420da7cd3a6fe050caa3/thumbnails/d51ce4ad9b644c2ba21619999f000e98/c110ce98684545ec86cd8979e0f36c64.jpeg",
+      "sha256": "d0fb00b0b23bf0c8c39793d8444992f60590077152d8556e9bfcd99f016e5b9b",
+      "bytes": 12512,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d0fb00b0b23bf0c8c39793d8444992f60590077152d8556e9bfcd99f016e5b9b.jpg"
+    },
+    {
+      "asset_id": "objaverse_60f0343cea6a479b8029b69525525ac3",
+      "url": "https://media.sketchfab.com/models/60f0343cea6a479b8029b69525525ac3/thumbnails/6daae19f8f084027974dda08b5da7344/6456bc34c85148779d8e37bf22582168.jpeg",
+      "sha256": "df3c10f562d4955496d2e8f08b6d366e92846f2c8300953202915ed0e6d3a190",
+      "bytes": 22635,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/df3c10f562d4955496d2e8f08b6d366e92846f2c8300953202915ed0e6d3a190.jpg"
+    },
+    {
+      "asset_id": "objaverse_62737a515d5343809e0f29d238e919fa",
+      "url": "https://media.sketchfab.com/models/62737a515d5343809e0f29d238e919fa/thumbnails/80753712256241e5bd5b3db828b2dccb/b478eb14a45847868aa08f77d8892153.jpeg",
+      "sha256": "32746e7328057e7bb142b3e94baffa1ad0b1584614a2b6f82c3cde06f4d1ba15",
+      "bytes": 12787,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/32746e7328057e7bb142b3e94baffa1ad0b1584614a2b6f82c3cde06f4d1ba15.jpg"
+    },
+    {
+      "asset_id": "objaverse_63e64f2dcc98476d8f758b646d341b56",
+      "url": "https://media.sketchfab.com/models/63e64f2dcc98476d8f758b646d341b56/thumbnails/09f8a90b7b2a4fe2bfca4be6cce55edc/728ecdba505149bba86804323125132a.jpeg",
+      "sha256": "3809ce570288a290cf68d14abf50d3eefa4d8be8af316ff143861a801fa29081",
+      "bytes": 12145,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3809ce570288a290cf68d14abf50d3eefa4d8be8af316ff143861a801fa29081.jpg"
+    },
+    {
+      "asset_id": "objaverse_6414af78e82d42ec893669a6014e30eb",
+      "url": "https://media.sketchfab.com/models/6414af78e82d42ec893669a6014e30eb/thumbnails/3bd1a1fe67114eae80489d5a278c4d73/bfa776f55f1d47a0b1f39a80e76c392b.jpeg",
+      "sha256": "35242e25ab3e858e51d3f7dfaf7da5c7672d67e3e6c0f966e9f5d557bec72207",
+      "bytes": 12829,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/35242e25ab3e858e51d3f7dfaf7da5c7672d67e3e6c0f966e9f5d557bec72207.jpg"
+    },
+    {
+      "asset_id": "objaverse_668d5ed647fd49bcacb406f3ec7920d4",
+      "url": "https://media.sketchfab.com/models/668d5ed647fd49bcacb406f3ec7920d4/thumbnails/d62eda93fd4d496a92fa2975624efd09/edcb89a922404990b5569a8ba0bd597b.jpeg",
+      "sha256": "62f442cab9572cd77aa1cd266e173c7432037e3100ebd633bb3d8f82f29df994",
+      "bytes": 10263,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/62f442cab9572cd77aa1cd266e173c7432037e3100ebd633bb3d8f82f29df994.jpg"
+    },
+    {
+      "asset_id": "objaverse_678a3507c84b49dfa716cebbf46f4c49",
+      "url": "https://media.sketchfab.com/models/678a3507c84b49dfa716cebbf46f4c49/thumbnails/406d12160cc4401f8b8918041b914727/eaa3b08a58d641e0a299842db46dc56c.jpeg",
+      "sha256": "5f632e3d92df4d35860f94c7ad0c8710c8ac28136e3220d6b1985f455f691ef3",
+      "bytes": 11402,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5f632e3d92df4d35860f94c7ad0c8710c8ac28136e3220d6b1985f455f691ef3.jpg"
+    },
+    {
+      "asset_id": "objaverse_6b6adebe3309430b9937c586976c8f86",
+      "url": "https://media.sketchfab.com/models/6b6adebe3309430b9937c586976c8f86/thumbnails/03a3b7a011c0405ea6faf0bc5de44c1c/dbbff1e33beb47108e52a5b6c5cf0ba8.jpeg",
+      "sha256": "6d7fa3e230db556d54b09f93da22c5bbe3f53189b89bd7e8f25d20d404a2bc22",
+      "bytes": 9378,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6d7fa3e230db556d54b09f93da22c5bbe3f53189b89bd7e8f25d20d404a2bc22.jpg"
+    },
+    {
+      "asset_id": "objaverse_72f994c4684747cd9fb66233d4d99d42",
+      "url": "https://media.sketchfab.com/models/72f994c4684747cd9fb66233d4d99d42/thumbnails/7faf40bfab9a45ecb9ceed4cf4e918a5/8ba3c01e7ac248c0bf3738bcdcfb7a2c.jpeg",
+      "sha256": "9be9360db567974bd135cb8ab416910d25f247bac3572f3a13f790db64ac1903",
+      "bytes": 16202,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9be9360db567974bd135cb8ab416910d25f247bac3572f3a13f790db64ac1903.jpg"
+    },
+    {
+      "asset_id": "objaverse_736e3ea67480426da4013dbca5fb8d20",
+      "url": "https://media.sketchfab.com/models/736e3ea67480426da4013dbca5fb8d20/thumbnails/f67bb76612c1443cbd0982a17dfb0c9d/81c831c69af3409b8628c97ae876c211.jpeg",
+      "sha256": "a4163d294060b3d5004799804c9d072c1ff6fe006e72e52613d940e0dcf98eb1",
+      "bytes": 19438,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a4163d294060b3d5004799804c9d072c1ff6fe006e72e52613d940e0dcf98eb1.jpg"
+    },
+    {
+      "asset_id": "objaverse_7a614d04d5514fa8b1c5f3c00cd68f3a",
+      "url": "https://media.sketchfab.com/models/7a614d04d5514fa8b1c5f3c00cd68f3a/thumbnails/8c786b368cc24d4ea957df3d44a423eb/88ee5f6811ce4f7e8e070c2ff68ab9ca.jpeg",
+      "sha256": "4eb0a67067cac1eb15c1ccd865a20bbf42661d83902983d84cded4a210b835fb",
+      "bytes": 13708,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4eb0a67067cac1eb15c1ccd865a20bbf42661d83902983d84cded4a210b835fb.jpg"
+    },
+    {
+      "asset_id": "objaverse_7b7b09d3e15348f4bc32db9afdccb41c",
+      "url": "https://media.sketchfab.com/models/7b7b09d3e15348f4bc32db9afdccb41c/thumbnails/ae26e5ca356c4803a0e13eb4e9352919/32d43c6a24674a50aa60e768d6f99705.jpeg",
+      "sha256": "19b73538a6a562d99a740706a2ba9b223ce3e9ed26bf5fa80c343017bec9ae51",
+      "bytes": 16138,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/19b73538a6a562d99a740706a2ba9b223ce3e9ed26bf5fa80c343017bec9ae51.jpg"
+    },
+    {
+      "asset_id": "objaverse_bf831c33e298401c9abc062c601baa2e",
+      "url": "https://media.sketchfab.com/models/bf831c33e298401c9abc062c601baa2e/thumbnails/90b564158c9846978ff14a136b407569/a940375844e341e98b1074f173c3fe29.jpeg",
+      "sha256": "b0cc924f4a0adadfc07ecb2ef84f9b8d00ab1349b771c08571a09f8d763e6f14",
+      "bytes": 12028,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b0cc924f4a0adadfc07ecb2ef84f9b8d00ab1349b771c08571a09f8d763e6f14.jpg"
+    },
+    {
+      "asset_id": "objaverse_cc69833092ad49e99db99198fd6de45d",
+      "url": "https://media.sketchfab.com/models/cc69833092ad49e99db99198fd6de45d/thumbnails/fa1be3cd243d44109f8f974de2d184ce/e00ef414076240ca9ddee8e765b007e5.jpeg",
+      "sha256": "a6775da31a7ceda274066a4c137cd410228c75437c854795dd42c4aa012dc80f",
+      "bytes": 9763,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a6775da31a7ceda274066a4c137cd410228c75437c854795dd42c4aa012dc80f.jpg"
+    },
+    {
+      "asset_id": "objaverse_20c4072e6cfa411c991db8d69e7da9de",
+      "url": "https://media.sketchfab.com/models/20c4072e6cfa411c991db8d69e7da9de/thumbnails/7efa26871a2543a0980539df3ff4639e/688973a8f52e48c587d0f47e733f0fcd.jpeg",
+      "sha256": "69dc459e34ec93962e9d8a995fc38445f48a42cef6ef3d5ed4f476f3bf8fbcf5",
+      "bytes": 14421,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/69dc459e34ec93962e9d8a995fc38445f48a42cef6ef3d5ed4f476f3bf8fbcf5.jpg"
+    },
+    {
+      "asset_id": "objaverse_81605d8deacc425e9c8ea7adabeb2a0c",
+      "url": "https://media.sketchfab.com/models/81605d8deacc425e9c8ea7adabeb2a0c/thumbnails/45aed29fe3a643d8a9d71f4adceeb5d3/e52c98beb0e5473b8b43bb5d5b9d7e83.jpeg",
+      "sha256": "6dd8a76fad2ec7586d216790ac77242aabf9364dea58b58e707c75f92cdd171c",
+      "bytes": 8612,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6dd8a76fad2ec7586d216790ac77242aabf9364dea58b58e707c75f92cdd171c.jpg"
+    },
+    {
+      "asset_id": "objaverse_9071b8b676ac4380a00b68a459349230",
+      "url": "https://media.sketchfab.com/models/9071b8b676ac4380a00b68a459349230/thumbnails/950de74d73d044628dd5f79628214a39/640x360.jpeg",
+      "sha256": "c45b969a81685a955cebfd1e8f157793b347c4a9885926daeb3db43ee6b6003d",
+      "bytes": 12629,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/c45b969a81685a955cebfd1e8f157793b347c4a9885926daeb3db43ee6b6003d.jpg"
+    },
+    {
+      "asset_id": "objaverse_bde4cde7c6474e9e9e27fed55671478c",
+      "url": "https://media.sketchfab.com/models/bde4cde7c6474e9e9e27fed55671478c/thumbnails/fc748a24b4234b0fbc9e22068827fe90/c2bedfd36cc04d1cb48b15f331bf79a1.jpeg",
+      "sha256": "94a2435efbf6ed9e19227abe2c53517213a7ebe53516c977af0c711859c60a31",
+      "bytes": 9362,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/94a2435efbf6ed9e19227abe2c53517213a7ebe53516c977af0c711859c60a31.jpg"
+    },
+    {
+      "asset_id": "objaverse_da8902bb362a4a148188cfd7454d74df",
+      "url": "https://media.sketchfab.com/models/da8902bb362a4a148188cfd7454d74df/thumbnails/498b615f6d53413d8349a89830615101/b8047ee0e6c042e69efd0ba1eeaf02a4.jpeg",
+      "sha256": "6996b23cb7fb7a0d148d94ae547bc02c641fe8fb70cf5de0485b261ba0f4e2b9",
+      "bytes": 10301,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6996b23cb7fb7a0d148d94ae547bc02c641fe8fb70cf5de0485b261ba0f4e2b9.jpg"
+    },
+    {
+      "asset_id": "objaverse_e80439dbb3b543c78ddb17d63368a283",
+      "url": "https://media.sketchfab.com/models/e80439dbb3b543c78ddb17d63368a283/thumbnails/1d069707f4444990999aa724dd4165a2/c6c75600d54041d087281ff36a60a10b.jpeg",
+      "sha256": "72a084b4a4106245f8a3341a4a4e6802fbd7890a45026c37a05371e503661b88",
+      "bytes": 9447,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/72a084b4a4106245f8a3341a4a4e6802fbd7890a45026c37a05371e503661b88.jpg"
+    },
+    {
+      "asset_id": "objaverse_14aa14d64588435d97b85efbcbef81b7",
+      "url": "https://media.sketchfab.com/models/14aa14d64588435d97b85efbcbef81b7/thumbnails/055df1e9ecea48888750c0d158f32646/07b1c528b5404959943d3a4b66998f39.jpeg",
+      "sha256": "dd04ceba8f2f778ba315b9224cb8ba4d9d5f622c3be4e14bb2f39e8115429fc9",
+      "bytes": 37002,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dd04ceba8f2f778ba315b9224cb8ba4d9d5f622c3be4e14bb2f39e8115429fc9.jpg"
+    },
+    {
+      "asset_id": "objaverse_1e04941f796e4198a5b7a250087b591c",
+      "url": "https://media.sketchfab.com/models/1e04941f796e4198a5b7a250087b591c/thumbnails/df9ffb2686a2442e8f783861421d7ee9/ca722351e4354b05a191ab0d03258716.jpeg",
+      "sha256": "562164e67bcaaae1928e68dec69a37d6c785a2b6f244af4319995c3b45abb8e4",
+      "bytes": 14870,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/562164e67bcaaae1928e68dec69a37d6c785a2b6f244af4319995c3b45abb8e4.jpg"
+    },
+    {
+      "asset_id": "objaverse_2495a4fcdcbe4429838641ddb460a0a2",
+      "url": "https://media.sketchfab.com/models/2495a4fcdcbe4429838641ddb460a0a2/thumbnails/b8d8416088634952b87d26664a21826f/4009b8e0bb9e4898a2aaec8684beebd1.jpeg",
+      "sha256": "fd672f524538e7b5c1bc22475734f32184b9cb729b0f39a1e1f27eb382c9b0d7",
+      "bytes": 11569,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/fd672f524538e7b5c1bc22475734f32184b9cb729b0f39a1e1f27eb382c9b0d7.jpg"
+    },
+    {
+      "asset_id": "objaverse_440267a0eb80401bb6b575f083ed0906",
+      "url": "https://media.sketchfab.com/models/440267a0eb80401bb6b575f083ed0906/thumbnails/4273437dc560472a87b5e329905bc71f/9cc163ac5b904822992db52542f4bba1.jpeg",
+      "sha256": "c18268569a104dccbb068225d310aa617949138751f603cc80cf7ee1505d60d3",
+      "bytes": 14600,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c18268569a104dccbb068225d310aa617949138751f603cc80cf7ee1505d60d3.jpg"
+    },
+    {
+      "asset_id": "objaverse_579123393aa14ceaac73d4f8b63c2d72",
+      "url": "https://media.sketchfab.com/models/579123393aa14ceaac73d4f8b63c2d72/thumbnails/1ec7d70bc51f4e8989041d3883273ed0/720x405.jpeg",
+      "sha256": "c7504aeaa06165e3940ad007869d766a678ed86df60070d23c01476b8ca45131",
+      "bytes": 14655,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c7504aeaa06165e3940ad007869d766a678ed86df60070d23c01476b8ca45131.jpg"
+    },
+    {
+      "asset_id": "objaverse_59c1fd83b17842bbb7000a1267da4f23",
+      "url": "https://media.sketchfab.com/models/59c1fd83b17842bbb7000a1267da4f23/thumbnails/7a2cb33b4a7c419dafda6904c7ac0f95/4957d90da20d4c94be437dee9be98b8a.jpeg",
+      "sha256": "da6a871bf1b5f85bdea3e7894d8616521f8de319f33857ff523f8e28d3d7bea9",
+      "bytes": 11393,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/da6a871bf1b5f85bdea3e7894d8616521f8de319f33857ff523f8e28d3d7bea9.jpg"
+    },
+    {
+      "asset_id": "objaverse_5a3b25f0f5af44d49c99914e308cc9cc",
+      "url": "https://media.sketchfab.com/models/5a3b25f0f5af44d49c99914e308cc9cc/thumbnails/d11ffcd0d4e147b5a0c2b5f1aad0b459/20b27253c8854ebba245579bcc78bdf2.jpeg",
+      "sha256": "6e88f02d348e9251b1d040ae2928799ea3b0b2f7b18bafe2110c57ec7e2c4893",
+      "bytes": 14372,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6e88f02d348e9251b1d040ae2928799ea3b0b2f7b18bafe2110c57ec7e2c4893.jpg"
+    },
+    {
+      "asset_id": "objaverse_7d1090efe39b46b69f7d57bd5d15252e",
+      "url": "https://media.sketchfab.com/models/7d1090efe39b46b69f7d57bd5d15252e/thumbnails/8401f3daafc44d3c8188351402d87fab/0e9c45ae0aa64e8193a8e62ed08753bd.jpeg",
+      "sha256": "42876e7079aa00ed40b61676b388316dd7b622bb651dadc4f7e1f3f813c8ad7a",
+      "bytes": 8636,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/42876e7079aa00ed40b61676b388316dd7b622bb651dadc4f7e1f3f813c8ad7a.jpg"
+    },
+    {
+      "asset_id": "objaverse_943ae5d90d654498912d0d3d0114ba35",
+      "url": "https://media.sketchfab.com/models/943ae5d90d654498912d0d3d0114ba35/thumbnails/54708adcc2354939a8b11ab3c6dd4877/4750956d36b4403a8e04ca4471c412fa.jpeg",
+      "sha256": "d12b4be2330aef8abaf30cda02090bf9d77552388b8b154f3e4175f542ee00b2",
+      "bytes": 16199,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d12b4be2330aef8abaf30cda02090bf9d77552388b8b154f3e4175f542ee00b2.jpg"
+    },
+    {
+      "asset_id": "objaverse_9886cfd1558c4c789eee16a44121d68b",
+      "url": "https://media.sketchfab.com/models/9886cfd1558c4c789eee16a44121d68b/thumbnails/b501ce44d365451db7e1b7bf294cc79d/0cfff4fa1253434da121df7e6a7898e6.jpeg",
+      "sha256": "e7be0ba787c3a0dc64ab840b65842d3f6f36c431cd5d06b281754a42f3519883",
+      "bytes": 13103,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e7be0ba787c3a0dc64ab840b65842d3f6f36c431cd5d06b281754a42f3519883.jpg"
+    },
+    {
+      "asset_id": "objaverse_a028928b36a449248464bbe50f4dc62b",
+      "url": "https://media.sketchfab.com/models/a028928b36a449248464bbe50f4dc62b/thumbnails/bd7285dda5a24e398871cab90c63cf75/da8f771e31364da4b5fe6b78716abe3b.jpeg",
+      "sha256": "f85b560de20b4a5856d28e9e743cd9e270241cc450646dac94dac43256ed29ea",
+      "bytes": 8997,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f85b560de20b4a5856d28e9e743cd9e270241cc450646dac94dac43256ed29ea.jpg"
+    },
+    {
+      "asset_id": "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+      "url": "https://media.sketchfab.com/models/a0fa677edd6a417f869d7dcf224484c4/thumbnails/79acfe72fde343e08ffb0e3c8579e2f0/178d78c5210c488b98d818623b31f450.jpeg",
+      "sha256": "b64223ea0c799beacff5e657a222326625f664616f17bcc81a604423de638478",
+      "bytes": 10637,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b64223ea0c799beacff5e657a222326625f664616f17bcc81a604423de638478.jpg"
+    },
+    {
+      "asset_id": "objaverse_a562af9c76a346faaad36773554c4c28",
+      "url": "https://media.sketchfab.com/models/a562af9c76a346faaad36773554c4c28/thumbnails/e478b1ce8a27422cb8f3faceeec49791/6e3ccbfaeefa4fae9ec1bb30e0f04251.jpeg",
+      "sha256": "7cae2dc14a4e734d325c13b6cf8946079d9eca09153b9b5e9327532d0637d599",
+      "bytes": 16803,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7cae2dc14a4e734d325c13b6cf8946079d9eca09153b9b5e9327532d0637d599.jpg"
+    },
+    {
+      "asset_id": "objaverse_a6ebe49d45454615ab11623cfc5b4bcc",
+      "url": "https://media.sketchfab.com/models/a6ebe49d45454615ab11623cfc5b4bcc/thumbnails/a09295a2c2464eae834885d474e1582f/be604de118dd4dd8a285aba00728226f.jpeg",
+      "sha256": "b6e6f50e2f045b0b88713e8d5c56112c0696578808c5830670af07813f07fc04",
+      "bytes": 11947,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b6e6f50e2f045b0b88713e8d5c56112c0696578808c5830670af07813f07fc04.jpg"
+    },
+    {
+      "asset_id": "objaverse_ab3b0f1ad1ec4faab30239e7d7f9bc0f",
+      "url": "https://media.sketchfab.com/models/ab3b0f1ad1ec4faab30239e7d7f9bc0f/thumbnails/b1317c6554684816b9d3dcc6754288be/52687c9f123a477d852a9f82e50f32f2.jpeg",
+      "sha256": "eacd1dbee591e30c22f7add5c54a4f62d098b214ed34f73326cb60357dcaa912",
+      "bytes": 12964,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/eacd1dbee591e30c22f7add5c54a4f62d098b214ed34f73326cb60357dcaa912.jpg"
+    },
+    {
+      "asset_id": "objaverse_bc41482a0e954f2c9fa20449e3fc319e",
+      "url": "https://media.sketchfab.com/models/bc41482a0e954f2c9fa20449e3fc319e/thumbnails/1d92ca11e8104c1ebe1a659803277806/96076ee1d8f64199acf9559f3b0e6356.jpeg",
+      "sha256": "c9c7cb73ed466782dd3acb57dd1328b57004db7d1ea5c830dc0918e893142447",
+      "bytes": 12015,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c9c7cb73ed466782dd3acb57dd1328b57004db7d1ea5c830dc0918e893142447.jpg"
+    },
+    {
+      "asset_id": "objaverse_c55d1fbcc0aa4538b31d1acf43cb0825",
+      "url": "https://media.sketchfab.com/models/c55d1fbcc0aa4538b31d1acf43cb0825/thumbnails/8bc3d18c65f84cf9a0c7677e8dba5dbd/2037eb38c56d4465a2b24148e23b6600.jpeg",
+      "sha256": "04b25d14b7d665ce9e4435491c41199c8f6a618f72b900479b05bc86e962702c",
+      "bytes": 27822,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/04b25d14b7d665ce9e4435491c41199c8f6a618f72b900479b05bc86e962702c.jpg"
+    },
+    {
+      "asset_id": "objaverse_ca32a8d9d85e4a6c9e9b32a89a5c148a",
+      "url": "https://media.sketchfab.com/models/ca32a8d9d85e4a6c9e9b32a89a5c148a/thumbnails/33009c29f81d409d956fdf3e55858734/640.jpeg",
+      "sha256": "f47c34353dff62c79a5a49fd008647be90d49094752c4b37129128a833991d10",
+      "bytes": 15590,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/f47c34353dff62c79a5a49fd008647be90d49094752c4b37129128a833991d10.jpg"
+    },
+    {
+      "asset_id": "objaverse_d1d82eaefc084cbea3dc33b302d5ef31",
+      "url": "https://media.sketchfab.com/models/d1d82eaefc084cbea3dc33b302d5ef31/thumbnails/7f2d6d32f2ba4c5cbd26f9288f5ac9cc/d7833787ec7b4f0f9f0c70c14f4d833a.jpeg",
+      "sha256": "0caccb38e6af4228cda42549161789ece2ac9288742874f7e03691ed1b5f1087",
+      "bytes": 36628,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0caccb38e6af4228cda42549161789ece2ac9288742874f7e03691ed1b5f1087.jpg"
+    },
+    {
+      "asset_id": "objaverse_d4ecb9dce4724ec98f5237e395591d41",
+      "url": "https://media.sketchfab.com/models/d4ecb9dce4724ec98f5237e395591d41/thumbnails/18082e9c581a4df69b95245aceb56314/dee663b47e2c40daa8b4cf70178aeec1.jpeg",
+      "sha256": "7b99432529a5137f90c2578dbae3889877b6e34667c410af3cc7282dc02724f6",
+      "bytes": 11812,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7b99432529a5137f90c2578dbae3889877b6e34667c410af3cc7282dc02724f6.jpg"
+    },
+    {
+      "asset_id": "objaverse_d5c97f124faa4e91acc045db07138f94",
+      "url": "https://media.sketchfab.com/models/d5c97f124faa4e91acc045db07138f94/thumbnails/b5b1e78d753041ae9dadbef8f85a570c/bee7e5b8f26b4910b2ac3a24a9b5e1b0.jpeg",
+      "sha256": "3485ad41925d661f29e14c291a72d8cd52faf28b26eccb8958afa8bc866a908f",
+      "bytes": 22080,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3485ad41925d661f29e14c291a72d8cd52faf28b26eccb8958afa8bc866a908f.jpg"
+    },
+    {
+      "asset_id": "objaverse_dc869cc4cb9e4ad0a49137f49d2ce3dd",
+      "url": "https://media.sketchfab.com/models/dc869cc4cb9e4ad0a49137f49d2ce3dd/thumbnails/5e20870444de4a948b0a8d6f6c573c8a/f7a66421140a454983d16b81d15749a3.jpeg",
+      "sha256": "46a421f2fdd39c0811092c921ff117a47798e4da47559c8c7c00c09eeccfa2a3",
+      "bytes": 16488,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/46a421f2fdd39c0811092c921ff117a47798e4da47559c8c7c00c09eeccfa2a3.jpg"
+    },
+    {
+      "asset_id": "objaverse_e092f97f52ce4267b67b80097e6218c2",
+      "url": "https://media.sketchfab.com/models/e092f97f52ce4267b67b80097e6218c2/thumbnails/8accd9fb58434ced8321847c90dacff2/f0441e6891454bfba216f91d90ff9e1a.jpeg",
+      "sha256": "f61d0898066a3bcb8cbe87d569d366efa8bd79a739812a997ae3000484337c68",
+      "bytes": 15076,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f61d0898066a3bcb8cbe87d569d366efa8bd79a739812a997ae3000484337c68.jpg"
+    },
+    {
+      "asset_id": "objaverse_e69fe2111ffb4969b9eaafe9702301ee",
+      "url": "https://media.sketchfab.com/models/e69fe2111ffb4969b9eaafe9702301ee/thumbnails/37ec9af76a89487fbd406ad45be04257/777c9b01507343d1b3ea25926aa16a98.jpeg",
+      "sha256": "47befb90d90d84a2ad60da712ea86c7fa0da61219f69c6a75123e952a79162de",
+      "bytes": 13515,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/47befb90d90d84a2ad60da712ea86c7fa0da61219f69c6a75123e952a79162de.jpg"
+    },
+    {
+      "asset_id": "objaverse_ff84d34455c8446aa6902bb6ae80bf85",
+      "url": "https://media.sketchfab.com/models/ff84d34455c8446aa6902bb6ae80bf85/thumbnails/9af98cd8eecb477c8f01de6714374157/80e3f47d1ae24041a5e1db77feac4c42.jpeg",
+      "sha256": "38edfd4744fe639d295674ee7c8ab86651c0154fb095cc057b340ef0ffc22fd8",
+      "bytes": 13200,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/38edfd4744fe639d295674ee7c8ab86651c0154fb095cc057b340ef0ffc22fd8.jpg"
+    },
+    {
+      "asset_id": "objaverse_e3d23369b8f04e009135d2104acc6104",
+      "url": "https://media.sketchfab.com/models/e3d23369b8f04e009135d2104acc6104/thumbnails/d537c88294b0421e95694cd431edd5d1/6d245a1ce39446459c9b04fb5717a648.jpeg",
+      "sha256": "78cf4da23357b862b4f136940f0ae72f7908143b274d340d069793a78f9dd66a",
+      "bytes": 12569,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/78cf4da23357b862b4f136940f0ae72f7908143b274d340d069793a78f9dd66a.jpg"
+    },
+    {
+      "asset_id": "objaverse_ef56fceaeccd4e068236eec7ad55ed39",
+      "url": "https://media.sketchfab.com/models/ef56fceaeccd4e068236eec7ad55ed39/thumbnails/9ccd7f0807a44a008eb1470764bda2c8/fb0140f749e7468d970fe6b6d45639fb.jpeg",
+      "sha256": "9c913ee024e7efc94bf1836f3986c37ceb944d76fffedabd0d8a0bbc6e25ad61",
+      "bytes": 11437,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9c913ee024e7efc94bf1836f3986c37ceb944d76fffedabd0d8a0bbc6e25ad61.jpg"
+    },
+    {
+      "asset_id": "objaverse_0060af6f4da24224a4770eea54685ecf",
+      "url": "https://media.sketchfab.com/models/0060af6f4da24224a4770eea54685ecf/thumbnails/8701412221144cb285ae4224828eede8/3cfd457317914913b314edd065c8fbbf.jpeg",
+      "sha256": "703ab241bbc1800eb70ee9a08898954be0090655383e3a9263b3da840ca37358",
+      "bytes": 8494,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/703ab241bbc1800eb70ee9a08898954be0090655383e3a9263b3da840ca37358.jpg"
+    },
+    {
+      "asset_id": "objaverse_0628b3ca2be14ddcbccb237bc969e67e",
+      "url": "https://media.sketchfab.com/models/0628b3ca2be14ddcbccb237bc969e67e/thumbnails/956409437936406ba4e5eb52ad526158/c32a310f812f4e8ea7efcab6505f4380.jpeg",
+      "sha256": "a689b7329a17779663f2c4f1950124574e8c3842ee4ac834a21f766bae42bf2e",
+      "bytes": 11457,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a689b7329a17779663f2c4f1950124574e8c3842ee4ac834a21f766bae42bf2e.jpg"
+    },
+    {
+      "asset_id": "objaverse_06aa77c8166d47edba0150a18f0eb514",
+      "url": "https://media.sketchfab.com/models/06aa77c8166d47edba0150a18f0eb514/thumbnails/8118b61eba6e47a693213cbff538886a/5ea2e57ceded43d9a806d6d30ea19e2f.jpeg",
+      "sha256": "4213a19ba4b1f29944ed19dcbfef264a3e1589148489c223d1941c279491cd66",
+      "bytes": 15636,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4213a19ba4b1f29944ed19dcbfef264a3e1589148489c223d1941c279491cd66.jpg"
+    },
+    {
+      "asset_id": "objaverse_0a5c822aa06b4b4e819eca2a5053eaac",
+      "url": "https://media.sketchfab.com/models/0a5c822aa06b4b4e819eca2a5053eaac/thumbnails/3a0f298d53d24f9096ff46969e97127a/9823e114a8c840edb6f9a2b091a42c9e.jpeg",
+      "sha256": "72c9c798c585e0689e66663a871bab25139be19cdaff19979068e5b92ffe99b8",
+      "bytes": 7565,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/72c9c798c585e0689e66663a871bab25139be19cdaff19979068e5b92ffe99b8.jpg"
+    },
+    {
+      "asset_id": "objaverse_bf67623e0ddc4534b18dbaee73d79936",
+      "url": "https://media.sketchfab.com/models/bf67623e0ddc4534b18dbaee73d79936/thumbnails/81e623ad8c9f4bf09cbd82d91ac96280/071679f702774dec8d750af51cfd9af0.jpeg",
+      "sha256": "72f1347468c5c9f2663590c569ae66ace48cf508a58e87e8d7eed55a0c430cb7",
+      "bytes": 22212,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/72f1347468c5c9f2663590c569ae66ace48cf508a58e87e8d7eed55a0c430cb7.jpg"
+    },
+    {
+      "asset_id": "objaverse_16119492d19f4d45965cb150e186f83a",
+      "url": "https://media.sketchfab.com/models/16119492d19f4d45965cb150e186f83a/thumbnails/b4234ad88d204def89d9d1f6150464cb/d179dd3e7d4f4874abe040c35e0fb0a2.jpeg",
+      "sha256": "7dc29a50b5a31e99f19227834b7af1ebb0b1d6346812a999eba8ec578352aad9",
+      "bytes": 9785,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7dc29a50b5a31e99f19227834b7af1ebb0b1d6346812a999eba8ec578352aad9.jpg"
+    },
+    {
+      "asset_id": "objaverse_26ccc202675d4eecaa5bbd730ebd99d1",
+      "url": "https://media.sketchfab.com/models/26ccc202675d4eecaa5bbd730ebd99d1/thumbnails/4cdabc6538c14a62a9d79c28b89e9f91/2fcc4c36afad494785f36318802e36fe.jpeg",
+      "sha256": "16e6200e581e4f16f6af3c45852895e2b2730424e4a9dea6fb12ca45c326a296",
+      "bytes": 24935,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/16e6200e581e4f16f6af3c45852895e2b2730424e4a9dea6fb12ca45c326a296.jpg"
+    },
+    {
+      "asset_id": "objaverse_e8d10d0d23564af590b879853be27782",
+      "url": "https://media.sketchfab.com/models/e8d10d0d23564af590b879853be27782/thumbnails/ba1dce6f98dd4ea186e476229b65cbf2/ef030c9d5b7b45a4b84fd434cb1d2448.jpeg",
+      "sha256": "b8a2aefcd6bc8e1dd075bc87745635381cb4ce140676c26554e6c46d1b32721b",
+      "bytes": 18557,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b8a2aefcd6bc8e1dd075bc87745635381cb4ce140676c26554e6c46d1b32721b.jpg"
+    },
+    {
+      "asset_id": "objaverse_e96769051078452bba7057473eceb587",
+      "url": "https://media.sketchfab.com/models/e96769051078452bba7057473eceb587/thumbnails/30975c5ef48044f2a84069c3921c4a3c/db93731bfe3044e0a20c4a575a3c36b6.jpeg",
+      "sha256": "9d5a4766027f626f315567f037d80a7ba5b6515d099728a1ce7bf979d486c2ce",
+      "bytes": 14139,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9d5a4766027f626f315567f037d80a7ba5b6515d099728a1ce7bf979d486c2ce.jpg"
+    },
+    {
+      "asset_id": "objaverse_15e3a5749ca74b3f8e8e2a7ca9bbcd06",
+      "url": "https://media.sketchfab.com/models/15e3a5749ca74b3f8e8e2a7ca9bbcd06/thumbnails/2a96fc0deb874e618e0dd5e56a01e30f/7ea458cd56b14456b02d946b788e9a12.jpeg",
+      "sha256": "811e00fe6219af7c731f7a3f7ffe8f273a837bc157cc31b8a7d8de2b8365ebac",
+      "bytes": 18274,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/811e00fe6219af7c731f7a3f7ffe8f273a837bc157cc31b8a7d8de2b8365ebac.jpg"
+    },
+    {
+      "asset_id": "objaverse_1ecb7ef58e8e4c0aa6eaf2e00a68a244",
+      "url": "https://media.sketchfab.com/models/1ecb7ef58e8e4c0aa6eaf2e00a68a244/thumbnails/e2c0f9fe0f9348f2bf2ce0d4ab865385/886ff20f80a9462281b65b34c479276e.jpeg",
+      "sha256": "45d7682a4787f7e7c0ee2f63bead1b17b7bbf35bf1fda89984433203bbde4732",
+      "bytes": 9125,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/45d7682a4787f7e7c0ee2f63bead1b17b7bbf35bf1fda89984433203bbde4732.jpg"
+    },
+    {
+      "asset_id": "objaverse_38d678aadc264313835f8e0baad7a574",
+      "url": "https://media.sketchfab.com/models/38d678aadc264313835f8e0baad7a574/thumbnails/13173384be9d4558816de7b69ed77f6f/887a16176e1540dbbf52c84fc5f30546.jpeg",
+      "sha256": "d8f76adbcab87a6dfa4b902479a96dc41c5e7a1faeabc2794a34ec0ee7b7f1a4",
+      "bytes": 10799,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d8f76adbcab87a6dfa4b902479a96dc41c5e7a1faeabc2794a34ec0ee7b7f1a4.jpg"
+    },
+    {
+      "asset_id": "objaverse_4c85eb3df8674e2597b96c761c94bd51",
+      "url": "https://media.sketchfab.com/models/4c85eb3df8674e2597b96c761c94bd51/thumbnails/6e51be42e91d41f3b11dc01d1f706fb9/22f952012edc44c3b8678681718e8972.jpeg",
+      "sha256": "f67ec1673d9debe9f4bef5537fe9709c525286ab8f6960319231928ae87b91ec",
+      "bytes": 11029,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f67ec1673d9debe9f4bef5537fe9709c525286ab8f6960319231928ae87b91ec.jpg"
+    },
+    {
+      "asset_id": "objaverse_5361819dc022443fb60888937578d9c9",
+      "url": "https://media.sketchfab.com/models/5361819dc022443fb60888937578d9c9/thumbnails/cd371e5ee31f4e66821e47589c38c45c/6cb8de42d0204632b536e9e88afdda91.jpeg",
+      "sha256": "cf7ecc8874875ea752c6cce48b465a53e94d33178aae627cbde05d1376b6dd78",
+      "bytes": 25721,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/cf7ecc8874875ea752c6cce48b465a53e94d33178aae627cbde05d1376b6dd78.jpg"
+    },
+    {
+      "asset_id": "objaverse_6eab2a2fc38c437f843076d8155a69b3",
+      "url": "https://media.sketchfab.com/models/6eab2a2fc38c437f843076d8155a69b3/thumbnails/0d52c0d744a54e0e9a2c8e235643781b/299d97c74bc14494aa711a0f9cdd842e.jpeg",
+      "sha256": "b56c9d47fa9197c5e6a1571982498bef152dc44d98fa83e7cd1504d81f63ce08",
+      "bytes": 25600,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b56c9d47fa9197c5e6a1571982498bef152dc44d98fa83e7cd1504d81f63ce08.jpg"
+    },
+    {
+      "asset_id": "objaverse_0858e2e66d264bc4b2341ce8e5678115",
+      "url": "https://media.sketchfab.com/models/0858e2e66d264bc4b2341ce8e5678115/thumbnails/a33f89fed4c04cfeb40a4dc1c0f2d678/f3a61026ad0d4579b5e2378b84ce2ab1.jpeg",
+      "sha256": "e593791ec9be72fdd3a0f2e4ffaf33bf59868074481f65243aad974d740ef603",
+      "bytes": 10400,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e593791ec9be72fdd3a0f2e4ffaf33bf59868074481f65243aad974d740ef603.jpg"
+    },
+    {
+      "asset_id": "objaverse_0f36f341d92c4a3e957372bfdf12e8a5",
+      "url": "https://media.sketchfab.com/models/0f36f341d92c4a3e957372bfdf12e8a5/thumbnails/0c51025c05f74d4cbeccd89ca08e0ef8/7df220ad0cbf4324b7cea5b30b5863b1.jpeg",
+      "sha256": "e75a7f2ee690172bbd96238687bec0e81e614ae249459d51ae081f366a891cc7",
+      "bytes": 11021,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e75a7f2ee690172bbd96238687bec0e81e614ae249459d51ae081f366a891cc7.jpg"
+    },
+    {
+      "asset_id": "objaverse_1e23aa69e1c344a4bdc8d379b035205c",
+      "url": "https://media.sketchfab.com/models/1e23aa69e1c344a4bdc8d379b035205c/thumbnails/f4c6d88a3e80417db06264388b77bf83/e87905bf34dc421ca536717cf78c8749.jpeg",
+      "sha256": "a7f4e61247008786c4be14c9a504745036e41464c67bf8bfd1f2230175a23d4e",
+      "bytes": 9632,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a7f4e61247008786c4be14c9a504745036e41464c67bf8bfd1f2230175a23d4e.jpg"
+    },
+    {
+      "asset_id": "objaverse_31035435a88940f3bf2884a06732b66b",
+      "url": "https://media.sketchfab.com/models/31035435a88940f3bf2884a06732b66b/thumbnails/e98493920b6f46fb85d201e625628609/64cbb371360143bc9545ec6992749f39.jpeg",
+      "sha256": "c9657a8f0086d9cd1de9b7b73f52605fd2ac6a245d53e6d1b7c4954ea89ed514",
+      "bytes": 10411,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c9657a8f0086d9cd1de9b7b73f52605fd2ac6a245d53e6d1b7c4954ea89ed514.jpg"
+    },
+    {
+      "asset_id": "objaverse_3c00e672e2624f859f95b66fe63197fd",
+      "url": "https://media.sketchfab.com/models/3c00e672e2624f859f95b66fe63197fd/thumbnails/046848e609034eb8aa59f641e127ff02/2dca4caaca074e14a85aabeb8fa1cc9f.jpeg",
+      "sha256": "ee365996bdbe3d9d72c1ebfac09e8599d07de57e37669b6a00ba1426a24f0fff",
+      "bytes": 11256,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ee365996bdbe3d9d72c1ebfac09e8599d07de57e37669b6a00ba1426a24f0fff.jpg"
+    },
+    {
+      "asset_id": "objaverse_47800b1a5add43d980fc38aa595fb379",
+      "url": "https://media.sketchfab.com/models/47800b1a5add43d980fc38aa595fb379/thumbnails/26cc7bdd01504ce8887ef73a95f77243/0459fb491f3245249d349621f2824e9a.jpeg",
+      "sha256": "38d51891d62b47d38b7232676067d3f8b432806927ff2687a6ae9964e91d08a9",
+      "bytes": 11008,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/38d51891d62b47d38b7232676067d3f8b432806927ff2687a6ae9964e91d08a9.jpg"
+    },
+    {
+      "asset_id": "objaverse_6375ad8dcd27437fa73559bd058b3395",
+      "url": "https://media.sketchfab.com/models/6375ad8dcd27437fa73559bd058b3395/thumbnails/7fa4c154f55345cbb5d1307459448d05/25e29778981749fb86418b50203a425e.jpeg",
+      "sha256": "05a63cb866474308cf1ec47c6771ba169d12faeb2df22d6c670920c9d2459f66",
+      "bytes": 8432,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/05a63cb866474308cf1ec47c6771ba169d12faeb2df22d6c670920c9d2459f66.jpg"
+    },
+    {
+      "asset_id": "objaverse_72e1d594a07242d3a8fbe7ea57513cd3",
+      "url": "https://media.sketchfab.com/models/72e1d594a07242d3a8fbe7ea57513cd3/thumbnails/2c0140f892c343b186390d328492f4c6/dedc923a1c1240b784fee210ce4c073d.jpeg",
+      "sha256": "a8e51dd973bb3d70b4f0c70f987f735d952fbaac00151e299c2547b68e7920df",
+      "bytes": 21227,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a8e51dd973bb3d70b4f0c70f987f735d952fbaac00151e299c2547b68e7920df.jpg"
+    },
+    {
+      "asset_id": "objaverse_9fc235927e18414bb21ff24d9d5b9d78",
+      "url": "https://media.sketchfab.com/models/9fc235927e18414bb21ff24d9d5b9d78/thumbnails/09b7f33739274e329efedf0393f1a259/a306012fa0f84a03b827ad2baa391674.jpeg",
+      "sha256": "d7b5c7801ffc1b90236489ef765ba8c8a3f155131a51fde58a4e01777e44d412",
+      "bytes": 12173,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d7b5c7801ffc1b90236489ef765ba8c8a3f155131a51fde58a4e01777e44d412.jpg"
+    },
+    {
+      "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+      "url": "https://media.sketchfab.com/models/ab65da1fdec04cfcb583391ae883f6b0/thumbnails/e96f1eec0677478991f8a5b5de51a3ca/7eca32f299a145c88b51015780d6e38a.jpeg",
+      "sha256": "4074566f201ed0c416f72cb7dc0fca7e0808b012a13e88b496cd1c85c100f01c",
+      "bytes": 13747,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4074566f201ed0c416f72cb7dc0fca7e0808b012a13e88b496cd1c85c100f01c.jpg"
+    },
+    {
+      "asset_id": "objaverse_b3efe5f166054313aa9463a21ced8025",
+      "url": "https://media.sketchfab.com/models/b3efe5f166054313aa9463a21ced8025/thumbnails/45b5dfd2f7984b7d8fb1c558dd8a9de7/c2ba7933b84b413891a40a2c4d7ff105.jpeg",
+      "sha256": "190fedce8e686a2c41445615bb5a965144d6096a9131c8c0d192d3a20caa86a5",
+      "bytes": 5702,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/190fedce8e686a2c41445615bb5a965144d6096a9131c8c0d192d3a20caa86a5.jpg"
+    },
+    {
+      "asset_id": "objaverse_421fbe7bfb0944e99f4954cfd7c10bbf",
+      "url": "https://media.sketchfab.com/models/421fbe7bfb0944e99f4954cfd7c10bbf/thumbnails/dba01cb4e6f04daa964ab43f52a56329/4f633be429634618a64915d7325fe47c.jpeg",
+      "sha256": "d925e4de7129392301c923d4549cd7a34c6a9d204108e2beb2e8b7f31889bbcd",
+      "bytes": 31877,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d925e4de7129392301c923d4549cd7a34c6a9d204108e2beb2e8b7f31889bbcd.jpg"
+    },
+    {
+      "asset_id": "objaverse_0edb18891f4d4add97bcfd7b5388569b",
+      "url": "https://media.sketchfab.com/models/0edb18891f4d4add97bcfd7b5388569b/thumbnails/7e967a2e8a62437586069fa2d2d3cb10/f3858e8ed1a5492896d9281cb64a66c7.jpeg",
+      "sha256": "d24df85e8e1bc03e2a52650d422060c011a26500c8e9465e9a0182b1e06959a2",
+      "bytes": 10920,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d24df85e8e1bc03e2a52650d422060c011a26500c8e9465e9a0182b1e06959a2.jpg"
+    },
+    {
+      "asset_id": "objaverse_28f11ab171bf44fa97e8b9bfa2ab76ed",
+      "url": "https://media.sketchfab.com/models/28f11ab171bf44fa97e8b9bfa2ab76ed/thumbnails/32fda9aa817b48c8a3b89c904515109f/252faeede2284a16bc962d6173907d97.jpeg",
+      "sha256": "599797187daac7ba59db7c26d611b16c646fcc2c2711e557a8d378c6932eb966",
+      "bytes": 8263,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/599797187daac7ba59db7c26d611b16c646fcc2c2711e557a8d378c6932eb966.jpg"
+    },
+    {
+      "asset_id": "objaverse_2bd3fcc82c9f43cfb0c8cf26c7d0107c",
+      "url": "https://media.sketchfab.com/models/2bd3fcc82c9f43cfb0c8cf26c7d0107c/thumbnails/82bd48ab682044d29248c9305f2a7433/7c3eb294a11d488e9475cec8c70aa0cf.jpeg",
+      "sha256": "c373a5df84e16df80e0f88c5c6bf0b6e088b73c15c0921bb8423a1a36a1af076",
+      "bytes": 12236,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c373a5df84e16df80e0f88c5c6bf0b6e088b73c15c0921bb8423a1a36a1af076.jpg"
+    },
+    {
+      "asset_id": "objaverse_2ef0c41e12504884b9dd681c9be9ded9",
+      "url": "https://media.sketchfab.com/models/2ef0c41e12504884b9dd681c9be9ded9/thumbnails/b644d6060b9c433aa26756c2bc1fd9c9/4aed0b74dd7b434cb77d154e0f317dfe.jpeg",
+      "sha256": "dad94c89dea2a362bfdbdf2aeedc5f9369ad79aba2c1455d0737ae6715cc88f6",
+      "bytes": 29964,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dad94c89dea2a362bfdbdf2aeedc5f9369ad79aba2c1455d0737ae6715cc88f6.jpg"
+    },
+    {
+      "asset_id": "objaverse_370ff64a4a5d42f7b53bf554fee38773",
+      "url": "https://media.sketchfab.com/models/370ff64a4a5d42f7b53bf554fee38773/thumbnails/c046cd1a8f0f424bb091f5965e115c96/e95cd07c4a014c9fac039228872438db.jpeg",
+      "sha256": "e75fab04c9f23faed29166608260f8cdc85e297b6a2fe10b5d557d6b6eb25a0c",
+      "bytes": 11035,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e75fab04c9f23faed29166608260f8cdc85e297b6a2fe10b5d557d6b6eb25a0c.jpg"
+    },
+    {
+      "asset_id": "objaverse_529451fd0d9d460b889be26bad712fbb",
+      "url": "https://media.sketchfab.com/models/529451fd0d9d460b889be26bad712fbb/thumbnails/4035d4f445a54e4292c1add9bbc9ae2b/95bf66e8553247b4980589d64ac91e90.jpeg",
+      "sha256": "cabdc2f975cf9e598a602d639bba2834fc784d7696580c20db89fcc0b12e1b49",
+      "bytes": 12111,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/cabdc2f975cf9e598a602d639bba2834fc784d7696580c20db89fcc0b12e1b49.jpg"
+    },
+    {
+      "asset_id": "objaverse_53acd9ae99e34bf69aea420121bc5b24",
+      "url": "https://media.sketchfab.com/models/53acd9ae99e34bf69aea420121bc5b24/thumbnails/595fdde88a7747d8a892cd07cea46a3f/2b2f216c005945e5a263cff5806a5882.jpeg",
+      "sha256": "faacd1feb0f4f256c7634afb655acee3bb09cb498c36e298a489a9083cdd89ae",
+      "bytes": 10282,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/faacd1feb0f4f256c7634afb655acee3bb09cb498c36e298a489a9083cdd89ae.jpg"
+    },
+    {
+      "asset_id": "objaverse_453b6edfa71b47ef99e688c383dbb646",
+      "url": "https://media.sketchfab.com/models/453b6edfa71b47ef99e688c383dbb646/thumbnails/8a1faa1462394830a4b3d145859c6442/97945fa780914eccbeecb5f21de7c6ce.jpeg",
+      "sha256": "1bf0c321a3e9259f4ed97af94573572e508c3d6f3be50b7d8ce733a8bc1599f0",
+      "bytes": 15684,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1bf0c321a3e9259f4ed97af94573572e508c3d6f3be50b7d8ce733a8bc1599f0.jpg"
+    },
+    {
+      "asset_id": "objaverse_4bde08ecf8c34561acd7d0ff0bd71376",
+      "url": "https://media.sketchfab.com/models/4bde08ecf8c34561acd7d0ff0bd71376/thumbnails/8a86ef4918c245ae87b61b5bbc7e875a/e345a78daf744585b5616acb2f126d10.jpeg",
+      "sha256": "b57a69dc3d496c054a7632de41c5dd12d544de5facbb70f4dc48cd0a78364d59",
+      "bytes": 14595,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b57a69dc3d496c054a7632de41c5dd12d544de5facbb70f4dc48cd0a78364d59.jpg"
+    },
+    {
+      "asset_id": "objaverse_db050b3e82254e58a0f4dc72f7300124",
+      "url": "https://media.sketchfab.com/models/db050b3e82254e58a0f4dc72f7300124/thumbnails/bb2edc701c3f40dcbf194d5a04274e11/2735caa45adb47de838563e2966b29ef.jpeg",
+      "sha256": "a7c2cba05a6d0e29544ce0732eee98191970e1bd16fd2011d928c1965cb483a1",
+      "bytes": 12676,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a7c2cba05a6d0e29544ce0732eee98191970e1bd16fd2011d928c1965cb483a1.jpg"
+    },
+    {
+      "asset_id": "objaverse_1a0cb6ce3e1d4e27b7f684f4d4e946c1",
+      "url": "https://media.sketchfab.com/models/1a0cb6ce3e1d4e27b7f684f4d4e946c1/thumbnails/3c11355ae4eb4fdca152b20783807557/16a7bd7004a7409295371cada4788742.jpeg",
+      "sha256": "65216931fce6a0efc30733798605b77a05e4d0822a122768bba8a10c382c0165",
+      "bytes": 24827,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/65216931fce6a0efc30733798605b77a05e4d0822a122768bba8a10c382c0165.jpg"
+    },
+    {
+      "asset_id": "objaverse_2b343edc50c34cf1b7a292a8976cc1d3",
+      "url": "https://media.sketchfab.com/models/2b343edc50c34cf1b7a292a8976cc1d3/thumbnails/e6e92149c10a4c3488ad5baee68fb837/43aaf45677494a4f8839ebe05ada67ff.jpeg",
+      "sha256": "128f2327b8cf2d823c4c948241687f43d447c8f26589efe97a8793af554a2422",
+      "bytes": 6555,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/128f2327b8cf2d823c4c948241687f43d447c8f26589efe97a8793af554a2422.jpg"
+    },
+    {
+      "asset_id": "objaverse_2da3dcf2156541c69c2e425f665bf52a",
+      "url": "https://media.sketchfab.com/models/2da3dcf2156541c69c2e425f665bf52a/thumbnails/4b90c87fe4244818b545a04595a94a7e/0f35aa7789464f839c589031b20e9a2f.jpeg",
+      "sha256": "2ec98a1c2280dadb0a7fa0fc82bd33d1361169d6b6b19bcbe6a0e9f0913f2262",
+      "bytes": 18774,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2ec98a1c2280dadb0a7fa0fc82bd33d1361169d6b6b19bcbe6a0e9f0913f2262.jpg"
+    },
+    {
+      "asset_id": "objaverse_327cbbd3e459444fb13a4815f53c44fc",
+      "url": "https://media.sketchfab.com/models/327cbbd3e459444fb13a4815f53c44fc/thumbnails/4e64470c5f6d4e9387476a8dcb4d9a15/c6d2c0f4403a43418e156fd71c6cb301.jpeg",
+      "sha256": "87b1407a349b7601f12fee076262d399ca50499660657e36605da8e9e0fa29b2",
+      "bytes": 9909,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/87b1407a349b7601f12fee076262d399ca50499660657e36605da8e9e0fa29b2.jpg"
+    },
+    {
+      "asset_id": "objaverse_3716f3bbb40e4933b470398e7a8284a3",
+      "url": "https://media.sketchfab.com/models/3716f3bbb40e4933b470398e7a8284a3/thumbnails/34affc6bd55f455ea9129f59e84be606/9e52e1df6d9f4b45909bee5ea2b8bf70.jpeg",
+      "sha256": "648f29b5a5be6d7295e8f25b14bb90604a66883c20263fa8c9f94a3034e7a59d",
+      "bytes": 7561,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/648f29b5a5be6d7295e8f25b14bb90604a66883c20263fa8c9f94a3034e7a59d.jpg"
+    },
+    {
+      "asset_id": "objaverse_3f64480e3b1c48139919a3da331f8c5f",
+      "url": "https://media.sketchfab.com/models/3f64480e3b1c48139919a3da331f8c5f/thumbnails/11bbde61fcb04aa5b094f9843c1dc422/a30c2061d6fb4074a617b70a2fffd19f.jpeg",
+      "sha256": "9508c0d14bd934c73cf1d7ec5b3187d8dc87dc20bc80df666bdacceef8c3cb9c",
+      "bytes": 12243,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9508c0d14bd934c73cf1d7ec5b3187d8dc87dc20bc80df666bdacceef8c3cb9c.jpg"
+    },
+    {
+      "asset_id": "objaverse_402294551ecc43a2a943851e8d78b14f",
+      "url": "https://media.sketchfab.com/models/402294551ecc43a2a943851e8d78b14f/thumbnails/e87c7bf6f4ce49578bf0dabc404a85d7/afecc61bd6144cc282f3e368df953fcb.jpeg",
+      "sha256": "9adf1d7c77e493dc51649d269c363b05dea021cad64891fde0c135262ba69407",
+      "bytes": 12435,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9adf1d7c77e493dc51649d269c363b05dea021cad64891fde0c135262ba69407.jpg"
+    },
+    {
+      "asset_id": "objaverse_50e6178c17364613b9b23909a715500d",
+      "url": "https://media.sketchfab.com/models/50e6178c17364613b9b23909a715500d/thumbnails/7892dc1b17de4afc8eea4033e9e618cd/b4a39edb535d4ad8943059e4d2a05359.jpeg",
+      "sha256": "94af828e7a28c671e6351469f4a8f431d701918f81256ce08ab65526672405d2",
+      "bytes": 10871,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/94af828e7a28c671e6351469f4a8f431d701918f81256ce08ab65526672405d2.jpg"
+    },
+    {
+      "asset_id": "objaverse_65ed94d550294ac5b0e503eab1316fb1",
+      "url": "https://media.sketchfab.com/models/65ed94d550294ac5b0e503eab1316fb1/thumbnails/3e2b5f01efc64e6481085c0f599acc74/464a3ab7cf7643d78267c7e6e5c2a3d8.jpeg",
+      "sha256": "7facb6ea2507debc068f5976f7015eba7357517c71cbc2d0316e3c3de6bf3fcb",
+      "bytes": 25026,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7facb6ea2507debc068f5976f7015eba7357517c71cbc2d0316e3c3de6bf3fcb.jpg"
+    },
+    {
+      "asset_id": "objaverse_7220663114be44fe8cbc2118426964de",
+      "url": "https://media.sketchfab.com/models/7220663114be44fe8cbc2118426964de/thumbnails/94983119f767465cbbbf49815751de55/c52585f517d4478c9cbf0582cafc64a7.jpeg",
+      "sha256": "8a3c394f57c5888e53cee7876ab0616303708d9de679cf6683120efb62301402",
+      "bytes": 14041,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/8a3c394f57c5888e53cee7876ab0616303708d9de679cf6683120efb62301402.jpg"
+    },
+    {
+      "asset_id": "objaverse_adea612a1f474f84a9c246c280c6230f",
+      "url": "https://media.sketchfab.com/models/adea612a1f474f84a9c246c280c6230f/thumbnails/f7b6b34b5d514443ad5c0467a5ce98b9/a62bad32c48649919e779ab32a391230.jpeg",
+      "sha256": "16789ef9f15a1bb3e11c9bd50533f51c215b9864403ddc057c3f6b2430ffa6af",
+      "bytes": 12374,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/16789ef9f15a1bb3e11c9bd50533f51c215b9864403ddc057c3f6b2430ffa6af.jpg"
+    },
+    {
+      "asset_id": "objaverse_0e3d8374a7c3453795fb28fbe4435c6a",
+      "url": "https://media.sketchfab.com/models/0e3d8374a7c3453795fb28fbe4435c6a/thumbnails/75f46814d9404cf5aa5f750a9bbf6f9c/10e4d4e57ca14986b2958fd4e7a1235a.jpeg",
+      "sha256": "b5c19afc8889f5825e76017604d1c9fe51c87499df21052efcd53dbfd6bfb883",
+      "bytes": 15649,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b5c19afc8889f5825e76017604d1c9fe51c87499df21052efcd53dbfd6bfb883.jpg"
+    },
+    {
+      "asset_id": "objaverse_b02c7301b23d40fb926f7c3c6b32cb9f",
+      "url": "https://media.sketchfab.com/models/b02c7301b23d40fb926f7c3c6b32cb9f/thumbnails/1d7092881e78424cb9d2fc2d16ce1245/8c41d658ee544fbcb0ca58034f8cb422.jpeg",
+      "sha256": "d84d496cc72c74092cc8af73253fb18b24028841567272f87a7c7a8a6917aac8",
+      "bytes": 16828,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d84d496cc72c74092cc8af73253fb18b24028841567272f87a7c7a8a6917aac8.jpg"
+    },
+    {
+      "asset_id": "objaverse_c77a1ae987cc4ad994cdafc2d94fcad0",
+      "url": "https://media.sketchfab.com/models/c77a1ae987cc4ad994cdafc2d94fcad0/thumbnails/c8ddc66565e2476084fe9c76f51f2aa8/3004d28cabb942a5b69e8ccffdb4c72a.jpeg",
+      "sha256": "0f1a48012b9b5e32cf1d4f9409e6bfb2618367a527cd269a90e72bf7612a1ad8",
+      "bytes": 15323,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0f1a48012b9b5e32cf1d4f9409e6bfb2618367a527cd269a90e72bf7612a1ad8.jpg"
+    },
+    {
+      "asset_id": "objaverse_1335773bd11b4741af9339b91dadc955",
+      "url": "https://media.sketchfab.com/models/1335773bd11b4741af9339b91dadc955/thumbnails/5aa49e7475d742e2885ea69854463a81/c05dcb2376a34bc0b6d210104b5b655c.jpeg",
+      "sha256": "0afdb1ed3ac4861c26675bea7738207b27d5957610abc00905859340ac85bff8",
+      "bytes": 25723,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0afdb1ed3ac4861c26675bea7738207b27d5957610abc00905859340ac85bff8.jpg"
+    },
+    {
+      "asset_id": "objaverse_1417a4fccb9d4a728105b3a3a45f6bb1",
+      "url": "https://media.sketchfab.com/models/1417a4fccb9d4a728105b3a3a45f6bb1/thumbnails/ade284f86a6a4827a1d3a97e347c8082/1878a1ec4186468d814a7a34b1ed8c89.jpeg",
+      "sha256": "607a6b844779c41e91f462fa04b1df2ef198c9a472ac8f30796443662ed3f09a",
+      "bytes": 13974,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/607a6b844779c41e91f462fa04b1df2ef198c9a472ac8f30796443662ed3f09a.jpg"
+    },
+    {
+      "asset_id": "objaverse_2b808687faa541dcb5a1987cea250c73",
+      "url": "https://media.sketchfab.com/models/2b808687faa541dcb5a1987cea250c73/thumbnails/8b985c31e6f34c3888a073431fb0aa71/720x405.jpeg",
+      "sha256": "157f946e946ffbd9086315b59ae9a8677ea84cb1d6362d5e8786e313c2f6cb87",
+      "bytes": 23469,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/157f946e946ffbd9086315b59ae9a8677ea84cb1d6362d5e8786e313c2f6cb87.jpg"
+    },
+    {
+      "asset_id": "objaverse_3f33bacd9f504d999be1cf35a78e089a",
+      "url": "https://media.sketchfab.com/models/3f33bacd9f504d999be1cf35a78e089a/thumbnails/bb4911d102a74e0593a026161096c562/7fd344c76ee04d8287bd5d8e35586242.jpeg",
+      "sha256": "3ff41ad61721195aa36dbf60591a72b7ae35f18f4ae6465206197a740ac530d3",
+      "bytes": 12805,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3ff41ad61721195aa36dbf60591a72b7ae35f18f4ae6465206197a740ac530d3.jpg"
+    },
+    {
+      "asset_id": "objaverse_43b3e67b31894d84a063fc73376c895a",
+      "url": "https://media.sketchfab.com/models/43b3e67b31894d84a063fc73376c895a/thumbnails/dc84cc91475b438da1aaad3555a94f3f/640x360.jpeg",
+      "sha256": "7589073edd19db178c7c45903220984bb7356b2c32708766b526159e34b1e14d",
+      "bytes": 12833,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/7589073edd19db178c7c45903220984bb7356b2c32708766b526159e34b1e14d.jpg"
+    },
+    {
+      "asset_id": "objaverse_0cbed499cebb4c889738c20ea1ed52d5",
+      "url": "https://media.sketchfab.com/models/0cbed499cebb4c889738c20ea1ed52d5/thumbnails/422c112dc4be4e359daa2ea66937e0c2/ab6c7729d8e84c0ba946cd9f43242e03.jpeg",
+      "sha256": "1747263f4d1438da70462da0ef0eb14a4c562e0ed7ef40e67363ac4e17abcb77",
+      "bytes": 13301,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1747263f4d1438da70462da0ef0eb14a4c562e0ed7ef40e67363ac4e17abcb77.jpg"
+    },
+    {
+      "asset_id": "objaverse_137c924ea6b244a39b92bfaafede15ba",
+      "url": "https://media.sketchfab.com/models/137c924ea6b244a39b92bfaafede15ba/thumbnails/03df31304e6b4cc3a94769a31a69ada8/949329ea0506400a99a01a94c70a2e7f.jpeg",
+      "sha256": "c9ee1353a45fa84992e7c8f9a03fd6ed5134ed966467222f7ddf7eaef9d39f63",
+      "bytes": 20435,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c9ee1353a45fa84992e7c8f9a03fd6ed5134ed966467222f7ddf7eaef9d39f63.jpg"
+    },
+    {
+      "asset_id": "objaverse_415990b9b8d7434099682efbc9993132",
+      "url": "https://media.sketchfab.com/models/415990b9b8d7434099682efbc9993132/thumbnails/59ff6d779bbe47c1b08699ccf7aa1ee0/e30b190ceeec4c22ba7bc7adb6057b62.jpeg",
+      "sha256": "b7777ea2464e5dca3fedadf56eb868f12726604d8488c4d7c3a5c474ea4d8a10",
+      "bytes": 16496,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b7777ea2464e5dca3fedadf56eb868f12726604d8488c4d7c3a5c474ea4d8a10.jpg"
+    },
+    {
+      "asset_id": "objaverse_431f0ac01db045629d9978a241209edb",
+      "url": "https://media.sketchfab.com/models/431f0ac01db045629d9978a241209edb/thumbnails/5ec3c0460500446f8ff76df42a040331/d3a447070c6f4f68b9c85790800d14b0.jpeg",
+      "sha256": "3ebe15c330b869ddd6f2a81bfece0a8b5c0c33c57f1324b5977720c7baca4349",
+      "bytes": 8334,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3ebe15c330b869ddd6f2a81bfece0a8b5c0c33c57f1324b5977720c7baca4349.jpg"
+    },
+    {
+      "asset_id": "objaverse_7d0cc40e4111490cb5d204bdc3e1b672",
+      "url": "https://media.sketchfab.com/models/7d0cc40e4111490cb5d204bdc3e1b672/thumbnails/f2642c749ab1496c88589d15215aee80/f3850f28a2d14b93a411a918fc5b6ca0.jpeg",
+      "sha256": "5e59177c35b9da199ac6e0a56970af38b9d72aeba971a893256a8741b68eb7d6",
+      "bytes": 9315,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5e59177c35b9da199ac6e0a56970af38b9d72aeba971a893256a8741b68eb7d6.jpg"
+    },
+    {
+      "asset_id": "objaverse_92bb160b69bb47f2a24e9a265c3b9a66",
+      "url": "https://media.sketchfab.com/models/92bb160b69bb47f2a24e9a265c3b9a66/thumbnails/431ba8bf388846ac809126e240db8864/847b68284dcf421fb020ea2051ea9f1f.jpeg",
+      "sha256": "becab9e732c1eaf299b88a04ed2b40b5ca5d08a76794d09b35c01ec15e605c62",
+      "bytes": 27761,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/becab9e732c1eaf299b88a04ed2b40b5ca5d08a76794d09b35c01ec15e605c62.jpg"
+    },
+    {
+      "asset_id": "objaverse_95c5111de4c74a8d8bc017306217321b",
+      "url": "https://media.sketchfab.com/models/95c5111de4c74a8d8bc017306217321b/thumbnails/87a88d8f04d44c45a27aeeac2ae38232/101dd5b893214c4bb906bae63423017b.jpeg",
+      "sha256": "e3b34bce921baa186ac6c2ff4ae3eca656fadd2c184fd2080d72c557c098bedb",
+      "bytes": 9624,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e3b34bce921baa186ac6c2ff4ae3eca656fadd2c184fd2080d72c557c098bedb.jpg"
+    },
+    {
+      "asset_id": "objaverse_a0cd37a98ff74f1eb1b12bce0b7da868",
+      "url": "https://media.sketchfab.com/models/a0cd37a98ff74f1eb1b12bce0b7da868/thumbnails/a41d017ede404997bc6cdd5e1a8ca957/7ef1a4adba144140bfddc1ea8d73a61a.jpeg",
+      "sha256": "7002636538d5877f19e863b7cb8bbae7852065d550f6d154e0d7d6f5041bfd5b",
+      "bytes": 21446,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7002636538d5877f19e863b7cb8bbae7852065d550f6d154e0d7d6f5041bfd5b.jpg"
+    },
+    {
+      "asset_id": "objaverse_afb8c3e4e147422581184c74f47c9b88",
+      "url": "https://media.sketchfab.com/models/afb8c3e4e147422581184c74f47c9b88/thumbnails/15add53862ff43f28ef4b0f7549c59d5/807e572fb3fc4d39ac6bb302dcbde017.jpeg",
+      "sha256": "dacdcf8e0deb61c5b201b99b66f663872d23c4edc4578ed26ade156e2d6c712a",
+      "bytes": 16287,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dacdcf8e0deb61c5b201b99b66f663872d23c4edc4578ed26ade156e2d6c712a.jpg"
+    },
+    {
+      "asset_id": "objaverse_181c197a71534f028f8aa65646587107",
+      "url": "https://media.sketchfab.com/models/181c197a71534f028f8aa65646587107/thumbnails/4625d9703942416a9194acf43929f941/938e7227a0bf49e58fb01bdcf246ba12.jpeg",
+      "sha256": "18255156c86200409e5e2848bd604c42e5c69421d548d0f827e1a55cfddb95e6",
+      "bytes": 9509,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/18255156c86200409e5e2848bd604c42e5c69421d548d0f827e1a55cfddb95e6.jpg"
+    },
+    {
+      "asset_id": "objaverse_2f7213b2075c41d58fd247078b92c582",
+      "url": "https://media.sketchfab.com/models/2f7213b2075c41d58fd247078b92c582/thumbnails/37abc639988a4d1b8d15a10e731d3302/640.jpeg",
+      "sha256": "99e949148c5d6d5a3a65e6599e472b356eda8ba4461803ffe25419592bf6e742",
+      "bytes": 12361,
+      "dimensions": [
+        640,
+        351
+      ],
+      "preview_local_path": "previews/99e949148c5d6d5a3a65e6599e472b356eda8ba4461803ffe25419592bf6e742.jpg"
+    },
+    {
+      "asset_id": "objaverse_016957e17edb48edae14c59b005c2ad3",
+      "url": "https://media.sketchfab.com/models/016957e17edb48edae14c59b005c2ad3/thumbnails/5d21cdd2f2a94fe3aa1f96a0f1b71c92/086524fa09594ce2bef5d8d2604bcb62.jpeg",
+      "sha256": "7d9946a16f0ab5e2a77445b0a36e19fa132a0162eddd4d11312446e2e61fb087",
+      "bytes": 21347,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7d9946a16f0ab5e2a77445b0a36e19fa132a0162eddd4d11312446e2e61fb087.jpg",
+      "review_id": "R1-001"
+    },
+    {
+      "asset_id": "objaverse_772e92af9eb34ed2a708b32e1e33da32",
+      "url": "https://media.sketchfab.com/models/772e92af9eb34ed2a708b32e1e33da32/thumbnails/7f211c7157fc41688944b490616f43db/a357859d444c4549a40de7e8c083a99b.jpeg",
+      "sha256": "d69a5f90fa915b77ec44672ea14b3ede81e5b47f2cca7a54831a5c5f78305ee8",
+      "bytes": 15670,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d69a5f90fa915b77ec44672ea14b3ede81e5b47f2cca7a54831a5c5f78305ee8.jpg",
+      "review_id": "R1-004"
+    },
+    {
+      "asset_id": "objaverse_01c808d0ab9f44e184ef3005cf0fe82d",
+      "url": "https://media.sketchfab.com/models/01c808d0ab9f44e184ef3005cf0fe82d/thumbnails/22fe22197bd34b91b53630265b2aa9e0/60aaebad095c43c0888067ebea0b6abc.jpeg",
+      "sha256": "65225b6d4789e95979bc72ffd499eedc012638eae0cc53eafd048938feb0c412",
+      "bytes": 9415,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/65225b6d4789e95979bc72ffd499eedc012638eae0cc53eafd048938feb0c412.jpg",
+      "review_id": "R1-006"
+    },
+    {
+      "asset_id": "objaverse_9131216e527344e3892b145f884eb58f",
+      "url": "https://media.sketchfab.com/models/9131216e527344e3892b145f884eb58f/thumbnails/51b6b5ca8aa843369b5c7e219b605d96/1b10f00311b446c7bc0199cb0831a69a.jpeg",
+      "sha256": "a8ff8b282e2ee5ca2c907e657007b81bd1550596e53b3f2fbc32bbf2cfdbb8dd",
+      "bytes": 14959,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a8ff8b282e2ee5ca2c907e657007b81bd1550596e53b3f2fbc32bbf2cfdbb8dd.jpg",
+      "review_id": "R1-007"
+    },
+    {
+      "asset_id": "objaverse_ca4ff0db8e6c449f909d28917501379b",
+      "url": "https://media.sketchfab.com/models/ca4ff0db8e6c449f909d28917501379b/thumbnails/cbf39437dd514e6499a636bb2645b67a/10d0ebbe2d0047908c0574944df34ef5.jpeg",
+      "sha256": "6fe283b0b70449f7c19f3b7e9fc1ca97ac2436a99f3b39bba2fca9d4c6d89d9d",
+      "bytes": 10178,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6fe283b0b70449f7c19f3b7e9fc1ca97ac2436a99f3b39bba2fca9d4c6d89d9d.jpg",
+      "review_id": "R1-010"
+    },
+    {
+      "asset_id": "objaverse_008487979a8540c7ace64b355d1624a2",
+      "url": "https://media.sketchfab.com/models/008487979a8540c7ace64b355d1624a2/thumbnails/01e77fa9e6a24c028b378755aa95f305/57c94cbe4c2e4e0fb2b052d13ae1741c.jpeg",
+      "sha256": "14601acdb42521d08cf635fa225a958b53a37ad50af33ed0c5c328fe9f6d8e43",
+      "bytes": 5392,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/14601acdb42521d08cf635fa225a958b53a37ad50af33ed0c5c328fe9f6d8e43.jpg",
+      "review_id": "R1-011"
+    },
+    {
+      "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+      "url": "https://media.sketchfab.com/models/04540b11852b4c65bfe6c608c22641e4/thumbnails/14a5ea507eba47d19cbd0e6ac65f2428/640x360.jpeg",
+      "sha256": "969449300063a19a88330ee1555e644c1ce04fc13a0d3a586472c860769a74ec",
+      "bytes": 11061,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/969449300063a19a88330ee1555e644c1ce04fc13a0d3a586472c860769a74ec.jpg",
+      "review_id": "R1-013"
+    },
+    {
+      "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+      "url": "https://media.sketchfab.com/models/005121da5ed340b4aedd168e33d56714/thumbnails/2b5b80cc613a48748e1c648bdb138654/cbbc6644e27240a6b4ece48baecfed29.jpeg",
+      "sha256": "a604efdc7182756696e44c7b67ad06234b145420f74a115a1c5971e5fceedeaa",
+      "bytes": 33360,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a604efdc7182756696e44c7b67ad06234b145420f74a115a1c5971e5fceedeaa.jpg",
+      "review_id": "R1-014"
+    },
+    {
+      "asset_id": "objaverse_3a63a5572e314bb88f74f90b9dce1b69",
+      "url": "https://media.sketchfab.com/models/3a63a5572e314bb88f74f90b9dce1b69/thumbnails/5deaebf7f70b4c2f98293fa70f5a190c/1db051178d2545688794e94e3e6169c4.jpeg",
+      "sha256": "0bca0367c66c086d061ff3ec4a3b4576af1352219e76ab0c0fd854a1b17135b9",
+      "bytes": 9750,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0bca0367c66c086d061ff3ec4a3b4576af1352219e76ab0c0fd854a1b17135b9.jpg",
+      "review_id": "R1-015"
+    },
+    {
+      "asset_id": "objaverse_1a6987d6ba634631854d508c626a582d",
+      "url": "https://media.sketchfab.com/models/1a6987d6ba634631854d508c626a582d/thumbnails/2e64490b2a1747e1bc3ebf396fd8f49f/cde6f0865f584b6893ac9b7ba5512b8e.jpeg",
+      "sha256": "7e1000dfda71b784f8a4889a5ca5c0716ad58e90ef59dda115d89169ab06d470",
+      "bytes": 15824,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7e1000dfda71b784f8a4889a5ca5c0716ad58e90ef59dda115d89169ab06d470.jpg",
+      "review_id": "R1-021"
+    },
+    {
+      "asset_id": "objaverse_1b4049699ba9424dbe02fce926cc80a5",
+      "url": "https://media.sketchfab.com/models/1b4049699ba9424dbe02fce926cc80a5/thumbnails/b8f794aa28cc44cc88c108af637f0d08/0a09a936ba75458fbc61d66ee8faf33d.jpeg",
+      "sha256": "47f2c7214a62d16930dc6bcea3e6b694ba6e7474a43ee84a40a382fab9498a11",
+      "bytes": 8766,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/47f2c7214a62d16930dc6bcea3e6b694ba6e7474a43ee84a40a382fab9498a11.jpg",
+      "review_id": "R1-022"
+    },
+    {
+      "asset_id": "objaverse_7427e2c0c32c44b89deb058f6583742a",
+      "url": "https://media.sketchfab.com/models/7427e2c0c32c44b89deb058f6583742a/thumbnails/c498998a5fb2491098e43e34d0e38ded/fcdc757e0203459287f79a579398d938.jpeg",
+      "sha256": "9bcf06d31e49a94adacf6f3ccc05e405b4c3861e88323b4b8c104cb6219f31d0",
+      "bytes": 16216,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9bcf06d31e49a94adacf6f3ccc05e405b4c3861e88323b4b8c104cb6219f31d0.jpg",
+      "review_id": "R1-025"
+    },
+    {
+      "asset_id": "objaverse_02f2bd71a28a421c87288b35524df8d0",
+      "url": "https://media.sketchfab.com/models/02f2bd71a28a421c87288b35524df8d0/thumbnails/08425f1a17bf4b7a9bd588938e8f1488/640.jpeg",
+      "sha256": "2e2c3cb27eb24a822a0f567c4f9ebdd9062b789da525759d61d3811e597ea403",
+      "bytes": 16010,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/2e2c3cb27eb24a822a0f567c4f9ebdd9062b789da525759d61d3811e597ea403.jpg",
+      "review_id": "R1-030"
+    },
+    {
+      "asset_id": "objaverse_2bf847b909e14422a886787029810a48",
+      "url": "https://media.sketchfab.com/models/2bf847b909e14422a886787029810a48/thumbnails/fd5173cd10cc466a8fc5985ed27ef019/cf95dde39982458fa70c43b1d8e161ad.jpeg",
+      "sha256": "dd565b9da6f79cd77b99cb3193fc59273418732fc4687c1cadbd2ae180b80c4f",
+      "bytes": 15128,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dd565b9da6f79cd77b99cb3193fc59273418732fc4687c1cadbd2ae180b80c4f.jpg",
+      "review_id": "R1-034"
+    },
+    {
+      "asset_id": "objaverse_646838d76f204c83ae952e049f2948b1",
+      "url": "https://media.sketchfab.com/models/646838d76f204c83ae952e049f2948b1/thumbnails/1c3a3a9206df41bca69e83631788f306/7299de1383cb4ce1b10f012a0db895ae.jpeg",
+      "sha256": "fcbcb50f929711ecdc995558853dedcb8a73acb0bd97b43961bb3d7ed737ac96",
+      "bytes": 12113,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/fcbcb50f929711ecdc995558853dedcb8a73acb0bd97b43961bb3d7ed737ac96.jpg",
+      "review_id": "R1-037"
+    },
+    {
+      "asset_id": "objaverse_028ceba3e34a4ebeacb4bd5f81cc251a",
+      "url": "https://media.sketchfab.com/models/028ceba3e34a4ebeacb4bd5f81cc251a/thumbnails/deb47908d8174b0887e8918d21a3678d/0fdd9713fad34d34a7c410cea298bb7b.jpeg",
+      "sha256": "7065856f6fec3493d31b0b51bac20327573ae8d6a43cd052b6bd9bd8d2590c14",
+      "bytes": 17515,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7065856f6fec3493d31b0b51bac20327573ae8d6a43cd052b6bd9bd8d2590c14.jpg",
+      "review_id": "R1-040"
+    },
+    {
+      "asset_id": "objaverse_4ddf5cccd96d4a99a6c81c69455c2cd8",
+      "url": "https://media.sketchfab.com/models/4ddf5cccd96d4a99a6c81c69455c2cd8/thumbnails/9c5334ef3e16409b80ad2901df82067a/2fa7b0564b594b93af932628bb7cd31a.jpeg",
+      "sha256": "ab0d0999b9035efb34dbff6a93855f992ac7d5f06f16139c0df1a77e93471b01",
+      "bytes": 13711,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ab0d0999b9035efb34dbff6a93855f992ac7d5f06f16139c0df1a77e93471b01.jpg",
+      "review_id": "R1-042"
+    },
+    {
+      "asset_id": "objaverse_5ee9aa73c0344183ac2b14355b32e5ed",
+      "url": "https://media.sketchfab.com/models/5ee9aa73c0344183ac2b14355b32e5ed/thumbnails/013d59d28dd84e1a925c50a137fad754/7ae39b13a04c4bb589f24845776d0a61.jpeg",
+      "sha256": "0ffeae248a7722c1bedbb7305f6741d39d715ced8e6bb26b007f5bde462eee19",
+      "bytes": 14811,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0ffeae248a7722c1bedbb7305f6741d39d715ced8e6bb26b007f5bde462eee19.jpg",
+      "review_id": "R1-048"
+    },
+    {
+      "asset_id": "objaverse_42aeb51fab09478eaa26db90d81e6c87",
+      "url": "https://media.sketchfab.com/models/42aeb51fab09478eaa26db90d81e6c87/thumbnails/b9d0f14438e546a4a462897602bebc13/14915554b2e24145b786d7797727c36c.jpeg",
+      "sha256": "0075a71df15e53d107a7f70b69407cc9eaa9a642187d505c4ed3fe872e360a20",
+      "bytes": 17312,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0075a71df15e53d107a7f70b69407cc9eaa9a642187d505c4ed3fe872e360a20.jpg",
+      "review_id": "R1-053"
+    },
+    {
+      "asset_id": "objaverse_5a0ba464174e4dbe94aecfe1a036ca6a",
+      "url": "https://media.sketchfab.com/models/5a0ba464174e4dbe94aecfe1a036ca6a/thumbnails/6a489895cbb1440eabcd3179164145df/9d080d69b22844a8a295b16833a24a93.jpeg",
+      "sha256": "98e161ddd46d17fd980f6c449db15ed1e89030a6fd6938242c4538591a3f1b01",
+      "bytes": 14911,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/98e161ddd46d17fd980f6c449db15ed1e89030a6fd6938242c4538591a3f1b01.jpg",
+      "review_id": "R1-054"
+    },
+    {
+      "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "url": "https://media.sketchfab.com/models/0002e50309b44e409c96f440202d90b3/thumbnails/512fed60ee034602bcc96f399c29d380/57c6a2d78c07488981d8f599c17c766a.jpeg",
+      "sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "bytes": 13438,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "review_id": "R1-056"
+    },
+    {
+      "asset_id": "objaverse_013300e1875b457a80d6857d13caa23a",
+      "url": "https://media.sketchfab.com/models/013300e1875b457a80d6857d13caa23a/thumbnails/0ffa119b72d74a468808aba935ad2658/7b487a6c270f49d5b1f3271822f50115.jpeg",
+      "sha256": "e52a49f76ff524995c25758397c90e1e342ff486b4ffe7c63625d179da6725bf",
+      "bytes": 4749,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e52a49f76ff524995c25758397c90e1e342ff486b4ffe7c63625d179da6725bf.jpg",
+      "review_id": "R1-057"
+    },
+    {
+      "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+      "url": "https://media.sketchfab.com/models/259e91c0f79b40c786ea883ca17ef2d7/thumbnails/8e3b2e60999f4363a2e3b404c20edf18/58baa08a5a42447f8117027d755c7d73.jpeg",
+      "sha256": "d88ba2c7345fb5fb870daf4d08443220c16556b3f96b906815887e3d42cf8b04",
+      "bytes": 16312,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d88ba2c7345fb5fb870daf4d08443220c16556b3f96b906815887e3d42cf8b04.jpg",
+      "review_id": "R1-058"
+    },
+    {
+      "asset_id": "objaverse_4bfa642cf5f64b40944933bad03f085a",
+      "url": "https://media.sketchfab.com/models/4bfa642cf5f64b40944933bad03f085a/thumbnails/b632ce60be3346989642398bb657294b/640.jpeg",
+      "sha256": "93856797ebe0190606c75d8b2680ecdc9e0a1df2aa209a1205d526c5c96d76ee",
+      "bytes": 31449,
+      "dimensions": [
+        640,
+        359
+      ],
+      "preview_local_path": "previews/93856797ebe0190606c75d8b2680ecdc9e0a1df2aa209a1205d526c5c96d76ee.jpg",
+      "review_id": "R1-060"
+    },
+    {
+      "asset_id": "objaverse_601291f67a284c7b8ed4b98b1823a1d2",
+      "url": "https://media.sketchfab.com/models/601291f67a284c7b8ed4b98b1823a1d2/thumbnails/a83373675f824638957fd58c2becb46b/8a7b176c2d484fcda534739593753b21.jpeg",
+      "sha256": "dd3eba139e4906c6e9087433e3617eb300110fbc839087a538e4a86bff0c40c0",
+      "bytes": 33185,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dd3eba139e4906c6e9087433e3617eb300110fbc839087a538e4a86bff0c40c0.jpg",
+      "review_id": "R1-061"
+    },
+    {
+      "asset_id": "objaverse_02126986b04e4c4fb2a463f2f679cbaa",
+      "url": "https://media.sketchfab.com/models/02126986b04e4c4fb2a463f2f679cbaa/thumbnails/ff2775b4c32c443a8e6aff87b432abab/c592fab5ebd04110910b0fcfe64a8fa8.jpeg",
+      "sha256": "3b0f0b6613efccb26043cbe8e56b26306d73d14f2ba5c47aecd52d272a0228c4",
+      "bytes": 10078,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3b0f0b6613efccb26043cbe8e56b26306d73d14f2ba5c47aecd52d272a0228c4.jpg",
+      "review_id": "R1-065"
+    },
+    {
+      "asset_id": "objaverse_451747c93dae4c26b6c3d121c6d4e58f",
+      "url": "https://media.sketchfab.com/models/451747c93dae4c26b6c3d121c6d4e58f/thumbnails/d24539815b1249fc9eace3489907f682/939c92b402ae4def8a07923000d1f129.jpeg",
+      "sha256": "4487f50f0cdbebb42323d18235487bb72e5ff84c1879a0095614dfbbe3d4438d",
+      "bytes": 8946,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4487f50f0cdbebb42323d18235487bb72e5ff84c1879a0095614dfbbe3d4438d.jpg",
+      "review_id": "R1-066"
+    },
+    {
+      "asset_id": "objaverse_86447bb411984aaea8a5593456d5aef9",
+      "url": "https://media.sketchfab.com/models/86447bb411984aaea8a5593456d5aef9/thumbnails/faa2cd98a4444b458396fc3cf0fa6caa/6878ae7fcd634901b35290081d960b03.jpeg",
+      "sha256": "0342a8be5c290302e8a977da2abe196d146a8f8e5dfa0dadabcd8f6328840494",
+      "bytes": 11119,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0342a8be5c290302e8a977da2abe196d146a8f8e5dfa0dadabcd8f6328840494.jpg",
+      "review_id": "R1-068"
+    },
+    {
+      "asset_id": "objaverse_f074fa13aebc443483237a883b62a2f2",
+      "url": "https://media.sketchfab.com/models/f074fa13aebc443483237a883b62a2f2/thumbnails/86306dff6a3440fe9c3ce0fd80c62b6b/fe85618031c04d2c884e924929158d9a.jpeg",
+      "sha256": "1c10ddb05cfad230509ebcca72159ebfb6ef3e162ff8ddfd92646b82464e62da",
+      "bytes": 3695,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1c10ddb05cfad230509ebcca72159ebfb6ef3e162ff8ddfd92646b82464e62da.jpg",
+      "review_id": "R1-071"
+    },
+    {
+      "asset_id": "objaverse_3c1ef9af05e34313b5a6135265afa6c7",
+      "url": "https://media.sketchfab.com/models/3c1ef9af05e34313b5a6135265afa6c7/thumbnails/6cee908fe5de4281a905aadff26e2ab0/0694c9d044de4ccb826cc5a339e41475.jpeg",
+      "sha256": "087327ba9bc27e253841fab86536cfacee34ba94fd6ea4c9c4639c0729feea69",
+      "bytes": 13274,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/087327ba9bc27e253841fab86536cfacee34ba94fd6ea4c9c4639c0729feea69.jpg",
+      "review_id": "R2-008"
+    },
+    {
+      "asset_id": "objaverse_ab9d2fc63edb41e59dce3900d8d073e4",
+      "url": "https://media.sketchfab.com/models/ab9d2fc63edb41e59dce3900d8d073e4/thumbnails/a26d67e7a3024fbbb93f60ee29a689e6/71ef58d2168c460b91ddbc1251ab5480.jpeg",
+      "sha256": "a9fec011718a2e2c7dd533e1d4d4b25999eba700180e84e26c7247441caf59c0",
+      "bytes": 15244,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a9fec011718a2e2c7dd533e1d4d4b25999eba700180e84e26c7247441caf59c0.jpg",
+      "review_id": "R2-009"
+    },
+    {
+      "asset_id": "objaverse_e846cb48e88446808af55976ff76b1da",
+      "url": "https://media.sketchfab.com/models/e846cb48e88446808af55976ff76b1da/thumbnails/5dd50f143b4147688032ce2efe527038/f205d44a9b57406db02ae5071646547b.jpeg",
+      "sha256": "cada8a72e4e5d9abb7de3a3c9e8b5ee368be4cbc5c015aee96690a11da2540e7",
+      "bytes": 8024,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/cada8a72e4e5d9abb7de3a3c9e8b5ee368be4cbc5c015aee96690a11da2540e7.jpg",
+      "review_id": "R2-010"
+    },
+    {
+      "asset_id": "objaverse_9a4b89d7ff5c482dae835df596fdcc2f",
+      "url": "https://media.sketchfab.com/models/9a4b89d7ff5c482dae835df596fdcc2f/thumbnails/0ed8bc7728b84255ad3e330e8d732ec3/720x405.jpeg",
+      "sha256": "b3bc0bb30157d5d204caa827ca4770d944f56dbef9405c578b61ea7673a79cf5",
+      "bytes": 23092,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b3bc0bb30157d5d204caa827ca4770d944f56dbef9405c578b61ea7673a79cf5.jpg",
+      "review_id": "R2-015"
+    },
+    {
+      "asset_id": "objaverse_ee0fa270366d4b4cac309b9a790178e4",
+      "url": "https://media.sketchfab.com/models/ee0fa270366d4b4cac309b9a790178e4/thumbnails/b9ad0ce51eee449f85f2532e550e818a/307aeb61987a45598a9ef23494f24c4c.jpeg",
+      "sha256": "f36a582104303ca94e856bbb90d95ee33d713f2fe0f57f6e9af419d3e41c61d8",
+      "bytes": 10067,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f36a582104303ca94e856bbb90d95ee33d713f2fe0f57f6e9af419d3e41c61d8.jpg",
+      "review_id": "R2-016"
+    },
+    {
+      "asset_id": "objaverse_9465ad0f363d4b708f9e15dca7f07b20",
+      "url": "https://media.sketchfab.com/models/9465ad0f363d4b708f9e15dca7f07b20/thumbnails/b1fe1a5a38b04db1bb8d00a0c857fcdd/afabe8dd3ea44866990c36080e1b053c.jpeg",
+      "sha256": "9e39861f7181796fad55ea66e331ed244fb316ed92a5759be08311263ae60806",
+      "bytes": 10973,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9e39861f7181796fad55ea66e331ed244fb316ed92a5759be08311263ae60806.jpg",
+      "review_id": "R2-022"
+    },
+    {
+      "asset_id": "objaverse_b310935556f645508f49323791feed34",
+      "url": "https://media.sketchfab.com/models/b310935556f645508f49323791feed34/thumbnails/ccc602f06106411c9203e57ccd5eb951/0b931e2c3ad449a8a56df831984e9df1.jpeg",
+      "sha256": "c0e31be19697a94423577b932979d697db07a32dc0efbba6aa919f20e4e72821",
+      "bytes": 12776,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c0e31be19697a94423577b932979d697db07a32dc0efbba6aa919f20e4e72821.jpg",
+      "review_id": "R2-023"
+    },
+    {
+      "asset_id": "objaverse_dc5b660879ce4c5c85926379d0906482",
+      "url": "https://media.sketchfab.com/models/dc5b660879ce4c5c85926379d0906482/thumbnails/d26e468806ff4028b1bb950530acd721/e7f241b9ffbf4567835c2ced07d0bbe9.jpeg",
+      "sha256": "b5dc9168e7f9faac4c00d29882442d252e815df308adb6003bd78ddfd2ce24ad",
+      "bytes": 24124,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b5dc9168e7f9faac4c00d29882442d252e815df308adb6003bd78ddfd2ce24ad.jpg",
+      "review_id": "R2-024"
+    },
+    {
+      "asset_id": "objaverse_03765a7e66374ec7b3fa18749795189a",
+      "url": "https://media.sketchfab.com/models/03765a7e66374ec7b3fa18749795189a/thumbnails/92e2a800b7a949098158eff62f7b7e05/4a66e4326e7c41dca2f39dbfffdb8515.jpeg",
+      "sha256": "662b043bdf15d2e0166e84c8b176c1cc9de29e9acd628b11928dc437d832aaa3",
+      "bytes": 24669,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/662b043bdf15d2e0166e84c8b176c1cc9de29e9acd628b11928dc437d832aaa3.jpg",
+      "review_id": "R2-025"
+    },
+    {
+      "asset_id": "objaverse_ad0de808e06f40bda894b76d6c7f2c1f",
+      "url": "https://media.sketchfab.com/models/ad0de808e06f40bda894b76d6c7f2c1f/thumbnails/cd7641f994f94e8bbc2d261bf664ab46/94c47ace3467458c8d2481f88688dd87.jpeg",
+      "sha256": "d702e4c70531a2441a2e91216967ddd2da3f57e6e0b3284dab4458d216450b23",
+      "bytes": 12704,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d702e4c70531a2441a2e91216967ddd2da3f57e6e0b3284dab4458d216450b23.jpg",
+      "review_id": "R2-032"
+    },
+    {
+      "asset_id": "objaverse_ce511701c920467c914aa4f2144c5144",
+      "url": "https://media.sketchfab.com/models/ce511701c920467c914aa4f2144c5144/thumbnails/f40b38a12d824250b478ba6d1509b82c/45f1afb31d094762aa15101002a98aa1.jpeg",
+      "sha256": "e9718b9fcd6bf92d892680ca49aa2e43583158710a75eca9860501c04b65f341",
+      "bytes": 17790,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e9718b9fcd6bf92d892680ca49aa2e43583158710a75eca9860501c04b65f341.jpg",
+      "review_id": "R2-034"
+    },
+    {
+      "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+      "url": "https://media.sketchfab.com/models/66ca97517dc54f5d9dacc0da6f6a4200/thumbnails/4245429bc4de48708ca068d6ef098634/b14f7691dc9a4b8c8f68976fddf35bf1.jpeg",
+      "sha256": "a9cb28d2d178743ce435f909767b2fa833a798f20c6eb82435de494dc5add86f",
+      "bytes": 15386,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a9cb28d2d178743ce435f909767b2fa833a798f20c6eb82435de494dc5add86f.jpg",
+      "review_id": "R2-038"
+    },
+    {
+      "asset_id": "objaverse_8add919a3c774e589c1d76d6984b84ef",
+      "url": "https://media.sketchfab.com/models/8add919a3c774e589c1d76d6984b84ef/thumbnails/a384b7b524674cc28cb639ed6afbdc51/4f38fbc82ee14d96806d69b2c21086ab.jpeg",
+      "sha256": "7c2ea47a24fc1121151aefef9b3339ce146af97c19a19483092c5d3287427143",
+      "bytes": 19720,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7c2ea47a24fc1121151aefef9b3339ce146af97c19a19483092c5d3287427143.jpg",
+      "review_id": "R2-040"
+    },
+    {
+      "asset_id": "objaverse_a6d80caf3fec4b568a1d9cb0d18c6c70",
+      "url": "https://media.sketchfab.com/models/a6d80caf3fec4b568a1d9cb0d18c6c70/thumbnails/546c7455bad54db7bc2f85410b1ad413/4cb1a5fad77b4e1f88c73accb2fa63af.jpeg",
+      "sha256": "59f3a5e29f9a8d5d01d36ebd62af8f52ad93d8d66a07435db752790d8682824a",
+      "bytes": 10864,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/59f3a5e29f9a8d5d01d36ebd62af8f52ad93d8d66a07435db752790d8682824a.jpg",
+      "review_id": "R2-041"
+    },
+    {
+      "asset_id": "objaverse_c5e3f1896c664d56a8f023b93749ab47",
+      "url": "https://media.sketchfab.com/models/c5e3f1896c664d56a8f023b93749ab47/thumbnails/426ae50105c04e9096919395df417d2b/720x405.jpeg",
+      "sha256": "524afe3ede208ff6c206bc1f1b15db1ad34adca15bbe5621826170891f636a57",
+      "bytes": 18435,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/524afe3ede208ff6c206bc1f1b15db1ad34adca15bbe5621826170891f636a57.jpg",
+      "review_id": "R2-045"
+    },
+    {
+      "asset_id": "objaverse_7377ec591df04445a1aae370017aaa13",
+      "url": "https://media.sketchfab.com/models/7377ec591df04445a1aae370017aaa13/thumbnails/893640cef26f4640b28bfea42b11bfbd/f4ba017c43af49be97c780e89f783d96.jpeg",
+      "sha256": "ed7fef59dbf4650d39ac39a69686f6bfd3534cdb33bee06d87a5dc8a2aa776f0",
+      "bytes": 17487,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ed7fef59dbf4650d39ac39a69686f6bfd3534cdb33bee06d87a5dc8a2aa776f0.jpg",
+      "review_id": "R2-051"
+    },
+    {
+      "asset_id": "objaverse_8162e965fab44025acd1115019628652",
+      "url": "https://media.sketchfab.com/models/8162e965fab44025acd1115019628652/thumbnails/0e1c9c65e77a4f7d81f1642777c8646e/6e7369df6c2649898b050b39ac63196a.jpeg",
+      "sha256": "65e73e8d0d63055e5a11f12a4e92fc2976802e671bcb8c7fcc44d64a16dc4713",
+      "bytes": 8301,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/65e73e8d0d63055e5a11f12a4e92fc2976802e671bcb8c7fcc44d64a16dc4713.jpg",
+      "review_id": "R2-052"
+    },
+    {
+      "asset_id": "objaverse_90770ba037ef4cdda310b0c4af787c17",
+      "url": "https://media.sketchfab.com/models/90770ba037ef4cdda310b0c4af787c17/thumbnails/1cf220d404b849c2895b491c659f95ae/1046b2c14f404f7db3daadc6adf29eec.jpeg",
+      "sha256": "13340212b0e8a423f2c524d387f494419dfa73e1dcf0a542ee30214d59306593",
+      "bytes": 5252,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/13340212b0e8a423f2c524d387f494419dfa73e1dcf0a542ee30214d59306593.jpg",
+      "review_id": "R2-053"
+    },
+    {
+      "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+      "url": "https://media.sketchfab.com/models/a759f6f592084e04be62a57d578b6cb6/thumbnails/97e4cad29a4147d2b757bafc4da27705/feb5bb9671244f069993f1a1c0f503ca.jpeg",
+      "sha256": "201801107538ccb525a4a4b788a424b2dc3fa11a93405a969d189d102137ef15",
+      "bytes": 8452,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/201801107538ccb525a4a4b788a424b2dc3fa11a93405a969d189d102137ef15.jpg",
+      "review_id": "R2-054"
+    },
+    {
+      "asset_id": "objaverse_a826489926e041b2820e2a05ee632b71",
+      "url": "https://media.sketchfab.com/models/a826489926e041b2820e2a05ee632b71/thumbnails/118a17a9b5244aeaa2f9166919a8ec2b/a4957e6b55a54c84b6f95780a616ce7a.jpeg",
+      "sha256": "1197f5774cb64c5110053f6add239084c7f87ea7221def4435aeec5e1ca23d1b",
+      "bytes": 5694,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1197f5774cb64c5110053f6add239084c7f87ea7221def4435aeec5e1ca23d1b.jpg",
+      "review_id": "R2-055"
+    },
+    {
+      "asset_id": "objaverse_8bc381a229e34834bd8e20ca6011e82f",
+      "url": "https://media.sketchfab.com/models/8bc381a229e34834bd8e20ca6011e82f/thumbnails/f63f2bdf4c0846159cddb951850cccf1/720x405.jpeg",
+      "sha256": "b0f5cfb52e636417f2818a59b685044e7d922e1eb6364937a4c2a4ab77ed7d1d",
+      "bytes": 21583,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b0f5cfb52e636417f2818a59b685044e7d922e1eb6364937a4c2a4ab77ed7d1d.jpg",
+      "review_id": "R2-057"
+    },
+    {
+      "asset_id": "objaverse_9ae7b722a6834c729896e441fa88a1fa",
+      "url": "https://media.sketchfab.com/models/9ae7b722a6834c729896e441fa88a1fa/thumbnails/ba3dae1ea44e44b4af019359bb0d335b/d486845d9b084840a03554cb2b7eeb8a.jpeg",
+      "sha256": "9fe5ac994df0a68c90b75e6800ca61d3491ea93f72f10ad48c346cd5968730b4",
+      "bytes": 5443,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9fe5ac994df0a68c90b75e6800ca61d3491ea93f72f10ad48c346cd5968730b4.jpg",
+      "review_id": "R2-058"
+    },
+    {
+      "asset_id": "objaverse_b2873c9ae9094e8f8eed63195ea18211",
+      "url": "https://media.sketchfab.com/models/b2873c9ae9094e8f8eed63195ea18211/thumbnails/6cc1f5d3e070493eaee72dcb8b9ae0b1/720x405.jpeg",
+      "sha256": "5e7d06e8fb7135193d5d3020d52605be05a8c2eb1e9055444d47e7932b861c57",
+      "bytes": 15324,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5e7d06e8fb7135193d5d3020d52605be05a8c2eb1e9055444d47e7932b861c57.jpg",
+      "review_id": "R2-059"
+    },
+    {
+      "asset_id": "objaverse_b5ff9b69c6674cdc9c1474156ff4d912",
+      "url": "https://media.sketchfab.com/models/b5ff9b69c6674cdc9c1474156ff4d912/thumbnails/a42b63dbe8494b4fb437b5c86d87eec6/c5a7041ae1144f3c986553f284274c0c.jpeg",
+      "sha256": "5e4be43b81abbf7418192e447bddff5116504a41037dfe13157daabcb1bbb7ae",
+      "bytes": 15951,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/5e4be43b81abbf7418192e447bddff5116504a41037dfe13157daabcb1bbb7ae.jpg",
+      "review_id": "R2-060"
+    },
+    {
+      "asset_id": "objaverse_4d24c6ab618c4754802ffd94de41c0f2",
+      "url": "https://media.sketchfab.com/models/4d24c6ab618c4754802ffd94de41c0f2/thumbnails/09554330a2d241818810d754fcbc92de/425f499ed762419694d2f4a88a84e030.jpeg",
+      "sha256": "04165c6b45a6e8645cf4a25b41e4c78a3adc8e1ad81539d101bd156d40bbb2ad",
+      "bytes": 8577,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/04165c6b45a6e8645cf4a25b41e4c78a3adc8e1ad81539d101bd156d40bbb2ad.jpg",
+      "review_id": "R2-061"
+    },
+    {
+      "asset_id": "objaverse_067d275b687b40869b3008c289b7e25d",
+      "url": "https://media.sketchfab.com/models/067d275b687b40869b3008c289b7e25d/thumbnails/76b7f2b32a0840d4a6d1475269290d9c/2d1a64224f7944719c09bcc5dbca9305.jpeg",
+      "sha256": "3b42dc0c81a4c1cf1e6fa6ed1a4640e91f2a0d7b51723dd3ec3567b0679110de",
+      "bytes": 10047,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3b42dc0c81a4c1cf1e6fa6ed1a4640e91f2a0d7b51723dd3ec3567b0679110de.jpg",
+      "review_id": "R3-001"
+    },
+    {
+      "asset_id": "objaverse_869f53e777524f1289bfe6eefbc88fad",
+      "url": "https://media.sketchfab.com/models/869f53e777524f1289bfe6eefbc88fad/thumbnails/b380da5a039040ec9dd9838188bce28c/720x405.jpeg",
+      "sha256": "649c52b1f6b435e4cb378bf5e8b34986330a0b3058071624a9b86b07e4a9bdf5",
+      "bytes": 12518,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/649c52b1f6b435e4cb378bf5e8b34986330a0b3058071624a9b86b07e4a9bdf5.jpg",
+      "review_id": "R3-003"
+    },
+    {
+      "asset_id": "objaverse_91afdd4c3e17423f80a5721e2fcec667",
+      "url": "https://media.sketchfab.com/models/91afdd4c3e17423f80a5721e2fcec667/thumbnails/4b5fc379e1074121be69eedb57e995d3/2780155f5bfe4816887631047e1dc2ca.jpeg",
+      "sha256": "32a9528d8afa22e70aa0ff61f42f937bfbe956da67652f77e6f5623b8de1d334",
+      "bytes": 5420,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/32a9528d8afa22e70aa0ff61f42f937bfbe956da67652f77e6f5623b8de1d334.jpg",
+      "review_id": "R3-004"
+    },
+    {
+      "asset_id": "objaverse_aa0072d9ebd04f3c87a9204c5a4d4f72",
+      "url": "https://media.sketchfab.com/models/aa0072d9ebd04f3c87a9204c5a4d4f72/thumbnails/cd2a2049f1e6432b807e67f815493590/9e02bf1f54334bd086ebc544479760f8.jpeg",
+      "sha256": "9b1a8732c351c8023d01cc37da700c3a7fb2877410b6c881a0edffeae6554e65",
+      "bytes": 9544,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/9b1a8732c351c8023d01cc37da700c3a7fb2877410b6c881a0edffeae6554e65.jpg",
+      "review_id": "R3-005"
+    },
+    {
+      "asset_id": "objaverse_f26ac047ad644c9e90743b13735a0fb8",
+      "url": "https://media.sketchfab.com/models/f26ac047ad644c9e90743b13735a0fb8/thumbnails/cc56c0f54abe405faa37ff819fec1d12/029af1281f5a4020900b402d79487182.jpeg",
+      "sha256": "937406833981dd07e6c33c1a0126340d25b161119521681c18785e674fc7f0ec",
+      "bytes": 16149,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/937406833981dd07e6c33c1a0126340d25b161119521681c18785e674fc7f0ec.jpg",
+      "review_id": "R3-006"
+    },
+    {
+      "asset_id": "objaverse_1884fb3fd39547788d962d4172ed12cc",
+      "url": "https://media.sketchfab.com/models/1884fb3fd39547788d962d4172ed12cc/thumbnails/c9c2f9b4c9e74422a727caf55e562bb7/63c88976437647cb80af7865a2094bc5.jpeg",
+      "sha256": "b0535a0aa435963e850210f06e0f45526f13563321436f1fa9ac87a076f49972",
+      "bytes": 10922,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b0535a0aa435963e850210f06e0f45526f13563321436f1fa9ac87a076f49972.jpg",
+      "review_id": "R3-009"
+    },
+    {
+      "asset_id": "objaverse_1eac5018744b461ab4e61f59ada13027",
+      "url": "https://media.sketchfab.com/models/1eac5018744b461ab4e61f59ada13027/thumbnails/a2c55996467642ba84cdc4b22f0bdaf7/6e50afe7de684c99b1dd007241dd30ed.jpeg",
+      "sha256": "3542e93f23c98744c931638e3400d4f635b969c27006891ea1a169c84cd22340",
+      "bytes": 14488,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3542e93f23c98744c931638e3400d4f635b969c27006891ea1a169c84cd22340.jpg",
+      "review_id": "R3-010"
+    },
+    {
+      "asset_id": "objaverse_39e367ac19a644a3aed0ca61ff7d7b19",
+      "url": "https://media.sketchfab.com/models/39e367ac19a644a3aed0ca61ff7d7b19/thumbnails/e3a2cd9607d04a14a6726dd89cfcac2c/9157a642f9f147a1b7569bbbde302d2a.jpeg",
+      "sha256": "a28ee0144226b4b4c71da01fd9744b50ebc640339dea7192d65aa16ee464a8fb",
+      "bytes": 19740,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a28ee0144226b4b4c71da01fd9744b50ebc640339dea7192d65aa16ee464a8fb.jpg",
+      "review_id": "R3-013"
+    },
+    {
+      "asset_id": "objaverse_41fbe5b95184415ea2d37c333d83474a",
+      "url": "https://media.sketchfab.com/models/41fbe5b95184415ea2d37c333d83474a/thumbnails/e6de9131f89645998be4696ce42d6891/013e8465dec342dca8053c41b5c4b639.jpeg",
+      "sha256": "49c4534c2d7c82ab2e3f47ef7b6987894da5d018611d929e100f54f9bde36e0a",
+      "bytes": 22506,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/49c4534c2d7c82ab2e3f47ef7b6987894da5d018611d929e100f54f9bde36e0a.jpg",
+      "review_id": "R3-014"
+    },
+    {
+      "asset_id": "objaverse_4ada88f4c1e14bbbaf3b40576967ef28",
+      "url": "https://media.sketchfab.com/models/4ada88f4c1e14bbbaf3b40576967ef28/thumbnails/f2e1a1ec21284be79eb4505e39c15223/481d528dce6a40ff8ff193d587d71c03.jpeg",
+      "sha256": "3c36018353a2c7814ca9dc7ac1d8bf93fd96fc2ab52f0a2ce652e553bce57c6b",
+      "bytes": 11656,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3c36018353a2c7814ca9dc7ac1d8bf93fd96fc2ab52f0a2ce652e553bce57c6b.jpg",
+      "review_id": "R3-015"
+    },
+    {
+      "asset_id": "objaverse_4da262198ca442deaf92607dc8388225",
+      "url": "https://media.sketchfab.com/models/4da262198ca442deaf92607dc8388225/thumbnails/3b3f9b5c568543388c16f581329ec24f/c490889066584cdab6c59851a4faea2c.jpeg",
+      "sha256": "3e114f42c05e2356567f1a464f586229d729d68ac58b896570a523561ca87118",
+      "bytes": 12327,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3e114f42c05e2356567f1a464f586229d729d68ac58b896570a523561ca87118.jpg",
+      "review_id": "R3-016"
+    },
+    {
+      "asset_id": "objaverse_210462efb3b34699ad6fbbcae8e27172",
+      "url": "https://media.sketchfab.com/models/210462efb3b34699ad6fbbcae8e27172/thumbnails/93125085f9ce4da38f3136efa05cdc27/720x405.jpeg",
+      "sha256": "b2809130124f9229b9ce4d26d689645de5e043f041eb647a60fbd4e383566e46",
+      "bytes": 11643,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b2809130124f9229b9ce4d26d689645de5e043f041eb647a60fbd4e383566e46.jpg",
+      "review_id": "R3-017"
+    },
+    {
+      "asset_id": "objaverse_d2539cb3c9b5411eae6335a2b7ed4aa6",
+      "url": "https://media.sketchfab.com/models/d2539cb3c9b5411eae6335a2b7ed4aa6/thumbnails/65ec005c6c2949eea73017c208f7bb51/c428cc91ccc34a5386ad02fe3936df00.jpeg",
+      "sha256": "af204393830473b0fba042193a05b0e8ded1ad24112fad4dccb8335d57b56163",
+      "bytes": 10203,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/af204393830473b0fba042193a05b0e8ded1ad24112fad4dccb8335d57b56163.jpg",
+      "review_id": "R3-020"
+    },
+    {
+      "asset_id": "objaverse_0115bca2d7bf45f092e9e93064ffada8",
+      "url": "https://media.sketchfab.com/models/0115bca2d7bf45f092e9e93064ffada8/thumbnails/d9d34d2a133348fab2380ed66e3d1c30/6a195db6cb694bf7b3c49607d6d3a48b.jpeg",
+      "sha256": "b259acd054192cd6b1bda37bf30c1ce5d1173eca55999269122cb589feb4b878",
+      "bytes": 14332,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b259acd054192cd6b1bda37bf30c1ce5d1173eca55999269122cb589feb4b878.jpg",
+      "review_id": "R3-021"
+    },
+    {
+      "asset_id": "objaverse_04a33ad7e5e44b00807c6ae8640b9a38",
+      "url": "https://media.sketchfab.com/models/04a33ad7e5e44b00807c6ae8640b9a38/thumbnails/bcb1705a27b3499387fecd28a6b93a3c/ff3cdcc636d44a9db9fe8c43a05f9a9b.jpeg",
+      "sha256": "2222031429b76e44f8c0cf0ec3c576878b86402451edecd0eec85e501d2664fa",
+      "bytes": 8872,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2222031429b76e44f8c0cf0ec3c576878b86402451edecd0eec85e501d2664fa.jpg",
+      "review_id": "R3-024"
+    },
+    {
+      "asset_id": "objaverse_7b67b44cdaa6456aad0433ee2b4591f3",
+      "url": "https://media.sketchfab.com/models/7b67b44cdaa6456aad0433ee2b4591f3/thumbnails/6be8fe99af4d4c9190ab216ede49619d/ac6de494b69a4aed8adb446cfe4aee80.jpeg",
+      "sha256": "38d719f0fcdd20c584e40c1fc218ed75721128699d157856aec8fce8c48652d9",
+      "bytes": 16987,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/38d719f0fcdd20c584e40c1fc218ed75721128699d157856aec8fce8c48652d9.jpg",
+      "review_id": "R3-028"
+    },
+    {
+      "asset_id": "objaverse_f73b3dbebc434dcbb28678fad0c6bf49",
+      "url": "https://media.sketchfab.com/models/f73b3dbebc434dcbb28678fad0c6bf49/thumbnails/f30c8c18bc474432bcdc0e4fdd3a48f3/640.jpeg",
+      "sha256": "407763fb22b742b43210f99e902b74017ba129b8a2f5b93b229f6b07aa1220f2",
+      "bytes": 13032,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/407763fb22b742b43210f99e902b74017ba129b8a2f5b93b229f6b07aa1220f2.jpg",
+      "review_id": "R3-031"
+    },
+    {
+      "asset_id": "objaverse_0102b2c1449f448687d62ea66ae2a26a",
+      "url": "https://media.sketchfab.com/models/0102b2c1449f448687d62ea66ae2a26a/thumbnails/13d67aea10d342d0828fcb6a2083ab92/640x360.jpeg",
+      "sha256": "652b1ea8c757f07db35427cbdda77ab1239e245993c79b6c46bcf01327f34e81",
+      "bytes": 17929,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/652b1ea8c757f07db35427cbdda77ab1239e245993c79b6c46bcf01327f34e81.jpg",
+      "review_id": "R3-033"
+    },
+    {
+      "asset_id": "objaverse_01b79647e6e442989fda47ff20cabdc9",
+      "url": "https://media.sketchfab.com/models/01b79647e6e442989fda47ff20cabdc9/thumbnails/dd94f50492ad4105b8b8c676fa75b3f4/4b0215da888f48629a5f78dc67c0b856.jpeg",
+      "sha256": "dbcd9abc076a3ff10dc84c81d050bd2f41731d9fd96ce27c1ff15e09336e193a",
+      "bytes": 14851,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dbcd9abc076a3ff10dc84c81d050bd2f41731d9fd96ce27c1ff15e09336e193a.jpg",
+      "review_id": "R3-034"
+    },
+    {
+      "asset_id": "objaverse_90033ea46d90407d9bcc8318186a2b1e",
+      "url": "https://media.sketchfab.com/models/90033ea46d90407d9bcc8318186a2b1e/thumbnails/9a6ac71664a241d7b45f45e5200ea38d/a38d855c8655423bb5799c85a4dc5d1d.jpeg",
+      "sha256": "98541c52867994c2fb984b1ebcb1bdda1af63f1b10faaa464f61043e0cc299ef",
+      "bytes": 11539,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/98541c52867994c2fb984b1ebcb1bdda1af63f1b10faaa464f61043e0cc299ef.jpg",
+      "review_id": "R3-035"
+    },
+    {
+      "asset_id": "objaverse_02db7e12359941c4b2ff79abb3504bef",
+      "url": "https://media.sketchfab.com/models/02db7e12359941c4b2ff79abb3504bef/thumbnails/5416db60dc8a4d17a8bdc1368aa46ef7/0cd85f0ef36d4532a776aad7a9938afc.jpeg",
+      "sha256": "45f13e5d9c7179319fd33efd4e170e71c18991c6b88499e5148d343df46c5bb3",
+      "bytes": 12838,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/45f13e5d9c7179319fd33efd4e170e71c18991c6b88499e5148d343df46c5bb3.jpg",
+      "review_id": "R3-038"
+    },
+    {
+      "asset_id": "objaverse_03f1678351214e169ed36e05c7fe3bf0",
+      "url": "https://media.sketchfab.com/models/03f1678351214e169ed36e05c7fe3bf0/thumbnails/e2579540114d4c46810fc7986d2bbfac/219ba08f8eac4aaa8c40fa9cdf471131.jpeg",
+      "sha256": "1703694dc820005db331531b8fdfcec9f361bc642820a6178c1eb867516bd137",
+      "bytes": 8605,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1703694dc820005db331531b8fdfcec9f361bc642820a6178c1eb867516bd137.jpg",
+      "review_id": "R3-040"
+    },
+    {
+      "asset_id": "objaverse_048a7e91bec24ed182671874b7cb6a47",
+      "url": "https://media.sketchfab.com/models/048a7e91bec24ed182671874b7cb6a47/thumbnails/ec35f707f14045c080bd05d027d2f45b/99ea95ce003c4af6a2ec75be0b2092a2.jpeg",
+      "sha256": "6b4eae3d4a200d435043c4688f299d8a7f2b671513a6dc490a9c5d53f1b7bf11",
+      "bytes": 8960,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6b4eae3d4a200d435043c4688f299d8a7f2b671513a6dc490a9c5d53f1b7bf11.jpg",
+      "review_id": "R3-041"
+    },
+    {
+      "asset_id": "objaverse_0d53e8e1621c41e78a46c6cde46a49b9",
+      "url": "https://media.sketchfab.com/models/0d53e8e1621c41e78a46c6cde46a49b9/thumbnails/19dd982a598c43ccbdfe1c4b7dc5a2c3/dc9f18222e534e8d85cb2fcc754c880d.jpeg",
+      "sha256": "c34bfcc082c53aaad1657a66cf48bab30025f7955115f48c4ea07fe3ee8d9356",
+      "bytes": 12944,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c34bfcc082c53aaad1657a66cf48bab30025f7955115f48c4ea07fe3ee8d9356.jpg",
+      "review_id": "R3-044"
+    },
+    {
+      "asset_id": "objaverse_1d068a0311374d73aaf88b7a9bba8f7c",
+      "url": "https://media.sketchfab.com/models/1d068a0311374d73aaf88b7a9bba8f7c/thumbnails/6dc39df033ba46548b0d900ad84bd9ea/b6559493815146eabdaf52151fb2b1c7.jpeg",
+      "sha256": "87125d299231c110b40fe2af90e07e9120de02be77d33f50c774650aaa1524d4",
+      "bytes": 9907,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/87125d299231c110b40fe2af90e07e9120de02be77d33f50c774650aaa1524d4.jpg",
+      "review_id": "R3-045"
+    },
+    {
+      "asset_id": "objaverse_c9e6949514064913af57ffdb35614436",
+      "url": "https://media.sketchfab.com/models/c9e6949514064913af57ffdb35614436/thumbnails/2d242eb248614ae9b4f5529e8d2deabe/53db0d37941c43a18ffa9172adb8cc56.jpeg",
+      "sha256": "c3dae0b7711387c77a7dc08d6e21d5b887f4065cca6c6ebdb811970fd4bc9423",
+      "bytes": 16084,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c3dae0b7711387c77a7dc08d6e21d5b887f4065cca6c6ebdb811970fd4bc9423.jpg",
+      "review_id": "R3-046"
+    },
+    {
+      "asset_id": "objaverse_f07315c2086d40c0aeac95b999508c8e",
+      "url": "https://media.sketchfab.com/models/f07315c2086d40c0aeac95b999508c8e/thumbnails/477fb26c852246d1895cbc8e36b813f6/762f8fdc8d354ef8a00b48bf429539bc.jpeg",
+      "sha256": "4e608edf81e639c0033cb07b7331f2db856aef2c08363fe5631213ce5ea7935a",
+      "bytes": 11812,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4e608edf81e639c0033cb07b7331f2db856aef2c08363fe5631213ce5ea7935a.jpg",
+      "review_id": "R3-047"
+    },
+    {
+      "asset_id": "objaverse_f8f4a3bbf71e4300a2472c82bc305de9",
+      "url": "https://media.sketchfab.com/models/f8f4a3bbf71e4300a2472c82bc305de9/thumbnails/a96585a260264af28a14358feaa40fed/4c36657009424b3eaa4e3f71031c62c6.jpeg",
+      "sha256": "26a4e19052c85192c7ce4d5cf2fa79f74ca41f510fb322e806abe202f3e5a410",
+      "bytes": 24036,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/26a4e19052c85192c7ce4d5cf2fa79f74ca41f510fb322e806abe202f3e5a410.jpg",
+      "review_id": "R3-048"
+    },
+    {
+      "asset_id": "objaverse_138b321d34a54870b8d8e6127d1f4c5f",
+      "url": "https://media.sketchfab.com/models/138b321d34a54870b8d8e6127d1f4c5f/thumbnails/9a10397d1ff44630a6db603cd4aacc80/e5fb954e9d9e4d3ebac66744dbc23f4e.jpeg",
+      "sha256": "3661f898ff498ea39a31f5f864ff7376c5cf8d3757c49df880d94cf25bc38384",
+      "bytes": 15527,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3661f898ff498ea39a31f5f864ff7376c5cf8d3757c49df880d94cf25bc38384.jpg",
+      "review_id": "R3-050"
+    },
+    {
+      "asset_id": "objaverse_1a3a21e8cc5948a1a6049ddfa0cedb34",
+      "url": "https://media.sketchfab.com/models/1a3a21e8cc5948a1a6049ddfa0cedb34/thumbnails/a3788fb171fb4976af98935922ea5fb4/8c55a308f7854428976bc86c78a5fc8f.jpeg",
+      "sha256": "a316c1b3d741f5c89ab11db8a3a3c81bcd7e6a10947895d42c83441e71b19ebc",
+      "bytes": 14062,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a316c1b3d741f5c89ab11db8a3a3c81bcd7e6a10947895d42c83441e71b19ebc.jpg",
+      "review_id": "R3-051"
+    },
+    {
+      "asset_id": "objaverse_2c5174dc122a4fd8bb21e1beb11da02c",
+      "url": "https://media.sketchfab.com/models/2c5174dc122a4fd8bb21e1beb11da02c/thumbnails/fa62571c21bc493f923290840c9ef09b/b4f104c3f0944da09ae7302532b7a9f3.jpeg",
+      "sha256": "0bf3a0179c3f275cd5c4c3b4d1fea88a871f87d1c3681fe82980fdb937c6cb58",
+      "bytes": 14831,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0bf3a0179c3f275cd5c4c3b4d1fea88a871f87d1c3681fe82980fdb937c6cb58.jpg",
+      "review_id": "R3-053"
+    },
+    {
+      "asset_id": "objaverse_41cce3bc254244578a7bfdf706ff8e6d",
+      "url": "https://media.sketchfab.com/models/41cce3bc254244578a7bfdf706ff8e6d/thumbnails/c3a5173d3d984629976dab9d47bf56f7/b8b204c58b774afb9cb85c0a25efdc3f.jpeg",
+      "sha256": "c012de84c8e810699800d816c51137e6a3ac25e5dde25bafb27041be2878e39d",
+      "bytes": 14393,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c012de84c8e810699800d816c51137e6a3ac25e5dde25bafb27041be2878e39d.jpg",
+      "review_id": "R3-054"
+    },
+    {
+      "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+      "url": "https://media.sketchfab.com/models/58e2f2bc9b9b4d07b4aa20f4b6ccbc47/thumbnails/83e3a6f7da6746bebd84570a4a26b779/d4dd0be9d6b2401f95273a44f7a37fbe.jpeg",
+      "sha256": "80bb1e073009418acb625b760637f2123c96c2dee18868437fc3780c619aff6f",
+      "bytes": 19322,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/80bb1e073009418acb625b760637f2123c96c2dee18868437fc3780c619aff6f.jpg",
+      "review_id": "R3-055"
+    },
+    {
+      "asset_id": "objaverse_9e9ccda0f3bd4f718c35048b787d7f6b",
+      "url": "https://media.sketchfab.com/models/9e9ccda0f3bd4f718c35048b787d7f6b/thumbnails/610ead23c5a4451b8c01b95993fe56d6/d3fbd1534c084c8d9e28f71a78137731.jpeg",
+      "sha256": "f6bd41fd15e957246fdea8db424eea3581d05c180f623cdafbbc106b17e17b22",
+      "bytes": 8974,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f6bd41fd15e957246fdea8db424eea3581d05c180f623cdafbbc106b17e17b22.jpg",
+      "review_id": "R3-058"
+    },
+    {
+      "asset_id": "objaverse_099d6dcd26ad4d4eb8389e60c74c173a",
+      "url": "https://media.sketchfab.com/models/099d6dcd26ad4d4eb8389e60c74c173a/thumbnails/be21a5d63c56416081352899c5daf5aa/7a1d9166e66a402289e70a547903923b.jpeg",
+      "sha256": "2ac07f04c544bb9ce509634cb5d6007c189a54c1a73923e99984d7d94fb0c260",
+      "bytes": 11824,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2ac07f04c544bb9ce509634cb5d6007c189a54c1a73923e99984d7d94fb0c260.jpg",
+      "review_id": "R3-059"
+    },
+    {
+      "asset_id": "objaverse_112c059282cf4511a01fd27211edcae8",
+      "url": "https://media.sketchfab.com/models/112c059282cf4511a01fd27211edcae8/thumbnails/52db90b715ff467f9c68a5d2f3167e1d/02af2b3085374cb4941dfd37aaa15289.jpeg",
+      "sha256": "393612317258071f70a55e06b9c7908c3f803d254fe19367cf59d01392262742",
+      "bytes": 6976,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/393612317258071f70a55e06b9c7908c3f803d254fe19367cf59d01392262742.jpg",
+      "review_id": "R3-060"
+    },
+    {
+      "asset_id": "objaverse_1c03a7c8544343e583eb9f42a0205c3e",
+      "url": "https://media.sketchfab.com/models/1c03a7c8544343e583eb9f42a0205c3e/thumbnails/05c92e2d6ec6408c807aaa37ecd7ac41/81644761f75f4d2d9cdaf13cc179e8ac.jpeg",
+      "sha256": "c605c382fd983361da531cf5cf4371d48c2c7bf10355e8e121f64e07796a0a55",
+      "bytes": 11202,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c605c382fd983361da531cf5cf4371d48c2c7bf10355e8e121f64e07796a0a55.jpg",
+      "review_id": "R3-061"
+    },
+    {
+      "asset_id": "objaverse_30c2ca3287634e5d8aaba478f2bffb3c",
+      "url": "https://media.sketchfab.com/models/30c2ca3287634e5d8aaba478f2bffb3c/thumbnails/87e229413044462480e342171effbe00/a4878bb9c07b41b48927ce223dca40ea.jpeg",
+      "sha256": "f82a277b370bb32825540e1fd4ea2df3d8783db9b149e16e6c583df81a679fcd",
+      "bytes": 6801,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f82a277b370bb32825540e1fd4ea2df3d8783db9b149e16e6c583df81a679fcd.jpg",
+      "review_id": "R3-062"
+    },
+    {
+      "asset_id": "objaverse_3fc7e4dcddae42ca9d8f905ff4622fa7",
+      "url": "https://media.sketchfab.com/models/3fc7e4dcddae42ca9d8f905ff4622fa7/thumbnails/8f8988159bac4f3ab4d2d4b37c587055/c37f0e9b8a504bacbc39dc3dba68891a.jpeg",
+      "sha256": "e16d89e6a1000c8a58b896c5ac7adc76dc837a7b1938e13a2bc1686994b3ef0f",
+      "bytes": 25165,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e16d89e6a1000c8a58b896c5ac7adc76dc837a7b1938e13a2bc1686994b3ef0f.jpg",
+      "review_id": "R3-063"
+    },
+    {
+      "asset_id": "objaverse_4c5e08ff47524bfbba7b6e02061d4756",
+      "url": "https://media.sketchfab.com/models/4c5e08ff47524bfbba7b6e02061d4756/thumbnails/421199fca4274a0c95447046697a8db8/7523507dd1f34d85b19770208c2840c3.jpeg",
+      "sha256": "8f9229579e51fe0021847c7d6cd0687a37d33d06c4b81e5e2d367e295084201d",
+      "bytes": 5141,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/8f9229579e51fe0021847c7d6cd0687a37d33d06c4b81e5e2d367e295084201d.jpg",
+      "review_id": "R3-064"
+    },
+    {
+      "asset_id": "objaverse_af86893c11a54ca28f365d56d901f90d",
+      "url": "https://media.sketchfab.com/models/af86893c11a54ca28f365d56d901f90d/thumbnails/c15805c250bc496a962a450e3957fd5b/d625258d9ceb4a318e28efd04c77c499.jpeg",
+      "sha256": "3b9a5e825d45fab3a36e50f161facdacb153384ef76a09e242750eedbfb7d72b",
+      "bytes": 10155,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3b9a5e825d45fab3a36e50f161facdacb153384ef76a09e242750eedbfb7d72b.jpg",
+      "review_id": "R3-066"
+    },
+    {
+      "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+      "url": "https://media.sketchfab.com/models/8a51e2572c2e49d6829bb8c2b135d214/thumbnails/ba476b14131d415da0f8a91ff734227d/abcc71a2068c4865a6faa74e374099a1.jpeg",
+      "sha256": "b59a4dde93a820af23f61bfffb95626e95f295ef53d383c313d02a0646e12838",
+      "bytes": 11547,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b59a4dde93a820af23f61bfffb95626e95f295ef53d383c313d02a0646e12838.jpg",
+      "review_id": "R3-067"
+    },
+    {
+      "asset_id": "objaverse_03c075bb284840b1bd3fb2a28c910f59",
+      "url": "https://media.sketchfab.com/models/03c075bb284840b1bd3fb2a28c910f59/thumbnails/1e631ebc60ad4f65b93c8a76ee263f72/2d311ef4416c4c87a404372d3f8e0332.jpeg",
+      "sha256": "87c1cd2536a6a341c35d4beca256d920000fa9902d522deef1436e443f6f1158",
+      "bytes": 11025,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/87c1cd2536a6a341c35d4beca256d920000fa9902d522deef1436e443f6f1158.jpg",
+      "review_id": "R3-069"
+    },
+    {
+      "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+      "url": "https://media.sketchfab.com/models/15997fe949024e51b4a2cf8df3fe3b5a/thumbnails/1862694b6829407599cbd0da5493dc05/75bea88ccafd47d1aeda09166051c059.jpeg",
+      "sha256": "62cd909a26b843b27f761a960de0f0453f5efc57c3c7afc2a528006cfcb8909b",
+      "bytes": 20049,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/62cd909a26b843b27f761a960de0f0453f5efc57c3c7afc2a528006cfcb8909b.jpg",
+      "review_id": "R3-070"
+    },
+    {
+      "asset_id": "objaverse_265f849af5a247698e821bf0a1d50307",
+      "url": "https://media.sketchfab.com/models/265f849af5a247698e821bf0a1d50307/thumbnails/f52fccdf514144e5a1407f43cd334082/a3ebc51226ca474b9a7d29fd4ae546b3.jpeg",
+      "sha256": "b1b54bbfcc6d8709eb5ee50b22ce75556206a8e0fc8afe1996dfe9b77e812cec",
+      "bytes": 5754,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b1b54bbfcc6d8709eb5ee50b22ce75556206a8e0fc8afe1996dfe9b77e812cec.jpg",
+      "review_id": "R3-074"
+    },
+    {
+      "asset_id": "objaverse_839f3289ecbe4849974b1c59261fcc66",
+      "url": "https://media.sketchfab.com/models/839f3289ecbe4849974b1c59261fcc66/thumbnails/f6b9a720f1664b8cb7258a5bd5d6104d/81ee84a3204243db83bac5d6916d9731.jpeg",
+      "sha256": "1e2e25167db0582c2f9cf23c8916875b3b9b4aa76d75b31c96f3e6ac8d178097",
+      "bytes": 14841,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1e2e25167db0582c2f9cf23c8916875b3b9b4aa76d75b31c96f3e6ac8d178097.jpg",
+      "review_id": "R3-080"
+    },
+    {
+      "asset_id": "objaverse_ac166ce0807345a385b051b06f7960f1",
+      "url": "https://media.sketchfab.com/models/ac166ce0807345a385b051b06f7960f1/thumbnails/3b2b4f62695e42ef940b41d5fd82770d/d973187c781a4a9283a7a42e77184fb9.jpeg",
+      "sha256": "307776b5a41fbe17d1b7ed3014da11e791543cbe66353f4abc87973084488088",
+      "bytes": 14515,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/307776b5a41fbe17d1b7ed3014da11e791543cbe66353f4abc87973084488088.jpg",
+      "review_id": "R3-081"
+    },
+    {
+      "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+      "url": "https://media.sketchfab.com/models/c2b22722e149416bacf7420a59cb472b/thumbnails/a5885631e6cc4884a9c4dc0218f1d801/85a5aa95568b4bbbaa8e6c229f2483bf.jpeg",
+      "sha256": "2dd47820b2b8194cf259fa200b3155c4baf908fdd8b44f4ed6bac7c2541724d4",
+      "bytes": 10176,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2dd47820b2b8194cf259fa200b3155c4baf908fdd8b44f4ed6bac7c2541724d4.jpg",
+      "review_id": "R3-082"
+    },
+    {
+      "asset_id": "objaverse_e5211b9697ea47b2bf1d76fbf20eaaa4",
+      "url": "https://media.sketchfab.com/models/e5211b9697ea47b2bf1d76fbf20eaaa4/thumbnails/ae99c709bac946d8b988c3f05adb26d9/89b46468c32046b1afe219cf797798a9.jpeg",
+      "sha256": "e6c7dc6c790ecd797eba6269b96be0e54064e3c4fe4dbc5d3d77be9c5b155796",
+      "bytes": 6836,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e6c7dc6c790ecd797eba6269b96be0e54064e3c4fe4dbc5d3d77be9c5b155796.jpg",
+      "review_id": "R3-085"
+    },
+    {
+      "asset_id": "objaverse_014968271f5d4a2e805a4c910ee8a614",
+      "url": "https://media.sketchfab.com/models/014968271f5d4a2e805a4c910ee8a614/thumbnails/5ce7a0174a424dd4b7a5aa8a117ca73a/640x360.jpeg",
+      "sha256": "90e086212a8e7a1b74d2d994ff5d043b3cdeb99723b8728bd8b97cec7d70c077",
+      "bytes": 11657,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/90e086212a8e7a1b74d2d994ff5d043b3cdeb99723b8728bd8b97cec7d70c077.jpg",
+      "review_id": "R3-086"
+    },
+    {
+      "asset_id": "objaverse_02833cad1696475f911832b813e6e78f",
+      "url": "https://media.sketchfab.com/models/02833cad1696475f911832b813e6e78f/thumbnails/04964b07c5e6401e90682737f0c1ffe5/2eeacf74a1cf4fee9be9703f061a6a7e.jpeg",
+      "sha256": "3504b92653b1c467e0ce773bffc2c8e9b18e9a7c371e499ef55ea80fe1097ee3",
+      "bytes": 19074,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3504b92653b1c467e0ce773bffc2c8e9b18e9a7c371e499ef55ea80fe1097ee3.jpg",
+      "review_id": "R3-087"
+    },
+    {
+      "asset_id": "objaverse_03fa59009cb344ee9241128bad9bba13",
+      "url": "https://media.sketchfab.com/models/03fa59009cb344ee9241128bad9bba13/thumbnails/b3f02c30eba04c4f8f2402ae30eaa7d8/44c211c9638442fb8c7f209128804da6.jpeg",
+      "sha256": "de1fc26ee53408dc2bd374ecfd7115860da6d36f410bd76ba3010c2cd4c09c94",
+      "bytes": 10013,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/de1fc26ee53408dc2bd374ecfd7115860da6d36f410bd76ba3010c2cd4c09c94.jpg",
+      "review_id": "R3-090"
+    },
+    {
+      "asset_id": "objaverse_065347b3aeb146489835300d265a7ce5",
+      "url": "https://media.sketchfab.com/models/065347b3aeb146489835300d265a7ce5/thumbnails/9990f9dc3af74c82a9d96203de8b1f56/117536740c724bce86de2dd3e0ed2805.jpeg",
+      "sha256": "000d85f642d914e356d4e6d9fd097669775dcd99604a0b972c7917e1ab1ed068",
+      "bytes": 11771,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/000d85f642d914e356d4e6d9fd097669775dcd99604a0b972c7917e1ab1ed068.jpg",
+      "review_id": "R3-091"
+    },
+    {
+      "asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+      "url": "https://media.sketchfab.com/models/00442dec7438488a94b88c229d4e5e0d/thumbnails/f90291e661de4f0d8c53464052667bf8/08526a6ef6e547318aea2c06697e6448.jpeg",
+      "sha256": "d5f9b0db5b3e866d17f09aad30fa175b09fa8aa1d3c091e962d5214d1d5f8cb4",
+      "bytes": 5379,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d5f9b0db5b3e866d17f09aad30fa175b09fa8aa1d3c091e962d5214d1d5f8cb4.jpg",
+      "review_id": "R3-094"
+    },
+    {
+      "asset_id": "objaverse_19369ef2dcd84be688800f64c3861d0d",
+      "url": "https://media.sketchfab.com/models/19369ef2dcd84be688800f64c3861d0d/thumbnails/3822db8594094345a66221f30d87333c/a751764b8dfe4cc88e6cc1471f3ee3a2.jpeg",
+      "sha256": "7a06bc1b68a82f3947f58ad06f4986811bdba8a2b6c467e677dce74a3d0e83ff",
+      "bytes": 29025,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7a06bc1b68a82f3947f58ad06f4986811bdba8a2b6c467e677dce74a3d0e83ff.jpg",
+      "review_id": "R3-096"
+    },
+    {
+      "asset_id": "objaverse_2595df0cfae64e55903e41510053b3ef",
+      "url": "https://media.sketchfab.com/models/2595df0cfae64e55903e41510053b3ef/thumbnails/e95c03e74c8d4dbfbef38abe8a30c022/336a3fb50c434bdda88df1277ce7fe3f.jpeg",
+      "sha256": "f9fa7ae623e215b70e4133b92b2af2bcd17926d904c61cdda95b733b7f565d77",
+      "bytes": 5599,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f9fa7ae623e215b70e4133b92b2af2bcd17926d904c61cdda95b733b7f565d77.jpg",
+      "review_id": "R3-098"
+    },
+    {
+      "asset_id": "objaverse_857f523d4cca4b14a23fc807d0859a84",
+      "url": "https://media.sketchfab.com/models/857f523d4cca4b14a23fc807d0859a84/thumbnails/38d1a1acc08747a4b9ab8b01c36ba818/3ac5c17f7ab24fc18be3662ec52b8d92.jpeg",
+      "sha256": "4c7b61223305f5f38ecdca4bc4f7ae0a714a5d605a6a13144d338cfae262d727",
+      "bytes": 8633,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4c7b61223305f5f38ecdca4bc4f7ae0a714a5d605a6a13144d338cfae262d727.jpg",
+      "review_id": "R3-101"
+    },
+    {
+      "asset_id": "objaverse_86809e11e6764a21b6b793d4be04fe85",
+      "url": "https://media.sketchfab.com/models/86809e11e6764a21b6b793d4be04fe85/thumbnails/298fb9c1287a482ea8294cef8e451f62/720x405.jpeg",
+      "sha256": "6b541a1617f73b76bdd9ff54f46f646992742606ba22b0530996d08b6c1edcc0",
+      "bytes": 16189,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/6b541a1617f73b76bdd9ff54f46f646992742606ba22b0530996d08b6c1edcc0.jpg",
+      "review_id": "R3-102"
+    },
+    {
+      "asset_id": "objaverse_ae3079ea24a6489d9defbf4622daa943",
+      "url": "https://media.sketchfab.com/models/ae3079ea24a6489d9defbf4622daa943/thumbnails/4282b90d8224425aa1fbf2f21c9b9dba/9239a9b1919840fa9cc1764858e29d4b.jpeg",
+      "sha256": "aa2c4636c5f437384bb46cf483ddb21c27ab003bd28992fe3ece5af2aa8e6850",
+      "bytes": 15207,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/aa2c4636c5f437384bb46cf483ddb21c27ab003bd28992fe3ece5af2aa8e6850.jpg",
+      "review_id": "R3-104"
+    },
+    {
+      "asset_id": "objaverse_056f9f2a6b4a402eaeab75f1f8053ac5",
+      "url": "https://media.sketchfab.com/models/056f9f2a6b4a402eaeab75f1f8053ac5/thumbnails/04b1ad3eb3bc419ca9301fface94862e/51a363509c49483190f24079755520b2.jpeg",
+      "sha256": "e6a6c8f2299c02a734d7099b612e3678b443749d38672ff53410a45988566483",
+      "bytes": 32422,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e6a6c8f2299c02a734d7099b612e3678b443749d38672ff53410a45988566483.jpg",
+      "review_id": "R3-107"
+    },
+    {
+      "asset_id": "objaverse_f4880e00298a492da2fb379966c6c9d3",
+      "url": "https://media.sketchfab.com/models/f4880e00298a492da2fb379966c6c9d3/thumbnails/dedbe638dd2e43338480c72d0d01b1e4/9ecf61428212493086a7ddc0ac06196e.jpeg",
+      "sha256": "73208286402a148077bac562fdf9c89400457695f7e0029309730df845d096b9",
+      "bytes": 13971,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/73208286402a148077bac562fdf9c89400457695f7e0029309730df845d096b9.jpg",
+      "review_id": "R3-113"
+    },
+    {
+      "asset_id": "objaverse_0d552143c2604dd7bc6ff5a1d330fa2b",
+      "url": "https://media.sketchfab.com/models/0d552143c2604dd7bc6ff5a1d330fa2b/thumbnails/5c9ddf03727343e28a4457f84b036dc7/e7b692b3fe924cbf86136e728b77253b.jpeg",
+      "sha256": "721d420a9cf5e156ed393ef31cae00921b8ecb6c70219ac48958cbb2b9bb4d98",
+      "bytes": 7513,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/721d420a9cf5e156ed393ef31cae00921b8ecb6c70219ac48958cbb2b9bb4d98.jpg",
+      "review_id": "R3-114"
+    },
+    {
+      "asset_id": "objaverse_3863963dcce04707a519612182a885f7",
+      "url": "https://media.sketchfab.com/models/3863963dcce04707a519612182a885f7/thumbnails/f8b6d30a02d7443eb1a59fbbd064837f/1080de6c55ee4674bd936397f360b83c.jpeg",
+      "sha256": "7457eb293ac2fda611190569f37588314437072ff5696929ac03cc90fcee770c",
+      "bytes": 12347,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7457eb293ac2fda611190569f37588314437072ff5696929ac03cc90fcee770c.jpg",
+      "review_id": "R3-116"
+    },
+    {
+      "asset_id": "objaverse_03b311710f5347dba54513de19199104",
+      "url": "https://media.sketchfab.com/models/03b311710f5347dba54513de19199104/thumbnails/2a236c057e1c47879f4e00294e8c0cf7/28fe9d52ca054c4e87f8857fbf2d3899.jpeg",
+      "sha256": "23e99f2591a143f5705d8f2480887f860270d2c9200e715bc020426b77f70632",
+      "bytes": 14490,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/23e99f2591a143f5705d8f2480887f860270d2c9200e715bc020426b77f70632.jpg",
+      "review_id": "R3-119"
+    },
+    {
+      "asset_id": "objaverse_1820993fd1fd489d87468b739da6fd93",
+      "url": "https://media.sketchfab.com/models/1820993fd1fd489d87468b739da6fd93/thumbnails/99fd6883efa746f6b1799e57eda0fa2b/b45d7e96a093448c918c0bb616bd0285.jpeg",
+      "sha256": "15bd81e63905bf48e149e10f2075dd1aff70378feb844e0ee2006db211f30cd2",
+      "bytes": 38184,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/15bd81e63905bf48e149e10f2075dd1aff70378feb844e0ee2006db211f30cd2.jpg",
+      "review_id": "R3-121"
+    },
+    {
+      "asset_id": "objaverse_1bf72a656b714fb4bbdceae059556d54",
+      "url": "https://media.sketchfab.com/models/1bf72a656b714fb4bbdceae059556d54/thumbnails/9f1d62591571479294243919d0326556/8f377fc6877245b0a4f38ac6cd6e20ac.jpeg",
+      "sha256": "3a967d69a8186a5ca720de5b599b56f0b8a5c6252f58c188c66fe9b5007e5bec",
+      "bytes": 18239,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3a967d69a8186a5ca720de5b599b56f0b8a5c6252f58c188c66fe9b5007e5bec.jpg",
+      "review_id": "R3-122"
+    },
+    {
+      "asset_id": "objaverse_0aaa38c156414b159207789705ad369b",
+      "url": "https://media.sketchfab.com/models/0aaa38c156414b159207789705ad369b/thumbnails/1fd6111b379a41f68bbb19c2451c041d/ca6a6304d9074e778940336bee4a0a0d.jpeg",
+      "sha256": "bf856d9ec5e09985b131cddb1ab5864a14e52960e19f47876d1c29c892e4ff71",
+      "bytes": 11656,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/bf856d9ec5e09985b131cddb1ab5864a14e52960e19f47876d1c29c892e4ff71.jpg",
+      "review_id": "R3-129"
+    },
+    {
+      "asset_id": "objaverse_179192b9d1a84719bf14fcdee5a86d1b",
+      "url": "https://media.sketchfab.com/models/179192b9d1a84719bf14fcdee5a86d1b/thumbnails/9ce72342ba46429286e27c676085fc2c/6410524cce9d4b98b34b4fae6232b680.jpeg",
+      "sha256": "751b25dbf8e75ffa4662b5d43e8d6e05eb927ba91b8298cfecb03c000cde22ca",
+      "bytes": 21335,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/751b25dbf8e75ffa4662b5d43e8d6e05eb927ba91b8298cfecb03c000cde22ca.jpg",
+      "review_id": "R3-130"
+    },
+    {
+      "asset_id": "objaverse_2c8d9f7aeea54e399823e3e03ed15cf8",
+      "url": "https://media.sketchfab.com/models/2c8d9f7aeea54e399823e3e03ed15cf8/thumbnails/61ac06c78cdd48c18712799f48f94bee/c9fc2a6445774daaba903763b509f15c.jpeg",
+      "sha256": "0640555706e3b6770bbd4c6adce395b1b4313bee87e80751a30ccacfd21e596a",
+      "bytes": 28334,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0640555706e3b6770bbd4c6adce395b1b4313bee87e80751a30ccacfd21e596a.jpg",
+      "review_id": "R3-133"
+    },
+    {
+      "asset_id": "objaverse_88cc407b80d24a1db765ad417394c72b",
+      "url": "https://media.sketchfab.com/models/88cc407b80d24a1db765ad417394c72b/thumbnails/1c8405bcbda04aa08ff8ad777a9fb57a/40e23e6b7ded4762be536827119a1d9f.jpeg",
+      "sha256": "de219b85bb48952cc794a88a4499bac4b2242824243ff1a97a09ce512f4960b7",
+      "bytes": 6024,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/de219b85bb48952cc794a88a4499bac4b2242824243ff1a97a09ce512f4960b7.jpg",
+      "review_id": "R3-136"
+    },
+    {
+      "asset_id": "objaverse_65f5e0b1c6434968bacc32e7cb126a5b",
+      "url": "https://media.sketchfab.com/models/65f5e0b1c6434968bacc32e7cb126a5b/thumbnails/a1f32c5fc23c446fb87075e61c7ef172/e1b4f5b58c034426b80db826578e78bf.jpeg",
+      "sha256": "05a9989c94d8202d87d40ee5a5f3934ca1e0f32882c3ca4173b7236a18e4b432",
+      "bytes": 4974,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/05a9989c94d8202d87d40ee5a5f3934ca1e0f32882c3ca4173b7236a18e4b432.jpg",
+      "review_id": "R3-141"
+    },
+    {
+      "asset_id": "objaverse_03779521d32b4e35b9574316ee117eab",
+      "url": "https://media.sketchfab.com/models/03779521d32b4e35b9574316ee117eab/thumbnails/f6eea9a663f544bea0c806773f948b09/640x360.jpeg",
+      "sha256": "a4909e61128f3f588cd20be4bfdc9b5051811ed7e06331d35cc22b04a8e6327d",
+      "bytes": 18608,
+      "dimensions": [
+        640,
+        360
+      ],
+      "preview_local_path": "previews/a4909e61128f3f588cd20be4bfdc9b5051811ed7e06331d35cc22b04a8e6327d.jpg",
+      "review_id": "R3-144"
+    },
+    {
+      "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+      "url": "https://media.sketchfab.com/models/600a996f3b9e44fd912beb8129b5f929/thumbnails/e0a92e688679422d93d94fe60b8e413e/956f6df450b743a98191c1fd60f7804b.jpeg",
+      "sha256": "1667afde2045c0473abcd93b05f7bd508e5e8b946509512a9d62bc15704fc619",
+      "bytes": 23720,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/1667afde2045c0473abcd93b05f7bd508e5e8b946509512a9d62bc15704fc619.jpg",
+      "review_id": "R3-148"
+    },
+    {
+      "asset_id": "objaverse_6f09695c6ebb4f8cb318ac1aac9015a6",
+      "url": "https://media.sketchfab.com/models/6f09695c6ebb4f8cb318ac1aac9015a6/thumbnails/d2ae5d5ca158407faf5b5f0948bd62ee/e5bfae2792e540e5bfea5e67d0eeb3d5.jpeg",
+      "sha256": "604ff81f686608be2d0ca7004273d6165db308699bf17a26feb125f8b87c5a7e",
+      "bytes": 9210,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/604ff81f686608be2d0ca7004273d6165db308699bf17a26feb125f8b87c5a7e.jpg",
+      "review_id": "R3-149"
+    },
+    {
+      "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+      "url": "https://media.sketchfab.com/models/7467af164bd64d0db09565b70b216e12/thumbnails/4ea7a108e3e14198ba24458848ca76d7/9a48f1b7a83245db900fedd28dad1747.jpeg",
+      "sha256": "e2addc554a3de60cf5e1285ca5b1a30cf94093583813bf6fdc6aebb4af9ee4e5",
+      "bytes": 16652,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e2addc554a3de60cf5e1285ca5b1a30cf94093583813bf6fdc6aebb4af9ee4e5.jpg",
+      "review_id": "R3-150"
+    },
+    {
+      "asset_id": "objaverse_a34ce45db54042bdbce9f9dda24f718c",
+      "url": "https://media.sketchfab.com/models/a34ce45db54042bdbce9f9dda24f718c/thumbnails/295f848d91424df8b80992e72c5340b9/bc3bf6570a2c456f9f773f57dd01fb1c.jpeg",
+      "sha256": "448a0a20b096926b1093f89bc7085073d1b7761b43729006c1df4e743d53769b",
+      "bytes": 17698,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/448a0a20b096926b1093f89bc7085073d1b7761b43729006c1df4e743d53769b.jpg",
+      "review_id": "R3-157"
+    },
+    {
+      "asset_id": "objaverse_9c40b37fd5a940c78fb6a177e03acb14",
+      "url": "https://media.sketchfab.com/models/9c40b37fd5a940c78fb6a177e03acb14/thumbnails/664d33d219264466baafe920ba26ee21/2495e232b1bf46ca821f1e864677a308.jpeg",
+      "sha256": "0f6fd6d5feaf39089d250848eb8ad9703cf655c3f9c106c038e3b4203919fccd",
+      "bytes": 8303,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/0f6fd6d5feaf39089d250848eb8ad9703cf655c3f9c106c038e3b4203919fccd.jpg",
+      "review_id": "R3-160"
+    },
+    {
+      "asset_id": "objaverse_00524c1f821a488ba925cf3c42f1af2b",
+      "url": "https://media.sketchfab.com/models/00524c1f821a488ba925cf3c42f1af2b/thumbnails/a8abfb37ce264a59b3f44293560236c5/a79b1f336dbc40cd8205612c818f6dde.jpeg",
+      "sha256": "ab3cbd84ef8c325bd837bf98fdb7d974e52a565c5c7efded53d9d1cd855624ec",
+      "bytes": 15461,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ab3cbd84ef8c325bd837bf98fdb7d974e52a565c5c7efded53d9d1cd855624ec.jpg",
+      "review_id": "R3-161"
+    },
+    {
+      "asset_id": "objaverse_006373e3885b472cb5538fc570235fcf",
+      "url": "https://media.sketchfab.com/models/006373e3885b472cb5538fc570235fcf/thumbnails/641667048a274ed19351f5ad05f68de8/33bfd3ef6f7d4bec892e10fc6d3b0e64.jpeg",
+      "sha256": "f8fb9d54e2d20f7982aa4d42b60a0f56956de69a3c9850aebca25d89b406d4ce",
+      "bytes": 23716,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/f8fb9d54e2d20f7982aa4d42b60a0f56956de69a3c9850aebca25d89b406d4ce.jpg",
+      "review_id": "R3-162"
+    },
+    {
+      "asset_id": "objaverse_01ff88bfc0034211b9f4996d620bc333",
+      "url": "https://media.sketchfab.com/models/01ff88bfc0034211b9f4996d620bc333/thumbnails/6943944daa924e5989b2b3e584e7225f/003ef8fb800147eeae8fd64c933ac665.jpeg",
+      "sha256": "94d54d64ee54446788e45b4259862126f0efa4d1c0a818a85f41548ced0387bb",
+      "bytes": 20963,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/94d54d64ee54446788e45b4259862126f0efa4d1c0a818a85f41548ced0387bb.jpg",
+      "review_id": "R3-163"
+    },
+    {
+      "asset_id": "objaverse_02302fca239e4d7a9d26ce5cc46225e5",
+      "url": "https://media.sketchfab.com/models/02302fca239e4d7a9d26ce5cc46225e5/thumbnails/6f3af5318077434fa4b1b8d5151b7c0f/3318ee3bbc9b4b10b1db81cc310eca47.jpeg",
+      "sha256": "113db80eb1dc34e0d397ea25231cf2c2723e43e4b1fb71b2a4468d492a1aad2c",
+      "bytes": 10762,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/113db80eb1dc34e0d397ea25231cf2c2723e43e4b1fb71b2a4468d492a1aad2c.jpg",
+      "review_id": "R3-164"
+    },
+    {
+      "asset_id": "objaverse_9bd21849d1d04837b4a317d1d5ac6a9e",
+      "url": "https://media.sketchfab.com/models/9bd21849d1d04837b4a317d1d5ac6a9e/thumbnails/5c6e6355bc47424989161231648f9047/5d00fdb623274511a46ed407ad069ccf.jpeg",
+      "sha256": "d436d64ab811190a71ae3a70e88af53306df4a50db91493a1a55e0a1d615fb9e",
+      "bytes": 27364,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d436d64ab811190a71ae3a70e88af53306df4a50db91493a1a55e0a1d615fb9e.jpg",
+      "review_id": "R3-168"
+    },
+    {
+      "asset_id": "objaverse_11e3537a91974cedaa7dd3222c9c58aa",
+      "url": "https://media.sketchfab.com/models/11e3537a91974cedaa7dd3222c9c58aa/thumbnails/0d81bb27f5094cd19eeef8802fe4efcc/6806aeb175f44e05a33e31e70dfea044.jpeg",
+      "sha256": "3db4b4bfe08c61db902eff717f0c6023bc2faec8d17f9f59f8559e50dcbfc0ef",
+      "bytes": 8883,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/3db4b4bfe08c61db902eff717f0c6023bc2faec8d17f9f59f8559e50dcbfc0ef.jpg",
+      "review_id": "R3-169"
+    },
+    {
+      "asset_id": "objaverse_143e8602ebc84f88b08f63f6b1fb4cf6",
+      "url": "https://media.sketchfab.com/models/143e8602ebc84f88b08f63f6b1fb4cf6/thumbnails/4bb5ea5e96584b88aaafdd7cb61f75d3/08f363854cef45dbb836dd175ab3acbf.jpeg",
+      "sha256": "7f45ccf46cf90e049c3524168ee3ae58731302b42d236958c6a181e07f9f8eac",
+      "bytes": 22306,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/7f45ccf46cf90e049c3524168ee3ae58731302b42d236958c6a181e07f9f8eac.jpg",
+      "review_id": "R3-170"
+    },
+    {
+      "asset_id": "objaverse_1579e4608c6b4f908e6da24d3752f783",
+      "url": "https://media.sketchfab.com/models/1579e4608c6b4f908e6da24d3752f783/thumbnails/768b8aa58f864d12b3db2d4794887079/435a6f72cc2b4ac88197d8bcbb49661c.jpeg",
+      "sha256": "a9a1eba73bc78766fa8de3ecbefdf48dd7a7262ec81e0398abe82453a4bf30c8",
+      "bytes": 17783,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a9a1eba73bc78766fa8de3ecbefdf48dd7a7262ec81e0398abe82453a4bf30c8.jpg",
+      "review_id": "R3-171"
+    },
+    {
+      "asset_id": "objaverse_15c626a3aab443998123f10dc0d38a65",
+      "url": "https://media.sketchfab.com/models/15c626a3aab443998123f10dc0d38a65/thumbnails/e10925e0076843c798c91079b3aa9db6/e6ff5f5efb3a4539ae55888dabfe8b57.jpeg",
+      "sha256": "2a3464b8bc21b63200ef5d964f2c99731fd05c0bf87a67594d7d953b934b0fc8",
+      "bytes": 22236,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/2a3464b8bc21b63200ef5d964f2c99731fd05c0bf87a67594d7d953b934b0fc8.jpg",
+      "review_id": "R3-172"
+    },
+    {
+      "asset_id": "objaverse_19a0c55a59ad42a398d9bc83895a1ef4",
+      "url": "https://media.sketchfab.com/models/19a0c55a59ad42a398d9bc83895a1ef4/thumbnails/fff084e9783b451fbd8743788ada0608/c2b8dad6fe3545bcbd506a3083d59feb.jpeg",
+      "sha256": "e8349a978169f934f8cb9a278d730b0211ffa4ab0b038c2a32a8197c526c2d49",
+      "bytes": 13774,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/e8349a978169f934f8cb9a278d730b0211ffa4ab0b038c2a32a8197c526c2d49.jpg",
+      "review_id": "R3-173"
+    },
+    {
+      "asset_id": "objaverse_1ad2a34e60894d08bf7cfb928b02efed",
+      "url": "https://media.sketchfab.com/models/1ad2a34e60894d08bf7cfb928b02efed/thumbnails/637c58972dad4764b38f9beb4c12ff2b/d135ab17d48d470a99b82006d50a8052.jpeg",
+      "sha256": "cd61d721a6365b064b725d6ec59ba22c23cd8ce98f9bb4bef59ee98e9dbaa587",
+      "bytes": 22106,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/cd61d721a6365b064b725d6ec59ba22c23cd8ce98f9bb4bef59ee98e9dbaa587.jpg",
+      "review_id": "R3-174"
+    },
+    {
+      "asset_id": "objaverse_f2b54fa63eb24203a52fd9fdee833723",
+      "url": "https://media.sketchfab.com/models/f2b54fa63eb24203a52fd9fdee833723/thumbnails/2271cd788feb4c08abc493dc6e870952/d1ea6674e7ac45908360b32f3181de32.jpeg",
+      "sha256": "a25f3c7259b355eee714419b2f1180c5e7ce9f3f133471914bd65653f9f64c05",
+      "bytes": 12440,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/a25f3c7259b355eee714419b2f1180c5e7ce9f3f133471914bd65653f9f64c05.jpg",
+      "review_id": "R3-177"
+    },
+    {
+      "asset_id": "objaverse_9db7f69324c748e6bfbed697c5afaa1e",
+      "url": "https://media.sketchfab.com/models/9db7f69324c748e6bfbed697c5afaa1e/thumbnails/7e3273ffd04c4f05b6712ea222aa5452/aa7ac73eab534877bc842141faf6e287.jpeg",
+      "sha256": "21e39c5745f9db4cd82673d49b1baf9859c963a279898bc0e847240f67e83677",
+      "bytes": 5929,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/21e39c5745f9db4cd82673d49b1baf9859c963a279898bc0e847240f67e83677.jpg",
+      "review_id": "R3-180"
+    },
+    {
+      "asset_id": "objaverse_baa9bafc0f184722bab3da113bd25b41",
+      "url": "https://media.sketchfab.com/models/baa9bafc0f184722bab3da113bd25b41/thumbnails/8d9bacf5a390456b9e41762fd7091b5b/1932a3fc527d4f6f8c090300b8bfcad1.jpeg",
+      "sha256": "4c67d94b6490fa5f39a0f9f87212ac53e837747dd2da52d01c7a1c13a0519910",
+      "bytes": 8398,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/4c67d94b6490fa5f39a0f9f87212ac53e837747dd2da52d01c7a1c13a0519910.jpg",
+      "review_id": "R3-182"
+    },
+    {
+      "asset_id": "objaverse_ef4b01dfce2446fda88041bbb195247e",
+      "url": "https://media.sketchfab.com/models/ef4b01dfce2446fda88041bbb195247e/thumbnails/08c9c034a2c44aca9d9f3fdb22081087/c45745b4d55a4965aee9a1de3e1f916a.jpeg",
+      "sha256": "ff3c97dc6194dd1b06f40a2da01c6a0912e1583c5ff406cf547c05f1fc5ad2a7",
+      "bytes": 13958,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/ff3c97dc6194dd1b06f40a2da01c6a0912e1583c5ff406cf547c05f1fc5ad2a7.jpg",
+      "review_id": "R3-184"
+    },
+    {
+      "asset_id": "objaverse_9566a7ad9cd144f9b8f294b7bf879e50",
+      "url": "https://media.sketchfab.com/models/9566a7ad9cd144f9b8f294b7bf879e50/thumbnails/26f0b0a45ea54c64b71b750a69716431/b18536c740af46cea264e6af8306f5b6.jpeg",
+      "sha256": "dff3f3719308728a0e4d313119aa5db969dd9ab57a5afaaf53f406b70008fa74",
+      "bytes": 15241,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/dff3f3719308728a0e4d313119aa5db969dd9ab57a5afaaf53f406b70008fa74.jpg",
+      "review_id": "R3-186"
+    },
+    {
+      "asset_id": "objaverse_5da2b95f9ab04256b8a01e3f61249cbf",
+      "url": "https://media.sketchfab.com/models/5da2b95f9ab04256b8a01e3f61249cbf/thumbnails/733166591b74460094c6b10400de3c3a/c5bc238c68bd4aa99d01592a7f595bcd.jpeg",
+      "sha256": "20a50656994009f402f09bca676e0f667558e9fb6824ac4a227cd2f046f6bb0f",
+      "bytes": 12049,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/20a50656994009f402f09bca676e0f667558e9fb6824ac4a227cd2f046f6bb0f.jpg",
+      "review_id": "R4-004"
+    },
+    {
+      "asset_id": "objaverse_15464cc080e74eddb1beaae2a32fc714",
+      "url": "https://media.sketchfab.com/models/15464cc080e74eddb1beaae2a32fc714/thumbnails/ee7a79d148754beda3f2bb91d1787ff2/3eb3cfd4955848b69014e9bb841dfec0.jpeg",
+      "sha256": "b4d1a6fccadbf9b37a1a4dbcd93334f6c230af729cfb753c57280aaee558919e",
+      "bytes": 26244,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/b4d1a6fccadbf9b37a1a4dbcd93334f6c230af729cfb753c57280aaee558919e.jpg",
+      "review_id": "R4-006"
+    },
+    {
+      "asset_id": "objaverse_af8ca0bc6862404ab35859e659ab1621",
+      "url": "https://media.sketchfab.com/models/af8ca0bc6862404ab35859e659ab1621/thumbnails/e7a7ac1a3ebd4087bf92850687894da6/e18e284a069e445a8a98da20a5cce95f.jpeg",
+      "sha256": "44bb994faf89f5099cea5cbe74974e960c88c2b61b5cc88733d3d38acf8aaf07",
+      "bytes": 36435,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/44bb994faf89f5099cea5cbe74974e960c88c2b61b5cc88733d3d38acf8aaf07.jpg",
+      "review_id": "R4-010"
+    },
+    {
+      "asset_id": "objaverse_b07505f9227b458eb1c6df7d08d0d54c",
+      "url": "https://media.sketchfab.com/models/b07505f9227b458eb1c6df7d08d0d54c/thumbnails/db1e5dd2ae4947c1bac7cf3b2040b1c2/4ad37aaec70c4027b4f6136cea716bb2.jpeg",
+      "sha256": "d3822d71d002fd4dcac57d184ce648c6e39ad25d41c1671d7c4e5c10f3e7750a",
+      "bytes": 8689,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/d3822d71d002fd4dcac57d184ce648c6e39ad25d41c1671d7c4e5c10f3e7750a.jpg",
+      "review_id": "R4-011"
+    },
+    {
+      "asset_id": "objaverse_32cfa73193de47c2b70c374ca170a8f8",
+      "url": "https://media.sketchfab.com/models/32cfa73193de47c2b70c374ca170a8f8/thumbnails/4a2a4d4e23324ec9a0fbe04359ce01a2/cc67b44931c84da8adb23d0ac01da3fd.jpeg",
+      "sha256": "df3b8994ac6fdfbfbe2afc4ceb976194e3fa51ab2aa41be27104db2d180e02d0",
+      "bytes": 11129,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/df3b8994ac6fdfbfbe2afc4ceb976194e3fa51ab2aa41be27104db2d180e02d0.jpg",
+      "review_id": "R4-017"
+    },
+    {
+      "asset_id": "objaverse_4d2cf1b84ede48c29b62e6f1f101765f",
+      "url": "https://media.sketchfab.com/models/4d2cf1b84ede48c29b62e6f1f101765f/thumbnails/bbde0f15cd514454890a4c082610bdb6/da007919c52849ecbe2f17b25497474c.jpeg",
+      "sha256": "c559f21686426d26eaf2afeedcca5b2cb813469cdffcb1117d028e61fc636b84",
+      "bytes": 10965,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c559f21686426d26eaf2afeedcca5b2cb813469cdffcb1117d028e61fc636b84.jpg",
+      "review_id": "R4-019"
+    },
+    {
+      "asset_id": "objaverse_309ccba7b2cb40a6bfffb89f498fc54c",
+      "url": "https://media.sketchfab.com/models/309ccba7b2cb40a6bfffb89f498fc54c/thumbnails/e45870532b5b4557b7c98133b83601e8/a0ac41f5ffe5470193a3978719728ed1.jpeg",
+      "sha256": "c1ae2290f7d015fd1098fbedc89a1074ca29ef84e7cd58bac1a45a52cc15de25",
+      "bytes": 20754,
+      "dimensions": [
+        720,
+        405
+      ],
+      "preview_local_path": "previews/c1ae2290f7d015fd1098fbedc89a1074ca29ef84e7cd58bac1a45a52cc15de25.jpg",
+      "review_id": "R4-021"
+    }
+  ],
+  "created_at_utc": "2026-11-03T17:19:24.476479+00:00",
+  "scope": "Reconstructed verified local copy; original protected snapshot unchanged.",
+  "packaging": {
+    "path_base": "extracted package root",
+    "source_provenance_sha256": "bd9c035c4c4f1926bbd31fec18d78f4ccc92c7265b36ff474107391facd85617",
+    "changes": "Preview paths made portable; original manifest/annotations/image bytes unchanged"
+  }
+}

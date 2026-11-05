@@ -8,10 +8,13 @@ nhận hai thành viên đã review/xác nhận. Bản này chốt các điểm 
 ## Trạng thái triển khai
 
 - #63 cung cấp schema request/response/service, persistence và tests PostgreSQL.
-- `POST /api/v1/search/text` hiện vẫn là route mock W1; chưa gọi persistence này.
-  `docs/openapi.json` vẫn mô tả đúng route đang chạy, không quảng cáo retrieval thật.
-- Issue tiếp theo nối service #60, mapping DB và persistence vào route thật,
-  cập nhật đồng bộ OpenAPI, frontend DTO/validator/mock và tests bị ảnh hưởng.
+- #65 đã nối service #60, bootstrap CLIP/Qdrant theo manifest, mapping DB,
+  pagination và persistence ở `APP_TEXT_SEARCH_SOURCE=service`. Cấu hình/cache/
+  index chưa sẵn sàng trả 503. Xem [bàn giao API và bằng chứng](../guides/text-search-api.md).
+- Mặc định `mock` vẫn giữ route W1; `docs/openapi.json` mô tả chế độ mặc định,
+  [OpenAPI service](../openapi-text-search.json) mô tả nhánh service đang có.
+  Đã có backend HTTP smoke CLIP/Qdrant local thật ngày 05/11; frontend với API
+  thật và nghiệm thu UI vẫn theo #66/#72, không suy ra từ backend smoke.
 - Schema bàn giao riêng: [JSON Schema](text-search-w3.schema.json), sinh từ
   [Pydantic](../../backend/app/schemas/text_search.py). Không thay route image/feedback.
 
@@ -125,7 +128,7 @@ Envelope luôn `{ "error": { "code": "...", "message": "...", "details": [] } }`
 
 503 cho phép người dùng retry khi dependency phục hồi; không hứa Retry-After.
 Messages an toàn, details chỉ mô tả trường validation, không trả input nhạy cảm.
-Error mapping 503 và route thật sẽ được triển khai ở issue API tiếp theo.
+Error mapping 503, route service và bootstrap/adapter #60 đã có trong #65.
 
 ## Bàn giao và kiểm chứng #63
 
