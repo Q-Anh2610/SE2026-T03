@@ -1,0 +1,63 @@
+{
+  "schema_version": "clip-text-index-manifest-v1",
+  "created_at_utc": "2026-11-04T06:57:36.846890Z",
+  "observed_at_utc": "2026-11-04T06:57:36.846883Z",
+  "index_config": {
+    "model_id": "openai/clip-vit-base-patch32",
+    "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "dimension": 512,
+    "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+    "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "index_version": "issue60-home-interior-354-clip-v1"
+  },
+  "collection": "issue60_home_interior_354_clip_v1",
+  "vector_name": "clip_c033a1db395ff981",
+  "processor_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "tokenizer_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "max_text_tokens": 77,
+  "processor_use_fast": false,
+  "image_color_mode": "RGB",
+  "normalization": "L2",
+  "similarity": "Cosine",
+  "source_manifest": "manifests/assets_354.json",
+  "source_manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "ready_manifest": "assets_354.ready.json",
+  "ready_manifest_sha256": "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+  "asset_count": 354,
+  "point_count": 354,
+  "code_commit": "061d40d79912b44dda5098b2bd122d0c597e4d5b",
+  "working_tree_dirty": true,
+  "module_sha256": {
+    "backend/app/embedding/clip_encoder.py": "cd9e4abb16f8767e53ed67ae2213fc7e2b4bdece41e5cf3356a19f94e408310d",
+    "backend/app/search/filters.py": "565ba23732446edaab6b6a8eb905bb9f32b27434706f22723f1820d261206f9d",
+    "backend/app/search/qdrant_store.py": "d4d41121e78f7fd77b257ffa84577c07571d35975a451058db30dc47f1079c01",
+    "backend/app/search/retrieval_config.py": "c840355d9d3bb707500571c14a85415074623d6937f8697d7833807b06c15fd3",
+    "backend/app/search/index_manifest.py": "9f80ecf45904a2e2c2d7f994c36d54b3b3d86f6b8a2c14709d0b8d7b6ffb85a2",
+    "backend/app/search/text_search.py": "7a8946a9cd72ab90ed1a156775aeb747399dd054d781045b4e69bff4c63c46bc",
+    "backend/app/search/smoke.py": "895830cc24ab10a7a8421b43e0aebec95f75d538d3e2419bc820b3c6aa37bef0",
+    "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+    "backend/app/schemas/text_search.py": "2afeee144b767ed9a6352fdedc06aba27327d54b2ab254bb20a83cd29eb5af35",
+    "docs/configs/clip-text-exact-v1.json": "f7b20e58b5b9b52ea8cbb38439a91af4abcea85b9695b708c121d912258741a4",
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "scripts/verify_issue60_handoff_354.py": "123539e4bd09b7d5f6acca304dbd3eef9fcd917f6de46aba8e7aff056f3ee8eb"
+  },
+  "retrieval_config": {
+    "schema_version": "clip-text-retrieval-config-v1",
+    "config_version": "clip-text-exact-all-filtered-v1-k200",
+    "candidate_limit": 200,
+    "strategy": "exact_all_filtered_points",
+    "exact": true,
+    "score_threshold": null,
+    "score_roundoff_tolerance": 1e-06,
+    "ordering": [
+      "score_desc",
+      "asset_id_asc"
+    ],
+    "deduplication": "max_score_per_asset",
+    "query_trim": true,
+    "query_min_characters": 1,
+    "query_max_characters": 500,
+    "text_token_policy": "truncate",
+    "text_token_limit_source": "model.config.text_config.max_position_embeddings"
+  }
+}

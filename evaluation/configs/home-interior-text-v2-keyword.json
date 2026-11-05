@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "benchmark_version": "home-interior-text-v2",
+  "manifest_path": "data/benchmark/manifest.yaml",
+  "queries_path": "data/benchmark/queries.csv",
+  "qrels_path": "data/benchmark/qrels.csv",
+  "candidate_metadata_path": "data/manifests/objaverse_200.json",
+  "top_k": 10,
+  "relevance_threshold": 1,
+  "relevance_rule": "relevance >= 1 is relevant; relevance 0 is not relevant",
+  "metric_cutoffs": [5, 10],
+  "search_config_version": "keyword-token-overlap-v1",
+  "filters": {}
+}

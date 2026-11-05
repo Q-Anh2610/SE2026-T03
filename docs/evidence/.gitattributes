@@ -1,0 +1,3 @@
+# Giữ bytes LF của bằng chứng smoke đã đối chiếu SHA-256.
+issue60-home-interior-354-index-manifest.json text eol=lf
+issue60-home-interior-354-smoke.json text eol=lf

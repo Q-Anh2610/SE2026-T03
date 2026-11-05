@@ -1,0 +1,190 @@
+{
+  "schema_version": "issue60-shared-retrieval-evidence-v1",
+  "issue": "https://github.com/Q-Anh2610/SE2026-T03/issues/60",
+  "handoff_issue": "https://github.com/Q-Anh2610/SE2026-T03/issues/62",
+  "snapshot": "home-interior-354-v1",
+  "storage_mode": "qdrant_persistent_local",
+  "started_at_utc": "2026-11-04T06:57:00.479465+00:00",
+  "finished_at_utc": "2026-11-04T06:57:36.865978+00:00",
+  "input": {
+    "source_manifest": "manifests/assets_354.json",
+    "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "ready_manifest": "assets_354.ready.json",
+    "ready_manifest_sha256": "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+    "asset_count": 354,
+    "distinct_readable_previews": 354,
+    "zip_sha256": "a12bc29e1d5638e25eda9aab766e9324afdda1263fb6fbd3c14d2f17c30d4d25"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "torch_build": "2.8.0+cpu",
+    "device": "cpu",
+    "seed": 0,
+    "batch_size": 8,
+    "packages": {
+      "torch": "2.8.0",
+      "transformers": "4.57.1",
+      "qdrant-client": "1.15.1",
+      "Pillow": "13.0.0"
+    }
+  },
+  "embedding": {
+    "embedded": 354,
+    "failed": 0,
+    "skipped": 0
+  },
+  "persisted_index": {
+    "exact_point_count": 354,
+    "scrolled_point_count": 354,
+    "unique_asset_ids": 354,
+    "unique_point_ids": 354,
+    "point_id_set_sha256": "c47de83665e44388947ca2fe35eb8d5130c81b32fb4047d57b20c2d036982397",
+    "point_payload_vector_sha256": "51ef93772ec25f1ed72ea34501a485dbae77d00de2ee44e00904b99ae5ce5fea",
+    "fingerprint_equal_before_after": true
+  },
+  "index_manifest": {
+    "path": "docs/evidence/issue60-home-interior-354-index-manifest.json",
+    "sha256": "d1aea93d879d4e20554295c724c9cf51325c8a952bf7b8f5a5a4f55b1da1ed39",
+    "collection": "issue60_home_interior_354_clip_v1",
+    "named_vector": "clip_c033a1db395ff981",
+    "code_commit": "061d40d79912b44dda5098b2bd122d0c597e4d5b",
+    "working_tree_dirty": true
+  },
+  "raw_report_sha256": "6cbec5c307f1cd04707e2f8209f617c519c9dbc84ee78218330455b33bdaa1df",
+  "versions": {
+    "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "index_version": "issue60-home-interior-354-clip-v1",
+    "config_version": "clip-text-exact-all-filtered-v1-k200",
+    "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+  },
+  "queries": [
+    {
+      "case": "unfiltered_en",
+      "filters": {},
+      "expected_asset_count": 354,
+      "expected_returned_count": 200,
+      "returned_count": 200,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "unfiltered_vi",
+      "filters": {},
+      "expected_asset_count": 354,
+      "expected_returned_count": 200,
+      "returned_count": 200,
+      "input_tokens": 10,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "category",
+      "filters": {
+        "category": "architecture"
+      },
+      "expected_asset_count": 53,
+      "expected_returned_count": 53,
+      "returned_count": 53,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "license",
+      "filters": {
+        "license": "by"
+      },
+      "expected_asset_count": 272,
+      "expected_returned_count": 200,
+      "returned_count": 200,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "format",
+      "filters": {
+        "format": "glb"
+      },
+      "expected_asset_count": 354,
+      "expected_returned_count": 200,
+      "returned_count": 200,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "face_min",
+      "filters": {
+        "face_count_min": 1958
+      },
+      "expected_asset_count": 260,
+      "expected_returned_count": 200,
+      "returned_count": 200,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "face_max",
+      "filters": {
+        "face_count_max": 1958
+      },
+      "expected_asset_count": 95,
+      "expected_returned_count": 95,
+      "returned_count": 95,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "and_exact_bounds",
+      "filters": {
+        "category": "architecture",
+        "license": "by",
+        "format": "glb",
+        "face_count_min": 1958,
+        "face_count_max": 1958
+      },
+      "expected_asset_count": 1,
+      "expected_returned_count": 1,
+      "returned_count": 1,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "empty",
+      "filters": {
+        "category": "__issue60_absent_category__"
+      },
+      "expected_asset_count": 0,
+      "expected_returned_count": 0,
+      "returned_count": 0,
+      "input_tokens": 4,
+      "max_text_tokens": 77,
+      "truncated": false
+    },
+    {
+      "case": "token_truncation",
+      "filters": {},
+      "expected_asset_count": 354,
+      "expected_returned_count": 200,
+      "returned_count": 200,
+      "input_tokens": 85,
+      "max_text_tokens": 77,
+      "truncated": true
+    }
+  ],
+  "repeat": {
+    "ordered_asset_ids_equal": true,
+    "versions_equal": true,
+    "max_score_abs_delta": 1.1102230246251565e-16,
+    "score_abs_tolerance": 1e-12
+  },
+  "acceptance": {
+    "passed": true
+  },
+  "verification_scope": "CLIP retrieval and filters on a persisted local Qdrant index. HTTP integration and benchmark evaluation are separate."
+}

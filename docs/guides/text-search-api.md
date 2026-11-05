@@ -1,10 +1,10 @@
-# API text search — phần chuẩn bị Issue #65
+# API text search — tích hợp service thật Issue #65
 
-Ngày 02/11/2026, nhánh `feat/65-text-search-api`. Contract:
-[W3 / #63](../contracts/text-search-w3.md). Đây là bàn giao một phần #65,
-chưa nghiệm thu tìm kiếm semantic thật và chưa đóng issue.
+Ngày 05/11/2026, nhánh `feat/65-text-search-api`. Contract:
+[W3 / #63](../contracts/text-search-w3.md). Nối implementation #60 đã merge qua
+PR #75; review/CI/merge và smoke web với Duy/Khuê được ghi nhận riêng.
 
-## Đã chuẩn bị
+## Triển khai backend
 
 - Router sync `POST /api/v1/search/text`, validation theo schemas #63.
 - Biên service nhận query trim, filters, `candidate_limit=200`; revalidate output.
@@ -20,20 +20,35 @@ chưa nghiệm thu tìm kiếm semantic thật và chưa đóng issue.
 - Lỗi read/commit DB → 500 chuẩn; rollback và đóng session, không fallback RAM.
 - Một service instance được cấp cho mỗi app và tái sử dụng qua các request;
   shutdown gọi `close()` nếu adapter cung cấp, luôn dispose DB engine.
+- Startup đọc/validate `IndexManifest`, kiểm tra SHA-256 source/ready, cấu hình
+  collection/named vector/count, rồi nạp CLIP CPU từ cache đúng revision một lần.
+  Adapter chuyển `SearchUnavailableError` của Chi sang `SearchUnavailable` để
+  API trả 503. Không bootstrap lại hoặc tải weights ở mỗi request.
+- Cấu hình/cache/index lỗi thì app giữ liveness, text search trả 503. Sau khi
+  sửa cần restart app. Bootstrap chỉ đọc index, không tự create/upsert/rebuild.
 
-## Chọn chế độ và thử khi chưa có Chi
+## Cấu hình và chạy
 
-Trong PowerShell, từ `backend/`, chọn chế độ cho tiến trình hiện tại:
+Trong PowerShell, từ gốc repo, dùng đường dẫn tuyệt đối của bộ index đã dựng:
 
 ```powershell
 $env:APP_TEXT_SEARCH_SOURCE = "service"
-.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+$env:APP_TEXT_INDEX_MANIFEST = "C:/path/to/index-manifest.json"
+$env:APP_TEXT_INDEX_ROOT = "C:/path/to/handoff-root"
+$env:APP_TEXT_QDRANT_LOCAL_PATH = "C:/path/to/existing-qdrant"
+backend\.venv\Scripts\python.exe -m uvicorn app.main:app --app-dir backend
 ```
 
 Mở `/docs`, gửi `{"query":"wooden chair","filters":{},"page":1,"limit":12}`
-đến `/api/v1/search/text`. Bản chuẩn bị chưa có adapter nên **503 là đúng**,
-không phải kết quả rỗng. Query rỗng/sai kiểu tham số trả 400 trước dependency.
+đến `/api/v1/search/text`. Chỉ cấu hình `service` mà chưa có manifest/root/cache/
+index sẽ trả 503, không phải kết quả rỗng. Query rỗng/sai kiểu trả 400 trước dependency.
 `/healthz` vẫn là liveness, không chứng minh search ready.
+
+Với Qdrant server, bỏ `APP_TEXT_QDRANT_LOCAL_PATH`, đặt `APP_TEXT_QDRANT_URL`
+thành HTTP(S) origin (mặc định `http://127.0.0.1:6333`); API key nếu có đặt riêng
+ở `APP_TEXT_QDRANT_API_KEY`. Local storage chỉ mở bởi một process/worker; adapter
+serialize các request để an toàn với CPU và SQLite. Không mở index cùng lúc với
+script khác. Đây là baseline subset nhỏ, chưa đánh giá tải đồng thời/latency.
 
 Quay lại mock cho tiến trình mới: đặt `APP_TEXT_SEARCH_SOURCE=mock`; mock text
 chỉ bật ngoài production với `APP_MOCK_API_ENABLED=true`. Image/feedback giữ
@@ -48,7 +63,7 @@ Không thêm service fixture bằng env hoặc route công khai. Fixture retriev
 nằm trong tests. `mock:false` trong các test này nói nhánh service/DB đang được
 kiểm thử, không xác nhận encoder/index thật hoặc chất lượng retrieval.
 
-## Cách nối adapter khi #60 sẵn sàng
+## Adapter và vòng đời
 
 `create_app(settings, text_search_service=service)` nhận instance có method sync:
 
@@ -56,15 +71,40 @@ kiểm thử, không xác nhận encoder/index thật hoặc chất lượng ret
 search_text(query, filters, *, candidate_limit=200) -> TextSearchCandidates
 ```
 
-Protocol và `SearchUnavailable` tại `app.services.text_search`. Chi hoặc adapter
-tích hợp cần chuyển lỗi model/index/Qdrant chưa sẵn sàng/không tương thích thành
-`SearchUnavailable` mà không lộ nội dung exception trong response. Lỗi bất ngờ
-khác là 500. Không instantiate encoder/client trong router hoặc mỗi lần gọi.
+Protocol và `SearchUnavailable` tại `app.services.text_search`. Adapter thật ở
+`app.services.text_search_runtime` chuyển lỗi readiness của #60 sang 503, lỗi
+bất ngờ là 500. Không instantiate encoder/client trong router hoặc mỗi request.
 
-Sau khi có code #60 mới thêm app factory/bootstrap nạp cấu hình index và cấp
-service thật. Hiện `app.main:app` chưa thực hiện bootstrap này; chỉ đổi env không
-làm xuất hiện model/index. Không có cấu hình đường dẫn class tùy ý hay tải model
-trong phần chuẩn bị này.
+`app.main:app` bootstrap trong lifespan với model cache offline. Không truyền
+instance khi chạy Uvicorn bình thường; `create_app(..., text_search_service=...)`
+chỉ dành cho tích hợp/test đã quản lý service. Liveness không tải model, nhưng
+startup của chế độ service có thời gian đọc cache; không dùng liveness thay readiness.
+
+## Chuẩn bị index riêng và chạy lại kiểm chứng
+
+Nếu chưa nhận được index/preview, có thể tải đúng subset đã chọn và dựng index
+riêng từ source manifest. Không ghi đè collection dùng chung, không ghi DB nghiệp vụ:
+
+```powershell
+backend\.venv\Scripts\python.exe scripts/prepare_text_search_index.py --manifest data/manifests/home-interior-354-v1/assets_354.json --snapshot home-interior-354-v1 --download-previews
+```
+
+Lệnh in thư mục mới dưới `data/processed/issue65/index-*`, gồm source/ready,
+preview checksums, index local và `index-manifest.json`. Chỉ tải preview từ
+manifest này; CLIP phải có sẵn trong cache. Không gọi trên toàn bộ dataset.
+
+Để smoke HTTP thật, cấu hình `TEST_DATABASE_URL` trỏ PostgreSQL riêng có tên
+`test_*`, rồi chạy từ gốc repo với đường dẫn thư mục được in ở bước trên:
+
+```powershell
+backend\.venv\Scripts\python.exe scripts/verify_text_search_api.py --index-manifest data/processed/issue65/index-<id>/index-manifest.json --index-root data/processed/issue65/index-<id> --qdrant-local-path data/processed/issue65/index-<id>/qdrant
+```
+
+Verifier tạo schema tạm, nhập metadata từ cùng bộ ready/source đã kiểm checksum,
+khởi chạy Uvicorn qua TCP localhost và gọi HTTP thật. Nó đối chiếu versions,
+events trong DB, pagination/filters/detail, kết quả rỗng và fingerprint index
+trước/sau; dừng server và dọn schema của lượt chạy. Report runtime nằm trong
+`data/processed/issue65/http-*.json`. Không dùng DATABASE_URL phát triển để ghi dữ liệu.
 
 ## OpenAPI và Frontend
 
@@ -74,14 +114,15 @@ trong phần chuẩn bị này.
   development của spec này vẫn có image/feedback mock.
 - `python -m app.export_openapi` từ `backend/` xuất lại cả hai spec; `/openapi.json`
   runtime phản ánh chế độ app đang chạy, không gộp hai text route cùng URL.
-- Frontend DTO/mock không thay đổi trong phần chuẩn bị này. Duy dùng contract
-  #63 để cập nhật mock boolean/dataset_snapshot và xác nhận API sau khi adapter
-  thật được bàn giao. Chưa tuyên bố UI text search thật hoạt động.
+- Frontend không được sửa trong lượt tích hợp backend này. Duy/Khuê dùng
+  contract #63 và cấu hình API để kiểm chứng web ở #66/#72; backend smoke
+  không thay cho UI E2E hoặc xác nhận tiếp nhận của các thành viên.
 
 ## Tests và giới hạn
 
-Nhóm unit: `backend/tests/unit/test_text_search_api.py`. Nhóm HTTP + PostgreSQL:
-`backend/tests/integration/test_text_search_stack.py`. Tái sử dụng tests #63.
+Nhóm unit: `backend/tests/unit/test_text_search_api.py`, `test_text_search_runtime.py`.
+Nhóm HTTP + PostgreSQL: `backend/tests/integration/test_text_search_stack.py`,
+`test_text_search_bootstrap.py`. Tái sử dụng tests #63.
 
 Từ gốc repo (cần PostgreSQL test riêng tên `test_*` cho integration):
 
@@ -92,7 +133,8 @@ backend\.venv\Scripts\python.exe -m pytest backend/tests/unit/test_text_search_a
 Tests integration dùng engine/session/commit thật trong schema tạm do test tạo;
 retrieval trả candidates fixture cố định. Kiểm tra pagination, filters được
 truyền đúng và đối chiếu DB, metadata/detail, event/versions, empty, ID thiếu
-ngoài trang, lỗi mapping/read/commit và phục hồi. Không gọi Internet/CLIP/Qdrant.
+ngoài trang, lỗi mapping/read/commit và phục hồi. Test bootstrap chạy service #60
+với Qdrant persistent local thật và encoder fixture 3D; tách khỏi smoke CLIP thật.
 
 Kết quả local ngày 02/11/2026: **116 passed**, không skip, 10,17 giây, khi chạy
 nhóm tests trong lệnh trên cùng `tests/unit/test_config.py` và
@@ -101,15 +143,35 @@ và schema tạm; không sửa dữ liệu phát triển. OpenAPI hai chế đ�
 examples service hợp lệ; tests OpenAPI mặc định và API mock cũ vẫn đạt.
 Kết quả này không thay cho GitHub CI, review hoặc nghiệm thu retrieval thật.
 
-## Còn chờ để hoàn thành #65
+### Kết quả tích hợp ngày 05/11/2026
 
-- [ ] Adapter text retrieval #60, model/index/config manifest và bootstrap thật.
-- [ ] Index tương thích snapshot nội thất hiện tại; không dùng bằng chứng index
-  W1 của #57 để xác nhận snapshot mới trong #61.
-- [ ] Đối chiếu snapshot/hash, ID và metadata giữa DB và index thật.
-- [ ] Smoke API dùng CLIP/Qdrant thật, kèm query/filter/empty và versions.
+- Nhóm tests API/runtime/contract/mock/OpenAPI/config và PostgreSQL integration:
+  **123 passed**, không skip (40,76 giây). Bao gồm service #60 + Qdrant local
+  thật với encoder fixture, kiểm tra startup, lifecycle, lỗi readiness 503.
+- Lượt Uvicorn qua TCP HTTP dùng CLIP thật từ cache, cùng snapshot
+  `home-interior-354-v1` và manifest SHA-256
+  `93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614` đã đạt.
+  Tải/decode 354 preview, tạo 354 embedding và index riêng 354 point.
+- Query `wooden chair` trả cửa sổ 200 ứng viên; hai trang đầu có 24 ID duy nhất,
+  detail khớp metadata. Filters AND gồm category/license/format/cận face_count
+  đạt; filter không khớp và trang vượt phạm vi trả rỗng đúng contract.
+- 5 request thành công lưu 5 event riêng; query/filters/model/index/config/dataset
+  khớp DB. Query invalid trả 400. Fingerprint 354 point trước/sau không đổi.
+- Database/schema test được dọn, Uvicorn dừng và Qdrant local đóng. Bộ preview/
+  index riêng được giữ trong `data/processed/issue65/index-1718ec3c49a0` (Git ignore)
+  để chạy lại; không thay dữ liệu phát triển hoặc index dùng chung.
+- [Bằng chứng gọn](../evidence/issue65-text-search-http.json) có hashes/provenance.
+  Báo cáo runtime: `data/processed/issue65/http-8ab50d647139.json`. Kết quả là
+  backend HTTP + CLIP + PostgreSQL + Qdrant persistent local; chưa phải Qdrant
+  server mode, quality benchmark hay UI E2E. Không nhận thay phần việc #66/#72.
+
+## Theo dõi bàn giao
+
+- [x] Adapter text retrieval #60, model/index/config manifest và bootstrap.
+- [x] Index riêng đúng snapshot 354, đối chiếu source/ready hashes và IDs.
+- [x] Smoke API thật với query/filters/pagination/empty/detail và durable events.
 - [ ] Duy/Khuê tiếp nhận và kiểm chứng UI/smoke theo phần việc #66.
 - [ ] CI, review và tích hợp; ghi theo kết quả GitHub thực tế.
 
-Có thể mở Draft PR cho phần chuẩn bị; không tick nghiệm thu retrieval thật
-hoặc đóng #65 từ các tests fixture/DB này.
+Không đóng #65 thay reviewer hoặc dùng backend smoke để tích UI E2E. Chuyển PR
+sang review sau khi đã cập nhật bằng chứng; merge/CI được xác nhận trên GitHub.

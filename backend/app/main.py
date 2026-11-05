@@ -28,6 +28,10 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
     @asynccontextmanager
     async def lifespan(application):
         try:
+            if settings.text_search_source == "service" and application.state.text_search_service is None:
+                from starlette.concurrency import run_in_threadpool
+                from app.services.text_search_runtime import build_text_search_service
+                application.state.text_search_service = await run_in_threadpool(build_text_search_service, settings)
             yield
         finally:
             try:
@@ -42,7 +46,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
 
     application = FastAPI(
         title=settings.name, debug=settings.debug,
-        description=("Danh sách/chi tiết asset đọc PostgreSQL. Text search dùng service được cung cấp; chưa có adapter #60 thì trả 503. Image/feedback vẫn mock ngoài production."
+        description=("Danh sách/chi tiết asset đọc PostgreSQL. Text search gọi CLIP/Qdrant theo index manifest đã cấu hình; cache/index chưa sẵn sàng trả 503. Image/feedback vẫn mock ngoài production."
                      if settings.text_search_source == "service" else
                      "Danh sách và chi tiết asset đọc PostgreSQL. Search/feedback hiện là mock phục vụ phát triển; chưa semantic search."),
         lifespan=lifespan,

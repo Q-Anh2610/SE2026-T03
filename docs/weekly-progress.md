@@ -83,7 +83,7 @@ một lần chạy lại toàn bộ kiểm thử. Giữ nguyên kế hoạch W2 
 | **TV2 — Trịnh Thị Thu Huyền** | Hoàn thành batch download/cleaning, checksum, retry, chống trùng và persistence; báo cáo 200 asset có trạng thái downloaded, chạy lại không trùng. Chi đã xác nhận nhận đủ 200 preview, checksum khớp và dùng được cho embedding. | [PR #52](https://github.com/Q-Anh2610/SE2026-T03/pull/52), [xác nhận tiếp nhận #41](https://github.com/Q-Anh2610/SE2026-T03/issues/41#issuecomment-6503152160). | Rà soát subset nội thất theo #58 để bàn giao benchmark; W3 tăng dữ liệu và bổ sung batch tests. |
 | **TV3 — Lê Thị Linh Chi** | Hoàn thành CLIP batch, Qdrant store và keyword baseline. Đã kiểm chứng 200/200 asset thật tạo embedding/index thành công, 0 lỗi; chạy lại vẫn 200 point, tập ID không đổi và không trùng asset. Có script, cấu hình và bằng chứng chia sẻ; PR đã merge. | [PR #53](https://github.com/Q-Anh2610/SE2026-T03/pull/53), [PR #57](https://github.com/Q-Anh2610/SE2026-T03/pull/57), [bằng chứng 200 asset](evidence/issue39-real-assets.json). | Phối hợp Khuê đo baseline; W3 làm text-to-preview retrieval, filters và index manifest. |
 | **TV4 — Nguyễn Văn Duy** | Hoàn thành list/detail nối API, phân trang và filters UI. Luồng UI gọi API PostgreSQL có kiểm thử tự động desktop/mobile trong PR #55. | [PR #29](https://github.com/Q-Anh2610/SE2026-T03/pull/29), [PR #55](https://github.com/Q-Anh2610/SE2026-T03/pull/55). | W3: text search thật và nguồn asset trên detail; đã có Draft PR #56 cho UI/tests, còn chờ API/index thật để nghiệm thu. |
-| **TV5 — Đoàn Thị Minh Khuê** | Hoàn thành metric CLI Recall/Hit/nDCG, tests metric và admin status UI mock/fixtures. | [PR #43](https://github.com/Q-Anh2610/SE2026-T03/pull/43), [PR #45](https://github.com/Q-Anh2610/SE2026-T03/pull/45). | Còn query/nhãn và lần đo baseline ở #46; tiếp tục song song với W3, phối hợp Huyền/Chi trước khi chốt tập đo. |
+| **TV5 — Đoàn Thị Minh Khuê** | Hoàn thành metric CLI Recall/Hit/nDCG, tests metric, admin status UI mock/fixtures và chuẩn bị benchmark #46: 70 query tiếng Anh, hai bộ nhãn độc lập 14.000 cặp/người, 14.000 qrels đã adjudicate; split seed 42 theo nhóm được duyệt và query/qrels đã khóa. | [PR #43](https://github.com/Q-Anh2610/SE2026-T03/pull/43), [PR #45](https://github.com/Q-Anh2610/SE2026-T03/pull/45), [manifest benchmark](../data/benchmark/manifest.yaml). | W3: nhận ranked results retrieval thật của Chi trên đúng snapshot, kiểm tra provenance/đủ 70 query rồi tính metric offline; không dùng test để điều chỉnh cấu hình. |
 
 ### Kết quả chung và phần còn chờ
 
@@ -92,18 +92,25 @@ trên bộ 200 asset thật; có bằng chứng chạy lại không trùng ở c
 index. Search/feedback HTTP vẫn mock; tìm text xuyên suốt là mục tiêu W3.
 
 **M1 chưa chốt hoàn tất:** [Issue #46](https://github.com/Q-Anh2610/SE2026-T03/issues/46)
-còn query/nhãn và kết quả đo thử baseline. Nhóm đã chốt benchmark chỉ gồm
-asset nội thất; [Issue #58](https://github.com/Q-Anh2610/SE2026-T03/issues/58)
-rà soát và tạo snapshot riêng, giữ nguyên snapshot W1 để truy vết. Huyền bàn
-giao danh sách mới cho Khuê trước khi gán nhãn; Chi đối chiếu/rebuild index nếu
-snapshot thay đổi. Kết quả index 200 asset cũ xác nhận kỹ thuật, chưa xác nhận
-bộ đó hoàn toàn thuộc miền nội thất hoặc có chất lượng retrieval đạt yêu cầu.
+đã hoàn tất phần chuẩn bị query/nhãn và khóa benchmark; phần đo retrieval thật
+còn chờ Chi, nên được chuyển tiếp sang W3. Bộ đã khóa có 70 query tiếng Anh,
+14.000 cặp nhãn độc lập cho mỗi annotator, 14.000 qrels đã adjudicate và split
+seed 42 theo `query_group_id` (28 validation / 42 test). Chi xác nhận cần xác minh
+preview/checksum và index đúng snapshot `home-interior-clear-200-v3` trước khi
+xuất ranked results đủ 70 query cùng provenance. Phép đo keyword metadata được
+lưu riêng để truy vết, không thay thế CLIP text retrieval và không hoàn tất
+tiêu chí đo baseline. Issue #46 sẽ tiếp tục mở tới khi có kết quả thật và cấu
+hình/version cần thiết được lưu. Kết quả index 200 asset cũ xác nhận kỹ thuật,
+chưa xác nhận bộ đó hoàn toàn thuộc miền nội thất hoặc có chất lượng retrieval
+đạt yêu cầu.
 
 ## Tuần 3 / M2 — Kế hoạch và phụ thuộc
 
 Mục tiêu theo ROADMAP: text search trên web dùng dữ liệu/index thật.
-Bắt đầu các phần độc lập song song; phần benchmark W2 tiếp tục được theo dõi
-ở #46/#58, không coi là đã hoàn thành khi chuyển sang W3.
+Bắt đầu các phần độc lập song song. Phần chuẩn bị benchmark #46 (query, nhãn,
+split và khóa đầu vào) đã xong; lần đo CLIP text retrieval thật được chuyển
+tiếp sang W3 do phụ thuộc vào retrieval và index khớp snapshot v3. M1 vẫn chưa
+đạt gate baseline cho tới khi có kết quả đo thật.
 
 ### Công việc từng thành viên
 
@@ -113,7 +120,7 @@ Bắt đầu các phần độc lập song song; phần benchmark W2 tiếp tụ
 | **TV2 — Huyền** | Ưu tiên curate subset nội thất #58, bàn giao snapshot có version; tăng dữ liệu và tests ảnh hỏng, thiếu trường, chạy lại. | Đồng bộ ID/snapshot với Chi và Khuê trước khi index/gán nhãn; phối hợp Quỳnh Anh nếu đổi persistence hoặc trạng thái. | `backend/app/ingestion/`, `data/manifests/`, `data/benchmark/`; metadata, checksum, DB status và đường dẫn preview. |
 | **TV3 — Chi** | Tái sử dụng CLIP/Qdrant W2; làm text-to-preview retrieval, filters, kết quả không trùng asset và index manifest. Bàn giao cách gọi baseline cho Khuê. | Dùng snapshot/ID đã đối chiếu với Huyền; thống nhất input/output, model/index/config và lỗi readiness với Quỳnh Anh. | `backend/app/embedding/`, `search/`; payload/filter schema, config Qdrant, manifest và contract search. |
 | **TV4 — Duy** | Tiếp tục #54 và Draft PR #56: UI text search, loading/empty/error/retry và nguồn asset trên detail; tái sử dụng list/detail W2. | API text search và index thật sẵn sàng, ID search khớp detail để nghiệm thu. Tests mock hiện có chưa thay cho smoke thật. | `frontend/src/features/search/`, `assets/`, API client/types; contract và components chung với Khuê. |
-| **TV5 — Khuê** | Tiếp tục #46 cùng Huyền/Chi; chuẩn bị smoke text search, báo cáo baseline và phần status UI nối API theo ROADMAP. | Chờ snapshot benchmark đã rà soát và retrieval thật để đo; chờ API/index để smoke UI. Status UI chỉ nối khi có contract và nguồn trạng thái thật được bàn giao. | `evaluation/`, `data/benchmark/`, frontend admin/E2E, CI/Compose; contract status và search. |
+| **TV5 — Khuê** | Hoàn tất phần chuẩn bị #46; khi Chi bàn giao ranked results trên snapshot đã khóa, xác minh 70 record/provenance, ghép qrels và tính metric offline theo split. Tiếp tục status UI nối API theo ROADMAP. | Chờ retrieval/index đúng snapshot v3 và JSON kết quả có provenance từ Chi để hoàn tất baseline; chờ API/index để smoke UI. Không dùng test để chọn hoặc chỉnh cấu hình. Status UI chỉ nối khi có contract và nguồn trạng thái thật được bàn giao. | `evaluation/`, `data/benchmark/`, frontend admin/E2E, CI/Compose; contract status và search. |
 
 ### Thứ tự bàn giao
 
@@ -127,9 +134,11 @@ Bắt đầu các phần độc lập song song; phần benchmark W2 tiếp tụ
 3. **Search API/UI — Chi → Quỳnh Anh → Duy:** retrieval thật → HTTP text search
    và search event → giao diện. Duy chuẩn bị UI/tests song song; nghiệm thu thật
    sau khi API/index sẵn sàng. Search và detail cần cùng hệ asset ID.
-4. **Benchmark — Huyền + Chi → Khuê:** đồng bộ snapshot nội thất trước khi gán
-   nhãn; dùng cùng implementation của sản phẩm để đo, lưu query/nhãn, kết quả
-   và cấu hình. Cập nhật #46 để chốt phần W2 còn chờ.
+4. **Benchmark — Chi → Khuê (W3 follow-up của #46):** xác minh preview/checksum
+   và index đúng snapshot `home-interior-clear-200-v3`, rồi xuất ranked results
+   đủ 70 query cùng cấu hình/version/provenance. Khuê kiểm tra đầu ra, ghép qrels
+   đã khóa và tính metric offline; không đổi query/qrels hay cấu hình dựa trên
+   test. Phép đo keyword diagnostic hiện có không thay cho bước này.
 5. **Status và smoke — Quỳnh Anh + Huyền/Chi → Khuê, phối hợp Duy:** chốt nguồn
    trạng thái/contract trước khi nối admin UI; không coi fixture là trạng thái
    job thật. Cả nhóm kiểm chứng tìm text trên web với API/index thật, lỗi và

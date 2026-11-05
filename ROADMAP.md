@@ -136,7 +136,7 @@ Mỗi nhiệm vụ dưới đây chuyển thành Issue có owner, reviewer, depe
 - Trịnh Thị Thu Huyền: tăng dữ liệu; batch tests cho ảnh hỏng, thiếu trường, chạy lại.
 - Lê Thị Linh Chi: text-to-preview retrieval, filters và index manifest.
 - Nguyễn Văn Duy: tìm text thật, loading/empty/error, nguồn asset trên detail.
-- Đoàn Thị Minh Khuê: smoke text search, báo cáo baseline, status UI nối API.
+- Đoàn Thị Minh Khuê: smoke text search, báo cáo baseline; hoàn thiện UI trạng thái job và tests độc lập với fixtures được ghi nhãn rõ. Kết nối jobs/status API thật chuyển sang W5 vì backend chưa có endpoint và nguồn trạng thái chưa được chốt.
 - Gate: text search trên web dùng dữ liệu thật; tag `v0.1.0` sau review.
 
 ### W4 / M3 - Image search và khóa dữ liệu đánh giá
@@ -150,11 +150,11 @@ Mỗi nhiệm vụ dưới đây chuyển thành Issue có owner, reviewer, depe
 
 ### W5 / M4 - MVP đầy đủ
 
-- Vũ Nguyễn Quỳnh Anh: explanation response, jobs/reindex API theo runner đã chọn, nghiệp vụ tests.
+- Vũ Nguyễn Quỳnh Anh: explanation response, jobs/reindex API theo runner đã chọn, nghiệp vụ tests; phối hợp Huyền/Chi chốt nguồn trạng thái ingestion/indexing và contract read-only jobs/status API cần cho #70.
 - Trịnh Thị Thu Huyền: dataset card, cập nhật metadata và đồng bộ payload.
 - Lê Thị Linh Chi: E5/RRF thử nghiệm trên validation, dedup theo asset.
 - Nguyễn Văn Duy: explanation/feedback hoàn chỉnh, xử lý trạng thái cần thiết.
-- Đoàn Thị Minh Khuê: admin job/reindex UI, integration tests, báo cáo so sánh ban đầu.
+- Đoàn Thị Minh Khuê: hoàn tất kết nối admin jobs/status UI với API thật theo contract/backend endpoint đã bàn giao ở #70; kiểm thử tích hợp/smoke với dữ liệu trạng thái thật, cùng admin reindex UI và báo cáo so sánh ban đầu. Phạm vi này không bao gồm tạo job, retry job hoặc triển khai reindex API.
 - Gate: chức năng bắt buộc hoàn chỉnh; tag `v0.5.0`; ngừng thêm tính năng lớn.
 
 ### W6 / M5 - Chọn cấu hình và sửa lỗi
