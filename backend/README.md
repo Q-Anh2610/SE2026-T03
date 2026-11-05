@@ -52,9 +52,9 @@ gốc trong DB. Xem [bàn giao asset API](../docs/guides/asset-api.md).
 ## Các API mock còn lại (Issue #9)
 
 Contract text search thật và search event persistence của Issue #63 đã có tại
-[bàn giao W3](../docs/contracts/text-search-w3.md). Chưa nối persistence/service
-vào route mock; JSON Schema W3 được xuất riêng bằng
-`python -m app.export_text_search_contract`, không thay OpenAPI của route đang chạy.
+[bàn giao W3](../docs/contracts/text-search-w3.md). Chế độ `service` của #65
+đã nối CLIP/Qdrant #60 và persistence; chế độ mock phát triển vẫn riêng.
+JSON Schema W3 xuất bằng `python -m app.export_text_search_contract`.
 
 Swagger `/docs` có đủ GET assets/list-detail, POST search/text, search/image và
 feedback dưới `/api/v1`. Xem [contract mock v1](../docs/contracts/api-v1.md) và
@@ -76,6 +76,13 @@ response thành công không có nghĩa các thành phần này đã sẵn sàng
 
 ## Cấu hình
 
+API text search #65: [bootstrap, cấu hình và kiểm chứng](../docs/guides/text-search-api.md).
+`APP_TEXT_SEARCH_SOURCE=service` chọn router dùng PostgreSQL và search service;
+startup nạp adapter #60 từ index manifest và model cache. Cấu hình/cache/index
+chưa sẵn sàng trả 503, không fallback mock. Mặc định `mock` giữ luồng phát triển cũ.
+Exporter OpenAPI hiện xuất cả `docs/openapi.json` (mock mặc định) và
+`docs/openapi-text-search.json` (service). Không đổi dependencies/migrations.
+
 `app/core/config.py` dùng pydantic-settings, đọc `.env` ở gốc repository theo
 đường dẫn tuyệt đối suy ra từ file Python, không phụ thuộc working directory.
 Biến môi trường của tiến trình ưu tiên hơn file; không có file thì dùng defaults.
@@ -87,7 +94,15 @@ Các biến dành cho dịch vụ khác trong `.env` chung được bỏ qua.
 | `APP_ENV` | `development` | `development`, `test` hoặc `production` |
 | `APP_DEBUG` | `false` | Debug FastAPI, không bật ở production |
 | `APP_ASSET_LIST_SOURCE` | `database` | Nguồn list/detail; `fixture` chỉ dùng khi bật mock ở development/test |
+| `APP_TEXT_SEARCH_SOURCE` | `mock` | `service` chọn API #65; readiness lỗi trả 503. `mock` chỉ có route ngoài production khi bật mock |
+| `APP_TEXT_INDEX_MANIFEST` | Không có | IndexManifest đúng model/revision/snapshot |
+| `APP_TEXT_INDEX_ROOT` | Không có | Root chứa source/ready khớp SHA-256 trong manifest |
+| `APP_TEXT_QDRANT_URL` | `http://127.0.0.1:6333` | Origin Qdrant server; API key cấu hình riêng nếu cần |
+| `APP_TEXT_QDRANT_LOCAL_PATH` | Không có | Storage local đã có; chọn thay server, dùng một process |
 | `BACKEND_PORT` | `8000` | Cổng host của Compose, không thay cổng Uvicorn local |
+
+Khi chọn text search `service`, list/detail luôn dùng PostgreSQL dù cấu hình
+asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 `.env.example` là cấu hình mẫu; `.env` không được commit hay đưa vào image.
 Ứng dụng từ chối giá trị `APP_ENV`/`APP_DEBUG` sai định dạng.

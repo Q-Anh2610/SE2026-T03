@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "checks": [
+    "live_http_pagination_unique_ids_detail",
+    "live_and_filters_inclusive_face_bounds",
+    "live_empty_and_out_of_range_events",
+    "http_400_validation",
+    "committed_events_match_actual_execution_versions",
+    "persisted_qdrant_fingerprint_unchanged"
+  ],
+  "asset_count": 354,
+  "point_count": 354,
+  "event_count": 5,
+  "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "versions": {
+    "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "index_version": "issue65-home-interior-354-v1-clip-v1",
+    "config_version": "clip-text-exact-all-filtered-v1-k200",
+    "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+  },
+  "collection": "issue65_text_search",
+  "vector_name": "clip_23e2f7fbe4e3f716",
+  "fingerprint_before_after": "4ec8a57d3532cb126ebca29d818d6e85aa1c36231eb88b2d208f6101b559c687",
+  "query": "wooden chair",
+  "sample_ids": [
+    "objaverse_0102b2c1449f448687d62ea66ae2a26a",
+    "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+    "objaverse_a562af9c76a346faaad36773554c4c28"
+  ],
+  "storage_mode": "qdrant_persistent_local",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7",
+  "limits": "Backend HTTP/DB/CLIP/local-Qdrant smoke; not frontend E2E, server-mode Qdrant or quality benchmark.",
+  "observed_at_utc": "2026-11-05T02:47:49.730933+00:00",
+  "raw_report_sha256": "18e2e5ce7e3eb505196dd405f4a4ea4283266821535d710599c47482240359f6",
+  "index_manifest_sha256": "67b51b190810fd15de2e372fd312ee332d2201671739257ddb77dfd0aac0b8fd",
+  "code_commit": "2754831ecba5ab16486b6540254548636a3f744e",
+  "merged_develop": "e1ee86136a7366e1a39f60d826610ae4be1337c4",
+  "working_tree_dirty": true,
+  "module_sha256": {
+    "backend/app/main.py": "50ef7c63f729d004f3db882a64de72a264ace6ebd204dcc1d9af2ca36d075c14",
+    "backend/app/api/text_search.py": "2a3bd10ce7cbd0e5c6fd561043ac7d3528f135d13cbcc98ee61d89fa1cb1a415",
+    "backend/app/services/text_search.py": "c6983b750aefab89645ea15e67d9265dab20013096254d3af349d11926cdaf8c",
+    "backend/app/services/text_search_runtime.py": "75c81bd145449759231b459c759063dd637948d1607d0321108b0a3aaf51ed5e",
+    "backend/app/services/search_events.py": "457518dfddec00396e4f72e216c53b0fcb63685f20e1e95a05d8684a7c7c316c",
+    "scripts/verify_text_search_api.py": "3b41a764b2ccc2de85908dc70ffb3c7c22ef4836437579a6a3579ac51df4f3b2"
+  }
+}
