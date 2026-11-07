@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from '@testing-librar
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SearchPage } from '../../src/features/search/SearchPage'
-import { deferred, makeResponse } from '../../src/test/fixtures'
+import { deferred, makeLiveResponse, makeResponse } from '../../src/test/fixtures'
 
 // Keep the production HTTP clients and validators; only transport is simulated.
 vi.mock('../../src/lib/api/search', async (importOriginal) => {
@@ -33,6 +33,42 @@ beforeEach(() => {
 })
 
 describe('text search UI through HTTP clients (simulated transport, no retrieval)', () => {
+  it('shows the live dataset snapshot and keeps IDs from the response without adding them to the request', async () => {
+    const response = makeLiveResponse('ghế')
+    fetchMock.mockResolvedValueOnce(json(response))
+    const user = userEvent.setup()
+    render(<SearchPage />)
+    submit('  ghế  ')
+    await screen.findByRole('list', { name: 'Kết quả asset' })
+    await user.click(screen.getByText('Thông tin phiên tìm kiếm'))
+    expect(screen.getByText(response.versions.dataset_snapshot)).toBeVisible()
+    expect(screen.getAllByText(response.search_event_id)).toHaveLength(2)
+    expect(screen.getByText('API khai báo không dùng mock')).toBeVisible()
+    expect(JSON.parse(fetchMock.mock.calls[0][1]!.body as string)).toEqual({ query: 'ghế', filters: {}, page: 1, limit: 12 })
+  })
+
+  it('identifies HTTP mock responses without inventing a dataset snapshot', async () => {
+    fetchMock.mockResolvedValueOnce(json(makeResponse('ghế')))
+    const user = userEvent.setup()
+    render(<SearchPage />)
+    submit('ghế')
+    await screen.findByRole('list', { name: 'Kết quả asset' })
+    await user.click(screen.getByText('Thông tin phiên tìm kiếm'))
+    expect(screen.getByText('Minh họa (mock)')).toBeVisible()
+    expect(screen.queryByText('Dataset snapshot')).not.toBeInTheDocument()
+  })
+
+  it('rejects live HTTP responses missing a snapshot instead of falling back to mock', async () => {
+    const response = makeLiveResponse('ghế')
+    Reflect.deleteProperty(response.versions, 'dataset_snapshot')
+    fetchMock.mockResolvedValueOnce(json(response))
+    render(<SearchPage />)
+    submit('ghế')
+    expect(await screen.findByRole('alert')).toHaveTextContent('không đúng contract')
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    expect(fetchMock).toHaveBeenCalledOnce()
+  })
+
   it('shows empty only after a successful response, keeping idle and loading distinct', async () => {
     const pending = deferred<Response>()
     fetchMock.mockReturnValueOnce(pending.promise)

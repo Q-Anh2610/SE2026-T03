@@ -329,7 +329,7 @@ export function SearchPage() {
                 Trang sau
               </button>
             </nav>}
-            {state.status === 'success' && <details className="response-details"><summary>Thông tin phiên tìm kiếm</summary><dl><div><dt>Query ID</dt><dd>{state.response.query_id}</dd></div><div><dt>Event ID</dt><dd>{state.response.search_event_id}</dd></div><div><dt>Model</dt><dd>{state.response.versions.model_version}</dd></div><div><dt>Index</dt><dd>{state.response.versions.index_version}</dd></div><div><dt>Cấu hình</dt><dd>{state.response.versions.config_version}</dd></div></dl></details>}
+            {state.status === 'success' && <details className="response-details"><summary>Thông tin phiên tìm kiếm</summary><dl><div><dt>Dữ liệu</dt><dd>{state.response.mock ? 'Minh họa (mock)' : 'API khai báo không dùng mock'}</dd></div><div><dt>Query ID</dt><dd>{state.response.query_id}</dd></div><div><dt>Event ID</dt><dd>{state.response.search_event_id}</dd></div><div><dt>Model</dt><dd>{state.response.versions.model_version}</dd></div><div><dt>Index</dt><dd>{state.response.versions.index_version}</dd></div><div><dt>Cấu hình</dt><dd>{state.response.versions.config_version}</dd></div>{!state.response.mock && <div><dt>Dataset snapshot</dt><dd>{state.response.versions.dataset_snapshot}</dd></div>}</dl></details>}
           </section>}
         </>
       )}

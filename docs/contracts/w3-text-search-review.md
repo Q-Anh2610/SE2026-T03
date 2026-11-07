@@ -79,8 +79,10 @@ Trong bảng, “khớp” chỉ nói hành vi hiện có; không xác nhận ow
 ## Quyết định còn chờ và ảnh hưởng frontend
 
 Các hàng sau là **đề xuất/chủ đề cần chốt**, chưa có owner xác nhận. Issue #54
-được đọc qua GitHub ngày 29/10/2026: `comments=[]`, acceptance criteria vẫn chưa
-được tích; nội dung Issue nêu phụ thuộc owner, không xác nhận chi tiết contract.
+được đọc qua GitHub ngày 29/10/2026: chưa có bình luận xác nhận contract thật.
+Các tiêu chí UI/tests/docs đã được tích sau bàn giao PR #56; các tiêu chí tìm
+kiếm thật, contract thật và smoke thật vẫn chưa tích. Việc tích phần UI không
+xác nhận chi tiết contract retrieval.
 Quy ước API mock #9 và mapping DB #47/#48 là hành vi đã triển khai; chưa có bằng
 chứng chúng đã được owner phê duyệt để áp dụng nguyên trạng cho retrieval W3.
 
@@ -147,3 +149,36 @@ thật; báo cáo này không xác nhận môi trường hay smoke đã sẵn s�
 Lượt đối chiếu 29/10 chỉ đọc code, JSON OpenAPI lưu sẵn và kiểm tra diff tài liệu;
 không chạy tests, exporter, smoke hoặc thay đổi GitHub. Không xác nhận spec lưu
 sẵn bằng spec sinh runtime; không sửa code đối với các sai lệch đã ghi nhận.
+
+## Bàn giao để tiếp tục W3
+
+Cập nhật ngày 29/10/2026: phần UI độc lập đã bàn giao qua
+[PR #56](https://github.com/Q-Anh2610/SE2026-T03/pull/56), code/tests tại
+`277be13`, tài liệu tại `5bf09da`. Tất cả check được GitHub báo trên HEAD
+`5bf09da` đã đạt; chưa có review/approve. Đây là trạng thái quan sát được,
+không xác nhận branch protection hoặc quyền merge. Không cần làm lại UI,
+bản review hay checklist smoke chỉ vì retrieval thật còn thiếu.
+
+| Đầu vào còn thiếu | Người phối hợp | Bằng chứng bàn giao cần có |
+|---|---|---|
+| Quyết định contract | Quỳnh Anh + Linh Chi | Xác nhận sáu hàng trong bảng quyết định ở trên; schema/OpenAPI và ví dụ response tương ứng. |
+| Text-to-preview retrieval | Linh Chi | Encode text, truy vấn vector, filters/dedup; commit và tests; manifest checkpoint/revision, preprocessing, dimension, similarity, index/config và dataset snapshot tương thích. |
+| API và search event | Quỳnh Anh | Route gọi retrieval thay MockStore, lifecycle/persistence event, lỗi dependency; cùng IDs và mapping metadata với detail DB; commit và hướng dẫn chạy. |
+| Dữ liệu để kiểm chứng | Huyền + Linh Chi | Subset đã index thành công, IDs tồn tại trong PostgreSQL và Qdrant, provenance/license cùng query mẫu phù hợp; không yêu cầu tải lại toàn dataset. |
+| Môi trường smoke | Quỳnh Anh + Linh Chi; Minh Khuê phối hợp | API origin/CORS, cách khởi động dịch vụ, manifest đang dùng và cách đối chiếu request qua encoder/index; không đưa credentials vào tài liệu. |
+| Review phần đã bàn giao | Thành viên khác tác giả | Review PR #56 và xử lý góp ý; approve/merge là bước riêng, không tự xác nhận thay reviewer. |
+
+Khi nhận đủ contract và môi trường, phần Duy tự thực hiện tiếp là:
+
+1. Đối chiếu response thật với DTO/validator/client; chỉ sửa khác biệt theo
+   quyết định đã được xác nhận, cập nhật tests bị ảnh hưởng.
+2. Chạy frontend với API origin được bàn giao; kiểm tra search → detail cùng ID
+   và quay lại, không dùng metadata search để che detail lỗi.
+3. Phối hợp Minh Khuê chạy [checklist smoke](../../frontend/tests/UI_ACCEPTANCE.md),
+   ghi commits/versions/query/kết quả và bằng chứng backend/index thật.
+4. Cập nhật Issue #54 và PR theo bằng chứng mới; chỉ hoàn tất tiêu chí tích hợp
+   sau khi smoke đạt. Không cần chờ thêm UI upload/feedback của W4.
+
+Hiện không có hạng mục code frontend độc lập còn thiếu đã được xác định trong
+phạm vi W3. Các đầu vào trên cần triển khai hoặc xác nhận từ người phối hợp;
+đây không phải lỗi môi trường có thể giải quyết bằng chạy lại tests mock.
