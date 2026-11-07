@@ -1,0 +1,74 @@
+{
+  "schema_version": "issue89-two-model-preflight-v1",
+  "preflight_ready": true,
+  "benchmark": false,
+  "snapshot": "home-interior-clear-200-v3",
+  "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+  "ready_manifest_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+  "candidate_count": 200,
+  "filters": {},
+  "filter_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705967217",
+  "diagnostic_candidate_limit": 10,
+  "models": {
+    "clip": {
+      "report_path": "data\\processed\\issue89\\clip-preflight-76d5d2c095b6\\report.json",
+      "report_sha256": "a4be5be77ccd71a3ddd9c20f6ef960e7e8275ff18a9976d37c93d121c17aefbe",
+      "index_config": {
+        "model_id": "openai/clip-vit-base-patch32",
+        "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+        "dimension": 512,
+        "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+        "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+        "index_version": "issue89-clip-preflight-76d5d2c095b6"
+      },
+      "vector_name": "clip_bdd84b49a263010b",
+      "collection": "issue89_image_previews",
+      "normalization": "L2",
+      "similarity": "Cosine",
+      "processor_class": "CLIPImageProcessor",
+      "storage_path": "data\\processed\\issue89\\clip-preflight-76d5d2c095b6\\qdrant",
+      "index_manifest_path": "data\\processed\\issue89\\clip-preflight-76d5d2c095b6\\index-manifest.json",
+      "manifest_sha256": "7ebba709c46fec69dc4485cd0b358e82ca48c60ce568b3a03111ac943b882528",
+      "audit": {
+        "exact_point_count": 200,
+        "scrolled_point_count": 200,
+        "unique_asset_ids": 200,
+        "unique_point_ids": 200,
+        "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+        "point_payload_vector_sha256": "5db69a3156a6b1a428d1f0c1f7d2d891c9ec99266d55ebc7d93a7926fb2093e9"
+      }
+    },
+    "siglip2": {
+      "report_path": "data\\processed\\issue89\\siglip2-preflight-8a07361d2081\\report.json",
+      "report_sha256": "cd59022e72224dd56c1242c05afb63706595e618ace4b84aaacf8090dfcaee18",
+      "index_config": {
+        "model_id": "google/siglip2-base-patch16-224",
+        "model_revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "dimension": 768,
+        "preprocessing_version": "siglip2-fixres-slow-processor-rgb-l2-v1",
+        "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+        "index_version": "issue89-siglip2-preflight-8a07361d2081"
+      },
+      "vector_name": "siglip2_2904b74938a2f4e1",
+      "collection": "issue89_image_previews",
+      "normalization": "L2",
+      "similarity": "Cosine",
+      "processor_class": "SiglipImageProcessor",
+      "storage_path": "data\\processed\\issue89\\siglip2-preflight-8a07361d2081\\qdrant",
+      "index_manifest_path": "data\\processed\\issue89\\siglip2-preflight-8a07361d2081\\index-manifest.json",
+      "manifest_sha256": "821617e5f6a69a57698f0e4f705f5004a98607d3098a7a77b473be9d0e59c4cd",
+      "audit": {
+        "exact_point_count": 200,
+        "scrolled_point_count": 200,
+        "unique_asset_ids": 200,
+        "unique_point_ids": 200,
+        "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+        "point_payload_vector_sha256": "6a7d1a5e3092f5f862fff07193e58e49f48e98ba67389225c1e69ac49a2bdd2c"
+      }
+    }
+  },
+  "limitations": [
+    "Indexed previews used only for module preflight; no independent benchmark query run.",
+    "Qrels, group split and locked evaluation protocol must be finalized before benchmark."
+  ]
+}

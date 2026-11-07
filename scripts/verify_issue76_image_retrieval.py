@@ -62,7 +62,8 @@ def check_inputs(root, manifest, preview_directory):
 
 def build_index(root, output, encoder, *, source_manifest, ready_manifest,
                 source_sha256, ready_sha256, asset_count, snapshot, snapshot_confirmation,
-                preview_directory, candidate_limit):
+                preview_directory, candidate_limit, index_prefix="issue76",
+                collection_name="issue76_image_previews", module_paths=MODULES):
     """Caller phải xác nhận TV2 trước; fixture tests dùng thư mục tạm riêng."""
     require(bool(snapshot_confirmation and snapshot_confirmation.strip()), "missing_tv2_snapshot_confirmation")
     metadata, receipt = load_inputs(root, {"input": {
@@ -79,11 +80,11 @@ def build_index(root, output, encoder, *, source_manifest, ready_manifest,
     elapsed = time.perf_counter() - started
     config = IndexConfig(encoder.model_id, encoder.revision, encoder.dimension,
         encoder.preprocessing_version, snapshot + "-sha256:" + source_sha256,
-        "issue76-" + output.name)
+        index_prefix + "-" + output.name)
     storage = output / "qdrant"
     require(not storage.exists(), "output_index_already_exists")
     with closing(QdrantClient(path=str(storage))) as client:
-        store = QdrantStore(client, collection_name="issue76_image_previews", config=config)
+        store = QdrantStore(client, collection_name=collection_name, config=config)
         require(store.upsert(batch.embedded) == asset_count, "upsert_incomplete")
         audit = audit_index(store, metadata)
         processor = getattr(encoder.processor, "image_processor", encoder.processor)
@@ -98,7 +99,7 @@ def build_index(root, output, encoder, *, source_manifest, ready_manifest,
             point_count=audit["exact_point_count"], snapshot_confirmation=snapshot_confirmation,
             code_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip(),
             working_tree_dirty=bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO, text=True).strip()),
-            module_sha256={name: digest(REPO / name) for name in MODULES},
+            module_sha256={name: digest(REPO / name) for name in module_paths},
             package_versions=versions(), retrieval_config=ImageRetrievalConfig.for_limit(candidate_limit))
         save_image_index_manifest(manifest, output / "index-manifest.json")
     return manifest, {"input": receipt, "embedding_seconds": elapsed, "summary": batch.summary}

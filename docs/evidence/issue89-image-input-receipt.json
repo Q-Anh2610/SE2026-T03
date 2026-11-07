@@ -1,0 +1,16 @@
+{
+  "schema_version": "issue89-image-input-v1",
+  "snapshot": "home-interior-clear-200-v3",
+  "asset_count": 200,
+  "filters": {},
+  "source_manifest": "source.json",
+  "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+  "ready_manifest": "ready.json",
+  "ready_manifest_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+  "candidate_assets_sha256": "260599cbf4ad9ea56777122ffdf03826ccbe6dfc0e6f0f896f00de2ffe6d785e",
+  "preview_provenance_sha256": "ded638d0d80ecd8f506a28204a829c12c1ee40c0098002307b060281668240e6",
+  "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705482003",
+  "filter_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705967217",
+  "query_images_used": false,
+  "benchmark": false
+}
