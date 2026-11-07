@@ -1,0 +1,38 @@
+benchmark_version: home-interior-image-v1
+status: owner_approved_query_draft
+created_at: 2026-11-07
+snapshot_name: home-interior-clear-200-v3
+snapshot_manifest_sha256: 9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd
+candidate_asset_count: 200
+candidate_asset_ids_source: data/manifests/objaverse_200.json
+query_file: data/benchmark/image_queries_v1.csv
+query_count: 20
+query_counts_by_type:
+  similarity: 20
+  same_id: 0
+same_id_shortfall_reason: >-
+  Repository audit verified zero independent alternate-view images for the 200
+  assets. Indexed previews and resized copies were excluded. Owners approved
+  20 similarity and 0 same_id queries in Issue #89.
+source_inventory: data/benchmark/image_query_sources_v1.csv
+source_images_local_only: true
+language_policy: image queries; language and query_text are not applicable
+split_policy: pending independent labels and adjudication; split by query_group_id
+split_seed: null
+split_version: pending
+locked_at: null
+locked_revision: null
+annotators:
+  - Doan Thi Minh Khue
+  - Trinh Thi Thu Huyen
+labeling_status: pending
+qrels_file: pending
+retrieval_index_preflight:
+  status: pending
+  requirement: exact 200 candidate IDs and checksums for each model index
+notes:
+  - This versioned image query draft is separate from the locked 70-row text queries.csv.
+  - Every query is similarity; source_asset_id is blank because these are independent reference images.
+  - Candidate-category mapping is sourcing metadata, not relevance ground truth.
+  - The split column is blank until labeling and adjudication are complete.
+  - Hit@K is not applicable because there are no same_id queries.
