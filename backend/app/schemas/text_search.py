@@ -1,7 +1,7 @@
 """Contract text search thật W3; chưa thay route mock của Issue #9."""
 
 from math import ceil
-from typing import Literal, Self
+from typing import ClassVar, Literal, Self
 from urllib.parse import urlsplit
 from uuid import UUID
 
@@ -73,6 +73,7 @@ class TextSearchCandidates(BaseModel):
 
 
 class LiveTextSearchResponse(BaseModel):
+    retrieval_source: ClassVar[str] = "clip_text_to_preview"
     model_config = ConfigDict(extra="forbid")
     query_id: UUID
     search_event_id: UUID
@@ -104,7 +105,7 @@ class LiveTextSearchResponse(BaseModel):
             hits.append(TextSearchHit(asset_id=result.asset.asset_id, score=result.score))
             if not result.asset.name.strip() or not result.asset.source.strip():
                 raise ValueError("Asset name and source must be nonempty.")
-            if result.retrieval_sources != ["clip_text_to_preview"] or not result.explanation.strip():
+            if result.retrieval_sources != [self.retrieval_source] or not result.explanation.strip():
                 raise ValueError("Live result must describe the actual CLIP retrieval source.")
             for url in (result.asset.source_url, result.asset.thumbnail_url):
                 if url is not None:

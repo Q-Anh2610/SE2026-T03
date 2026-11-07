@@ -75,7 +75,8 @@ def verify(args, *, configure_app=None, extra_checks=None):
             DATABASE_URL=SecretStr(db.url.render_as_string(hide_password=False)),
             text_index_manifest=args.index_manifest, text_index_root=args.index_root,
             text_qdrant_local_path=args.qdrant_local_path,
-            cors_origins=getattr(args, "ui_origins", []))
+            cors_origins=getattr(args, "ui_origins", []),
+            **getattr(args, "settings_overrides", {}))
         app = create_app(settings)
         app.state.db_engine = db.engine  # Chỉ cấp engine schema test, không mở DB nghiệp vụ.
         if configure_app is not None:

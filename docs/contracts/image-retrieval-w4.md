@@ -1,10 +1,11 @@
 # Bàn giao retrieval ảnh TV3 — Issue #76
 
-Trạng thái: implementation local trên `feat/76-image-retrieval`, chưa commit/PR.
-Đây là đề xuất interface cho TV1 tại #80; không thay OpenAPI hay route HTTP.
+Code retrieval đã merge qua PR #83. API #80 sử dụng interface dưới đây;
+hướng dẫn HTTP tại [image search API](../guides/image-search-api.md).
 Đã đối chiếu contract upload trong PR #82 tại commit
-`70e6f1c5f9f23c77741e11c75aa81efcb3fd08e7`; chưa có phản hồi TV1
-xác nhận tên method/output/lỗi của interface dưới đây.
+`70e6f1c5f9f23c77741e11c75aa81efcb3fd08e7`.
+Phần tích hợp #80 gọi method/output/lỗi dưới đây và ghi bằng chứng kiểm thử
+trong hướng dẫn HTTP.
 
 ```python
 ImageSearchService(encoder, store).search_image(

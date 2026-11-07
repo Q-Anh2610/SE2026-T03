@@ -17,7 +17,9 @@ curl.exe -X POST http://127.0.0.1:8000/api/v1/search/image -F 'image=@preview.pn
 
 Frontend dùng `FormData`, thêm ảnh vào `image` và thêm
 `JSON.stringify(filters)` vào `filters` nếu có. Trình duyệt tự đặt multipart
-boundary. Response 200 dùng `SearchResponse` với `mock: true` và kết quả fixture.
+boundary. Chế độ mặc định trả `SearchResponse` với `mock: true` và kết quả fixture.
+Chế độ `APP_IMAGE_SEARCH_SOURCE=service` của #80 dùng
+[contract HTTP ảnh thật](../guides/image-search-api.md).
 Xem [ví dụ request/response trong OpenAPI](../openapi.json).
 
 | HTTP | `error.code` | Khi nào |
