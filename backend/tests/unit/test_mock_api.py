@@ -1,10 +1,10 @@
 from io import BytesIO
 
 from fastapi.testclient import TestClient
-from PIL import Image
+from PIL import Image, PngImagePlugin
 import pytest
 
-from app.api.mock import MAX_IMAGE_BYTES
+from app.api.image_upload import MAX_IMAGE_BYTES
 from app.core.config import Settings
 from app.main import create_app
 from app.schemas.api import AssetFilters
@@ -127,10 +127,11 @@ def test_image_search_decodes_file_content_and_returns_mock(client, format):
 
 @pytest.mark.parametrize("content,code", [
     (b"pretend PNG", "INVALID_IMAGE"),
+    (image_bytes("JPEG")[:-2], "INVALID_IMAGE"),
     (image_bytes("GIF"), "UNSUPPORTED_IMAGE"),
     (image_bytes(size=(4097, 1)), "IMAGE_DIMENSIONS_EXCEEDED"),
     (b"a" * (MAX_IMAGE_BYTES + 1), "IMAGE_TOO_LARGE"),
-], ids=["invalid-content", "unsupported-gif", "too-wide", "too-many-bytes"])
+], ids=["invalid-content", "truncated-jpeg", "unsupported-gif", "too-wide", "too-many-bytes"])
 def test_image_validation(client, content, code):
     response = client.post("/api/v1/search/image", files={"image": ("preview.png", content, "image/png")})
     assert response.status_code == 400
@@ -138,10 +139,27 @@ def test_image_validation(client, content, code):
 
 
 def test_image_missing_and_invalid_filter_json(client):
-    assert client.post("/api/v1/search/image").status_code == 400
+    missing = client.post("/api/v1/search/image")
+    assert missing.status_code == 400
+    assert missing.json()["error"]["code"] == "INVALID_REQUEST"
     response = client.post("/api/v1/search/image", files={"image": ("a.png", image_bytes())}, data={"filters": "{"})
     assert response.status_code == 400
     assert response.json()["error"]["code"] == "INVALID_FILTERS"
+
+
+def test_image_at_inclusive_dimensions_and_size_limits(client):
+    # Ancillary tEXt chunk: 12 byte overhead + key và dấu phân cách NUL.
+    source = image_bytes(size=(4096, 1))
+    metadata = PngImagePlugin.PngInfo()
+    metadata.add_text("pad", "x" * (MAX_IMAGE_BYTES - len(source) - 16))
+    buffer = BytesIO()
+    with Image.open(BytesIO(source)) as decoded:
+        decoded.save(buffer, format="PNG", pnginfo=metadata)
+    content = buffer.getvalue()
+    assert len(content) == MAX_IMAGE_BYTES
+    result = client.post("/api/v1/search/image", files={"image": ("at-limit.png", content)})
+    assert result.status_code == 200
+    assert result.json()["mock"] is True
 
 
 @pytest.mark.parametrize("relevance", [True, False])
