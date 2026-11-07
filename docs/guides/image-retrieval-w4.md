@@ -15,8 +15,11 @@ backend\.venv\Scripts\python.exe -m pytest backend/tests/unit -q
 ```
 
 Runner luôn `local_files_only=True`, không tải weights/preview. CLIP cache
-có pinned revision; SigLIP 2 chưa có trong cache ở lượt kiểm tra ngày 07/11/2026.
-Chưa smoke SigLIP 2 thật; không tự tải checkpoint lớn hay sửa cache/dependencies.
+có pinned revision. Chi đã tải ba file checkpoint SigLIP 2 đúng revision vào
+`data/models/huggingface`, kiểm tra weights SHA-256 và config/processor Git blob
+hash, rồi build/smoke offline thành công. Không thêm dependencies hoặc đưa cache,
+weights/index/preview vào Git. Cache SigLIP 2 riêng cần đặt `HF_HUB_CACHE` như lệnh
+Git Bash bên dưới; không mặc định thay cache CLIP.
 
 ## Smoke ngay với index W3 đã có
 
@@ -78,7 +81,7 @@ backend/.venv/Scripts/python.exe scripts/verify_issue76_image_retrieval.py build
 ```
 
 Lưu đường dẫn report JSON cuối lệnh. Chưa chạy/verify xong thì chưa ghi nhận build
-đạt. Weights SigLIP 2 chưa sẵn sàng nên chưa build được index model thứ hai.
+đạt. Lượt build SigLIP 2 thật tiếp theo đã hoàn tất; xem kết quả bên dưới.
 
 ## Quy tắc build và so sánh
 
@@ -128,15 +131,73 @@ Chi chạy runner trên snapshot do TV2 xác nhận. Run local:
   ghi pinned checkpoint/processor/preprocessing, snapshot confirmation và code hashes.
 - Unit backend do Chi chạy: 638 passed in 16.76s. Đây là local, không phải CI.
 
-Chưa có smoke/index SigLIP 2 thật, image benchmark có nhãn hoặc HTTP image E2E.
+CLIP diagnostic đạt; chưa có image benchmark có nhãn hoặc HTTP image E2E.
 Interface TV1 và protocol TV5 vẫn cần xác nhận; không đánh dấu toàn bộ #76 đạt.
+
+## Kết quả build SigLIP 2 thật và đối chiếu với CLIP
+
+Run ngày 07/11/2026: `data/processed/issue76/siglip2-build-f0e695060aaa`, code tại
+`5a190ce4d683122887102251ede965e641a04b36`, working tree sạch khi chạy.
+
+| Kiểm tra | CLIP | SigLIP 2 |
+|---|---|---|
+| Dimension | 512 | 768 |
+| Embedded / failed / skipped | 354 / 0 / 0 | 354 / 0 / 0 |
+| Point / asset ID duy nhất | 354 / 354 | 354 / 354 |
+| Smoke K=10 | 10/10 | 10/10 |
+| Fingerprint persisted sau reopen | Giữ nguyên | Giữ nguyên |
+| Embedding (giây) | 23.948 | 98.274 |
+| Tổng runner (giây) | 37.464 | 119.780 |
+
+Thời gian chỉ mô tả hai lượt diagnostic riêng, chưa theo protocol latency/warmup
+của TV5; không dùng bảng này chọn model hoặc tuyên bố chất lượng.
+
+SigLIP 2 dùng processor `SiglipImageProcessor`, model revision đã pin trong contract,
+index `issue76-siglip2-build-f0e695060aaa`, named vector `siglip2_10156095155cf171`.
+Hai storage path riêng dù collection cùng tên `issue76_image_previews`.
+Fingerprint SigLIP 2 persisted:
+`c0d97db0bba2555306cc9b3d83a53d719a63971311ca29e8e12577065cf2cb0a`.
+
+[Report SigLIP 2/raw ranked results](../evidence/issue76-siglip2-image-smoke.json),
+[manifest SigLIP 2](../evidence/issue76-siglip2-image-index-manifest.json) và
+[đối chiếu hai model](../evidence/issue76-image-model-smoke-comparison.json)
+xác nhận cùng snapshot/source/ready/count/retrieval policy, 10 query preview
+SHA-256 và filters khớp. Không cộng/so trực tiếp cosine giữa hai không gian.
+Chỉ self-preview smoke, chưa có metric chất lượng theo qrels độc lập.
+
+### Chạy lại SigLIP 2 trên Git Bash
+
+Weights phải có sẵn tại cache đã chọn. Không cần build lại nếu chỉ đọc bằng chứng.
+Lệnh tạo index mới riêng rồi smoke, không ghi đè lượt trước:
+
+```bash
+HF_HUB_OFFLINE=1 HF_HUB_CACHE=data/models/huggingface \
+backend/.venv/Scripts/python.exe scripts/verify_issue76_image_retrieval.py build \
+  --model siglip2 \
+  --handoff-root data/processed/issue60/smoke-20261104T065700Z-6dcbc8/home-interior-354-v1 \
+  --source-manifest manifests/assets_354.json \
+  --ready-manifest assets_354.ready.json \
+  --source-sha256 93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614 \
+  --ready-sha256 7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c \
+  --asset-count 354 \
+  --snapshot home-interior-354-v1 \
+  --candidate-limit 10 \
+  --snapshot-confirmation 'https://github.com/Q-Anh2610/SE2026-T03/issues/76#issuecomment-6702522644' \
+  --reference-manifest data/processed/issue76/clip-build-1ce976722ab7/index-manifest.json
+```
+
+Trên Windows nếu tải cache báo `WinError 1314` khi tạo symlink sau khi weights đã
+tải xong, kiểm tra blob/checksum đã có và dùng bản copy thường tại snapshot; không
+cần yêu cầu Administrator hoặc tải lại weights chỉ để tạo symlink. Ở lượt này file
+processor 394 byte được copy từ blob đúng Git hash; weights SHA-256 khớp LFS chính
+thức, ghi trong bản đối chiếu. Cảnh báo thiếu `hf_xet` không chặn tải HTTP đã thành công.
 
 ## Handoff hiện tại
 
 - Có thể tích hợp thử ở module: bytes JPEG/PNG → CLIP → Qdrant tương thích
   → candidates/versions; tests ảnh lỗi/filter/dedup/tie-break/empty/version.
-- Có adapter SigLIP 2 và manifest/runner riêng; tests fixture đạt, chưa có
-  weights/cache và index SigLIP 2 thật để nghiệm thu.
+- SigLIP 2 model thật đã encode/build/smoke 354 preview; report/manifest và đối
+  chiếu với CLIP được bổ sung trên nhánh kiểm chứng. Chưa coi đó là benchmark có nhãn.
 - TV2 đã xác nhận snapshot W4; đang chờ TV1 xác nhận interface #76 → #80
   và TV5 image benchmark/protocol.
   Không tự sửa checklist/review GitHub, commit, push hoặc mở PR trong phiên này.

@@ -1,0 +1,1104 @@
+{
+  "schema_version": "issue76-image-diagnostic-v1",
+  "passed": true,
+  "started_at_utc": "2026-11-07T05:47:12.204074+00:00",
+  "mode": "build",
+  "benchmark": false,
+  "model": "siglip2",
+  "command": [
+    "scripts/verify_issue76_image_retrieval.py",
+    "build",
+    "--model",
+    "siglip2",
+    "--handoff-root",
+    "data/processed/issue60/smoke-20261104T065700Z-6dcbc8/home-interior-354-v1",
+    "--source-manifest",
+    "manifests/assets_354.json",
+    "--ready-manifest",
+    "assets_354.ready.json",
+    "--source-sha256",
+    "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "--ready-sha256",
+    "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+    "--asset-count",
+    "354",
+    "--snapshot",
+    "home-interior-354-v1",
+    "--candidate-limit",
+    "10",
+    "--snapshot-confirmation",
+    "https://github.com/Q-Anh2610/SE2026-T03/issues/76#issuecomment-6702522644",
+    "--reference-manifest",
+    "data/processed/issue76/clip-build-1ce976722ab7/index-manifest.json"
+  ],
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel",
+    "python": "3.13.7",
+    "device": "cpu"
+  },
+  "package_versions": {
+    "torch": "2.8.0",
+    "transformers": "4.57.1",
+    "Pillow": "13.0.0",
+    "qdrant-client": "1.15.1"
+  },
+  "code_commit": "5a190ce4d683122887102251ede965e641a04b36",
+  "working_tree_dirty": false,
+  "module_sha256": {
+    "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+    "backend/app/embedding/siglip2_encoder.py": "513bd37bcf93ee95e2bd4c49c623a814997eb5d56d534a6b7469df37b90ddc4e",
+    "backend/app/embedding/image_encoding.py": "0eb39082e326688b7ae33bc28c07445260aa5752f17d7280b30ae9f69e83e980",
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "backend/app/search/image_search.py": "386386328f06026e4c41969d5254d3bd6334bcb3984879ba53b65eef8f950ed6",
+    "backend/app/search/image_index_manifest.py": "7a9b449e9a2cb684679b72d578d1823a2c6fec673a03f7dd3a81997383436d8d",
+    "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+    "backend/app/search/qdrant_store.py": "10aa20d0ee22559a5269cc8edfa3badebdfbcdb81ed2e3abfff0cd4e4a69b254",
+    "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+    "backend/app/search/smoke.py": "eb6f39b2f54f02064dd9695b13e0b161b9de3b6ba926e9997f9264e960c4762d",
+    "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+    "backend/app/schemas/text_search.py": "2afeee144b767ed9a6352fdedc06aba27327d54b2ab254bb20a83cd29eb5af35",
+    "scripts/verify_issue76_image_retrieval.py": "e3b62966044c7a17690b4ffa347146545bd85a5401f7c93ff2fe18ad1560a196"
+  },
+  "model_load_seconds": 4.783322300063446,
+  "build": {
+    "input": {
+      "source_manifest": "manifests/assets_354.json",
+      "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+      "ready_manifest": "assets_354.ready.json",
+      "ready_manifest_sha256": "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+      "asset_count": 354,
+      "distinct_readable_previews": 354
+    },
+    "embedding_seconds": 98.27439280005638,
+    "summary": {
+      "embedded": 354,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "comparison_inputs_match": true,
+  "queries": [
+    {
+      "case": "self_preview_1",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {},
+      "elapsed_seconds": 0.3621473000384867,
+      "repeat_consistent": true,
+      "repeat_exact_equal": false,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 3.3306690738754696e-16,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.7738215105649118
+        }
+      ],
+      "self_in_top_k": true,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.9999999999994647
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981701
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638011
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.7738215105649116
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "self_preview_2",
+      "query_asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+      "query_image_path": "previews/d5f9b0db5b3e866d17f09aad30fa175b09fa8aa1d3c091e962d5214d1d5f8cb4.jpg",
+      "query_sha256": "d5f9b0db5b3e866d17f09aad30fa175b09fa8aa1d3c091e962d5214d1d5f8cb4",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {},
+      "elapsed_seconds": 0.3444620999507606,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+          "score": 0.9999999999992941
+        },
+        {
+          "asset_id": "objaverse_2595df0cfae64e55903e41510053b3ef",
+          "score": 0.8618186510225545
+        },
+        {
+          "asset_id": "objaverse_32cfa73193de47c2b70c374ca170a8f8",
+          "score": 0.855720341279741
+        },
+        {
+          "asset_id": "objaverse_af86893c11a54ca28f365d56d901f90d",
+          "score": 0.8469166437575045
+        },
+        {
+          "asset_id": "objaverse_50e6178c17364613b9b23909a715500d",
+          "score": 0.8376637773822049
+        },
+        {
+          "asset_id": "objaverse_451747c93dae4c26b6c3d121c6d4e58f",
+          "score": 0.8324936278071173
+        },
+        {
+          "asset_id": "objaverse_265f849af5a247698e821bf0a1d50307",
+          "score": 0.8294585614261062
+        },
+        {
+          "asset_id": "objaverse_1417a4fccb9d4a728105b3a3a45f6bb1",
+          "score": 0.8223334089028729
+        },
+        {
+          "asset_id": "objaverse_857f523d4cca4b14a23fc807d0859a84",
+          "score": 0.8213572684861712
+        },
+        {
+          "asset_id": "objaverse_02126986b04e4c4fb2a463f2f679cbaa",
+          "score": 0.821290316717971
+        }
+      ],
+      "self_in_top_k": true,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+          "score": 0.9999999999992941
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_2595df0cfae64e55903e41510053b3ef",
+          "score": 0.8618186510225545
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_32cfa73193de47c2b70c374ca170a8f8",
+          "score": 0.855720341279741
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_af86893c11a54ca28f365d56d901f90d",
+          "score": 0.8469166437575045
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_50e6178c17364613b9b23909a715500d",
+          "score": 0.8376637773822049
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_451747c93dae4c26b6c3d121c6d4e58f",
+          "score": 0.8324936278071173
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_265f849af5a247698e821bf0a1d50307",
+          "score": 0.8294585614261062
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_1417a4fccb9d4a728105b3a3a45f6bb1",
+          "score": 0.8223334089028729
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_857f523d4cca4b14a23fc807d0859a84",
+          "score": 0.8213572684861712
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_02126986b04e4c4fb2a463f2f679cbaa",
+          "score": 0.821290316717971
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "self_preview_3",
+      "query_asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+      "query_image_path": "previews/a604efdc7182756696e44c7b67ad06234b145420f74a115a1c5971e5fceedeaa.jpg",
+      "query_sha256": "a604efdc7182756696e44c7b67ad06234b145420f74a115a1c5971e5fceedeaa",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {},
+      "elapsed_seconds": 0.6613380999770015,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.9999999999998445
+        },
+        {
+          "asset_id": "objaverse_26f45c6733254144bcc20788c03ea31f",
+          "score": 0.9118709753864664
+        },
+        {
+          "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+          "score": 0.8684668855126019
+        },
+        {
+          "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+          "score": 0.8684452208087994
+        },
+        {
+          "asset_id": "objaverse_a0cd37a98ff74f1eb1b12bce0b7da868",
+          "score": 0.8649846840050079
+        },
+        {
+          "asset_id": "objaverse_afb8c3e4e147422581184c74f47c9b88",
+          "score": 0.8646166363636482
+        },
+        {
+          "asset_id": "objaverse_415990b9b8d7434099682efbc9993132",
+          "score": 0.8559864096473478
+        },
+        {
+          "asset_id": "objaverse_1a0cb6ce3e1d4e27b7f684f4d4e946c1",
+          "score": 0.8497472315087087
+        },
+        {
+          "asset_id": "objaverse_ad0de808e06f40bda894b76d6c7f2c1f",
+          "score": 0.8398402155025964
+        },
+        {
+          "asset_id": "objaverse_ce511701c920467c914aa4f2144c5144",
+          "score": 0.8366530709559314
+        }
+      ],
+      "self_in_top_k": true,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.9999999999998445
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_26f45c6733254144bcc20788c03ea31f",
+          "score": 0.9118709753864664
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+          "score": 0.8684668855126019
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+          "score": 0.8684452208087994
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_a0cd37a98ff74f1eb1b12bce0b7da868",
+          "score": 0.8649846840050079
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_afb8c3e4e147422581184c74f47c9b88",
+          "score": 0.8646166363636482
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_415990b9b8d7434099682efbc9993132",
+          "score": 0.8559864096473478
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_1a0cb6ce3e1d4e27b7f684f4d4e946c1",
+          "score": 0.8497472315087087
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_ad0de808e06f40bda894b76d6c7f2c1f",
+          "score": 0.8398402155025964
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_ce511701c920467c914aa4f2144c5144",
+          "score": 0.8366530709559314
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "category",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "category": "architecture"
+      },
+      "elapsed_seconds": 0.34870660002343357,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+          "score": 0.7714040830111086
+        },
+        {
+          "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+          "score": 0.7682021448005676
+        },
+        {
+          "asset_id": "objaverse_204a34f7c4f94da1a3c73f56679ea929",
+          "score": 0.7638211682649021
+        },
+        {
+          "asset_id": "objaverse_2bd3fcc82c9f43cfb0c8cf26c7d0107c",
+          "score": 0.7621999561131336
+        },
+        {
+          "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+          "score": 0.75750046004862
+        },
+        {
+          "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+          "score": 0.7546279900420375
+        },
+        {
+          "asset_id": "objaverse_309ccba7b2cb40a6bfffb89f498fc54c",
+          "score": 0.7517702558412733
+        },
+        {
+          "asset_id": "objaverse_421fbe7bfb0944e99f4954cfd7c10bbf",
+          "score": 0.7481905350134985
+        },
+        {
+          "asset_id": "objaverse_3c1ef9af05e34313b5a6135265afa6c7",
+          "score": 0.7459444371163504
+        }
+      ],
+      "self_in_top_k": false,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+          "score": 0.7714040830111086
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+          "score": 0.7682021448005676
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_204a34f7c4f94da1a3c73f56679ea929",
+          "score": 0.7638211682649021
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_2bd3fcc82c9f43cfb0c8cf26c7d0107c",
+          "score": 0.7621999561131336
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+          "score": 0.75750046004862
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+          "score": 0.7546279900420375
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_309ccba7b2cb40a6bfffb89f498fc54c",
+          "score": 0.7517702558412733
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_421fbe7bfb0944e99f4954cfd7c10bbf",
+          "score": 0.7481905350134985
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_3c1ef9af05e34313b5a6135265afa6c7",
+          "score": 0.7459444371163504
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "license",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "license": "by"
+      },
+      "elapsed_seconds": 0.5716724001104012,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+          "score": 0.7714040830111086
+        },
+        {
+          "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+          "score": 0.7682021448005676
+        }
+      ],
+      "self_in_top_k": true,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+          "score": 0.7714040830111086
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+          "score": 0.7682021448005676
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "format",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "format": "glb"
+      },
+      "elapsed_seconds": 0.38669720001053065,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.7738215105649118
+        }
+      ],
+      "self_in_top_k": true,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.7738215105649118
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "face_min",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "face_count_min": 1958
+      },
+      "elapsed_seconds": 0.4897987999720499,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+          "score": 0.7714040830111086
+        },
+        {
+          "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+          "score": 0.7682021448005676
+        },
+        {
+          "asset_id": "objaverse_018cff2beb324e609446af6f64d059e2",
+          "score": 0.766714029002781
+        },
+        {
+          "asset_id": "objaverse_02f2bd71a28a421c87288b35524df8d0",
+          "score": 0.7661964614122909
+        }
+      ],
+      "self_in_top_k": false,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_600a996f3b9e44fd912beb8129b5f929",
+          "score": 0.8191123911560463
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_a759f6f592084e04be62a57d578b6cb6",
+          "score": 0.798971237649698
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_15997fe949024e51b4a2cf8df3fe3b5a",
+          "score": 0.7885367790538971
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_7467af164bd64d0db09565b70b216e12",
+          "score": 0.7874327861628537
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_4adc793119754406aa3bcd790782cd4c",
+          "score": 0.7794658062981703
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_66ca97517dc54f5d9dacc0da6f6a4200",
+          "score": 0.7754213421638013
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_8a51e2572c2e49d6829bb8c2b135d214",
+          "score": 0.7714040830111086
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_58e2f2bc9b9b4d07b4aa20f4b6ccbc47",
+          "score": 0.7682021448005676
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_018cff2beb324e609446af6f64d059e2",
+          "score": 0.766714029002781
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_02f2bd71a28a421c87288b35524df8d0",
+          "score": 0.7661964614122909
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "face_max",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "face_count_max": 1958
+      },
+      "elapsed_seconds": 0.39875149994622916,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.7738215105649118
+        },
+        {
+          "asset_id": "objaverse_a0cd37a98ff74f1eb1b12bce0b7da868",
+          "score": 0.7669640917236675
+        },
+        {
+          "asset_id": "objaverse_03b311710f5347dba54513de19199104",
+          "score": 0.7660341028113102
+        },
+        {
+          "asset_id": "objaverse_415990b9b8d7434099682efbc9993132",
+          "score": 0.7589352697535152
+        },
+        {
+          "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+          "score": 0.75750046004862
+        },
+        {
+          "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+          "score": 0.7546279900420375
+        },
+        {
+          "asset_id": "objaverse_1417a4fccb9d4a728105b3a3a45f6bb1",
+          "score": 0.7511757650197324
+        }
+      ],
+      "self_in_top_k": true,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+          "score": 0.999999999999465
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_259e91c0f79b40c786ea883ca17ef2d7",
+          "score": 0.7900593778455773
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "score": 0.7765862671421407
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+          "score": 0.7738215105649118
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_a0cd37a98ff74f1eb1b12bce0b7da868",
+          "score": 0.7669640917236675
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_03b311710f5347dba54513de19199104",
+          "score": 0.7660341028113102
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_415990b9b8d7434099682efbc9993132",
+          "score": 0.7589352697535152
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_c2b22722e149416bacf7420a59cb472b",
+          "score": 0.75750046004862
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_04540b11852b4c65bfe6c608c22641e4",
+          "score": 0.7546279900420375
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_1417a4fccb9d4a728105b3a3a45f6bb1",
+          "score": 0.7511757650197324
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "and_exact_bounds",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "category": "architecture",
+        "license": "by",
+        "format": "glb",
+        "face_count_min": 1958,
+        "face_count_max": 1958
+      },
+      "elapsed_seconds": 0.4336056999163702,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+          "score": 0.6511266729866324
+        }
+      ],
+      "self_in_top_k": false,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+          "score": 0.6511266729866324
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    },
+    {
+      "case": "empty",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_image_path": "previews/3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef.jpg",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "query_source": "indexed_preview_diagnostic_only",
+      "filters": {
+        "category": "__issue60_absent_category__"
+      },
+      "elapsed_seconds": 0.571571399923414,
+      "repeat_consistent": true,
+      "repeat_exact_equal": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0,
+      "repeat_hits": [],
+      "self_in_top_k": false,
+      "hits": [],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue76-siglip2-build-f0e695060aaa",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+      }
+    }
+  ],
+  "input": {
+    "source_manifest": "manifests/assets_354.json",
+    "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "ready_manifest": "assets_354.ready.json",
+    "ready_manifest_sha256": "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+    "asset_count": 354,
+    "distinct_readable_previews": 354
+  },
+  "audit_before": {
+    "exact_point_count": 354,
+    "scrolled_point_count": 354,
+    "unique_asset_ids": 354,
+    "unique_point_ids": 354,
+    "point_id_set_sha256": "c47de83665e44388947ca2fe35eb8d5130c81b32fb4047d57b20c2d036982397",
+    "point_payload_vector_sha256": "c0d97db0bba2555306cc9b3d83a53d719a63971311ca29e8e12577065cf2cb0a"
+  },
+  "audit_after": {
+    "exact_point_count": 354,
+    "scrolled_point_count": 354,
+    "unique_asset_ids": 354,
+    "unique_point_ids": 354,
+    "point_id_set_sha256": "c47de83665e44388947ca2fe35eb8d5130c81b32fb4047d57b20c2d036982397",
+    "point_payload_vector_sha256": "03c519670f7d8ba3ba2a147ecf13cc027bfe2d6c9abcf69610901e2ab3d1df1a"
+  },
+  "audit_reopened": {
+    "exact_point_count": 354,
+    "scrolled_point_count": 354,
+    "unique_asset_ids": 354,
+    "unique_point_ids": 354,
+    "point_id_set_sha256": "c47de83665e44388947ca2fe35eb8d5130c81b32fb4047d57b20c2d036982397",
+    "point_payload_vector_sha256": "c0d97db0bba2555306cc9b3d83a53d719a63971311ca29e8e12577065cf2cb0a"
+  },
+  "in_memory_fingerprint_unchanged": false,
+  "persisted_fingerprint_unchanged": true,
+  "total_seconds": 119.78010600002017,
+  "finished_at_utc": "2026-11-07T05:49:12.138207+00:00"
+}
