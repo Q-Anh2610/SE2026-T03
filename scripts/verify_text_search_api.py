@@ -27,7 +27,7 @@ def fingerprint(client, collection):
     return sha256(json.dumps(rows, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
 
 
-def verify(args):
+def verify(args, *, configure_app=None, extra_checks=None):
     import httpx
     from pydantic import SecretStr
     from qdrant_client import QdrantClient
@@ -74,9 +74,12 @@ def verify(args):
         settings = Settings(_env_file=None, env="test", mock_api_enabled=False, text_search_source="service",
             DATABASE_URL=SecretStr(db.url.render_as_string(hide_password=False)),
             text_index_manifest=args.index_manifest, text_index_root=args.index_root,
-            text_qdrant_local_path=args.qdrant_local_path)
+            text_qdrant_local_path=args.qdrant_local_path,
+            cors_origins=getattr(args, "ui_origins", []))
         app = create_app(settings)
         app.state.db_engine = db.engine  # Chỉ cấp engine schema test, không mở DB nghiệp vụ.
+        if configure_app is not None:
+            configure_app(app, db)
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
             port = sock.getsockname()[1]
@@ -139,6 +142,7 @@ def verify(args):
                     assert event.query_text == payload["query"] and event.filters == payload.get("filters", {})
                     assert all(getattr(event, key) == value for key, value in manifest.execution_versions().model_dump().items())
             checks.append("committed_events_match_actual_execution_versions")
+            integration = extra_checks(app, db, manifest, metadata, f"http://127.0.0.1:{port}") if extra_checks else None
         finally:
             server.should_exit = True
             thread.join(30)
@@ -154,7 +158,8 @@ def verify(args):
         vector_name=manifest.vector_name, fingerprint_before_after=before,
         query="wooden chair", sample_ids=ids[:3], storage_mode="qdrant_persistent_local",
         platform=platform.platform(), python=platform.python_version(),
-        limits="Backend HTTP/DB/CLIP/local-Qdrant smoke; not frontend E2E, server-mode Qdrant or quality benchmark.")
+        integration=integration,
+        limits="Backend HTTP/DB/CLIP/local-Qdrant smoke; frontend coverage recorded separately in integration; not server-mode Qdrant or quality benchmark.")
 
 
 def main():
