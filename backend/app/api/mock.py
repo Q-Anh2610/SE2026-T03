@@ -23,6 +23,7 @@ ERROR_RESPONSES = {
     ]
 }
 router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
+image_router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
 text_router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
 list_router = APIRouter(prefix="/api/v1", responses=ERROR_RESPONSES)
 
@@ -53,7 +54,7 @@ async def search_text(request: Request, value: Annotated[TextSearchRequest, Body
     return store(request).search(value.query, value.filters, value.page, value.limit)
 
 
-@router.post("/search/image", response_model=SearchResponse, tags=["search"], summary="[Mock] Upload ảnh preview",
+@image_router.post("/search/image", response_model=SearchResponse, tags=["search"], summary="[Mock] Upload ảnh preview",
              description="JPEG/PNG decode được, tối đa 5 MiB, mỗi chiều tối đa 4096 pixel. Chỉ trả fixture cố định; chưa tìm theo nội dung ảnh.",
              openapi_extra={"requestBody": {"content": {"multipart/form-data": {
                  "example": {"image": "(chọn file JPEG/PNG)", "filters": '{"category":"Nội thất"}', "page": 1, "limit": 12},

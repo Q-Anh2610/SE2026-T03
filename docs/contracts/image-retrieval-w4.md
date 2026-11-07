@@ -4,10 +4,12 @@ Trạng thái: implementation đã merge vào `develop` qua
 [PR #83](https://github.com/Q-Anh2610/SE2026-T03/pull/83). CLIP và SigLIP 2 đều
 đã build/smoke bằng model thật trên snapshot W4; bằng chứng SigLIP 2 và đối chiếu
 hai model được lưu trong `docs/evidence/` và liên kết ở cuối tài liệu.
-Đây là đề xuất interface cho TV1 tại #80; không thay OpenAPI hay route HTTP.
+API #80 sử dụng interface dưới đây; hướng dẫn HTTP tại
+[image search API](../guides/image-search-api.md).
 Đã đối chiếu contract upload trong PR #82 tại commit
-`70e6f1c5f9f23c77741e11c75aa81efcb3fd08e7`; chưa có phản hồi TV1
-xác nhận tên method/output/lỗi của interface dưới đây.
+`70e6f1c5f9f23c77741e11c75aa81efcb3fd08e7`.
+Phần tích hợp #80 gọi method/output/lỗi dưới đây và ghi bằng chứng kiểm thử
+trong hướng dẫn HTTP.
 
 ```python
 ImageSearchService(encoder, store).search_image(

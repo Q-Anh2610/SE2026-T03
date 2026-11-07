@@ -14,6 +14,8 @@ from app.schemas.text_search import (
 )
 from app.services.assets import asset_metadata
 from app.services.search_events import persist_text_search_event
+from app.services.search_events import persist_image_search_event
+from app.schemas.image_search import LiveImageSearchRequest, LiveImageSearchResponse
 
 
 class SearchUnavailable(RuntimeError):
@@ -48,6 +50,14 @@ def matches_database_filters(asset: Asset, filters: TextSearchFilters) -> bool:
 def execute_text_search(
     session: Session, request: LiveTextSearchRequest, candidates: TextSearchCandidates,
 ) -> LiveTextSearchResponse:
+    return execute_search(session, request, candidates)
+
+
+def execute_search(
+    session: Session, request: LiveTextSearchRequest | LiveImageSearchRequest,
+    candidates: TextSearchCandidates,
+) -> LiveTextSearchResponse:
+    image_search = isinstance(request, LiveImageSearchRequest)
     ids = [hit.asset_id for hit in candidates.hits]
     assets = {} if not ids else {
         asset.asset_id: asset for asset in session.scalars(select(Asset).where(Asset.asset_id.in_(ids)))
@@ -61,17 +71,21 @@ def execute_text_search(
     selected = candidates.hits[offset:offset + request.limit] if offset < total else []
     # Kiểm tra mapping + response trước commit. UUID tạm chỉ tồn tại nội bộ,
     # sau commit thay đúng hai trường ID bằng UUID do persistence cấp.
-    response = LiveTextSearchResponse(
-        query_id=UUID(int=0), search_event_id=UUID(int=0), query=request.query,
+    response_model = LiveImageSearchResponse if image_search else LiveTextSearchResponse
+    response = response_model(
+        query_id=UUID(int=0), search_event_id=UUID(int=0),
+        query=request.query_image_ref if image_search else request.query,
         results=[SearchResult(
             rank=rank, asset=asset_metadata(assets[hit.asset_id]), score=hit.score,
-            retrieval_sources=["clip_text_to_preview"],
-            explanation="Xếp hạng theo tương đồng cosine giữa văn bản và ảnh preview bằng CLIP.",
+            retrieval_sources=[response_model.retrieval_source],
+            explanation=("Xếp hạng theo tương đồng cosine giữa ảnh truy vấn và ảnh preview bằng CLIP."
+                         if image_search else "Xếp hạng theo tương đồng cosine giữa văn bản và ảnh preview bằng CLIP."),
         ) for rank, hit in enumerate(selected, 1)],
         versions=candidates.versions,
         pagination=Pagination(page=request.page, limit=request.limit, total=total, pages=pages,
                               has_next=request.page < pages), mock=False,
     )
     response.model_dump_json()  # Serialization cũng phải hợp lệ trước khi ghi event.
-    identifier = persist_text_search_event(session, request, candidates.versions)
+    persist = persist_image_search_event if image_search else persist_text_search_event
+    identifier = persist(session, request, candidates.versions)
     return response.model_copy(update={"query_id": identifier, "search_event_id": identifier})

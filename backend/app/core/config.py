@@ -32,6 +32,12 @@ class Settings(BaseSettings):
     text_qdrant_url: str = "http://127.0.0.1:6333"
     text_qdrant_local_path: Path | None = None
     text_qdrant_api_key: SecretStr | None = None
+    image_search_source: Literal["mock", "service"] = "mock"
+    image_index_manifest: Path | None = None
+    image_index_root: Path | None = None
+    image_qdrant_url: str = "http://127.0.0.1:6333"
+    image_qdrant_local_path: Path | None = None
+    image_qdrant_api_key: SecretStr | None = None
     cors_origins: list[str] = Field(default_factory=lambda: [
         "http://localhost:5173", "http://127.0.0.1:5173",
     ])
