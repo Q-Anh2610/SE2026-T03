@@ -1,0 +1,371 @@
+{
+  "status": "passed",
+  "checks": [
+    "live_http_pagination_unique_ids_detail",
+    "live_and_filters_inclusive_face_bounds",
+    "live_empty_and_out_of_range_events",
+    "http_400_validation",
+    "committed_events_match_actual_execution_versions",
+    "persisted_qdrant_fingerprint_unchanged"
+  ],
+  "asset_count": 354,
+  "point_count": 354,
+  "event_count": 5,
+  "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "versions": {
+    "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "index_version": "issue65-home-interior-354-v1-clip-v1",
+    "config_version": "clip-text-exact-all-filtered-v1-k200",
+    "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+  },
+  "collection": "issue65_text_search",
+  "vector_name": "clip_23e2f7fbe4e3f716",
+  "fingerprint_before_after": "4ec8a57d3532cb126ebca29d818d6e85aa1c36231eb88b2d208f6101b559c687",
+  "query": "wooden chair",
+  "sample_ids": [
+    "objaverse_0102b2c1449f448687d62ea66ae2a26a",
+    "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+    "objaverse_a562af9c76a346faaad36773554c4c28"
+  ],
+  "storage_mode": "qdrant_persistent_local",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7",
+  "integration": {
+    "status": "passed",
+    "versions": {
+      "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "index_version": "issue76-clip-build-16556914413d",
+      "config_version": "image-exact-all-filtered-rgb-v1-k200",
+      "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+    },
+    "query_image_sha256": "12d077e8c0225aff385a113eec7723491f4d516d37e6ef71d5f777b934aea46b",
+    "cases": [
+      {
+        "payload": {
+          "page": 1,
+          "limit": 6
+        },
+        "total": 200,
+        "hits": [
+          {
+            "asset_id": "objaverse_2ba64b0c024e4661b4a896de0422e9be",
+            "score": 0.9999999999999951
+          },
+          {
+            "asset_id": "objaverse_a866914edde64b87acd8f5ea115a433f",
+            "score": 0.9218280738701818
+          },
+          {
+            "asset_id": "objaverse_16160a192501414dbbe4b7a96979515e",
+            "score": 0.8953888032129786
+          },
+          {
+            "asset_id": "objaverse_8bc381a229e34834bd8e20ca6011e82f",
+            "score": 0.8953272056517705
+          },
+          {
+            "asset_id": "objaverse_c50614b6796f4357aa6d7825d86f188e",
+            "score": 0.8546708721671405
+          },
+          {
+            "asset_id": "objaverse_7220663114be44fe8cbc2118426964de",
+            "score": 0.8537284299146849
+          }
+        ],
+        "search_event_id": "ebbd9373-1870-47f4-936c-9aec8b1cac0b",
+        "status": 200
+      },
+      {
+        "payload": {
+          "page": 2,
+          "limit": 6
+        },
+        "total": 200,
+        "hits": [
+          {
+            "asset_id": "objaverse_02126986b04e4c4fb2a463f2f679cbaa",
+            "score": 0.8369777973802548
+          },
+          {
+            "asset_id": "objaverse_9ae7b722a6834c729896e441fa88a1fa",
+            "score": 0.8366883258459621
+          },
+          {
+            "asset_id": "objaverse_00b360de1846428eb5c23464824c5fc8",
+            "score": 0.8338483421645264
+          },
+          {
+            "asset_id": "objaverse_b2873c9ae9094e8f8eed63195ea18211",
+            "score": 0.8322881118292869
+          },
+          {
+            "asset_id": "objaverse_4d24c6ab618c4754802ffd94de41c0f2",
+            "score": 0.8182971749336247
+          },
+          {
+            "asset_id": "objaverse_b5ff9b69c6674cdc9c1474156ff4d912",
+            "score": 0.8174656484766921
+          }
+        ],
+        "search_event_id": "04552c06-ee85-4b35-9644-2d0cc65332eb",
+        "status": 200
+      },
+      {
+        "payload": {
+          "page": 34,
+          "limit": 6
+        },
+        "total": 200,
+        "hits": [
+          {
+            "asset_id": "objaverse_72f994c4684747cd9fb66233d4d99d42",
+            "score": 0.731026349678811
+          },
+          {
+            "asset_id": "objaverse_009de5b694dd4aac9c5a760d544046d1",
+            "score": 0.7308886199609879
+          }
+        ],
+        "search_event_id": "5617357e-5980-4b82-a5c8-df5f5e8781a7",
+        "status": 200
+      },
+      {
+        "payload": {
+          "page": 35,
+          "limit": 6
+        },
+        "total": 200,
+        "hits": [],
+        "search_event_id": "50693aee-518e-4482-b3af-407c5916c6ab",
+        "status": 200
+      },
+      {
+        "payload": {
+          "filters": {
+            "category": "furniture-home",
+            "license": "by",
+            "format": "glb",
+            "face_count_min": 540642,
+            "face_count_max": 540642
+          }
+        },
+        "total": 1,
+        "hits": [
+          {
+            "asset_id": "objaverse_a866914edde64b87acd8f5ea115a433f",
+            "score": 0.9218280738701818
+          }
+        ],
+        "search_event_id": "a5b72bef-1fc2-464b-9b28-5bd4a5c20e02",
+        "status": 200
+      },
+      {
+        "payload": {
+          "filters": {
+            "category": "__issue80_empty__"
+          }
+        },
+        "total": 0,
+        "hits": [],
+        "search_event_id": "5b90e56e-7300-41f2-8c64-074d0f923cbc",
+        "status": 200
+      }
+    ],
+    "errors": [
+      {
+        "case": "missing_index",
+        "status": 503,
+        "body": {
+          "error": {
+            "code": "SEARCH_UNAVAILABLE",
+            "message": "Dịch vụ tìm kiếm chưa sẵn sàng. Vui lòng thử lại sau.",
+            "details": []
+          }
+        }
+      },
+      {
+        "case": "db_write_failure",
+        "status": 500,
+        "body": {
+          "error": {
+            "code": "INTERNAL_ERROR",
+            "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+            "details": []
+          }
+        }
+      }
+    ],
+    "recovery_status": 200,
+    "image_event_count": 7,
+    "final_event_count": 12,
+    "query_source": "indexed_preview_self_match_diagnostic",
+    "image_source_manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "image_ready_manifest_sha256": "f302f58f2321b4a77a7ec25b37abf6571fd3221476d4e0f91dce67334f6ec3a6",
+    "limits": "Backend real HTTP/local Qdrant/CLIP; frontend and image benchmark pending separate verification."
+  },
+  "limits": "Backend HTTP/DB/CLIP/local-Qdrant smoke; frontend coverage recorded separately in integration; not server-mode Qdrant or quality benchmark.",
+  "image_point_count": 354,
+  "image_persisted_fingerprint_before_after": "e17e9c523799dfa35bbe2a9ea50e7787e380031a24a35afec57e8d6812348f8f",
+  "observed_at_utc": "2026-11-07T05:49:08.514448+00:00",
+  "base_commit": "5a190ce4d683122887102251ede965e641a04b36",
+  "module_sha256": {
+    "scripts/verify_image_search_api.py": "0427c88f73ac6ed34f9237d4f566e3a34407ee87bcb4198e943f60a43e2b7c04",
+    "scripts/verify_text_search_api.py": "b51fd4d6f3e637e46692fb468f52212277a70c02d2c10e675976a25b378ee226",
+    "backend/app/export_text_search_contract.py": "0d62174ec09f400f581545f461be01879fa5a2021306bc3a59a64ebf9a7f25e2",
+    "backend/app/api/image_search.py": "0da090c0f679a94d0152a8e76cc559373690f427abc5d7648b847c1ff4386bf0",
+    "backend/app/api/text_search.py": "3616c573e6cbb6b2518466a228090efbcacf1543dde4dbfac7c7d00a90bb5a96",
+    "backend/app/schemas/image_search.py": "b00c5bd942ca58dbd5b08ee9070ac7a604b5571a6e5e58fce7f1ed9b32dfda7c",
+    "backend/app/schemas/text_search.py": "27ff38934bdc1285a0a83ad26cb4a4bddd45f6c4d665ca067e761b643bab920e",
+    "backend/app/search/image_search.py": "386386328f06026e4c41969d5254d3bd6334bcb3984879ba53b65eef8f950ed6",
+    "backend/app/search/text_search.py": "021fa376a9b86f4bb58d9ae16e07fd67144d196718cc1bda25f0ed640abac809",
+    "backend/app/services/image_search_runtime.py": "5735f34912b29974f0e79214ede2201263d1f78fe897fc61c0bfbd3d87ee66f5",
+    "backend/app/services/search_events.py": "120d421f9e771d39f2d11eded105d9390fa2fa040f96839054af6be31142563e",
+    "backend/app/services/text_search.py": "7d22cfe3abe6f337953f8e2ded112c6b51664d0ed531a547e7b730224ba06837",
+    "backend/app/services/text_search_runtime.py": "50017a9169deeffe135d82a05b62985030db28b51af27ad1cfc5a545940549d2"
+  },
+  "issue": 80,
+  "execution": "local_uncommitted",
+  "tests": {
+    "unit_passed": 653,
+    "unit_duration_seconds": 157.29,
+    "selected_api_postgres_passed": 30,
+    "selected_duration_seconds": 25.57,
+    "selected_targets": [
+      "tests/integration/test_image_search_stack.py",
+      "tests/integration/test_text_search_stack.py",
+      "tests/integration/test_search_events.py",
+      "tests/unit/test_image_search_api.py"
+    ]
+  },
+  "image_build": {
+    "summary": {
+      "embedded": 354,
+      "failed": 0,
+      "skipped": 0
+    },
+    "machine": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+      "python": "3.13.7",
+      "device": "cpu"
+    },
+    "package_versions": {
+      "torch": "2.8.0",
+      "transformers": "4.57.1",
+      "Pillow": "13.0.0",
+      "qdrant-client": "1.15.1"
+    },
+    "source_manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "ready_manifest_sha256": "f302f58f2321b4a77a7ec25b37abf6571fd3221476d4e0f91dce67334f6ec3a6",
+    "index_manifest": {
+      "schema_version": "image-index-manifest-v1",
+      "created_at_utc": "2026-11-07T05:45:08.287463Z",
+      "observed_at_utc": "2026-11-07T05:45:08.286143Z",
+      "index_config": {
+        "model_id": "openai/clip-vit-base-patch32",
+        "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+        "dimension": 512,
+        "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+        "index_version": "issue76-clip-build-16556914413d"
+      },
+      "collection": "issue76_image_previews",
+      "vector_name": "clip_96f511dcb04bcbf4",
+      "processor_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "processor_class": "CLIPImageProcessor",
+      "processor_config": {
+        "_processor_class": null,
+        "do_resize": true,
+        "size": {
+          "shortest_edge": 224
+        },
+        "resample": 3,
+        "do_center_crop": true,
+        "crop_size": {
+          "height": 224,
+          "width": 224
+        },
+        "do_rescale": true,
+        "rescale_factor": 0.00392156862745098,
+        "do_normalize": true,
+        "image_mean": [
+          0.48145466,
+          0.4578275,
+          0.40821073
+        ],
+        "image_std": [
+          0.26862954,
+          0.26130258,
+          0.27577711
+        ],
+        "do_convert_rgb": true,
+        "image_processor_type": "CLIPImageProcessor"
+      },
+      "processor_use_fast": false,
+      "image_color_mode": "RGB",
+      "normalization": "L2",
+      "similarity": "Cosine",
+      "source_manifest": "source.json",
+      "source_manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+      "ready_manifest": "ready.json",
+      "ready_manifest_sha256": "f302f58f2321b4a77a7ec25b37abf6571fd3221476d4e0f91dce67334f6ec3a6",
+      "asset_count": 354,
+      "point_count": 354,
+      "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/76#issuecomment-6702522644",
+      "code_commit": "5a190ce4d683122887102251ede965e641a04b36",
+      "working_tree_dirty": true,
+      "module_sha256": {
+        "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+        "backend/app/embedding/siglip2_encoder.py": "513bd37bcf93ee95e2bd4c49c623a814997eb5d56d534a6b7469df37b90ddc4e",
+        "backend/app/embedding/image_encoding.py": "0eb39082e326688b7ae33bc28c07445260aa5752f17d7280b30ae9f69e83e980",
+        "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+        "backend/app/search/image_search.py": "386386328f06026e4c41969d5254d3bd6334bcb3984879ba53b65eef8f950ed6",
+        "backend/app/search/image_index_manifest.py": "7a9b449e9a2cb684679b72d578d1823a2c6fec673a03f7dd3a81997383436d8d",
+        "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+        "backend/app/search/qdrant_store.py": "10aa20d0ee22559a5269cc8edfa3badebdfbcdb81ed2e3abfff0cd4e4a69b254",
+        "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+        "backend/app/search/smoke.py": "eb6f39b2f54f02064dd9695b13e0b161b9de3b6ba926e9997f9264e960c4762d",
+        "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+        "backend/app/schemas/text_search.py": "27ff38934bdc1285a0a83ad26cb4a4bddd45f6c4d665ca067e761b643bab920e",
+        "scripts/verify_issue76_image_retrieval.py": "e3b62966044c7a17690b4ffa347146545bd85a5401f7c93ff2fe18ad1560a196"
+      },
+      "package_versions": {
+        "torch": "2.8.0",
+        "transformers": "4.57.1",
+        "Pillow": "13.0.0",
+        "qdrant-client": "1.15.1"
+      },
+      "retrieval_config": {
+        "schema_version": "image-retrieval-config-v1",
+        "config_version": "image-exact-all-filtered-rgb-v1-k200",
+        "candidate_limit": 200,
+        "strategy": "exact_all_filtered_points",
+        "exact": true,
+        "score_threshold": null,
+        "score_roundoff_tolerance": 1e-06,
+        "ordering": [
+          "score_desc",
+          "asset_id_asc"
+        ],
+        "deduplication": "max_score_per_asset",
+        "image_formats": [
+          "JPEG",
+          "PNG"
+        ],
+        "max_image_bytes": 5242880,
+        "max_image_dimension": 4096,
+        "image_color_mode": "RGB",
+        "frame_policy": "first",
+        "exif_orientation": "stored_pixels"
+      }
+    },
+    "ready_provenance": "Repacked from cached Issue65 previews, all 354 hashes checked against committed TV2 provenance."
+  },
+  "additional_module_sha256": {
+    "backend/app/main.py": "d81b00a531b70ea654f7d1336c9ffbe08188ce44bd692875f43ae6d5962b6e37",
+    "backend/app/core/config.py": "808466faf1095dc5c320972cbde44dad19f87f432df9c24e5187b1875651708e",
+    "backend/app/api/image_upload.py": "160af91c04d9b6042007ac30be1902b84e7f2882a08be8ad080ad146f79d89f7",
+    "backend/app/export_openapi.py": "1a6cbec189f7bc3738100dcd318e492d2de310e3204b1bbb74f6eddefb625a02"
+  },
+  "review_status": "Pending PR, CI, reviewer and frontend handoff verification."
+}

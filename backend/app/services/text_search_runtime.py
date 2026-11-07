@@ -9,8 +9,8 @@ from app.services.text_search import SearchUnavailable
 logger = logging.getLogger(__name__)
 
 
-class CLIPTextSearchAdapter:
-    """Serialize CPU/local-Qdrant access; API nhận cùng exception readiness."""
+class LockedSearchAdapter:
+    """Serialize CPU/local-Qdrant và đóng client một lần khi shutdown."""
 
     def __init__(self, service, client):
         self.service = service
@@ -18,6 +18,14 @@ class CLIPTextSearchAdapter:
         self.lock = RLock()
         self.closed = False
 
+    def close(self):
+        with self.lock:
+            if not self.closed:
+                self.closed = True
+                self.client.close()
+
+
+class CLIPTextSearchAdapter(LockedSearchAdapter):
     def search_text(self, query, filters, *, candidate_limit=200):
         from app.search.text_search import SearchUnavailableError
 
@@ -28,12 +36,6 @@ class CLIPTextSearchAdapter:
                 return self.service.search_text(query, filters, candidate_limit=candidate_limit)
             except SearchUnavailableError:
                 raise SearchUnavailable("retrieval_unavailable") from None
-
-    def close(self):
-        with self.lock:
-            if not self.closed:
-                self.closed = True
-                self.client.close()
 
 
 def load_encoder():

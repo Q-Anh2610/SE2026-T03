@@ -1,0 +1,232 @@
+{
+  "schema_version": "issue76-two-model-image-smoke-v1",
+  "benchmark": false,
+  "purpose": "Module smoke and input provenance comparison; no quality/model selection claim.",
+  "snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "source_manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "ready_manifest_sha256": "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+  "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/76#issuecomment-6702522644",
+  "candidate_limit": 10,
+  "retrieval_config": {
+    "schema_version": "image-retrieval-config-v1",
+    "config_version": "image-exact-all-filtered-rgb-v1-k10",
+    "candidate_limit": 10,
+    "strategy": "exact_all_filtered_points",
+    "exact": true,
+    "score_threshold": null,
+    "score_roundoff_tolerance": 1e-06,
+    "ordering": [
+      "score_desc",
+      "asset_id_asc"
+    ],
+    "deduplication": "max_score_per_asset",
+    "image_formats": [
+      "JPEG",
+      "PNG"
+    ],
+    "max_image_bytes": 5242880,
+    "max_image_dimension": 4096,
+    "image_color_mode": "RGB",
+    "frame_policy": "first",
+    "exif_orientation": "stored_pixels"
+  },
+  "same_snapshot_source_ready_count_policy": true,
+  "same_query_images_and_filters": true,
+  "index_storage_paths_distinct": true,
+  "query_source": "indexed_preview_diagnostic_only",
+  "model_weights_verification": {
+    "siglip2_safetensors_bytes": 1500800904,
+    "siglip2_safetensors_sha256": "612923381c76ec5a9bed335d1c48827e3f2e506ac31b044b63b2031fadee6a0b",
+    "config_processor_git_blobs_verified": true
+  },
+  "models": {
+    "clip": {
+      "index_config": {
+        "model_id": "openai/clip-vit-base-patch32",
+        "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+        "dimension": 512,
+        "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+        "index_version": "issue76-clip-build-1ce976722ab7"
+      },
+      "collection": "issue76_image_previews",
+      "vector_name": "clip_d4a2b0ba8f1c521e",
+      "storage_path": "data/processed/issue76/clip-build-1ce976722ab7/qdrant",
+      "processor_class": "CLIPImageProcessor",
+      "asset_count": 354,
+      "point_count": 354,
+      "code_commit": "01f7056629425d5294d926c3938199047bc5ce28",
+      "working_tree_dirty": true,
+      "package_versions": {
+        "torch": "2.8.0",
+        "transformers": "4.57.1",
+        "Pillow": "13.0.0",
+        "qdrant-client": "1.15.1"
+      },
+      "embedding_seconds": 23.94760650000535,
+      "total_seconds": 37.4639280999545,
+      "report_file": "issue76-clip-image-smoke.json",
+      "manifest_file": "issue76-clip-image-index-manifest.json",
+      "persisted_fingerprint_sha256": "7c28ecfef509e1f456f0b8c7572d8c91380ef511fa2bee85da6a182f18f7b77b",
+      "persisted_fingerprint_unchanged": true,
+      "in_memory_fingerprint_unchanged": false
+    },
+    "siglip2": {
+      "index_config": {
+        "model_id": "google/siglip2-base-patch16-224",
+        "model_revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "dimension": 768,
+        "preprocessing_version": "siglip2-fixres-slow-processor-rgb-l2-v1",
+        "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+        "index_version": "issue76-siglip2-build-f0e695060aaa"
+      },
+      "collection": "issue76_image_previews",
+      "vector_name": "siglip2_10156095155cf171",
+      "storage_path": "data/processed/issue76/siglip2-build-f0e695060aaa/qdrant",
+      "processor_class": "SiglipImageProcessor",
+      "asset_count": 354,
+      "point_count": 354,
+      "code_commit": "5a190ce4d683122887102251ede965e641a04b36",
+      "working_tree_dirty": false,
+      "package_versions": {
+        "torch": "2.8.0",
+        "transformers": "4.57.1",
+        "Pillow": "13.0.0",
+        "qdrant-client": "1.15.1"
+      },
+      "embedding_seconds": 98.27439280005638,
+      "total_seconds": 119.78010600002017,
+      "report_file": "issue76-siglip2-image-smoke.json",
+      "manifest_file": "issue76-siglip2-image-index-manifest.json",
+      "persisted_fingerprint_sha256": "c0d97db0bba2555306cc9b3d83a53d719a63971311ca29e8e12577065cf2cb0a",
+      "persisted_fingerprint_unchanged": true,
+      "in_memory_fingerprint_unchanged": false
+    }
+  },
+  "cases": [
+    {
+      "case": "self_preview_1",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {},
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "self_preview_2",
+      "query_asset_id": "objaverse_00442dec7438488a94b88c229d4e5e0d",
+      "query_sha256": "d5f9b0db5b3e866d17f09aad30fa175b09fa8aa1d3c091e962d5214d1d5f8cb4",
+      "filters": {},
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "self_preview_3",
+      "query_asset_id": "objaverse_005121da5ed340b4aedd168e33d56714",
+      "query_sha256": "a604efdc7182756696e44c7b67ad06234b145420f74a115a1c5971e5fceedeaa",
+      "filters": {},
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "category",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "category": "architecture"
+      },
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "license",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "license": "by"
+      },
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "format",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "format": "glb"
+      },
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "face_min",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "face_count_min": 1958
+      },
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "face_max",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "face_count_max": 1958
+      },
+      "returned_count_per_model": 10,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "and_exact_bounds",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "category": "architecture",
+        "license": "by",
+        "format": "glb",
+        "face_count_min": 1958,
+        "face_count_max": 1958
+      },
+      "returned_count_per_model": 1,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    },
+    {
+      "case": "empty",
+      "query_asset_id": "objaverse_0002e50309b44e409c96f440202d90b3",
+      "query_sha256": "3a7f538458a4a50fe80649710fa9a15ddb39ae8d76110602d997e0cbff14a3ef",
+      "filters": {
+        "category": "__issue60_absent_category__"
+      },
+      "returned_count_per_model": 0,
+      "same_query_inputs": true,
+      "clip_repeat_consistent": true,
+      "siglip2_repeat_consistent": true
+    }
+  ],
+  "limitations": [
+    "No independent image queries/qrels or locked image benchmark protocol yet.",
+    "K=10 is diagnostic pending TV5 confirmation; no metric or latency benchmark/model selection.",
+    "Code provenance and run times differ; each raw report retains commit/dirty/module hashes.",
+    "TV1 interface acceptance and TV5 protocol/cutoff confirmation remain pending."
+  ]
+}

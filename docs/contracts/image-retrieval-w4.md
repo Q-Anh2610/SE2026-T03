@@ -1,10 +1,15 @@
 # Bàn giao retrieval ảnh TV3 — Issue #76
 
-Trạng thái: implementation local trên `feat/76-image-retrieval`, chưa commit/PR.
-Đây là đề xuất interface cho TV1 tại #80; không thay OpenAPI hay route HTTP.
+Trạng thái: implementation đã merge vào `develop` qua
+[PR #83](https://github.com/Q-Anh2610/SE2026-T03/pull/83). CLIP và SigLIP 2 đều
+đã build/smoke bằng model thật trên snapshot W4; bằng chứng SigLIP 2 và đối chiếu
+hai model được lưu trong `docs/evidence/` và liên kết ở cuối tài liệu.
+API #80 sử dụng interface dưới đây; hướng dẫn HTTP tại
+[image search API](../guides/image-search-api.md).
 Đã đối chiếu contract upload trong PR #82 tại commit
-`70e6f1c5f9f23c77741e11c75aa81efcb3fd08e7`; chưa có phản hồi TV1
-xác nhận tên method/output/lỗi của interface dưới đây.
+`70e6f1c5f9f23c77741e11c75aa81efcb3fd08e7`.
+Phần tích hợp #80 gọi method/output/lỗi dưới đây và ghi bằng chứng kiểm thử
+trong hướng dẫn HTTP.
 
 ```python
 ImageSearchService(encoder, store).search_image(
@@ -100,3 +105,17 @@ storage riêng, không ghi đè index đã có. Đổi model cần encode/rebuil
   Chưa tự thay checklist GitHub trong phiên này.
 
 Xem [hướng dẫn runner](../guides/image-retrieval-w4.md) để chạy lại.
+
+## Kiểm chứng hai model thật ngày 07/11/2026
+
+CLIP và SigLIP 2 đều có 354 embedded, 0 failed/skipped, 354 point/asset ID duy
+nhất và 10/10 ca smoke K=10. Cùng source/ready hashes, query preview SHA-256,
+filters và retrieval policy; named vectors/storage/index versions riêng.
+Fingerprint persisted của từng index giữ nguyên sau đóng/mở lại. Xem
+[đối chiếu provenance](../evidence/issue76-image-model-smoke-comparison.json),
+[report SigLIP 2](../evidence/issue76-siglip2-image-smoke.json) và
+[manifest SigLIP 2](../evidence/issue76-siglip2-image-index-manifest.json).
+
+Đây là self-preview diagnostic, chưa có image queries/qrels độc lập và cutoff
+benchmark được TV5 chốt. Không so trực tiếp cosine hai model hoặc dùng thời gian
+runner để chọn model; không tự tích nghiệm thu interface/protocol thay TV1/TV5.
