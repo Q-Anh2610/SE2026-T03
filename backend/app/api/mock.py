@@ -1,21 +1,16 @@
 """Mock endpoints cho frontend; không gọi DB/Qdrant hay encoder."""
 
 import hashlib
-from io import BytesIO
 from typing import Annotated
-import warnings
 
 from fastapi import APIRouter, Body, File, Form, Query, Request, UploadFile
-from PIL import Image, UnidentifiedImageError
 from pydantic import ValidationError
 
 from app.api.examples import ASSET_EXAMPLE, FEEDBACK_EXAMPLE, IMAGE_SEARCH_EXAMPLE, PAGINATION_EXAMPLE, SEARCH_EXAMPLE, response_example
+from app.api.image_upload import read_validated_image
 from app.core.errors import api_error
 from app.schemas.api import AssetDetailResponse, AssetFilters, AssetListQuery, AssetListResponse, ErrorResponse, FeedbackRequest, FeedbackResponse, SearchResponse, TextSearchRequest
 from app.services.mock_api import MockStore, page_of
-
-MAX_IMAGE_BYTES = 5 * 1024 * 1024
-MAX_IMAGE_DIMENSION = 4096
 
 ERROR_RESPONSES = {
     status: {"model": ErrorResponse, **response_example({"error": {
@@ -60,7 +55,22 @@ async def search_text(request: Request, value: Annotated[TextSearchRequest, Body
 
 @router.post("/search/image", response_model=SearchResponse, tags=["search"], summary="[Mock] Upload ảnh preview",
              description="JPEG/PNG decode được, tối đa 5 MiB, mỗi chiều tối đa 4096 pixel. Chỉ trả fixture cố định; chưa tìm theo nội dung ảnh.",
-             responses={200: response_example(IMAGE_SEARCH_EXAMPLE)})
+             openapi_extra={"requestBody": {"content": {"multipart/form-data": {
+                 "example": {"image": "(chọn file JPEG/PNG)", "filters": '{"category":"Nội thất"}', "page": 1, "limit": 12},
+             }}}},
+             responses={
+                 200: response_example(IMAGE_SEARCH_EXAMPLE),
+                 400: {
+                     "model": ErrorResponse,
+                     "description": (
+                         "INVALID_REQUEST, INVALID_FILTERS, IMAGE_TOO_LARGE, UNSUPPORTED_IMAGE, "
+                         "IMAGE_DIMENSIONS_EXCEEDED hoặc INVALID_IMAGE."
+                     ),
+                     **response_example({"error": {
+                         "code": "INVALID_IMAGE", "message": "Không đọc được nội dung ảnh.", "details": [],
+                     }}),
+                 },
+             })
 async def search_image(
     request: Request,
     image: Annotated[UploadFile, File(description="File JPEG hoặc PNG; không nhận URL ảnh")],
@@ -73,22 +83,7 @@ async def search_image(
             parsed = AssetFilters.model_validate_json(filters)
         except ValidationError:
             raise api_error(400, "INVALID_FILTERS", "Bộ lọc JSON không hợp lệ.") from None
-        content = await image.read(MAX_IMAGE_BYTES + 1)
-        if len(content) > MAX_IMAGE_BYTES:
-            raise api_error(400, "IMAGE_TOO_LARGE", "Ảnh vượt giới hạn 5 MiB.")
-        try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("error", Image.DecompressionBombWarning)
-                with Image.open(BytesIO(content)) as decoded:
-                    if decoded.format not in {"JPEG", "PNG"}:
-                        raise api_error(400, "UNSUPPORTED_IMAGE", "Chỉ hỗ trợ ảnh JPEG hoặc PNG.")
-                    if max(decoded.size) > MAX_IMAGE_DIMENSION:
-                        raise api_error(400, "IMAGE_DIMENSIONS_EXCEEDED", "Mỗi chiều ảnh không được vượt 4096 pixel.")
-                    decoded.verify()
-                with Image.open(BytesIO(content)) as decoded:
-                    decoded.load()
-        except (UnidentifiedImageError, OSError, SyntaxError, ValueError, Image.DecompressionBombError, Image.DecompressionBombWarning):
-            raise api_error(400, "INVALID_IMAGE", "Không đọc được nội dung ảnh.") from None
+        content = await read_validated_image(image)
         reference = "mock-image:" + hashlib.sha256(content).hexdigest()
         return store(request).search(reference, parsed, page, limit, image=True)
     finally:

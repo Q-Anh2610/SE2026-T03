@@ -512,6 +512,12 @@
             "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/Body_search_image_api_v1_search_image_post"
+              },
+              "example": {
+                "image": "(chọn file JPEG/PNG)",
+                "filters": "{\"category\":\"Nội thất\"}",
+                "page": 1,
+                "limit": 12
               }
             }
           },
@@ -578,7 +584,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "INVALID_REQUEST, INVALID_FILTERS, IMAGE_TOO_LARGE, UNSUPPORTED_IMAGE, IMAGE_DIMENSIONS_EXCEEDED hoặc INVALID_IMAGE.",
             "content": {
               "application/json": {
                 "schema": {
@@ -586,8 +592,8 @@
                 },
                 "example": {
                   "error": {
-                    "code": "INVALID_REQUEST",
-                    "message": "Yêu cầu không hợp lệ.",
+                    "code": "INVALID_IMAGE",
+                    "message": "Không đọc được nội dung ảnh.",
                     "details": []
                   }
                 }
