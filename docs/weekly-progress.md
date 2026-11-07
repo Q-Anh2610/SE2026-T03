@@ -147,3 +147,28 @@ tiếp sang W3 do phụ thuộc vào retrieval và index khớp snapshot v3. M1 
 Khi tổng kết W3, bổ sung kết quả từng thành viên, phần chuyển tiếp và kế hoạch
 W4 bên dưới; giữ lại lịch sử các tuần. Cập nhật riêng phần còn chờ của W2 khi
 có bằng chứng hoàn thành, không tự đánh dấu cả M1/M2 đã đạt.
+
+### Tổng kết W3 — cập nhật 07/11/2026
+
+| Thành viên | Kết quả | Bằng chứng |
+| --- | --- | --- |
+| **TV1 — Quỳnh Anh** | Đã chốt contract, tích hợp text search thật và lưu search event PostgreSQL. Bộ kiểm chứng #66 đã merge, có bằng chứng HTTP và UI dùng CLIP/Qdrant local trên snapshot 354 asset. | [PR #64](https://github.com/Q-Anh2610/SE2026-T03/pull/64), [PR #67](https://github.com/Q-Anh2610/SE2026-T03/pull/67), [PR #78](https://github.com/Q-Anh2610/SE2026-T03/pull/78), [báo cáo #66](evidence/issue66-text-search-integration.json) |
+| **TV2 — Huyền** | Đã mở rộng snapshot nội thất lên 354 asset và kiểm chứng batch, checksum, chạy lại và index local. Bộ 200 asset đã khóa được giữ riêng cho benchmark. | [Issue #62](https://github.com/Q-Anh2610/SE2026-T03/issues/62), [PR #74](https://github.com/Q-Anh2610/SE2026-T03/pull/74) |
+| **TV3 — Chi** | Đã merge CLIP text-to-preview retrieval, filters và index manifest. Đã bàn giao ranked results cho baseline 70 query trên snapshot 200 asset. | [PR #75](https://github.com/Q-Anh2610/SE2026-T03/pull/75), [PR #77](https://github.com/Q-Anh2610/SE2026-T03/pull/77) |
+| **TV4 — Duy** | Đã merge các trạng thái UI tìm text, metadata nguồn trên detail và HTTP tests. Bản xuất từ PR #68 đã qua 8 ca UI của #66. Thay đổi contract mới trong #68 còn ở Draft. | [PR #56](https://github.com/Q-Anh2610/SE2026-T03/pull/56), [PR #68](https://github.com/Q-Anh2610/SE2026-T03/pull/68), [PR #78](https://github.com/Q-Anh2610/SE2026-T03/pull/78) |
+| **TV5 — Khuê** | Đã đo baseline CLIP cho 70 query trên snapshot khóa, có báo cáo validation/test. Đã merge UI trạng thái job bản xem trước và tests. | [PR #77](https://github.com/Q-Anh2610/SE2026-T03/pull/77), [PR #73](https://github.com/Q-Anh2610/SE2026-T03/pull/73) |
+
+Đã có bằng chứng tìm text trên web qua API, retrieval và PostgreSQL thật trong
+môi trường local. Phần đo CLIP chuyển tiếp từ W2 đã có kết quả trong PR #77.
+Tiếp tục theo dõi tích hợp frontend ở PR #68 và smoke riêng của Khuê tại
+[Issue #72](https://github.com/Q-Anh2610/SE2026-T03/issues/72). Kết nối trang
+trạng thái job với API thật chuyển sang W5 theo
+[Issue #70](https://github.com/Q-Anh2610/SE2026-T03/issues/70).
+
+## Tuần 4 / M3 — Kế hoạch TV1
+
+| Issue | Công việc | Phụ thuộc và bàn giao |
+| --- | --- | --- |
+| [#79](https://github.com/Q-Anh2610/SE2026-T03/issues/79) | Upload multipart và validation ảnh | Dùng contract hiện có để bắt đầu. Đối chiếu multipart và mã lỗi với Duy, dữ liệu ảnh đã kiểm tra với Chi. |
+| [#80](https://github.com/Q-Anh2610/SE2026-T03/issues/80) | Tích hợp image retrieval thật và lưu search event | Dùng validation từ #79. Nghiệm thu với CLIP và index tương thích do Chi bàn giao ở #76. |
+| [#81](https://github.com/Q-Anh2610/SE2026-T03/issues/81) | Lưu feedback vào PostgreSQL | Bắt đầu với event text search W3. Kiểm chứng thêm event truy vấn ảnh sau #80. |
