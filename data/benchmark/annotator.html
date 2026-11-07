@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Benchmark labeler</title>
+  <title>Benchmark relevance labeler</title>
   <style>
     :root { color-scheme: light; font: 16px/1.45 system-ui, sans-serif; color: #18212b; background: #f4f6f8; }
     * { box-sizing: border-box; }
@@ -20,6 +20,7 @@
     .panel h2 { margin: 0 0 8px; font-size: 1.05rem; }
     .muted { color: #536272; font-size: .92rem; }
     #queryText { font-size: 1.25rem; font-weight: 700; margin: 14px 0; }
+    #queryPreview { display: block; width: 100%; max-height: min(45vh, 420px); object-fit: contain; background: #e8edf2; border-radius: 7px; }
     #preview { display: block; width: 100%; height: min(55vh, 520px); object-fit: contain; background: #e8edf2; border-radius: 7px; }
     #missingPreview { display: none; min-height: 240px; padding: 40px 18px; text-align: center; background: #fff5df; border: 1px solid #eed39a; border-radius: 7px; }
     .rating { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
@@ -38,13 +39,14 @@
 </head>
 <body>
   <header>
-    <h1>Benchmark labeler · human-reviewed relevance suggestions</h1>
-    <p>Review each preview and the metadata-based score/evidence suggestion. Accept with Enter or change either field before saving.</p>
+    <h1>Benchmark relevance labeler</h1>
+    <p>Review the query image and candidate preview, then record relevance with evidence. Image-query mode disables text metadata suggestions.</p>
   </header>
   <main>
     <section class="setup" aria-label="Input files">
       <label class="file">Queries CSV<input id="queriesFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Candidate assets CSV<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Query images folder<input id="queryImagesFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
       <label class="file">Preview images folder<input id="previewsFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
       <label class="file">Previously saved labels CSV<input id="labelsFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Annotator<select id="annotator"><option>Doan Thi Minh Khue</option><option>Trinh Thi Thu Huyen</option></select></label>
@@ -54,6 +56,7 @@
       <article class="panel">
         <h2>Query <span id="queryCounter">—</span></h2>
         <div id="queryText">Load queries and candidates to begin.</div>
+        <img id="queryPreview" alt="Image query" hidden>
         <div id="queryInfo" class="muted"></div>
         <p id="queryNotes" class="muted"></p>
       </article>
@@ -81,7 +84,7 @@
     </nav>
   </main>
   <script>
-    const state = { queries: [], candidates: [], images: new Map(), labels: new Map(), queryIndex: 0, candidateIndex: 0, selectedScore: null, suggestionScore: null, suggestionNote: '', imageUrl: null };
+    const state = { queries: [], candidates: [], images: new Map(), queryImages: new Map(), labels: new Map(), queryIndex: 0, candidateIndex: 0, selectedScore: null, suggestionScore: null, suggestionNote: '', imageUrl: null, queryImageUrl: null };
     const $ = (id) => document.getElementById(id);
     const keyFor = (queryId, assetId) => `${queryId}\t${assetId}`;
 
@@ -110,6 +113,12 @@
 
     function currentQuery() { return state.queries[state.queryIndex]; }
     function currentAsset() { return state.candidates[state.candidateIndex]; }
+    function isImageQuery(query) { return query?.query_type === 'similarity' || query?.query_type === 'same_id'; }
+    function findQueryImage(query) {
+      const path = String(query?.query_image_path || '').replace(/\\/g, '/').toLowerCase();
+      const basename = path.split('/').pop();
+      return state.queryImages.get(path) || state.queryImages.get(basename) || [...state.queryImages.entries()].find(([name]) => name.endsWith(`/${basename}`))?.[1];
+    }
     function resumeAtFirstUnlabeled() {
       if (!state.queries.length || !state.candidates.length) return;
       for (let qi = 0; qi < state.queries.length; qi++) {
@@ -128,6 +137,7 @@
       return String(text || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').match(/[a-z0-9]+/g)?.filter((word) => !ignoredWords.has(word)) || [];
     }
     function suggest(query, asset) {
+      if (isImageQuery(query)) return { score: 0, note: 'Image query: no metadata suggestion is generated.' };
       const queryWords = [...new Set(contentWords(query.query_text))];
       const titleWords = new Set(contentWords(asset.name));
       const matches = queryWords.filter((word) => titleWords.has(word));
@@ -151,7 +161,14 @@
       if (!query || !asset) { $('status').textContent = 'Load valid query and candidate CSV files'; return; }
       $('queryCounter').textContent = `${state.queryIndex + 1}/${state.queries.length}`;
       $('candidateCounter').textContent = `${state.candidateIndex + 1}/${state.candidates.length}`;
-      $('queryText').textContent = query.query_text;
+      $('queryText').textContent = isImageQuery(query) ? `Image query · target: ${query.notes || query.query_id}` : query.query_text;
+      const queryImage = isImageQuery(query) ? findQueryImage(query) : null;
+      if (state.queryImageUrl) URL.revokeObjectURL(state.queryImageUrl);
+      state.queryImageUrl = queryImage ? URL.createObjectURL(queryImage) : null;
+      $('queryPreview').hidden = !queryImage;
+      if (queryImage) $('queryPreview').src = state.queryImageUrl;
+      $('useSuggestions').disabled = isImageQuery(query);
+      if (isImageQuery(query)) $('useSuggestions').checked = false;
       $('queryInfo').textContent = `${query.query_id} · ${query.split || 'unsplit'} · ${query.language || ''}`;
       $('queryNotes').textContent = query.notes || '';
       $('assetInfo').textContent = `${asset.asset_id} · ${asset.name || ''}${asset.license ? ` · license: ${asset.license}` : ''}`;
@@ -187,8 +204,10 @@
     function saveAndAdvance() {
       const query = currentQuery(); const asset = currentAsset();
       if (!query || !asset || state.selectedScore === null) { $('status').textContent = 'Select score 0, 1, or 2 first'; return; }
+      if (isImageQuery(query) && (!findQueryImage(query) || !$('queryPreview').complete || $('queryPreview').naturalWidth === 0)) { $('status').textContent = 'Load and review the image query before saving this score'; return; }
       if ($('preview').hidden || !$('preview').complete || $('preview').naturalWidth === 0) { $('status').textContent = 'Load and review the candidate preview before saving this score'; return; }
       const assisted = $('useSuggestions').checked;
+      if (!$('evidence').value.trim()) { $('status').textContent = 'Add a brief evidence note before saving this label'; $('evidence').focus(); return; }
       const accepted = String(state.selectedScore) === String(state.suggestionScore);
       const notePrefix = assisted ? (accepted ? 'Metadata suggestion accepted after preview review. ' : 'Metadata suggestion edited by reviewer after preview review. ') : '';
       const label = { query_id: query.query_id, asset_id: asset.asset_id, annotator: $('annotator').value, relevance: state.selectedScore, evidence_note: `${notePrefix}${$('evidence').value.trim()}`, annotated_at_utc: new Date().toISOString() };
@@ -201,10 +220,11 @@
       const blob = new Blob(['\uFEFF' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
       const slug = $('annotator').value === 'Trinh Thi Thu Huyen' ? 'huyen' : 'khue';
       const mode = $('useSuggestions').checked ? '_assisted' : '';
-      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `labels_${slug}${mode}.csv`; link.click(); URL.revokeObjectURL(link.href);
+      const imageSet = state.queries.some(isImageQuery);
+      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `labels${imageSet ? '_image_v1' : ''}_${slug}${mode}.csv`; link.click(); URL.revokeObjectURL(link.href);
     }
 
-    $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_type === 'text' && row.query_id && row.query_text); resumeAtFirstUnlabeled(); });
+    $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_id && (row.query_type === 'text' ? row.query_text : isImageQuery(row) && row.query_image_path)); resumeAtFirstUnlabeled(); });
     $('candidatesFile').addEventListener('change', async (event) => { state.candidates = parseCsv(await event.target.files[0].text()).filter((row) => row.asset_id); resumeAtFirstUnlabeled(); });
     $('labelsFile').addEventListener('change', async (event) => {
       const rows = parseCsv(await event.target.files[0].text());
@@ -218,6 +238,7 @@
       $('status').textContent = `${state.labels.size} existing labels loaded · resumed at first unlabeled pair`;
     });
     $('previewsFolder').addEventListener('change', (event) => { state.images.clear(); for (const file of event.target.files) state.images.set(file.name.toLowerCase(), file); refresh(); });
+    $('queryImagesFolder').addEventListener('change', (event) => { state.queryImages.clear(); for (const file of event.target.files) { state.queryImages.set(file.name.toLowerCase(), file); state.queryImages.set(file.webkitRelativePath.toLowerCase(), file); } refresh(); });
     $('useSuggestions').addEventListener('change', refresh);
     document.querySelectorAll('[data-score]').forEach((button) => button.addEventListener('click', () => { state.selectedScore = button.dataset.score; document.querySelectorAll('[data-score]').forEach((item) => item.classList.toggle('selected', item === button)); }));
     $('previous').addEventListener('click', () => advance(-1));

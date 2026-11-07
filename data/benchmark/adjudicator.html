@@ -20,6 +20,7 @@
     .panel h2 { margin: 0 0 8px; font-size: 1.05rem; }
     .muted { color: #536272; font-size: .92rem; }
     #queryText { font-size: 1.25rem; font-weight: 700; margin: 14px 0; }
+    #queryPreview { display: block; width: 100%; max-height: min(42vh, 380px); object-fit: contain; background: #e8edf2; border-radius: 7px; }
     #preview { display: block; width: 100%; height: min(48vh, 460px); object-fit: contain; background: #e8edf2; border-radius: 7px; }
     #missingPreview { display: none; min-height: 200px; padding: 40px 18px; text-align: center; background: #fff5df; border: 1px solid #eed39a; border-radius: 7px; }
     .judgments { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
@@ -52,6 +53,7 @@
       <label class="file">Nhãn Huyền CSV<input id="huyenFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Queries CSV<input id="queriesFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Candidate assets CSV<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
+      <label class="file">Query images folder<input id="queryImagesFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
       <label class="file">Preview images folder<input id="previewsFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
       <div class="file"><span>qrels.csv (đọc và ghi trực tiếp)</span><button id="openQrels" type="button">Mở qrels.csv để cập nhật</button><span id="fileStatus" class="muted">Chưa mở tệp qrels.</span></div>
     </section>
@@ -60,6 +62,7 @@
       <article class="panel">
         <h2>Query <span id="queryCounter">—</span></h2>
         <div id="queryText">Nạp hai file nhãn và qrels.csv để bắt đầu.</div>
+        <img id="queryPreview" alt="Image query" hidden>
         <div id="queryInfo" class="muted"></div>
         <h2 style="margin-top:18px">Hai đánh giá độc lập</h2>
         <div class="judgments">
@@ -92,7 +95,7 @@
     const HEADERS = ['query_id', 'asset_id', 'relevance', 'adjudication_status', 'adjudication_note', 'adjudicated_by', 'adjudicated_at_utc'];
     const VALID_SCORES = new Set(['0', '1', '2']);
     const DEFAULT_NOTES = { '0': 'Not relevant', '1': 'Partly relevant', '2': 'Directly relevant' };
-    const state = { queries: [], candidates: [], images: new Map(), khue: new Map(), huyen: new Map(), qrels: [], qrelsByKey: new Map(), disputes: [], disputeIndex: 0, selectedScore: null, fileHandle: null, lastSavedText: '', imageUrl: null };
+    const state = { queries: [], candidates: [], images: new Map(), queryImages: new Map(), khue: new Map(), huyen: new Map(), qrels: [], qrelsByKey: new Map(), disputes: [], disputeIndex: 0, selectedScore: null, fileHandle: null, lastSavedText: '', imageUrl: null, queryImageUrl: null };
     const $ = (id) => document.getElementById(id);
     const keyFor = (queryId, assetId) => `${queryId}\t${assetId}`;
 
@@ -123,6 +126,12 @@
     function currentKey() { return state.disputes[state.disputeIndex]; }
     function currentQuery() { const row = state.qrelsByKey.get(currentKey()); return state.queries.find((item) => item.query_id === row?.query_id); }
     function currentAsset() { const row = state.qrelsByKey.get(currentKey()); return state.candidates.find((item) => item.asset_id === row?.asset_id); }
+    function isImageQuery(query) { return query?.query_type === 'similarity' || query?.query_type === 'same_id'; }
+    function findQueryImage(query) {
+      const path = String(query?.query_image_path || '').replace(/\\/g, '/').toLowerCase();
+      const basename = path.split('/').pop();
+      return state.queryImages.get(path) || state.queryImages.get(basename) || [...state.queryImages.entries()].find(([name]) => name.endsWith(`/${basename}`))?.[1];
+    }
     function hasUnresolvedQrel(key) { const row = state.qrelsByKey.get(key); return !row || !row.adjudication_status || !VALID_SCORES.has(row.relevance); }
     function setStatus(message, error = false) { $('status').textContent = message; $('status').style.color = error ? '#a32121' : ''; }
 
@@ -154,7 +163,10 @@
       const khue = state.khue.get(key); const huyen = state.huyen.get(key);
       $('queryCounter').textContent = `${state.disputeIndex + 1}/${state.disputes.length}`;
       $('pairCounter').textContent = `qrels row ${state.qrels.indexOf(qrel) + 2}`;
-      $('queryText').textContent = query?.query_text || qrel.query_id;
+      $('queryText').textContent = isImageQuery(query) ? `Image query · ${query.notes || query.query_id}` : (query?.query_text || qrel.query_id);
+      const queryImage = isImageQuery(query) ? findQueryImage(query) : null;
+      if (state.queryImageUrl) URL.revokeObjectURL(state.queryImageUrl); state.queryImageUrl = queryImage ? URL.createObjectURL(queryImage) : null;
+      $('queryPreview').hidden = !queryImage; if (queryImage) $('queryPreview').src = state.queryImageUrl;
       $('queryInfo').textContent = `${qrel.query_id} · ${query?.split || ''} · scores differ: Khuê ${khue.relevance}, Huyền ${huyen.relevance}`;
       $('khueScore').textContent = `Điểm ${khue.relevance}`; $('khueNote').textContent = khue.evidence_note || '(không có ghi chú)';
       $('huyenScore').textContent = `Điểm ${huyen.relevance}`; $('huyenNote').textContent = huyen.evidence_note || '(không có ghi chú)';
@@ -204,6 +216,7 @@
       if (!key || !row || !state.fileHandle) return;
       if (!VALID_SCORES.has(state.selectedScore)) { setStatus('Chọn điểm đã thống nhất 0, 1 hoặc 2.', true); return; }
       if (!note) { setStatus('Nhập ghi chú adjudication trước khi lưu.', true); $('decisionNote').focus(); return; }
+      if (isImageQuery(currentQuery()) && (!findQueryImage(currentQuery()) || !$('queryPreview').complete || $('queryPreview').naturalWidth === 0)) { setStatus('Nạp và xem ảnh query trước khi adjudicate cặp này.', true); return; }
       if (!$('preview').complete || $('preview').naturalWidth === 0) { setStatus('Nạp và xem preview trước khi adjudicate cặp này.', true); return; }
       try {
         const currentFile = await state.fileHandle.getFile(); const actualText = await currentFile.text();
@@ -223,6 +236,7 @@
     $('queriesFile').addEventListener('change', async (event) => { state.queries = parseCsv(await event.target.files[0].text()).filter((row) => row.query_id); render(); });
     $('candidatesFile').addEventListener('change', async (event) => { state.candidates = parseCsv(await event.target.files[0].text()).filter((row) => row.asset_id); render(); });
     $('previewsFolder').addEventListener('change', (event) => { state.images.clear(); for (const file of event.target.files) state.images.set(file.name.toLowerCase(), file); render(); });
+    $('queryImagesFolder').addEventListener('change', (event) => { state.queryImages.clear(); for (const file of event.target.files) { state.queryImages.set(file.name.toLowerCase(), file); state.queryImages.set(file.webkitRelativePath.toLowerCase(), file); } render(); });
     $('openQrels').addEventListener('click', openQrels);
     document.querySelectorAll('[data-score]').forEach((button) => button.addEventListener('click', () => {
       state.selectedScore = button.dataset.score;
