@@ -149,3 +149,13 @@ test_tmp=$(mktemp -d "$PWD/work/pytest-ingestion-XXXXXX")
 
 Hướng dẫn các trường hợp kiểm thử:
 `docs/guides/ingestion-batch-validation.md`.
+
+## Kiểm chứng bổ sung W4 — Issue #92
+
+- [Báo cáo tổng hợp](../reports/issue92/audit.md).
+- [Độ phủ danh mục và cách tái lập](../reports/issue92/category-coverage.md).
+- [Rà nghi trùng bằng AI và giới hạn](../reports/issue92/visual-review.md).
+
+Snapshot giữ nguyên 354 asset. Cặp nghi trùng còn uncertain
+và các xác nhận từ retrieval, PostgreSQL, evaluation tiếp tục
+được theo dõi; chưa coi Issue #92 hoàn tất chỉ từ báo cáo.
