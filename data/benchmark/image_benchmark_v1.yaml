@@ -1,5 +1,5 @@
 benchmark_version: home-interior-image-v1
-status: candidate_pool_prepared_labels_pending
+status: labels_and_split_locked
 created_at: 2026-11-07
 snapshot_name: home-interior-clear-200-v3
 snapshot_manifest_sha256: 9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd
@@ -23,26 +23,66 @@ candidate_preview_download_script: scripts/download_image_benchmark_previews.ps1
 candidate_preview_policy: local_only; verify every file against candidate_assets.csv before annotation
 qrels_template: data/benchmark/image_qrels_v1.template.csv
 qrels_preparation_script: scripts/prepare_image_qrels_v1.ps1
-independent_label_files_pending:
-  - data/benchmark/labels_image_v1_khue.csv
-  - data/benchmark/labels_image_v1_huyen.csv
 language_policy: image queries; language and query_text are not applicable
-split_policy: pending independent labels and adjudication; split by query_group_id
-split_seed: null
-split_version: pending
-locked_at: null
-locked_revision: null
+split_policy: grouped_by_query_group_id; 40% validation / 60% test; SHA-256 rank of seed|query_group_id
+split_seed: 8901
+split_version: image-v1-grouped-40-60-seed-8901
+locked_at: 2026-11-07T17:27:53Z
+locked_revision: sha256:96902638afe49c8f1fac55d624103af0e319e53ac707aadf7bdb1286d0f15b86
+locked_revision_inputs:
+  query_file_sha256: 24a706ea4bdb5b2e4b61fc127fa73d50c0464e37bf2685ed625e1536b489fc09
+  qrels_file_sha256: 964b6d46e65c360c6a174bbe5af919069755b46554951b959a5bab9c45b9c109
+  split_version: image-v1-grouped-40-60-seed-8901
 annotators:
   - Doan Thi Minh Khue
   - Trinh Thi Thu Huyen
-labeling_status: pending_independent_review_by_both_annotators
-qrels_file: pending_until_both_independent_label_files_are_complete
+labeling_status: independent_review_and_adjudication_complete
+qrels_file: data/benchmark/image_qrels_v1.csv
 retrieval_index_preflight:
-  status: pending
-  requirement: exact 200 candidate IDs and checksums for each model index
+  status: ready_local
+  checked_at_utc: 2026-11-07T18:12:00Z
+  snapshot_manifest_sha256: 9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd
+  ready_manifest_sha256: 050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3
+  candidate_count: 200
+  filters: {}
+  normalization: L2
+  similarity: Cosine
+  models:
+    - name: CLIP
+      index_version: issue89-clip-preflight-76d5d2c095b6
+      model_revision: 3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268
+      dimension: 512
+      preprocessing: clip-slow-processor-rgb-l2-v1
+    - name: SigLIP 2
+      index_version: issue89-siglip2-preflight-8a07361d2081
+      model_revision: 75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2
+      dimension: 768
+      preprocessing: siglip2-fixres-slow-processor-rgb-l2-v1
+  audit:
+    embedded_per_model: 200
+    failed_per_model: 0
+    skipped_per_model: 0
+    unique_asset_ids_per_model: 200
+    payload_and_version_valid: true
+    persisted_fingerprint_matches_after_reopen: true
+    comparison_preflight_ready: true
+  smoke:
+    repeated_preview_queries_per_model: 3
+    k: 10
+    k_is_diagnostic_only: true
+  report: docs/guides/image-index-preflight-89.md
+  evidence:
+    comparison: docs/evidence/issue89-image-index-preflight-comparison.json
+    clip_report: docs/evidence/issue89-clip-image-index-preflight.json
+    clip_manifest: docs/evidence/issue89-clip-image-index-manifest.json
+    siglip2_report: docs/evidence/issue89-siglip2-image-index-preflight.json
+    siglip2_manifest: docs/evidence/issue89-siglip2-image-index-manifest.json
+  environment: local
+  end_to_end_benchmark: not_run
+  limitation: inputs, model weights, and Qdrant storage remain on the retrieval owner's machine
 notes:
   - This versioned image query draft is separate from the locked 70-row text queries.csv.
   - Every query is similarity; source_asset_id is blank because these are independent reference images.
   - Candidate-category mapping is sourcing metadata, not relevance ground truth.
-  - The split column is blank until labeling and adjudication are complete.
+  - Query groups were assigned to validation/test (8/12 queries) with the fixed seed and split version above.
   - Hit@K is not applicable because there are no same_id queries.

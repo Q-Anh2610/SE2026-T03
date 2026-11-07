@@ -17,7 +17,13 @@ if (-not $outputPath.StartsWith($workspace, [System.StringComparison]::OrdinalIg
 $expectedSnapshotHash = "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
 $actualSnapshotHash = (Get-FileHash -LiteralPath $snapshotJson -Algorithm SHA256).Hash.ToLowerInvariant()
 if ($actualSnapshotHash -ne $expectedSnapshotHash) { throw "Unexpected snapshot manifest hash: $actualSnapshotHash" }
-$snapshot = @(Get-Content -LiteralPath $snapshotJson -Raw -Encoding utf8 | ConvertFrom-Json)
+$parsedSnapshot = Get-Content -LiteralPath $snapshotJson -Raw -Encoding utf8 | ConvertFrom-Json
+$snapshot = @($parsedSnapshot)
+# Windows PowerShell may pass a top-level JSON array through the pipeline as
+# one nested array object. Flatten that shape before validating/counting IDs.
+if ($snapshot.Count -eq 1 -and $snapshot[0] -is [System.Array]) {
+    $snapshot = @($snapshot[0])
+}
 $candidates = @(Import-Csv -LiteralPath $candidateCsv)
 if ($snapshot.Count -ne 200 -or $candidates.Count -ne 200) { throw "Expected exactly 200 snapshot assets and candidate rows." }
 if (Compare-Object @($snapshot.asset_id | Sort-Object) @($candidates.asset_id | Sort-Object)) { throw "Candidate IDs do not match the verified snapshot." }

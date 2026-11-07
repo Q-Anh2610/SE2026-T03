@@ -55,16 +55,16 @@
       <label class="file">Candidate assets CSV<input id="candidatesFile" type="file" accept=".csv,text/csv"></label>
       <label class="file">Query images folder<input id="queryImagesFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
       <label class="file">Preview images folder<input id="previewsFolder" type="file" accept="image/*" multiple webkitdirectory directory></label>
-      <div class="file"><span>qrels.csv (đọc và ghi trực tiếp)</span><button id="openQrels" type="button">Mở qrels.csv để cập nhật</button><span id="fileStatus" class="muted">Chưa mở tệp qrels.</span></div>
+      <div class="file"><span>Qrels CSV (đọc và ghi trực tiếp)</span><button id="openQrels" type="button">Mở qrels / image_qrels_v1 CSV</button><span id="fileStatus" class="muted">Chưa mở tệp qrels.</span></div>
     </section>
-    <p class="warning">Chỉ mở một cửa sổ adjudicator để sửa cùng một qrels.csv. Trình duyệt sẽ hỏi quyền ghi tệp. Nếu qrels.csv bị thay đổi từ cửa sổ khác, giao diện sẽ dừng ghi để tránh ghi đè cập nhật đó.</p>
+    <p class="warning">Chấp nhận qrels.csv, image_qrels_v1.csv và các bản image_qrels_v1.work.csv. Quyết định được ghi trực tiếp vào đúng tệp đã chọn; không cần đổi tên. Chỉ mở một cửa sổ cho cùng một tệp. Trình duyệt sẽ hỏi quyền ghi và giao diện sẽ dừng nếu phát hiện tệp đã thay đổi ở nơi khác.</p>
     <section class="layout">
       <article class="panel">
         <h2>Query <span id="queryCounter">—</span></h2>
-        <div id="queryText">Nạp hai file nhãn và qrels.csv để bắt đầu.</div>
+        <div id="queryText">Nạp hai file nhãn và tệp qrels để bắt đầu.</div>
         <img id="queryPreview" alt="Image query" hidden>
         <div id="queryInfo" class="muted"></div>
-        <h2 style="margin-top:18px">Hai đánh giá độc lập</h2>
+        <h2 style="margin-top:18px">Hai đánh giá của người chấm</h2>
         <div class="judgments">
           <section class="judgment"><h3>Khuê</h3><div id="khueScore" class="score">—</div><div id="khueNote" class="note muted"></div></section>
           <section class="judgment"><h3>Huyền</h3><div id="huyenScore" class="score">—</div><div id="huyenNote" class="note muted"></div></section>
@@ -122,7 +122,8 @@
       return rows.map((values) => Object.fromEntries(headers.map((header, i) => [header, values[i] ?? ''])));
     }
     function csvCell(value) { const text = String(value ?? ''); return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
-    function serializeQrels() { return '\uFEFF' + [HEADERS.join(','), ...state.qrels.map((row) => HEADERS.map((header) => csvCell(row[header])).join(','))].join('\r\n') + '\r\n'; }
+    function serializeQrels(rows = state.qrels) { return '\uFEFF' + [HEADERS.join(','), ...rows.map((row) => HEADERS.map((header) => csvCell(row[header])).join(','))].join('\r\n') + '\r\n'; }
+    function isQrelsFilename(name) { return /^(?:qrels|image_qrels_v1(?:[._-][a-z0-9_-]+)*)\.csv$/i.test(name); }
     function currentKey() { return state.disputes[state.disputeIndex]; }
     function currentQuery() { const row = state.qrelsByKey.get(currentKey()); return state.queries.find((item) => item.query_id === row?.query_id); }
     function currentAsset() { const row = state.qrelsByKey.get(currentKey()); return state.candidates.find((item) => item.asset_id === row?.asset_id); }
@@ -132,7 +133,7 @@
       const basename = path.split('/').pop();
       return state.queryImages.get(path) || state.queryImages.get(basename) || [...state.queryImages.entries()].find(([name]) => name.endsWith(`/${basename}`))?.[1];
     }
-    function hasUnresolvedQrel(key) { const row = state.qrelsByKey.get(key); return !row || !row.adjudication_status || !VALID_SCORES.has(row.relevance); }
+    function hasUnresolvedQrel(key) { const row = state.qrelsByKey.get(key); return !row || !['Agreed', 'Adjudicated'].includes(row.adjudication_status) || !VALID_SCORES.has(row.relevance); }
     function setStatus(message, error = false) { $('status').textContent = message; $('status').style.color = error ? '#a32121' : ''; }
 
     function buildDisputes() {
@@ -140,8 +141,10 @@
       const missingHuyen = [...state.khue.keys()].filter((key) => !state.huyen.has(key)).length;
       const missingKhue = [...state.huyen.keys()].filter((key) => !state.khue.has(key)).length;
       const missingQrels = [...state.khue.keys()].filter((key) => !state.qrelsByKey.has(key)).length;
-      if (missingHuyen || missingKhue || missingQrels) {
-        setStatus(`Không khớp tập cặp: thiếu ở Huyền ${missingHuyen}, ở Khuê ${missingKhue}, trong qrels ${missingQrels}`, true);
+      const extraQrels = [...state.qrelsByKey.keys()].filter((key) => !state.khue.has(key)).length;
+      if (missingHuyen || missingKhue || missingQrels || extraQrels) {
+        state.disputes = [];
+        setStatus(`Không khớp tập cặp: thiếu ở Huyền ${missingHuyen}, ở Khuê ${missingKhue}, trong qrels ${missingQrels}; qrels thừa ${extraQrels} cặp`, true);
         $('saveNext').disabled = true; return;
       }
       state.disputes = [...state.khue.keys()].filter((key) => state.khue.get(key).relevance !== state.huyen.get(key).relevance && hasUnresolvedQrel(key));
@@ -155,7 +158,7 @@
     function render() {
       const key = currentKey(); const qrel = state.qrelsByKey.get(key); const query = currentQuery(); const asset = currentAsset();
       if (!key || !qrel) {
-        $('queryText').textContent = state.khue.size && state.huyen.size && state.qrels.length ? 'Không còn bất đồng chưa adjudicate.' : 'Nạp hai file nhãn và mở qrels.csv để bắt đầu.';
+        $('queryText').textContent = state.khue.size && state.huyen.size && state.qrels.length ? 'Không còn bất đồng chưa adjudicate.' : 'Nạp hai file nhãn và mở tệp qrels để bắt đầu.';
         $('queryInfo').textContent = ''; $('assetInfo').textContent = ''; $('queryCounter').textContent = '—'; $('pairCounter').textContent = '—';
         $('khueScore').textContent = '—'; $('huyenScore').textContent = '—'; $('khueNote').textContent = ''; $('huyenNote').textContent = '';
         $('preview').hidden = true; $('missingPreview').style.display = 'block'; $('saveNext').disabled = true; return;
@@ -198,13 +201,13 @@
       try {
         if (!window.showOpenFilePicker) throw new Error('Trình duyệt này không hỗ trợ ghi tệp trực tiếp. Dùng Chrome hoặc Edge bản desktop.');
         const [handle] = await window.showOpenFilePicker({ multiple: false, types: [{ description: 'CSV files', accept: { 'text/csv': ['.csv'] } }] });
-        if (handle.name.toLowerCase() !== 'qrels.csv') throw new Error('Hãy chọn đúng file qrels.csv.');
+        if (!isQrelsFilename(handle.name)) throw new Error('Chọn qrels.csv hoặc image_qrels_v1*.csv (ví dụ image_qrels_v1.csv, image_qrels_v1.work.csv).');
         const permission = await handle.requestPermission({ mode: 'readwrite' });
-        if (permission !== 'granted') throw new Error('Chưa được cấp quyền ghi qrels.csv.');
+        if (permission !== 'granted') throw new Error(`Chưa được cấp quyền ghi ${handle.name}.`);
         const file = await handle.getFile(); const text = await file.text(); const rows = parseCsv(text);
-        if (!rows.length || HEADERS.some((header) => !(header in rows[0]))) throw new Error('qrels.csv không khớp schema yêu cầu.');
+        if (!rows.length || HEADERS.some((header) => !(header in rows[0]))) throw new Error(`${handle.name}: cần qrels có dữ liệu và đủ các cột adjudication; không dùng file template chỉ có header hoặc file nhãn cá nhân.`);
         const qrelsByKey = new Map();
-        for (const row of rows) { const key = keyFor(row.query_id, row.asset_id); if (!row.query_id || !row.asset_id || qrelsByKey.has(key)) throw new Error(`qrels.csv có ID thiếu hoặc cặp trùng: ${key}`); qrelsByKey.set(key, row); }
+        for (const row of rows) { const key = keyFor(row.query_id, row.asset_id); if (!row.query_id || !row.asset_id || qrelsByKey.has(key)) throw new Error(`${handle.name} có ID thiếu hoặc cặp trùng: ${key}`); qrelsByKey.set(key, row); }
         state.fileHandle = handle; state.lastSavedText = text; state.qrels = rows; state.qrelsByKey = qrelsByKey;
         $('fileStatus').textContent = `${handle.name} · ${rows.length} cặp · quyền ghi đã cấp`;
         buildDisputes();
@@ -213,21 +216,22 @@
 
     async function saveCurrent() {
       const key = currentKey(); const row = state.qrelsByKey.get(key); const note = $('decisionNote').value.trim();
-      if (!key || !row || !state.fileHandle) return;
+      if (!key || !row || !state.fileHandle || $('saveNext').disabled) return;
       if (!VALID_SCORES.has(state.selectedScore)) { setStatus('Chọn điểm đã thống nhất 0, 1 hoặc 2.', true); return; }
       if (!note) { setStatus('Nhập ghi chú adjudication trước khi lưu.', true); $('decisionNote').focus(); return; }
       if (isImageQuery(currentQuery()) && (!findQueryImage(currentQuery()) || !$('queryPreview').complete || $('queryPreview').naturalWidth === 0)) { setStatus('Nạp và xem ảnh query trước khi adjudicate cặp này.', true); return; }
       if (!$('preview').complete || $('preview').naturalWidth === 0) { setStatus('Nạp và xem preview trước khi adjudicate cặp này.', true); return; }
       try {
         const currentFile = await state.fileHandle.getFile(); const actualText = await currentFile.text();
-        if (actualText !== state.lastSavedText) { setStatus('qrels.csv đã thay đổi ở nơi khác. Tải lại qrels để tránh ghi đè.', true); $('saveNext').disabled = true; return; }
+        if (actualText !== state.lastSavedText) { setStatus(`${state.fileHandle.name} đã thay đổi ở nơi khác. Mở lại tệp để tránh ghi đè.`, true); $('saveNext').disabled = true; return; }
         const updated = { ...row, relevance: state.selectedScore, adjudication_status: 'Adjudicated', adjudication_note: note, adjudicated_by: 'Khue, Huyen', adjudicated_at_utc: new Date().toISOString() };
-        const index = state.qrels.indexOf(row); state.qrels[index] = updated; state.qrelsByKey.set(key, updated);
-        const stream = await state.fileHandle.createWritable(); await stream.write(serializeQrels()); await stream.close();
+        const index = state.qrels.indexOf(row); const updatedRows = state.qrels.slice(); updatedRows[index] = updated;
+        const stream = await state.fileHandle.createWritable(); await stream.write(serializeQrels(updatedRows)); await stream.close();
+        state.qrels = updatedRows; state.qrelsByKey.set(key, updated);
         state.lastSavedText = await (await state.fileHandle.getFile()).text();
         state.disputeIndex = Math.min(state.disputeIndex, Math.max(0, state.disputes.length - 1));
         buildDisputes();
-      } catch (error) { setStatus(`Không ghi được qrels.csv: ${error.message || error}`, true); }
+      } catch (error) { setStatus(`Không ghi được ${state.fileHandle.name}: ${error.message || error}`, true); }
     }
 
     function move(direction) { if (!state.disputes.length) return; state.disputeIndex = (state.disputeIndex + direction + state.disputes.length) % state.disputes.length; render(); }
