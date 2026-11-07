@@ -41,7 +41,8 @@ def index_vector_name(config: IndexConfig) -> str:
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
-    return f"clip_{sha256(encoded).hexdigest()[:16]}"
+    prefix = "siglip2" if config.model_id == "google/siglip2-base-patch16-224" else "clip"
+    return f"{prefix}_{sha256(encoded).hexdigest()[:16]}"
 
 
 class QdrantStore:
