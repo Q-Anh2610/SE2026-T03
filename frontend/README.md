@@ -28,6 +28,12 @@ empty, error/retry đúng file/trang, phân trang fixture và bỏ response cũ 
 bị thay/xóa. Chế độ này luôn gọi HTTP kể cả Vite development; cần API mock hiện
 có và CORS phù hợp. Không có fallback local khi API lỗi.
 
+Đối chiếu PR #82 / contract #79: multipart và giới hạn ảnh giữ nguyên.
+HTTP 400 được ánh xạ theo `error.code`: `INVALID_REQUEST`, `INVALID_FILTERS`,
+`IMAGE_TOO_LARGE`, `IMAGE_DIMENSIONS_EXCEEDED`, `UNSUPPORTED_IMAGE`, `INVALID_IMAGE`.
+Lỗi không rõ mã hoặc JSON hỏng dùng thông báo chung; không hiện chi tiết nội bộ server.
+Đây là đối chiếu mã nguồn và tests HTTP giả lập, không phải smoke UI/backend thật.
+
 **API ảnh hiện chỉ trả fixture**, được ghi rõ trên trang; không đo ảnh tương tự,
 không coi HTTP thành công là image retrieval thật. UI chỉ nhận response mock theo
 contract W1; chưa bật response ảnh thật vì chưa có contract đó. Chưa thêm feedback

@@ -25,6 +25,21 @@ it.each([400, 503, 500])('rejects HTTP %s without mock fallback', async (status)
   await expect(searchImage(file, 1, new AbortController().signal)).rejects.toThrow(status === 400 ? 'không hợp lệ' : 'chưa sẵn sàng')
   expect(fetchMock).toHaveBeenCalledOnce()
 })
+it.each([
+  ['INVALID_REQUEST', 'phân trang không hợp lệ'],
+  ['INVALID_FILTERS', 'Bộ lọc không hợp lệ'],
+  ['IMAGE_TOO_LARGE', '5 MiB'],
+  ['IMAGE_DIMENSIONS_EXCEEDED', '4096 pixel'],
+  ['UNSUPPORTED_IMAGE', 'JPEG hoặc PNG'],
+  ['INVALID_IMAGE', 'Không đọc được nội dung ảnh'],
+])('maps upload error %s to a safe Vietnamese message', async (code, message) => {
+  fetchMock.mockResolvedValue(new Response(JSON.stringify({ error: { code, message: 'private server detail' } }), { status: 400 }))
+  await expect(searchImage(file, 1, new AbortController().signal)).rejects.toThrow(message)
+})
+it.each(['{}', 'null', '{"error":null}', '{"error":{"code":123}}', '{"error":{"code":"UNKNOWN"}}', '{"error":{"code":"toString"}}'])('handles malformed or unknown upload error %s', async (body) => {
+  fetchMock.mockResolvedValue(new Response(body, { status: 400 }))
+  await expect(searchImage(file, 1, new AbortController().signal)).rejects.toThrow('Ảnh hoặc yêu cầu không hợp lệ')
+})
 it.each(['bad-json', '{}', '{"query":1}', 'null', '1'])('rejects invalid response %s', async (body) => {
   fetchMock.mockResolvedValue(new Response(body))
   await expect(searchImage(file, 1, new AbortController().signal)).rejects.toThrow()

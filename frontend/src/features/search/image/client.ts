@@ -39,9 +39,27 @@ export async function searchImage(file: File, page: number, signal: AbortSignal)
     if (signal.aborted) throw error
     throw new Error('Không kết nối được dịch vụ tìm ảnh. Hãy thử lại.')
   }
-  if (!response.ok) throw new Error(response.status === 400
-    ? 'Ảnh hoặc yêu cầu không hợp lệ. Kiểm tra ảnh rồi thử lại.'
-    : 'Dịch vụ tìm ảnh chưa sẵn sàng. Hãy thử lại sau.')
+  if (!response.ok) {
+    if (response.status !== 400) throw new Error('Dịch vụ tìm ảnh chưa sẵn sàng. Hãy thử lại sau.')
+    const messages: Record<string, string> = {
+      INVALID_REQUEST: 'Thiếu ảnh hoặc phân trang không hợp lệ. Kiểm tra yêu cầu rồi thử lại.',
+      INVALID_FILTERS: 'Bộ lọc không hợp lệ. Kiểm tra bộ lọc rồi thử lại.',
+      IMAGE_TOO_LARGE: 'Ảnh vượt giới hạn 5 MiB. Hãy chọn ảnh nhỏ hơn.',
+      IMAGE_DIMENSIONS_EXCEEDED: 'Mỗi chiều ảnh không được vượt 4096 pixel.',
+      UNSUPPORTED_IMAGE: 'Chỉ hỗ trợ ảnh JPEG hoặc PNG.',
+      INVALID_IMAGE: 'Không đọc được nội dung ảnh. Hãy chọn ảnh JPEG hoặc PNG hợp lệ.',
+    }
+    let code: unknown
+    try {
+      const body: unknown = await response.json()
+      if (typeof body === 'object' && body !== null && 'error' in body
+        && typeof body.error === 'object' && body.error !== null && 'code' in body.error) {
+        code = body.error.code
+      }
+    } catch { /* Giữ thông báo an toàn nếu server không trả JSON. */ }
+    throw new Error(typeof code === 'string' && Object.hasOwn(messages, code)
+      ? messages[code] : 'Ảnh hoặc yêu cầu không hợp lệ. Kiểm tra ảnh rồi thử lại.')
+  }
   let payload: unknown
   try { payload = await response.json() } catch { throw new Error('API trả về dữ liệu ảnh không hợp lệ.') }
   if (typeof payload !== 'object' || payload === null || !('query' in payload) || typeof payload.query !== 'string') {
