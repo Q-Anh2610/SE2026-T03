@@ -28,6 +28,8 @@ READY_MANIFEST = "data/processed/ingestion/objaverse_200.ready.json"
 REPEAT_SCORE_ABS_TOLERANCE = 1e-12
 MODULE_PATHS = (
     "backend/app/embedding/clip_encoder.py",
+    "backend/app/embedding/image_encoding.py",
+    "backend/app/search/vector_search.py",
     "backend/app/search/filters.py",
     "backend/app/search/qdrant_store.py",
     "backend/app/search/retrieval_config.py",

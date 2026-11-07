@@ -1,0 +1,102 @@
+{
+  "schema_version": "image-index-manifest-v1",
+  "created_at_utc": "2026-11-07T05:03:09.042878Z",
+  "observed_at_utc": "2026-11-07T05:03:09.042871Z",
+  "index_config": {
+    "model_id": "openai/clip-vit-base-patch32",
+    "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "dimension": 512,
+    "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+    "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+    "index_version": "issue76-clip-build-1ce976722ab7"
+  },
+  "collection": "issue76_image_previews",
+  "vector_name": "clip_d4a2b0ba8f1c521e",
+  "processor_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "processor_class": "CLIPImageProcessor",
+  "processor_config": {
+    "_processor_class": null,
+    "do_resize": true,
+    "size": {
+      "shortest_edge": 224
+    },
+    "resample": 3,
+    "do_center_crop": true,
+    "crop_size": {
+      "height": 224,
+      "width": 224
+    },
+    "do_rescale": true,
+    "rescale_factor": 0.00392156862745098,
+    "do_normalize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "do_convert_rgb": true,
+    "image_processor_type": "CLIPImageProcessor"
+  },
+  "processor_use_fast": false,
+  "image_color_mode": "RGB",
+  "normalization": "L2",
+  "similarity": "Cosine",
+  "source_manifest": "manifests/assets_354.json",
+  "source_manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "ready_manifest": "assets_354.ready.json",
+  "ready_manifest_sha256": "7d0a3e59f4d1c697cb37fd8b82decea3ba3efa95d8c84235bda73b5afb67474c",
+  "asset_count": 354,
+  "point_count": 354,
+  "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/76#issuecomment-6702522644",
+  "code_commit": "01f7056629425d5294d926c3938199047bc5ce28",
+  "working_tree_dirty": true,
+  "module_sha256": {
+    "backend/app/embedding/clip_encoder.py": "ebc65589b4facc58b24a0bdecc7adb24642ff3ce24c0b6ba27ed493578a28236",
+    "backend/app/embedding/siglip2_encoder.py": "3772dac71a0b0ec0ae5edeeac60622e74c30ea8a6c887d7528ef1a49cbbd8625",
+    "backend/app/embedding/image_encoding.py": "b9beda1b24f9c968075cdeb1c0fa522705bebc168793eb0506489027cadd3210",
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "backend/app/search/image_search.py": "0491a5c1a3d5091e44712ab928d23fc71efa21906eec0ab5b025f73c54f6ecf6",
+    "backend/app/search/image_index_manifest.py": "f7b4733483b6a1d16c13ad7b18899fa97f910ebb71053d6365546005e5177a66",
+    "backend/app/search/vector_search.py": "66d1ec2546a2dbeac471f2d83dfa7290eb82f2dde56f76a1fb420702f8323711",
+    "backend/app/search/qdrant_store.py": "2c832c36a3d9b8e663c0073388ec40cb3cf8adb385946e940cff97568de1e9a0",
+    "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+    "backend/app/search/smoke.py": "94c1aed7c32b2991649b205dd139fc9b2bb5c44cbcd83072e99a9ed3518553f6",
+    "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+    "backend/app/schemas/text_search.py": "2afeee144b767ed9a6352fdedc06aba27327d54b2ab254bb20a83cd29eb5af35",
+    "scripts/verify_issue76_image_retrieval.py": "9c15663a44f9924a4b362a598f43c6c821b3bca8303b31ac9ff6e0a679888240"
+  },
+  "package_versions": {
+    "torch": "2.8.0",
+    "transformers": "4.57.1",
+    "Pillow": "13.0.0",
+    "qdrant-client": "1.15.1"
+  },
+  "retrieval_config": {
+    "schema_version": "image-retrieval-config-v1",
+    "config_version": "image-exact-all-filtered-rgb-v1-k10",
+    "candidate_limit": 10,
+    "strategy": "exact_all_filtered_points",
+    "exact": true,
+    "score_threshold": null,
+    "score_roundoff_tolerance": 1e-06,
+    "ordering": [
+      "score_desc",
+      "asset_id_asc"
+    ],
+    "deduplication": "max_score_per_asset",
+    "image_formats": [
+      "JPEG",
+      "PNG"
+    ],
+    "max_image_bytes": 5242880,
+    "max_image_dimension": 4096,
+    "image_color_mode": "RGB",
+    "frame_policy": "first",
+    "exif_orientation": "stored_pixels"
+  }
+}
