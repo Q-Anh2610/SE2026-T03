@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 def persist_text_search_event(
     session: Session, request: LiveTextSearchRequest, versions: SearchExecutionVersions,
+    *, result_asset_ids: list[str] | None = None,
 ) -> UUID:
     """Commit trước HTTP 200. Dùng session riêng theo request, không commit việc khác.
 
@@ -31,20 +32,21 @@ def persist_text_search_event(
     event = SearchEvent(
         search_event_id=identifier, query_type="text", query_text=request.query,
         query_image_ref=None, filters=request.filters.model_dump(exclude_none=True),
-        **versions.model_dump(),
+        result_asset_ids=result_asset_ids, **versions.model_dump(),
     )
     return _commit_event(session, event)
 
 
 def persist_image_search_event(
     session: Session, request: LiveImageSearchRequest, versions: SearchExecutionVersions,
+    *, result_asset_ids: list[str] | None = None,
 ) -> UUID:
     request = LiveImageSearchRequest.model_validate(request.model_dump())
     versions = SearchExecutionVersions.model_validate(versions.model_dump())
     event = SearchEvent(
         search_event_id=uuid4(), query_type="image", query_text=None,
         query_image_ref=request.query_image_ref, filters=request.filters.model_dump(exclude_none=True),
-        **versions.model_dump(),
+        result_asset_ids=result_asset_ids, **versions.model_dump(),
     )
     return _commit_event(session, event)
 

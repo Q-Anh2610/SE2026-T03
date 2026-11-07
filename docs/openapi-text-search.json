@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "3D Asset Semantic Search API",
-    "description": "Danh sách/chi tiết asset đọc PostgreSQL. Search được chọn theo cấu hình text/image; chế độ service dùng CLIP/Qdrant và lưu event PostgreSQL. Dependency chưa sẵn sàng trả 503. Feedback mock ngoài production.",
+    "description": "Danh sách/chi tiết asset đọc PostgreSQL. Search được chọn theo cấu hình text/image; chế độ service dùng CLIP/Qdrant và lưu event PostgreSQL. Dependency chưa sẵn sàng trả 503. Feedback chọn PostgreSQL hoặc mock theo cấu hình.",
     "version": "0.1.0"
   },
   "paths": {

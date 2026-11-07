@@ -129,6 +129,31 @@ def check_image_http(app, db, text_manifest, metadata, origin, *, args):
         limits="Backend real HTTP/local Qdrant/CLIP; frontend and image benchmark pending separate verification.")
 
 
+def verify_image_http(args, *, extra_checks=None):
+    from qdrant_client import QdrantClient
+    from app.search.image_index_manifest import load_image_index_manifest
+
+    manifest = load_image_index_manifest(args.image_index_manifest)
+    assert (args.image_qdrant_local_path / "meta.json").is_file()
+    with closing(QdrantClient(path=str(args.image_qdrant_local_path))) as client:
+        before = fingerprint(client, manifest.collection)
+        count = client.count(manifest.collection, exact=True).count
+
+    def checks(*values):
+        result = check_image_http(*values, args=args)
+        if extra_checks is not None:
+            result["feedback"] = extra_checks(*values)
+        return result
+
+    result = verify(args, extra_checks=checks)
+    with closing(QdrantClient(path=str(args.image_qdrant_local_path))) as client:
+        assert fingerprint(client, manifest.collection) == before
+        assert client.count(manifest.collection, exact=True).count == count == manifest.point_count
+    result["image_point_count"] = count
+    result["image_persisted_fingerprint_before_after"] = before
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("index-manifest", "index-root", "qdrant-local-path",
@@ -139,19 +164,7 @@ def main():
     args.settings_overrides = dict(image_search_source="service", image_index_manifest=args.image_index_manifest,
         image_index_root=args.image_index_root, image_qdrant_local_path=args.image_qdrant_local_path)
     try:
-        from qdrant_client import QdrantClient
-        from app.search.image_index_manifest import load_image_index_manifest
-        manifest = load_image_index_manifest(args.image_index_manifest)
-        assert (args.image_qdrant_local_path / "meta.json").is_file()
-        with closing(QdrantClient(path=str(args.image_qdrant_local_path))) as client:
-            before = fingerprint(client, manifest.collection)
-            count = client.count(manifest.collection, exact=True).count
-        result = verify(args, extra_checks=lambda *values: check_image_http(*values, args=args))
-        with closing(QdrantClient(path=str(args.image_qdrant_local_path))) as client:
-            assert fingerprint(client, manifest.collection) == before
-            assert client.count(manifest.collection, exact=True).count == count == manifest.point_count
-        result["image_point_count"] = count
-        result["image_persisted_fingerprint_before_after"] = before
+        result = verify_image_http(args)
     except Exception as exc:
         result = dict(status="failed", error_code=type(exc).__name__, failure_locations=[
             dict(file=Path(f.filename).name, line=f.lineno, function=f.name) for f in traceback.extract_tb(exc.__traceback__)])
