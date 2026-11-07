@@ -20,7 +20,7 @@ candidate_pairs_file: data/benchmark/image_candidate_pairs_v1.csv
 candidate_pair_count: 4000
 candidate_preview_set: data/benchmark/objaverse/previews/
 candidate_preview_download_script: scripts/download_image_benchmark_previews.ps1
-candidate_preview_status_in_preparing_checkout: not_present; download and verify before annotation
+candidate_preview_policy: local_only; verify every file against candidate_assets.csv before annotation
 qrels_template: data/benchmark/image_qrels_v1.template.csv
 qrels_preparation_script: scripts/prepare_image_qrels_v1.ps1
 independent_label_files_pending:
