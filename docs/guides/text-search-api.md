@@ -167,6 +167,10 @@ Kết quả này không thay cho GitHub CI, review hoặc nghiệm thu retrieval
 
 ## Theo dõi bàn giao
 
+Bộ kiểm chứng HTTP + retrieval thật + UI của #66 và kết quả local riêng nằm ở
+[hướng dẫn tích hợp text search](text-search-integration.md). Xác nhận tiếp nhận
+của Duy/Khuê vẫn cần được ghi trên Issue/PR, tách khỏi kết quả chạy tự động.
+
 - [x] Adapter text retrieval #60, model/index/config manifest và bootstrap.
 - [x] Index riêng đúng snapshot 354, đối chiếu source/ready hashes và IDs.
 - [x] Smoke API thật với query/filters/pagination/empty/detail và durable events.
