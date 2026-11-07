@@ -25,7 +25,7 @@ def event(**overrides):
 def test_migration_round_trip_and_model_drift(migrated_database):
     connection, configuration = migrated_database
     assert {"assets", "search_events", "feedbacks"} <= set(inspect(connection).get_table_names())
-    assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0001"
+    assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0002"
     command.check(configuration)
     command.downgrade(configuration, "base")
     assert not {"assets", "search_events", "feedbacks"} & set(inspect(connection).get_table_names())
