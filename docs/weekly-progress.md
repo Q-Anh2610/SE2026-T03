@@ -198,4 +198,6 @@ trạng thái job với API thật chuyển sang W5 theo
   persistence mode để tránh gửi event thật sang mock. UI image smoke thật cũng
   gửi 2 feedback qua frontend và đối chiếu bản ghi PostgreSQL. Checklist
   acceptance và task của [Issue #81](https://github.com/Q-Anh2610/SE2026-T03/issues/81)
-  đã được đánh dấu theo bằng chứng. Issue vẫn mở; PR/review/CI/merge chưa làm.
+  đã được đánh dấu theo bằng chứng. [PR #97](https://github.com/Q-Anh2610/SE2026-T03/pull/97)
+  đã mở vào `develop`; review đã được yêu cầu. Branch-policy và Frontend checks
+  đạt, Backend/API checks còn chạy; chưa có approval hoặc merge.

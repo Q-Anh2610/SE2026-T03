@@ -2,7 +2,8 @@
 
 Ngày kiểm chứng: 10/11/2026. Phần image và feedback từ hai worktree đã được ghép
 vào workspace chính `SE2026-T03`; implementation và kiểm chứng được chia thành
-các commit theo khối image, feedback và tài liệu. Chưa có PR/review/CI mới.
+các commit theo khối image, feedback và tài liệu. PR #97 đã mở vào `develop`;
+đã xin review Quỳnh Anh/Khuê, đang chờ required checks và nghiệm thu.
 
 ## Acceptance đã rà soát
 
