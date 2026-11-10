@@ -1,5 +1,5 @@
-import { parseResponse } from '../contract'
-import type { MockSearchResponse } from '../types'
+import { parseResponse, validateListQuery } from '../contract'
+import type { AssetFilters, SearchResponse } from '../types'
 import { apiUrl, REQUEST_TIMEOUT_MS } from '../../../lib/api/http'
 
 export async function validateImage(file: File): Promise<void> {
@@ -22,11 +22,12 @@ export async function validateImage(file: File): Promise<void> {
   } finally { URL.revokeObjectURL(url) }
 }
 
-/** W1 image endpoint is explicitly a fixture API; no live-image contract exists yet. */
-export async function searchImage(file: File, page: number, signal: AbortSignal): Promise<MockSearchResponse> {
+/** Multipart contract shared by fixture and W4 image service. */
+export async function searchImage(file: File, page: number, signal: AbortSignal, filters: AssetFilters = {}): Promise<SearchResponse> {
+  const request = validateListQuery({ filters, page, limit: 12 })
   const form = new FormData()
   form.append('image', file)
-  form.append('filters', '{}')
+  form.append('filters', JSON.stringify(request.filters))
   form.append('page', String(page))
   form.append('limit', '12')
   let response: Response
@@ -65,7 +66,13 @@ export async function searchImage(file: File, page: number, signal: AbortSignal)
   if (typeof payload !== 'object' || payload === null || !('query' in payload) || typeof payload.query !== 'string') {
     throw new Error('API trả về dữ liệu ảnh không hợp lệ.')
   }
-  const parsed = parseResponse(payload, { query: payload.query, filters: {}, page, limit: 12 })
-  if (!parsed.mock) throw new Error('Chưa có contract tìm ảnh thật; không thể xác nhận response này.')
+  const parsed = parseResponse(payload, { query: payload.query, ...request })
+  if (!parsed.mock && !/^sha256:[a-f0-9]{64}$/.test(parsed.query)) throw new Error('API trả về định danh ảnh không hợp lệ.')
+  if (!parsed.mock && (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(parsed.search_event_id)
+    || parsed.results.some((result) => result.retrieval_sources.length !== 1
+      || result.retrieval_sources[0] !== 'clip_image_to_preview'
+      || result.score === null || result.score < -1 || result.score > 1))) {
+    throw new Error('API trả về kết quả không đúng contract tìm ảnh thật.')
+  }
   return parsed
 }

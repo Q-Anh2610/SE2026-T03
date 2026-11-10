@@ -14,7 +14,7 @@ Sau tìm kiếm, thanh nhập gọn được căn trái, tiêu đề và số l�
 
 ## Chạy local
 
-### UI ảnh W4 — chế độ phát triển
+### UI ảnh W4 — multipart và response service
 
 Link **Tìm bằng ảnh** mở `/#image-search`. Chọn/thay/xóa JPEG hoặc PNG; UI kiểm
 tra signature, decode được, dung lượng 1 byte–5 MiB và mỗi chiều tối đa 4096 px.
@@ -22,23 +22,35 @@ Preview local chỉ dùng ảnh người dùng chọn, thu hồi object URL khi 
 trang. Validation frontend không thay validation backend.
 
 Gửi multipart tới `POST /api/v1/search/image` qua `VITE_API_BASE_URL` hoặc cùng
-origin: `image` là file, `filters` là JSON string `{}`, `page`, `limit=12`.
+origin: `image` là file, `filters` là JSON string của bộ lọc đã gửi, `page`, `limit=12`.
 Không đặt Content-Type thủ công để trình duyệt tự tạo boundary. Có loading,
-empty, error/retry đúng file/trang, phân trang fixture và bỏ response cũ khi ảnh
-bị thay/xóa. Chế độ này luôn gọi HTTP kể cả Vite development; cần API mock hiện
-có và CORS phù hợp. Không có fallback local khi API lỗi.
+empty, error/retry đúng file/filters/trang, phân trang theo response và bỏ response cũ khi ảnh
+bị thay/xóa. Chế độ này luôn gọi HTTP kể cả Vite development; cần API và CORS phù hợp. Không có fallback local khi API lỗi.
 
 Đối chiếu PR #82 / contract #79: multipart và giới hạn ảnh giữ nguyên.
 HTTP 400 được ánh xạ theo `error.code`: `INVALID_REQUEST`, `INVALID_FILTERS`,
 `IMAGE_TOO_LARGE`, `IMAGE_DIMENSIONS_EXCEEDED`, `UNSUPPORTED_IMAGE`, `INVALID_IMAGE`.
 Lỗi không rõ mã hoặc JSON hỏng dùng thông báo chung; không hiện chi tiết nội bộ server.
-Đây là đối chiếu mã nguồn và tests HTTP giả lập, không phải smoke UI/backend thật.
 
-**API ảnh hiện chỉ trả fixture**, được ghi rõ trên trang; không đo ảnh tương tự,
-không coi HTTP thành công là image retrieval thật. UI chỉ nhận response mock theo
-contract W1; chưa bật response ảnh thật vì chưa có contract đó. Chưa thêm feedback
-hoặc mở rộng filters. Những ghi nhận lịch sử “chưa có UI ảnh” bên dưới mô tả bản
-trước W4, không thay cho trạng thái này.
+UI nhận cả response mock có nhãn và response service theo #80. Response thật phải
+có hash ảnh `sha256:...`, query/event ID trùng nhau dạng UUID, snapshot và versions,
+nguồn `clip_image_to_preview`, cosine hữu hạn trong [-1, 1], metadata và pagination
+hợp lệ. Không dùng score làm phần trăm chính xác. “Thông tin phiên tìm ảnh” hiển
+thị IDs, hash, model/index/config và dataset snapshot nguyên từ API, kể cả empty.
+Retry và chuyển trang giữ file/bộ lọc của lần gửi; thay ảnh/xóa ảnh bỏ response cũ.
+Để dùng retrieval thật, cấu hình backend theo
+[image search API](../docs/guides/image-search-api.md), chọn
+`APP_IMAGE_SEARCH_SOURCE=service` cùng image index và metadata PostgreSQL khớp nhau.
+
+Kiểm chứng W4 riêng ngày 10/11/2026 đã chạy smoke HTTP và UI với API, PostgreSQL,
+CLIP và image index thật trong worktree ảnh; source `ImageSearchPage.tsx` và
+`client.ts` có SHA khớp file ghép hiện tại. Xem [bằng chứng và giới hạn](../docs/guides/frontend-image-w4.md): query dùng ảnh preview đã index (self-match diagnostic), không phải benchmark relevance độc lập.
+
+Sau khi ghép image + feedback vào workspace ngày 10/11/2026: lint và build/typecheck
+đạt; 371/371 tests đạt, coverage từng file trên ngưỡng 95% (lines/functions 100%,
+statements 99,55%, branches 98,24%); image E2E riêng 4/4 và E2E chung 36/36.
+Image E2E dùng interception, không thay thế smoke API/retrieval thật. Không đổi
+API/schema, model, index dùng chung hoặc dependencies.
 
 Tests W4 gồm validation bytes/decode/kích thước, multipart, HTTP lỗi/sai response,
 preview/replace/clear, retry, pagination và race/unmount. Tests decode unit dùng
@@ -95,7 +107,7 @@ Unit/component test kiểm tra validator, mock, HTTP client, loading/error/retry
 - Xóa truy vấn giữ danh mục cục bộ và trả focus về ô nhập. Nút “Xóa bộ lọc” xóa danh mục cục bộ độc lập. Reset ở empty state xóa cả truy vấn lẫn bộ lọc.
 - Mở chi tiết asset từ thẻ trong danh sách hoặc kết quả tìm kiếm sẽ gọi `GET /api/v1/assets/{asset_id}`, hiển thị đầy đủ metadata thực tế, xử lý loading/404/lỗi mạng/retry/ảnh hỏng và quay lại giữ nguyên filters, `page` và `limit`.
 - Preview thật dùng `thumbnail_url`, lazy loading và fallback khi lỗi; hình ghế ở intro là minh họa giao diện tự tạo. Metadata thiếu để null, không bịa license/tác giả/số mặt. `description`/`category` null hiện “Chưa có thông tin”.
-- Chưa có UI tìm ảnh hoặc UI gửi feedback.
+- UI tìm ảnh nằm tại `src/features/search/image/`; gửi feedback từ kết quả text/ảnh theo `search_event_id` trả về. Client kiểm tra OpenAPI để không gửi event thật sang endpoint feedback mock, rồi xác nhận event, asset, relevance, persistence mode và timestamp trong response.
 
 ## Cấu trúc
 
@@ -134,7 +146,9 @@ thư mục backend lúc gỡ lỗi local. Bộ test tự khởi động/dừng F
 và Vite trên 5196/5197, không dùng dịch vụ chia sẻ. Dùng
 `PLAYWRIGHT_BROWSER_CHANNEL=chromium` nếu cài Chromium qua Playwright.
 Tests chạy frontend–FastAPI HTTP thật nhưng backend trả fixture; không đo semantic
-retrieval. Upload và feedback được kiểm tra qua HTTP, chưa có UI cho hai tính năng.
+retrieval. UI ảnh và feedback có component/E2E riêng; xem
+[`docs/guides/frontend-image-w4.md`](../docs/guides/frontend-image-w4.md) để biết
+cấu hình và bằng chứng smoke HTTP thật.
 
 ## Kiểm chứng W3 — Issue #54
 
