@@ -11,7 +11,7 @@ test('selects and previews an image, retries the fixture API and clears the imag
     else await route.fulfill({ json: makeResponse('mock-image:fixture') })
   })
   await page.goto('/#image-search')
-  await expect(page.getByText(/chưa tìm theo nội dung ảnh/)).toBeVisible()
+  await expect(page.getByText(/Chọn ảnh và bộ lọc/)).toBeVisible()
   const upload = page.getByLabel(/Chọn hoặc thay ảnh/)
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nO8AAAAASUVORK5CYII=', 'base64')
   await upload.setInputFiles({ name: 'query.png', mimeType: 'image/png', buffer: png })
@@ -257,4 +257,26 @@ test('browses asset list, handles error/retry, request race, and detail 404/erro
   await view.resetApiFilters()
   await expect(page.getByRole('heading', { name: 'Asset trang 1', exact: true })).toBeVisible()
   await view.checkWidth()
+})
+
+test('renders the live image contract and rejects a malformed service result', async ({ page }) => {
+  const response = makeLiveResponse(`sha256:${'a'.repeat(64)}`)
+  response.results[0].retrieval_sources = ['clip_image_to_preview']
+  let calls = 0
+  await page.route('**/api/v1/search/image', async route => {
+    calls++
+    if (calls === 2) response.results[0].score = 2
+    await route.fulfill({ json: response })
+  })
+  await page.goto('/#image-search')
+  await page.getByLabel(/Chọn hoặc thay ảnh/).setInputFiles({ name: 'query.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nO8AAAAASUVORK5CYII=', 'base64') })
+  await expect(page.getByRole('img', { name: 'Ảnh truy vấn: query.png' })).toBeVisible()
+  await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
+  await expect(page.getByRole('status')).toHaveText('Kết quả tìm kiếm bằng ảnh')
+  await page.getByText('Thông tin phiên tìm ảnh').click()
+  await expect(page.getByText(response.versions.dataset_snapshot)).toBeVisible()
+  await expect(page.getByText(response.search_event_id, { exact: true })).toHaveCount(2)
+  await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('không đúng contract')
+  await expect(page.getByRole('list', { name: 'Kết quả ảnh' })).toHaveCount(0)
 })
