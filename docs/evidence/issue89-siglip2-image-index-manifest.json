@@ -1,0 +1,99 @@
+{
+  "schema_version": "image-index-manifest-v1",
+  "created_at_utc": "2026-11-07T18:03:41.408190Z",
+  "observed_at_utc": "2026-11-07T18:03:41.408184Z",
+  "index_config": {
+    "model_id": "google/siglip2-base-patch16-224",
+    "model_revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+    "dimension": 768,
+    "preprocessing_version": "siglip2-fixres-slow-processor-rgb-l2-v1",
+    "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+    "index_version": "issue89-siglip2-preflight-8a07361d2081"
+  },
+  "collection": "issue89_image_previews",
+  "vector_name": "siglip2_2904b74938a2f4e1",
+  "processor_revision": "75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+  "processor_class": "SiglipImageProcessor",
+  "processor_config": {
+    "_processor_class": "SiglipProcessor",
+    "image_processor_type": "SiglipImageProcessor",
+    "do_resize": true,
+    "size": {
+      "height": 224,
+      "width": 224
+    },
+    "resample": 2,
+    "do_rescale": true,
+    "rescale_factor": 0.00392156862745098,
+    "do_normalize": true,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "do_convert_rgb": null
+  },
+  "processor_use_fast": false,
+  "image_color_mode": "RGB",
+  "normalization": "L2",
+  "similarity": "Cosine",
+  "source_manifest": "source.json",
+  "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+  "ready_manifest": "ready.json",
+  "ready_manifest_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+  "asset_count": 200,
+  "point_count": 200,
+  "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705482003",
+  "code_commit": "05895389ae62133ac6144ebcbdc4b59702eca82e",
+  "working_tree_dirty": true,
+  "module_sha256": {
+    "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+    "backend/app/embedding/siglip2_encoder.py": "513bd37bcf93ee95e2bd4c49c623a814997eb5d56d534a6b7469df37b90ddc4e",
+    "backend/app/embedding/image_encoding.py": "0eb39082e326688b7ae33bc28c07445260aa5752f17d7280b30ae9f69e83e980",
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "backend/app/search/image_search.py": "386386328f06026e4c41969d5254d3bd6334bcb3984879ba53b65eef8f950ed6",
+    "backend/app/search/image_index_manifest.py": "7a9b449e9a2cb684679b72d578d1823a2c6fec673a03f7dd3a81997383436d8d",
+    "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+    "backend/app/search/qdrant_store.py": "10aa20d0ee22559a5269cc8edfa3badebdfbcdb81ed2e3abfff0cd4e4a69b254",
+    "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+    "backend/app/search/smoke.py": "eb6f39b2f54f02064dd9695b13e0b161b9de3b6ba926e9997f9264e960c4762d",
+    "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+    "backend/app/schemas/text_search.py": "27ff38934bdc1285a0a83ad26cb4a4bddd45f6c4d665ca067e761b643bab920e",
+    "scripts/verify_issue76_image_retrieval.py": "7e8a2f99a1e7068dcd29d2c47a45a3171b1c917e893ef24ce0da21b79b160424",
+    "scripts/verify_issue89_image_preflight.py": "22d9e97a40e9979a7feb4b89deda47b4f3071abbdeadf0fea3120c857f62e20b"
+  },
+  "package_versions": {
+    "torch": "2.8.0",
+    "transformers": "4.57.1",
+    "Pillow": "13.0.0",
+    "qdrant-client": "1.15.1"
+  },
+  "retrieval_config": {
+    "schema_version": "image-retrieval-config-v1",
+    "config_version": "image-exact-all-filtered-rgb-v1-k10",
+    "candidate_limit": 10,
+    "strategy": "exact_all_filtered_points",
+    "exact": true,
+    "score_threshold": null,
+    "score_roundoff_tolerance": 1e-06,
+    "ordering": [
+      "score_desc",
+      "asset_id_asc"
+    ],
+    "deduplication": "max_score_per_asset",
+    "image_formats": [
+      "JPEG",
+      "PNG"
+    ],
+    "max_image_bytes": 5242880,
+    "max_image_dimension": 4096,
+    "image_color_mode": "RGB",
+    "frame_policy": "first",
+    "exif_orientation": "stored_pixels"
+  }
+}
