@@ -44,18 +44,31 @@ export interface Pagination {
   has_next: boolean
 }
 
-export interface SearchResponse {
+interface SearchResponseBase {
   pagination: Pagination
   query_id: string
   search_event_id: string
   query: string
   results: SearchResult[]
-  versions: {
-    model_version: string
-    index_version: string
-    config_version: string
-  }
 }
+
+interface SearchVersions {
+  model_version: string
+  index_version: string
+  config_version: string
+}
+
+export interface MockSearchResponse extends SearchResponseBase {
+  mock: true
+  versions: SearchVersions
+}
+
+export interface LiveSearchResponse extends SearchResponseBase {
+  mock: false
+  versions: SearchVersions & { dataset_snapshot: string }
+}
+
+export type SearchResponse = MockSearchResponse | LiveSearchResponse
 
 export interface AssetListQuery {
   filters: AssetFilters

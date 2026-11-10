@@ -1,0 +1,250 @@
+{
+  "status": "passed",
+  "checks": [
+    "live_http_pagination_unique_ids_detail",
+    "live_and_filters_inclusive_face_bounds",
+    "live_empty_and_out_of_range_events",
+    "http_400_validation",
+    "committed_events_match_actual_execution_versions",
+    "persisted_qdrant_fingerprint_unchanged"
+  ],
+  "asset_count": 354,
+  "point_count": 354,
+  "event_count": 5,
+  "manifest_sha256": "93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614",
+  "versions": {
+    "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "index_version": "issue65-home-interior-354-v1-clip-v1",
+    "config_version": "clip-text-exact-all-filtered-v1-k200",
+    "dataset_snapshot": "home-interior-354-v1-sha256:93f65237ca51060aad75f0f672b2b16f76c89a64dce64d7473791f428e944614"
+  },
+  "collection": "issue65_text_search",
+  "vector_name": "clip_23e2f7fbe4e3f716",
+  "fingerprint_before_after": "7b001b1b14fab93a7ba2a84276e3ca967f2bd8d66ca3404abcf862d06faa7fe5",
+  "query": "wooden chair",
+  "sample_ids": [
+    "objaverse_0102b2c1449f448687d62ea66ae2a26a",
+    "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+    "objaverse_a562af9c76a346faaad36773554c4c28"
+  ],
+  "storage_mode": "qdrant_persistent_local",
+  "platform": "Linux-7.2.11-300.fc45.x86_64-x86_64-with-glibc2.44",
+  "python": "3.13.18",
+  "integration": {
+    "comparisons": [
+      {
+        "payload": {
+          "query": "wooden chair",
+          "page": 1,
+          "limit": 6
+        },
+        "status": 200,
+        "total": 200,
+        "ids": [
+          "objaverse_0102b2c1449f448687d62ea66ae2a26a",
+          "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+          "objaverse_a562af9c76a346faaad36773554c4c28",
+          "objaverse_ab65da1fdec04cfcb583391ae883f6b0",
+          "objaverse_3fc7e4dcddae42ca9d8f905ff4622fa7",
+          "objaverse_f73b3dbebc434dcbb28678fad0c6bf49"
+        ],
+        "scores": [
+          0.3555053332012278,
+          0.3353033692388985,
+          0.33143415370338414,
+          0.32683905753710035,
+          0.3189405204473207,
+          0.3175391770690269
+        ],
+        "search_event_id": "5d2e27ed-3585-46b1-8c3b-b7a7e46aef61"
+      },
+      {
+        "payload": {
+          "query": "wooden chair",
+          "page": 2,
+          "limit": 6
+        },
+        "status": 200,
+        "total": 200,
+        "ids": [
+          "objaverse_95c5111de4c74a8d8bc017306217321b",
+          "objaverse_39e367ac19a644a3aed0ca61ff7d7b19",
+          "objaverse_30c2ca3287634e5d8aaba478f2bffb3c",
+          "objaverse_ac166ce0807345a385b051b06f7960f1",
+          "objaverse_81605d8deacc425e9c8ea7adabeb2a0c",
+          "objaverse_20c4072e6cfa411c991db8d69e7da9de"
+        ],
+        "scores": [
+          0.3154476634809338,
+          0.31145720221432605,
+          0.3058284620120499,
+          0.30549459534475804,
+          0.30530521536887417,
+          0.30412421096379205
+        ],
+        "search_event_id": "e05552cd-c738-42fc-a8fb-d67e7eb23a3d"
+      },
+      {
+        "payload": {
+          "query": "wooden chair",
+          "page": 34,
+          "limit": 6
+        },
+        "status": 200,
+        "total": 200,
+        "ids": [
+          "objaverse_3a63a5572e314bb88f74f90b9dce1b69",
+          "objaverse_bf831c33e298401c9abc062c601baa2e"
+        ],
+        "scores": [
+          0.2315305381601094,
+          0.23055617925128957
+        ],
+        "search_event_id": "e51c85df-8e20-4a83-8e51-979df1e01eac"
+      },
+      {
+        "payload": {
+          "query": "wooden chair",
+          "page": 35,
+          "limit": 6
+        },
+        "status": 200,
+        "total": 200,
+        "ids": [],
+        "scores": [],
+        "search_event_id": "203e626a-272f-4eaf-8ba8-0aba31258282"
+      },
+      {
+        "payload": {
+          "query": "chair",
+          "filters": {
+            "category": "furniture-home",
+            "license": "by",
+            "format": "glb",
+            "face_count_min": 540642,
+            "face_count_max": 540642
+          }
+        },
+        "status": 200,
+        "total": 1,
+        "ids": [
+          "objaverse_a866914edde64b87acd8f5ea115a433f"
+        ],
+        "scores": [
+          0.2283427653025309
+        ],
+        "search_event_id": "1b17731c-fc0a-41b0-908b-01a2d145600a"
+      },
+      {
+        "payload": {
+          "query": "chair",
+          "filters": {
+            "category": "__issue66_no_category__"
+          }
+        },
+        "status": 200,
+        "total": 0,
+        "ids": [],
+        "scores": [],
+        "search_event_id": "6c67fe34-dfec-4b7a-a1c9-498ea1225344"
+      }
+    ],
+    "errors_and_recovery": [
+      {
+        "mode": "missing_index",
+        "status": 503,
+        "error": {
+          "error": {
+            "code": "SEARCH_UNAVAILABLE",
+            "message": "Dịch vụ tìm kiếm chưa sẵn sàng. Vui lòng thử lại sau.",
+            "details": []
+          }
+        },
+        "recovery_status": 200
+      },
+      {
+        "mode": "incompatible_index",
+        "status": 503,
+        "error": {
+          "error": {
+            "code": "SEARCH_UNAVAILABLE",
+            "message": "Dịch vụ tìm kiếm chưa sẵn sàng. Vui lòng thử lại sau.",
+            "details": []
+          }
+        },
+        "recovery_status": 200
+      },
+      {
+        "mode": "db_read_failure",
+        "status": 500,
+        "error": {
+          "error": {
+            "code": "INTERNAL_ERROR",
+            "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+            "details": []
+          }
+        },
+        "recovery_status": 200
+      },
+      {
+        "mode": "db_write_failure",
+        "status": 500,
+        "error": {
+          "error": {
+            "code": "INTERNAL_ERROR",
+            "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+            "details": []
+          }
+        },
+        "recovery_status": 200
+      }
+    ],
+    "invalid_requests_create_no_event": true,
+    "final_event_count": 29,
+    "ui": {
+      "status": "passed",
+      "stats": {
+        "startTime": "2026-11-07T13:21:11.401Z",
+        "duration": 11525.18,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "frontend_revision": "716dc45",
+      "successful_http_requests": 14,
+      "frontend_dir_mode": "checkout",
+      "browsers": "Chrome desktop 1280x900 + mobile viewport 390x844",
+      "real_http_no_response_mocking": true,
+      "successful_http_events_verified_in_postgresql": true
+    },
+    "frontend_handoff": {
+      "api_origin": "http://127.0.0.1:53295",
+      "cors_origins": [
+        "http://127.0.0.1:53913"
+      ],
+      "filters": {
+        "category": "furniture-home",
+        "license": "by",
+        "format": "glb",
+        "face_count_min": 540642,
+        "face_count_max": 540642
+      }
+    },
+    "human_confirmation": {
+      "Duy": "pending",
+      "Khue": "pending"
+    }
+  },
+  "limits": "Local CPU CLIP + persistent local Qdrant, disposable PostgreSQL schema; not remote Qdrant, benchmark, CI or human approval.",
+  "frontend_source_manifest_sha256": "d950027ee13b851fb6779c658deb3368039471c885cfa2bd15b8e7b0219f30c9",
+  "observed_at_utc": "2026-11-07T13:21:23.257647+00:00",
+  "base_commit": "716dc4552500af282b082e2ce6a3c68770501b64",
+  "verification_source_sha256": {
+    "scripts/verify_text_search_integration.py": "32a05fefba7f3642363ce944eb3ad0f99bf92946a8df84485af642f5e42860c3",
+    "scripts/verify_text_search_api.py": "34f9a5d515e5d87fb98ba90bf959d48a3023631af27c485f4ed7ff514c2c85e4",
+    "frontend/playwright.semantic.config.ts": "0a501381baf0625089b79d5a7dbb0524c6008aa05c8df6c7398e5fb47680f30d",
+    "frontend/tests/semantic/text-search.spec.ts": "83df72f5dd5d6e2eddbc97187de2d4883ef9e036434f0072cbabba26ea7f2e6e",
+    "frontend/tests/semantic/types.ts": "2317f0ca92eb91eec5f196a71642d0cf3548cd8838e00dcd69f9953ba7a5d2ed"
+  }
+}
