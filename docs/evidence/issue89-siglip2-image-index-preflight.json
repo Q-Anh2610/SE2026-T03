@@ -1,0 +1,443 @@
+{
+  "schema_version": "issue89-model-preflight-v1",
+  "preflight_ready": true,
+  "benchmark": false,
+  "model": "siglip2",
+  "filters": {},
+  "input": {
+    "schema_version": "issue89-image-input-v1",
+    "snapshot": "home-interior-clear-200-v3",
+    "asset_count": 200,
+    "filters": {},
+    "source_manifest": "source.json",
+    "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+    "ready_manifest": "ready.json",
+    "ready_manifest_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+    "candidate_assets_sha256": "260599cbf4ad9ea56777122ffdf03826ccbe6dfc0e6f0f896f00de2ffe6d785e",
+    "preview_provenance_sha256": "ded638d0d80ecd8f506a28204a829c12c1ee40c0098002307b060281668240e6",
+    "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705482003",
+    "filter_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705967217",
+    "query_images_used": false,
+    "benchmark": false
+  },
+  "input_root": "C:\\Users\\lelin\\SE2026-T03\\data\\processed\\issue89\\inputs-1d75f15977be",
+  "index_manifest": "index-manifest.json",
+  "command": [
+    "scripts/verify_issue89_image_preflight.py",
+    "build",
+    "--model",
+    "siglip2",
+    "--input-root",
+    "data/processed/issue89/inputs-1d75f15977be",
+    "--reference-manifest",
+    "data/processed/issue89/clip-preflight-76d5d2c095b6/index-manifest.json"
+  ],
+  "started_at_utc": "2026-11-07T18:02:34.764320+00:00",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel",
+    "python": "3.13.7",
+    "device": "cpu"
+  },
+  "package_versions": {
+    "torch": "2.8.0",
+    "transformers": "4.57.1",
+    "Pillow": "13.0.0",
+    "qdrant-client": "1.15.1"
+  },
+  "queries": [
+    {
+      "query_asset_id": "objaverse_0060af6f4da24224a4770eea54685ecf",
+      "query_sha256": "703ab241bbc1800eb70ee9a08898954be0090655383e3a9263b3da840ca37358",
+      "query_source": "indexed_preview_preflight_only",
+      "filters": {},
+      "elapsed_seconds": 0.3557125999359414,
+      "repeat_consistent": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 1.1102230246251565e-16,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_0060af6f4da24224a4770eea54685ecf",
+          "score": 0.9999999999998112
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_e69fe2111ffb4969b9eaafe9702301ee",
+          "score": 0.8601857927633265
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_447a958614524af09826c60303e445b3",
+          "score": 0.850446117783088
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_14aa14d64588435d97b85efbcbef81b7",
+          "score": 0.8481434938629017
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_d4ecb9dce4724ec98f5237e395591d41",
+          "score": 0.8455701883578309
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_c715fad78e6c4fc79b3b54d40ab50d07",
+          "score": 0.8433674971207352
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_a028928b36a449248464bbe50f4dc62b",
+          "score": 0.840528019439367
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_e80439dbb3b543c78ddb17d63368a283",
+          "score": 0.8382138408231329
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_440267a0eb80401bb6b575f083ed0906",
+          "score": 0.8317068942533847
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_60f0343cea6a479b8029b69525525ac3",
+          "score": 0.8263739731713486
+        }
+      ],
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_0060af6f4da24224a4770eea54685ecf",
+          "score": 0.9999999999998112
+        },
+        {
+          "asset_id": "objaverse_e69fe2111ffb4969b9eaafe9702301ee",
+          "score": 0.8601857927633266
+        },
+        {
+          "asset_id": "objaverse_447a958614524af09826c60303e445b3",
+          "score": 0.850446117783088
+        },
+        {
+          "asset_id": "objaverse_14aa14d64588435d97b85efbcbef81b7",
+          "score": 0.8481434938629017
+        },
+        {
+          "asset_id": "objaverse_d4ecb9dce4724ec98f5237e395591d41",
+          "score": 0.8455701883578309
+        },
+        {
+          "asset_id": "objaverse_c715fad78e6c4fc79b3b54d40ab50d07",
+          "score": 0.8433674971207352
+        },
+        {
+          "asset_id": "objaverse_a028928b36a449248464bbe50f4dc62b",
+          "score": 0.840528019439367
+        },
+        {
+          "asset_id": "objaverse_e80439dbb3b543c78ddb17d63368a283",
+          "score": 0.8382138408231329
+        },
+        {
+          "asset_id": "objaverse_440267a0eb80401bb6b575f083ed0906",
+          "score": 0.8317068942533847
+        },
+        {
+          "asset_id": "objaverse_60f0343cea6a479b8029b69525525ac3",
+          "score": 0.8263739731713486
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue89-siglip2-preflight-8a07361d2081",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+      }
+    },
+    {
+      "query_asset_id": "objaverse_009de5b694dd4aac9c5a760d544046d1",
+      "query_sha256": "d3405285142c817e2292a0c050ef73a8dd51d3468f894f840f460c96c8b2a31f",
+      "query_source": "indexed_preview_preflight_only",
+      "filters": {},
+      "elapsed_seconds": 0.30071540002245456,
+      "repeat_consistent": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 2.220446049250313e-16,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_009de5b694dd4aac9c5a760d544046d1",
+          "score": 0.9999999999997863
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_01810aab099a49569c550c646b3427cc",
+          "score": 0.9381234211326703
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_529451fd0d9d460b889be26bad712fbb",
+          "score": 0.8961187470473111
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_28f11ab171bf44fa97e8b9bfa2ab76ed",
+          "score": 0.8931700943220431
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_53acd9ae99e34bf69aea420121bc5b24",
+          "score": 0.8629042566029664
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_2ef0c41e12504884b9dd681c9be9ded9",
+          "score": 0.8528280212097304
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_421fbe7bfb0944e99f4954cfd7c10bbf",
+          "score": 0.8174273551423308
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_2bd3fcc82c9f43cfb0c8cf26c7d0107c",
+          "score": 0.8102654680650223
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_15e3a5749ca74b3f8e8e2a7ca9bbcd06",
+          "score": 0.7937780638868954
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_7b7b09d3e15348f4bc32db9afdccb41c",
+          "score": 0.7897487148047475
+        }
+      ],
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_009de5b694dd4aac9c5a760d544046d1",
+          "score": 0.9999999999997863
+        },
+        {
+          "asset_id": "objaverse_01810aab099a49569c550c646b3427cc",
+          "score": 0.9381234211326703
+        },
+        {
+          "asset_id": "objaverse_529451fd0d9d460b889be26bad712fbb",
+          "score": 0.8961187470473111
+        },
+        {
+          "asset_id": "objaverse_28f11ab171bf44fa97e8b9bfa2ab76ed",
+          "score": 0.8931700943220433
+        },
+        {
+          "asset_id": "objaverse_53acd9ae99e34bf69aea420121bc5b24",
+          "score": 0.8629042566029664
+        },
+        {
+          "asset_id": "objaverse_2ef0c41e12504884b9dd681c9be9ded9",
+          "score": 0.8528280212097304
+        },
+        {
+          "asset_id": "objaverse_421fbe7bfb0944e99f4954cfd7c10bbf",
+          "score": 0.8174273551423308
+        },
+        {
+          "asset_id": "objaverse_2bd3fcc82c9f43cfb0c8cf26c7d0107c",
+          "score": 0.8102654680650223
+        },
+        {
+          "asset_id": "objaverse_15e3a5749ca74b3f8e8e2a7ca9bbcd06",
+          "score": 0.7937780638868954
+        },
+        {
+          "asset_id": "objaverse_7b7b09d3e15348f4bc32db9afdccb41c",
+          "score": 0.7897487148047475
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue89-siglip2-preflight-8a07361d2081",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+      }
+    },
+    {
+      "query_asset_id": "objaverse_ff84d34455c8446aa6902bb6ae80bf85",
+      "query_sha256": "38edfd4744fe639d295674ee7c8ab86651c0154fb095cc057b340ef0ffc22fd8",
+      "query_source": "indexed_preview_preflight_only",
+      "filters": {},
+      "elapsed_seconds": 0.29832260007970035,
+      "repeat_consistent": true,
+      "repeat_score_abs_tolerance": 1e-12,
+      "repeat_max_score_delta": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "asset_id": "objaverse_ff84d34455c8446aa6902bb6ae80bf85",
+          "score": 0.999999999999702
+        },
+        {
+          "rank": 2,
+          "asset_id": "objaverse_a562af9c76a346faaad36773554c4c28",
+          "score": 0.8031325628830313
+        },
+        {
+          "rank": 3,
+          "asset_id": "objaverse_e092f97f52ce4267b67b80097e6218c2",
+          "score": 0.8017944779810818
+        },
+        {
+          "rank": 4,
+          "asset_id": "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+          "score": 0.7926118644401978
+        },
+        {
+          "rank": 5,
+          "asset_id": "objaverse_1891b143ddc44a3aa845bd421a8ae82d",
+          "score": 0.7901158914219208
+        },
+        {
+          "rank": 6,
+          "asset_id": "objaverse_0628b3ca2be14ddcbccb237bc969e67e",
+          "score": 0.7804777099550033
+        },
+        {
+          "rank": 7,
+          "asset_id": "objaverse_dc869cc4cb9e4ad0a49137f49d2ce3dd",
+          "score": 0.7793172473764559
+        },
+        {
+          "rank": 8,
+          "asset_id": "objaverse_0a5c822aa06b4b4e819eca2a5053eaac",
+          "score": 0.7776117436107837
+        },
+        {
+          "rank": 9,
+          "asset_id": "objaverse_e80439dbb3b543c78ddb17d63368a283",
+          "score": 0.7734498970358323
+        },
+        {
+          "rank": 10,
+          "asset_id": "objaverse_4e966fc0c95a4a698a5f10913104df43",
+          "score": 0.7711675334944457
+        }
+      ],
+      "repeat_hits": [
+        {
+          "asset_id": "objaverse_ff84d34455c8446aa6902bb6ae80bf85",
+          "score": 0.999999999999702
+        },
+        {
+          "asset_id": "objaverse_a562af9c76a346faaad36773554c4c28",
+          "score": 0.8031325628830313
+        },
+        {
+          "asset_id": "objaverse_e092f97f52ce4267b67b80097e6218c2",
+          "score": 0.8017944779810818
+        },
+        {
+          "asset_id": "objaverse_a0fa677edd6a417f869d7dcf224484c4",
+          "score": 0.7926118644401978
+        },
+        {
+          "asset_id": "objaverse_1891b143ddc44a3aa845bd421a8ae82d",
+          "score": 0.7901158914219208
+        },
+        {
+          "asset_id": "objaverse_0628b3ca2be14ddcbccb237bc969e67e",
+          "score": 0.7804777099550033
+        },
+        {
+          "asset_id": "objaverse_dc869cc4cb9e4ad0a49137f49d2ce3dd",
+          "score": 0.7793172473764559
+        },
+        {
+          "asset_id": "objaverse_0a5c822aa06b4b4e819eca2a5053eaac",
+          "score": 0.7776117436107837
+        },
+        {
+          "asset_id": "objaverse_e80439dbb3b543c78ddb17d63368a283",
+          "score": 0.7734498970358323
+        },
+        {
+          "asset_id": "objaverse_4e966fc0c95a4a698a5f10913104df43",
+          "score": 0.7711675334944457
+        }
+      ],
+      "versions": {
+        "model_version": "google/siglip2-base-patch16-224@75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
+        "index_version": "issue89-siglip2-preflight-8a07361d2081",
+        "config_version": "image-exact-all-filtered-rgb-v1-k10",
+        "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+      }
+    }
+  ],
+  "module_sha256": {
+    "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+    "backend/app/embedding/siglip2_encoder.py": "513bd37bcf93ee95e2bd4c49c623a814997eb5d56d534a6b7469df37b90ddc4e",
+    "backend/app/embedding/image_encoding.py": "0eb39082e326688b7ae33bc28c07445260aa5752f17d7280b30ae9f69e83e980",
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "backend/app/search/image_search.py": "386386328f06026e4c41969d5254d3bd6334bcb3984879ba53b65eef8f950ed6",
+    "backend/app/search/image_index_manifest.py": "7a9b449e9a2cb684679b72d578d1823a2c6fec673a03f7dd3a81997383436d8d",
+    "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+    "backend/app/search/qdrant_store.py": "10aa20d0ee22559a5269cc8edfa3badebdfbcdb81ed2e3abfff0cd4e4a69b254",
+    "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+    "backend/app/search/smoke.py": "eb6f39b2f54f02064dd9695b13e0b161b9de3b6ba926e9997f9264e960c4762d",
+    "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+    "backend/app/schemas/text_search.py": "27ff38934bdc1285a0a83ad26cb4a4bddd45f6c4d665ca067e761b643bab920e",
+    "scripts/verify_issue76_image_retrieval.py": "7e8a2f99a1e7068dcd29d2c47a45a3171b1c917e893ef24ce0da21b79b160424",
+    "scripts/verify_issue89_image_preflight.py": "22d9e97a40e9979a7feb4b89deda47b4f3071abbdeadf0fea3120c857f62e20b"
+  },
+  "code_commit": "05895389ae62133ac6144ebcbdc4b59702eca82e",
+  "working_tree_dirty": true,
+  "model_load_seconds": 5.484597200062126,
+  "build": {
+    "input": {
+      "source_manifest": "source.json",
+      "manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "ready_manifest": "ready.json",
+      "ready_manifest_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+      "asset_count": 200,
+      "distinct_readable_previews": 200
+    },
+    "embedding_seconds": 59.17508339998312,
+    "summary": {
+      "embedded": 200,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "audit_before": {
+    "exact_point_count": 200,
+    "scrolled_point_count": 200,
+    "unique_asset_ids": 200,
+    "unique_point_ids": 200,
+    "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+    "point_payload_vector_sha256": "6a7d1a5e3092f5f862fff07193e58e49f48e98ba67389225c1e69ac49a2bdd2c"
+  },
+  "audit_after": {
+    "exact_point_count": 200,
+    "scrolled_point_count": 200,
+    "unique_asset_ids": 200,
+    "unique_point_ids": 200,
+    "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+    "point_payload_vector_sha256": "37182caa4bd388a0caec1aaf744178aa4653d6ef2cb01a23df0415d7e92d0007"
+  },
+  "audit_reopened": {
+    "exact_point_count": 200,
+    "scrolled_point_count": 200,
+    "unique_asset_ids": 200,
+    "unique_point_ids": 200,
+    "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+    "point_payload_vector_sha256": "6a7d1a5e3092f5f862fff07193e58e49f48e98ba67389225c1e69ac49a2bdd2c"
+  },
+  "persisted_fingerprint_unchanged": true,
+  "in_memory_fingerprint_unchanged": false,
+  "total_seconds": 69.24257800006308,
+  "finished_at_utc": "2026-11-07T18:03:44.174903+00:00"
+}
