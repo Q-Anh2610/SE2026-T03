@@ -17,6 +17,7 @@ from app.api.mock import list_router as mock_list_router
 from app.api.mock import text_router as mock_text_router
 from app.api.mock import image_router as mock_image_router
 from app.api.image_search import router as image_search_router
+from app.api.feedback import router as feedback_router
 from app.api.assets import router as assets_router
 from app.api.text_search import router as text_search_router
 from app.services.mock_api import MockStore
@@ -58,8 +59,9 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
 
     application = FastAPI(
         title=settings.name, debug=settings.debug,
-        description=("Danh sách/chi tiết asset đọc PostgreSQL. Search được chọn theo cấu hình text/image; chế độ service dùng CLIP/Qdrant và lưu event PostgreSQL. Dependency chưa sẵn sàng trả 503. Feedback mock ngoài production."
-                     if settings.text_search_source == "service" or settings.image_search_source == "service" else
+        description=("Danh sách/chi tiết asset đọc PostgreSQL. Search được chọn theo cấu hình text/image; chế độ service dùng CLIP/Qdrant và lưu event PostgreSQL. Dependency chưa sẵn sàng trả 503. Feedback chọn PostgreSQL hoặc mock theo cấu hình."
+                     if settings.text_search_source == "service" or settings.image_search_source == "service"
+                     or settings.feedback_source == "database" else
                      "Danh sách và chi tiết asset đọc PostgreSQL. Search/feedback hiện là mock phục vụ phát triển; chưa semantic search."),
         lifespan=lifespan,
     )
@@ -74,6 +76,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
     list_router = mock_list_router if (
         mocks_enabled and settings.asset_list_source == "fixture"
         and settings.text_search_source != "service" and settings.image_search_source != "service"
+        and settings.feedback_source != "database"
     ) else assets_router
     application.include_router(list_router)
     selected_text_router = text_search_router if settings.text_search_source == "service" else (
@@ -86,9 +89,13 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
     )
     if selected_image_router is not None:
         application.include_router(selected_image_router)
+    selected_feedback_router = feedback_router if settings.feedback_source == "database" else (
+        mock_router if mocks_enabled else None
+    )
+    if selected_feedback_router is not None:
+        application.include_router(selected_feedback_router)
     if mocks_enabled:
         application.state.mock_store = MockStore()
-        application.include_router(mock_router)
     if settings.cors_origins:
         application.add_middleware(
             CORSMiddleware, allow_origins=settings.cors_origins,
@@ -111,7 +118,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
             # explicit nulls in examples: frontend requires nullable keys present.
             for route in [*list_router.routes, *(selected_text_router.routes if selected_text_router else []),
                           *(selected_image_router.routes if selected_image_router else []),
-                          *(mock_router.routes if mocks_enabled else [])]:
+                          *(selected_feedback_router.routes if selected_feedback_router else [])]:
                 if not isinstance(route, APIRoute):
                     continue
                 for method in route.methods:

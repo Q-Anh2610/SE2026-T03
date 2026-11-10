@@ -6,6 +6,8 @@ import logging
 import os
 from unittest.mock import Mock
 
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 from fastapi.testclient import TestClient
 from PIL import Image
 import pytest
@@ -18,7 +20,7 @@ from app.ingestion.db_writer import DatabaseWriter
 from app.ingestion.pipeline import run_batch
 from app.main import create_app
 from app.models import Asset
-from scripts.asset_api_test_support import isolated_asset_database
+from scripts.asset_api_test_support import ROOT, isolated_asset_database
 
 pytestmark = pytest.mark.integration
 
@@ -58,7 +60,9 @@ def test_empty_schema_migration_seed_and_api_stack(stack_database):
             assert detail.json() == {"asset": asset, "mock": False}
         assert database.engine.pool.checkedout() == 0
     with database.engine.connect() as connection:
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0001"
+        configuration = Config(str(ROOT / "backend/alembic.ini"))
+        expected_revision = ScriptDirectory.from_config(configuration).get_current_head()
+        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == expected_revision
     database.migrate()  # Schema check vẫn đạt sau seed và request API.
 
 

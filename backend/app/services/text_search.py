@@ -87,5 +87,6 @@ def execute_search(
     )
     response.model_dump_json()  # Serialization cũng phải hợp lệ trước khi ghi event.
     persist = persist_image_search_event if image_search else persist_text_search_event
-    identifier = persist(session, request, candidates.versions)
+    identifier = persist(session, request, candidates.versions,
+        result_asset_ids=[result.asset.asset_id for result in response.results])
     return response.model_copy(update={"query_id": identifier, "search_event_id": identifier})

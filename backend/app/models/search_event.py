@@ -16,6 +16,10 @@ if TYPE_CHECKING:
 class SearchEvent(Base):
     __tablename__ = "search_events"
     __table_args__ = (
+        CheckConstraint(
+            "result_asset_ids IS NULL OR jsonb_typeof(result_asset_ids) = 'array'",
+            name="result_asset_ids_array",
+        ),
         CheckConstraint("query_type IN ('text', 'image')", name="query_type"),
         CheckConstraint(
             "(query_type = 'text' AND query_text IS NOT NULL AND length(trim(query_text)) > 0) OR "
@@ -33,6 +37,7 @@ class SearchEvent(Base):
     index_version: Mapped[str] = mapped_column(Text)
     config_version: Mapped[str] = mapped_column(Text)
     dataset_snapshot: Mapped[str | None] = mapped_column(Text)
+    result_asset_ids: Mapped[list[str] | None] = mapped_column(JSONB(none_as_null=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
 
     feedbacks: Mapped[list["Feedback"]] = relationship(back_populates="search_event", passive_deletes="all")

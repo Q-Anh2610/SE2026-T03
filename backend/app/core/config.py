@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     text_qdrant_local_path: Path | None = None
     text_qdrant_api_key: SecretStr | None = None
     image_search_source: Literal["mock", "service"] = "mock"
+    feedback_source: Literal["mock", "database"] = "mock"
     image_index_manifest: Path | None = None
     image_index_root: Path | None = None
     image_qdrant_url: str = "http://127.0.0.1:6333"

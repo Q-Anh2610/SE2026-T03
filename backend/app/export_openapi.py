@@ -7,12 +7,13 @@ from app.core.config import Settings
 from app.main import create_app
 
 
-def contract_app(*, text_search_source="mock", image_search_source="mock"):
+def contract_app(*, text_search_source="mock", image_search_source="mock", feedback_source="mock"):
     return create_app(Settings(
         _env_file=None, name="3D Asset Semantic Search API", env="development",
         debug=False, mock_api_enabled=True, asset_list_source="database", cors_origins=[],
         text_search_source=text_search_source,
         image_search_source=image_search_source,
+        feedback_source=feedback_source,
     ))
 
 
@@ -25,6 +26,11 @@ def main() -> None:
             encoding="utf-8",
         )
         print("Exported docs/" + filename)
+    (root / "openapi-feedback.json").write_text(
+        json.dumps(contract_app(text_search_source="service", image_search_source="service",
+            feedback_source="database").openapi(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8",
+    )
+    print("Exported docs/openapi-feedback.json")
 
 
 if __name__ == "__main__":
