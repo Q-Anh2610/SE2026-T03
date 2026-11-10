@@ -1,10 +1,28 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { AssetCard } from './AssetCard'
 import { makeResponse } from '../../test/fixtures'
 
 describe('asset result card', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('sends feedback with the result asset and search event IDs', async () => {
+    const eventId = 'event-from-search-response'
+    const result = makeResponse().results[0]!
+    const fetchMock = vi.fn((url: string, init?: RequestInit) => {
+      void init
+      return String(url).endsWith('/openapi.json')
+        ? new Response(JSON.stringify({ paths: { '/api/v1/feedback': { post: { responses: { 201: { content: { 'application/json': { schema: { $ref: '#/components/schemas/FeedbackResponse' } } } } } } } } }))
+        : new Response(JSON.stringify({ feedback_id: 'feedback-1', search_event_id: eventId, asset_id: result.asset.asset_id, relevance: true, created_at: '2026-11-10T00:00:00Z', mock: true, storage: 'memory' }), { status: 201 })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    render(<ul><AssetCard result={result} feedback={{ eventId, mock: true }} /></ul>)
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Phù hợp' }))
+    expect(await screen.findByText('Đã gửi đánh giá minh họa (lưu tạm).')).toBeVisible()
+    expect(JSON.parse(String(fetchMock.mock.calls[1]![1]!.body))).toEqual({ search_event_id: eventId, asset_id: result.asset.asset_id, relevance: true })
+  })
+
   it('renders rank, metadata and explicit placeholders without fabricating missing data', () => {
     render(<ul><AssetCard result={makeResponse().results[0]!} /></ul>)
     expect(screen.getByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()

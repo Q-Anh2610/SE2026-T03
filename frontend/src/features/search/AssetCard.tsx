@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import type { AssetMetadata, SearchResult } from './types'
 import './AssetCard.css'
+import { Feedback } from './Feedback'
 
 export interface AssetCardProps {
+  feedback?: { eventId: string; mock: boolean }
   result?: SearchResult
   asset?: AssetMetadata
   onOpenDetail?: (assetId: string) => void
 }
 
-export function AssetCard({ result, asset: item, onOpenDetail }: AssetCardProps) {
+export function AssetCard({ result, asset: item, onOpenDetail, feedback }: AssetCardProps) {
   const asset = (result ? result.asset : item)!
   const [imageFailed, setImageFailed] = useState(false)
   return (
@@ -55,6 +57,7 @@ export function AssetCard({ result, asset: item, onOpenDetail }: AssetCardProps)
               </>
             )}
           </details>
+          {result && feedback && <Feedback key={`${feedback.eventId}-${asset.asset_id}`} {...feedback} assetId={asset.asset_id} />}
         </div>
       </div>
     </li>

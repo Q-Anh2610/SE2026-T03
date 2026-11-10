@@ -284,6 +284,7 @@ export function SearchPage() {
                   <AssetCard
                     key={`${state.response.search_event_id}-${result.asset.asset_id}`}
                     result={result}
+                    feedback={{ eventId: state.response.search_event_id, mock: state.response.mock }}
                     onOpenDetail={(assetId) => { void openDetail(assetId) }}
                   />
                 ))}
