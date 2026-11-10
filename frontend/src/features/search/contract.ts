@@ -150,7 +150,8 @@ function isValidPagination(pagination: unknown, page: number, limit: number, ite
 
 export function parseResponse(value: unknown, request: SearchRequest): SearchResponse {
   const invalid = () => new Error('Dữ liệu trả về không đúng contract nháp. Hãy thử lại hoặc kiểm tra API.')
-  if (!isRecord(value) || typeof value.query_id !== 'string' || !value.query_id
+  if (!isRecord(value) || typeof value.mock !== 'boolean'
+    || typeof value.query_id !== 'string' || !value.query_id
     || typeof value.search_event_id !== 'string' || !value.search_event_id
     || value.query !== request.query || !isRecord(value.versions)
     || !['model_version', 'index_version', 'config_version'].every(
@@ -159,6 +160,16 @@ export function parseResponse(value: unknown, request: SearchRequest): SearchRes
     ) || !Array.isArray(value.results) || value.results.length > request.limit
     || !isValidPagination(value.pagination, request.page ?? 1, request.limit, value.results.length)) {
     throw invalid()
+  }
+  if (value.mock === false) {
+    if (value.query_id !== value.search_event_id || value.pagination.total > 200
+      || !['model_version', 'index_version', 'config_version', 'dataset_snapshot'].every((key) => {
+        const version = (value.versions as Record<string, unknown>)[key]
+        return typeof version === 'string' && version.trim().length > 0
+          && !version.trim().toLowerCase().startsWith('mock-')
+      })) {
+      throw invalid()
+    }
   }
   const identifiers = new Set<string>()
   for (const [position, result] of value.results.entries()) {

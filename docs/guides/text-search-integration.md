@@ -124,3 +124,29 @@ Ngày 05/11/2026, trên Windows 11 / Python 3.13.7:
 
 Chờ Duy/Khuê xác nhận tiếp nhận/kết quả trên Issue/PR. Giữ tiêu chí xác nhận
 con người chưa tick; không tự ghi nhận approval hoặc đóng #66 thay reviewer.
+
+## Kiểm chứng HEAD PR #68 — 07/11/2026
+
+Đã chạy lại trên `716dc4552500af282b082e2ce6a3c68770501b64` sau cập nhật
+`develop`. [Report](../evidence/pr68-head-716dc45-text-smoke.json) ghi PASS:
+
+- 8/8 ca UI desktop/mobile, 0 skip/flaky; 14 HTTP request UI thành công
+  được đối chiếu search event đã commit trong PostgreSQL.
+- 354 preview tải thành công, CLIP CPU đúng revision, Qdrant persistent local
+  có 354 point; fingerprint không đổi sau kiểm chứng.
+- Query, phân trang, filters AND, detail/back, empty, lỗi 503/500 và retry đạt.
+  Các lỗi DB/index được tạo có kiểm soát trong schema test riêng.
+- Linux, Python 3.13.18, dependencies theo requirements-dev.txt; PostgreSQL 17
+  trong container test riêng. Schema test được dọn, server và container đã dừng.
+
+Index riêng còn tại `data/processed/issue65/index-5ce3860d0b39/` (Git ignore).
+Sau khi khởi động lại PostgreSQL test và đặt TEST_DATABASE_URL trong môi trường,
+chạy từ gốc repo:
+
+```bash
+OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 backend/.venv/bin/python scripts/verify_text_search_integration.py --index-manifest data/processed/issue65/index-5ce3860d0b39/index-manifest.json --index-root data/processed/issue65/index-5ce3860d0b39 --qdrant-local-path data/processed/issue65/index-5ce3860d0b39/qdrant --frontend-revision 716dc4552500af282b082e2ce6a3c68770501b64 --output data/processed/issue66/pr68-head-716dc45.json
+```
+
+Đây là smoke text search local thật do agent chạy, chưa thay xác nhận con người
+của Duy/Khuê, GitHub CI hoặc approval. Không nghiệm thu image search W4,
+Qdrant server mode hay chất lượng relevance. Không có thay đổi source sản phẩm.

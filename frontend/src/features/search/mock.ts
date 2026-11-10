@@ -97,6 +97,7 @@ export function createMockSearchResponse(query: string, limit = 12, scenario: Mo
   const matching = scenario === 'empty' ? [] : findMockAssets(request.query).filter((asset) => matchesMockFilters(asset, filters))
   const selected = matching.slice((page - 1) * request.limit, page * request.limit)
   return parseResponse({
+    mock: true,
     query_id: `mock-query-${crypto.randomUUID()}`,
     search_event_id: `mock-event-${crypto.randomUUID()}`,
     query: request.query,
