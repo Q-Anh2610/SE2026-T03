@@ -165,6 +165,19 @@ Tiếp tục theo dõi tích hợp frontend ở PR #68 và smoke riêng của Kh
 trạng thái job với API thật chuyển sang W5 theo
 [Issue #70](https://github.com/Q-Anh2610/SE2026-T03/issues/70).
 
+### Đối chiếu W3 — 10/11/2026
+
+- [PR #68](https://github.com/Q-Anh2610/SE2026-T03/pull/68) đã được approve
+  và merge vào `develop` ngày 10/11/2026 (merge commit `2c1c8a8c037389376edf06059fa7e1c7267f42f6`),
+  thay cho trạng thái Draft trong tổng kết ngày 07/11 ở trên.
+- [Issue #72](https://github.com/Q-Anh2610/SE2026-T03/issues/72) đã đóng;
+  checklist trong Issue ghi nhận smoke UI với API/index thật và bằng chứng liên quan.
+  Không coi kiểm thử mock là bằng chứng smoke thật.
+- Chưa có tag hoặc GitHub release `v0.1.0` khi đối chiếu. Việc phát hành là
+  bước riêng sau review, cần người có quyền thực hiện; không tự đánh dấu release
+  hoàn tất chỉ vì các Issue và PR W3 đã đóng hoặc merge.
+- Kết nối trang trạng thái job với API thật vẫn thuộc W5 theo Issue #70.
+
 ## Tuần 4 / M3 — Kế hoạch TV1
 
 | Issue | Công việc | Phụ thuộc và bàn giao |
@@ -172,3 +185,17 @@ trạng thái job với API thật chuyển sang W5 theo
 | [#79](https://github.com/Q-Anh2610/SE2026-T03/issues/79) | Upload multipart và validation ảnh | Dùng contract hiện có để bắt đầu. Đối chiếu multipart và mã lỗi với Duy, dữ liệu ảnh đã kiểm tra với Chi. |
 | [#80](https://github.com/Q-Anh2610/SE2026-T03/issues/80) | Tích hợp image retrieval thật và lưu search event | Dùng validation từ #79. Nghiệm thu với CLIP và index tương thích do Chi bàn giao ở #76. |
 | [#81](https://github.com/Q-Anh2610/SE2026-T03/issues/81) | Lưu feedback vào PostgreSQL | Bắt đầu với event text search W3. Kiểm chứng thêm event truy vấn ảnh sau #80. |
+
+### Tiến độ local W4 — Nguyễn Văn Duy — 10/11/2026
+
+- Ghép thay đổi frontend image và feedback từ hai worktree vào workspace chính;
+  chia thay đổi W4 thành các commit riêng cho image search, feedback và docs.
+- Image UI: API/UI smoke thật đã có trong worktree image; sau ghép chạy lại
+  coverage, lint/build, 4 image E2E và 36 E2E chung. Chi tiết/giới hạn ở
+  [hướng dẫn W4](guides/frontend-image-w4.md).
+- Feedback #81: PostgreSQL integration 8/8, unit/mock/OpenAPI 49/49; frontend
+  371/371 tests và frontend–FastAPI integration 8/8 đạt; xác nhận OpenAPI
+  persistence mode để tránh gửi event thật sang mock. UI image smoke thật cũng
+  gửi 2 feedback qua frontend và đối chiếu bản ghi PostgreSQL. Checklist
+  acceptance và task của [Issue #81](https://github.com/Q-Anh2610/SE2026-T03/issues/81)
+  đã được đánh dấu theo bằng chứng. Issue vẫn mở; PR/review/CI/merge chưa làm.
