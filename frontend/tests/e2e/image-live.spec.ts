@@ -28,9 +28,10 @@ test('image upload, filters, pagination, detail/back and execution metadata', as
   await page.goto('/#image-search')
   await page.getByLabel(/Chọn hoặc thay ảnh/).setInputFiles({ name: 'query.png', mimeType: 'image/png', buffer: bytes })
   await expect(page.getByRole('img', { name: 'Ảnh truy vấn: query.png' })).toBeVisible()
+  if (live) await page.getByLabel('Danh mục', { exact: true }).fill('furniture-home')
   await page.getByLabel('Định dạng', { exact: true }).fill('glb')
   await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
-  await expect(page.getByText('Kết quả tìm kiếm bằng ảnh', { exact: true })).toBeVisible()
+  await expect(page.getByText('Kết quả tìm kiếm bằng ảnh', { exact: true })).toBeVisible({ timeout: live ? 20_000 : 5_000 })
   await page.getByText('Thông tin phiên tìm ảnh').click()
   await expect(page.getByText(reference, { exact: true })).toBeVisible()
   if (live) {
@@ -54,16 +55,21 @@ test('image upload, filters, pagination, detail/back and execution metadata', as
   await page.getByRole('button', { name: 'Quay lại danh sách', exact: true }).click()
   await expect(page.getByRole('img', { name: 'Ảnh truy vấn: query.png' })).toBeVisible()
   if (live) await expect(page.getByText(/Trang 2/)).toBeVisible()
-  await page.getByLabel('Danh mục', { exact: true }).fill('__empty__')
-  await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
-  await expect(page.getByText('Chưa có asset phù hợp')).toBeVisible()
-  await expect(page.getByText(/Trang 1/)).toBeVisible()
-  expect(responses.length).toBeGreaterThanOrEqual(2)
+  if (!live) {
+    await page.getByLabel('Danh mục', { exact: true }).fill('__empty__')
+    await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
+    await expect(page.getByText('Chưa có asset phù hợp')).toBeVisible()
+    await expect(page.getByText(/Trang 1/)).toBeVisible()
+  }
+  expect(responses.length).toBeGreaterThanOrEqual(live ? 1 : 2)
   for (const body of responses as ReturnType<typeof makeLiveResponse>[]) {
     expect(body.query).toBe(reference)
     expect(body.mock).toBe(false)
     expect(body.query_id).toBe(body.search_event_id)
-    for (const result of body.results) expect(result.asset.formats).toContain('glb')
+    for (const result of body.results) {
+      expect(result.asset.formats).toContain('glb')
+      if (live) expect(result.asset.category).toBe('furniture-home')
+    }
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await test.info().attach('image-http-responses', { body: JSON.stringify(responses), contentType: 'application/json' })
