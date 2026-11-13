@@ -101,7 +101,10 @@ Các tests này kiểm artifact drift, ID coverage, namespace/compatibility, inp
 và index corruption, giữ metadata thiếu, encode thiếu batch, từ chối ghi đè và
 persistence sau reopen. Chúng không thay thế build bằng weights thật hoặc đo
 quality/latency retrieval. Kết quả local/CI và build thật phải ghi riêng sau chạy.
-Hash query canonical và contract fusion vẫn theo dõi ở #91; chưa chạy benchmark.
+[Quỳnh Anh đã xác nhận contract fusion thử nghiệm](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6849816002).
+E5-only/orchestration/DTO còn phải triển khai riêng; shared API/runtime/search
+event cần review trước tích hợp, CLIP vẫn mặc định. Hash query canonical vẫn
+chưa chốt; chưa chạy benchmark.
 
 Kiểm chứng local ngày 13/11/2026, Windows/Python 3.13.7:
 
