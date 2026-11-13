@@ -9,6 +9,7 @@
 - Suite coverage summary: statements 694/697 (99.56%), branches 740/753 (98.27%), functions 173/173 (100%), lines 598/598 (100%). Global figures hide whether risk-specific behavior is checked; see traceability and mutation result.
 - Mutation: temporary `count > limit` → `count >= limit`; test `accepts a title exactly at the 120-character boundary` with 120 emoji code points failed (`expected true; received false`). The implementation was restored to `>` and the tests passed again. The mutant is not present in the final branch.
 - Pairwise harness: 12 selected combinations across permission (granted/denied/default/unsupported), sender (ok/throws), title (under/exact/over 120), and body (under/over 240). Selection covers all pairs of factor values; exact-limit title remains an explicit boundary test.
+- Large-input negative: body with 1,000,000 Unicode code points is reduced to 240 before notification construction; title scanning stops after observing the 121st code point when over the cap.
 - Synthetic burst: 100 Promise.all tasks; observed p95 `0.010 ms`, wall `1.241 ms`; local Vitest run. This is not a server load test and cannot establish system p95 under HTTP/DB/browser load.
 - Flaky review: fixed input; no wall-clock sleeps, random data, network, or shared DB; Notification globals and constructor spy reset after each test. Current tests still use jsdom and mocked `fetch`; actual browser permission UX is not covered.
 

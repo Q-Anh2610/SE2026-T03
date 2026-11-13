@@ -34,7 +34,7 @@ it('rejects a title over the 120-character boundary', () => {
 it('truncates an oversized body to the configured cap', () => {
   vi.stubGlobal('Notification', FakeNotification)
 
-  expect(notifyBusinessEvent('Saved', '😀'.repeat(MAX_NOTIFICATION_BODY_LENGTH + 30))).toBe(true)
+  expect(notifyBusinessEvent('Saved', '😀'.repeat(1_000_000))).toBe(true)
   expect(Array.from(construct.mock.calls[0][1].body)).toHaveLength(MAX_NOTIFICATION_BODY_LENGTH)
 })
 
