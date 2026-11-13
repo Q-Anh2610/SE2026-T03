@@ -1,9 +1,10 @@
 # E5/RRF validation — phần độc lập của #91
 
 Trạng thái: encoder và fusion nội bộ đã có trong [PR #100](https://github.com/Q-Anh2610/SE2026-T03/pull/100)
-đang Draft, chưa merge.
-Đã có smoke encoder E5 bằng weights thật ngày 13/11/2026; chưa có E5
-corpus/index hoặc raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
+đã được Khuê approve và merge vào `develop` tại `ccd7e01` ngày 13/11/2026.
+Đã có smoke encoder E5 bằng weights thật và tiếp nhận corpus ngày 13/11/2026.
+Build/audit index E5 bằng weights thật đã đạt trên 200 passages; xem
+[bằng chứng index](../evidence/issue91-e5-index-build-20261113.json). Chưa có raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
 CLIP mặc định; không đổi shared schema/API/runtime.
 
 ## Encoder
@@ -15,8 +16,8 @@ CLIP mặc định; không đổi shared schema/API/runtime.
   và special tokens; không tự dịch hoặc bỏ dấu. Query trim 1–500 Unicode code
   points, nội dung passage trim và phải không rỗng.
 - `encode_text(query)` thêm `query: `; `encode_passages(texts)` thêm `passage: `.
-  Caller truyền nội dung chưa có prefix. Chưa chọn trường/thứ tự ghép metadata;
-  không encode asset ID hoặc caption bịa thay passage rỗng.
+  Caller truyền nội dung chưa có prefix. Corpus #101 đã được tiếp nhận theo
+  version/hash cụ thể; xem [hướng dẫn index E5](e5-metadata-index-91.md).
 - Average pooling có attention mask, float32 rồi L2; từ chối shape sai,
   vector zero/non-finite. Không nhân score với 100.
 - Preprocessing: `e5-fast-right-truncate512-mask-mean-fp32-l2-v1`.
@@ -113,9 +114,12 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
 
 ## Các xác nhận còn cần
 
-1. Huyền: nguồn metadata gốc trên đúng 200 asset; các trường/thứ tự ghép,
-   tags order/dedup, whitespace/newline/Unicode, null/empty và asset không có
-   nội dung. Chốt recipe version, asset IDs, source/corpus hash trước index.
+1. Corpus của Huyền tại PR #102, commit `a85c8fa`, đã được Chi chạy tái lập
+   và tiếp nhận ngày 13/11/2026. Recipe giữ tên `e5-metadata-passage-v1-draft`;
+   corpus hash `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
+   Xem [build/audit index E5](e5-metadata-index-91.md): weights thật đã đạt
+   trên 200 passages sau bản sửa persistence; 831 unit tests đạt. Phần retrieval/
+   fusion/benchmark và review nhánh mới còn tiếp tục.
 2. Quỳnh Anh: candidate/fusion interface, `score_type` RRF, provenance mỗi
    nguồn, versions, lỗi dependency và phạm vi integration; không nhét score
    RRF vào contract cosine W3. Chưa sửa shared DTO/API.
