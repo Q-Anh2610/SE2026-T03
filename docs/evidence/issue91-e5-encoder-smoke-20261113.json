@@ -1,0 +1,129 @@
+{
+  "schema_version": "issue91-real-e5-encoder-evidence-v1",
+  "recorded_at_utc": "2026-11-13T06:05:56.548163+00:00",
+  "scope": "real pinned E5 encoder diagnostic; not E5 index, relevance or benchmark latency",
+  "code_provenance": {
+    "commit_observed_after_smoke": "b9fdfa5e38bd8e085937aece9b22a1ca2fd77d39",
+    "module_sha256_observed_after_smoke": {
+      "backend/app/embedding/e5_encoder.py": "7154ab893ca4cb0cca9f645a79c5abc82cbc36691e92ff7e5603b47da52e187b",
+      "scripts/smoke_e5_encoder.py": "35a70b54834015e79370cc233ed7fd57e33c5f5c5a583d0998704e440c0424f8"
+    },
+    "matches_known_tested_source": true
+  },
+  "source_report": {
+    "relative_path": "data/processed/issue91/e5-encoder-smoke-20261113.json",
+    "sha256": "b8f6707951197953cf30a35e16552032f8bbd5231c4c0301d9d820f74c0b1901",
+    "portable_change": "command[0] made repository-relative; original report retained locally",
+    "python_flags_in_user_executed_command": [
+      "-B"
+    ]
+  },
+  "cache_verification": {
+    "source_record_sha256": "1333ad5520d6219f37be0401720f5f2bcca1e52b62bf07ec1c5049a90258b837",
+    "complete_cache": true,
+    "verified_file_count": 6,
+    "verified_files": [
+      {
+        "name": "config.json",
+        "bytes": 655,
+        "sha256": "69137736cab8b8903a07fe8afaafdda25aac55415a12a55d1bffa9f581abf959"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "bytes": 443,
+        "sha256": "a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b"
+      },
+      {
+        "name": "special_tokens_map.json",
+        "bytes": 167,
+        "sha256": "d05497f1da52c5e09554c0cd874037a083e1dc1b9cfd48034d1c717f1afc07a7"
+      },
+      {
+        "name": "tokenizer.json",
+        "bytes": 17082730,
+        "sha256": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39"
+      },
+      {
+        "name": "sentencepiece.bpe.model",
+        "bytes": 5069051,
+        "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+      },
+      {
+        "name": "model.safetensors",
+        "bytes": 470641600,
+        "sha256": "1a55775f53449dac10a2bcbc312469fac40b96d53198c407081a831f81c98477"
+      }
+    ],
+    "recovered_by_regular_copy": [
+      "tokenizer_config.json",
+      "special_tokens_map.json"
+    ],
+    "recovery_scope": "Windows symlink failure; copied two existing metadata blobs without redownloading weights"
+  },
+  "smoke": {
+    "schema_version": "issue91-e5-encoder-smoke-v1",
+    "status": "passed",
+    "started_at_utc": "2026-11-13T06:01:58.216306+00:00",
+    "finished_at_utc": "2026-11-13T06:01:59.655596+00:00",
+    "scope": "synthetic encoder diagnostic; not a relevance benchmark or index smoke",
+    "model_id": "intfloat/multilingual-e5-small",
+    "model_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "tokenizer_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "preprocessing_version": "e5-fast-right-truncate512-mask-mean-fp32-l2-v1",
+    "dimension": 384,
+    "max_text_tokens": 512,
+    "local_files_only": true,
+    "device": "cpu",
+    "queries": [
+      "wooden chair",
+      "ghế gỗ"
+    ],
+    "passages": [
+      "A wooden chair with four legs.",
+      "A rectangular dining table."
+    ],
+    "query_prefix": "query: ",
+    "passage_prefix": "passage: ",
+    "normalization": "L2",
+    "pooling": "attention-mask mean in float32",
+    "load_seconds": 1.1721155000268482,
+    "warmup": {
+      "query_calls": 1,
+      "passage_calls": 1
+    },
+    "timed_operations": {
+      "query_calls": 4,
+      "passages": 2,
+      "total_seconds": 0.07284080004319549
+    },
+    "repeat_max_abs_difference": 0.0,
+    "repeat_tolerance": 1e-12,
+    "environment": {
+      "python": "3.13.7",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel",
+      "logical_cpu_count": 8,
+      "packages": {
+        "torch": "2.8.0",
+        "transformers": "4.57.1",
+        "tokenizers": "0.22.2",
+        "safetensors": "0.8.0"
+      }
+    },
+    "command": [
+      "backend/.venv/Scripts/python.exe",
+      "scripts/smoke_e5_encoder.py",
+      "--device",
+      "cpu",
+      "--output",
+      "data/processed/issue91/e5-encoder-smoke-20261113.json"
+    ]
+  },
+  "limits": [
+    "Synthetic examples only; no benchmark queries or qrels read by the smoke script",
+    "No E5 corpus/index or retrieval orchestration checked",
+    "Timed operations are a diagnostic batch; no per-query p50/p95 or relevance conclusion",
+    "Vietnamese example is a technical smoke only, not a Vietnamese quality evaluation"
+  ]
+}
