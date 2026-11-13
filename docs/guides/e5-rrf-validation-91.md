@@ -1,8 +1,10 @@
 # E5/RRF validation — phần độc lập của #91
 
-Trạng thái: triển khai local/unmerged phần encoder và phép fusion theo rank.
-Chưa có E5 corpus/index, weights smoke thật hoặc raw validation results. Chưa
-nghiệm thu #91. Giữ CLIP mặc định; không đổi shared schema/API/runtime.
+Trạng thái: encoder và fusion nội bộ đã có trong [PR #100](https://github.com/Q-Anh2610/SE2026-T03/pull/100)
+đang Draft, chưa merge.
+Đã có smoke encoder E5 bằng weights thật ngày 13/11/2026; chưa có E5
+corpus/index hoặc raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
+CLIP mặc định; không đổi shared schema/API/runtime.
 
 ## Encoder
 
@@ -82,6 +84,32 @@ không đọc queries/qrels. Output mới ghi machine/packages, command, thời 
 load/warmup/operations, prefix/token policy, normalization và repeat tolerance
 1e-12. Đây là diagnostic encoder bằng ví dụ tự tạo; không đo quality tiếng Việt
 hoặc latency protocol của benchmark. File đã có thì chọn tên mới.
+
+## Smoke weights thật — 13/11/2026
+
+Đã chạy CPU bằng cache local đúng model/tokenizer revision đã pin. Sáu file
+cache được xác minh checksum; hai metadata file được phục hồi từ blobs bằng
+copy thường sau lỗi symlink Windows. Không thay thư viện hoặc quyền hệ thống.
+
+```bash
+backend/.venv/Scripts/python.exe -B scripts/smoke_e5_encoder.py --device cpu --output data/processed/issue91/e5-encoder-smoke-20261113.json
+```
+
+[Bằng chứng portable](../evidence/issue91-e5-encoder-smoke-20261113.json)
+ghi môi trường, packages, command, model/tokenizer pin và hashes source/report.
+Raw report gốc giữ ở `data/processed/issue91/` (Git ignore).
+
+- Status `passed`; CPU, dimension 384, token limit 512, prefix query/passage,
+  attention-mask mean float32 và L2. Model được dùng lại cho các lời gọi smoke.
+- Repeat max absolute difference `0.0`, trong tolerance `1e-12`.
+- Model load `1.1721155000268482` s. Nhóm timed operations (4 query calls và
+  2 passages) tổng `0.07284080004319549` s, sau warm-up.
+- Windows 11, Python 3.13.7, 8 logical CPU; torch 2.8.0, transformers 4.57.1,
+  tokenizers 0.22.2, safetensors 0.8.0. Chi tiết CPU có trong JSON.
+
+Đây là encoder diagnostic bằng ví dụ tự tạo, không đọc queries/qrels hoặc
+mở index. Thời gian trên không phải p50/p95 benchmark; chưa có kết quả
+relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
 
 ## Các xác nhận còn cần
 
