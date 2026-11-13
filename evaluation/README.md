@@ -101,3 +101,11 @@ Kết quả benchmark lưu config, seed, thời gian chạy, Python/platform/mac
 versions API trả về và các ID truy xuất theo thứ tự. Kết quả trong `results/`
 nên nhỏ, có provenance; không lưu model, index hoặc bulk data ở đây. Query và
 nhãn chuẩn thuộc `data/benchmark/`, báo cáo diễn giải thuộc `docs/evaluation/`.
+
+## Runner E5/RRF thử nghiệm W5 — #91
+
+`scripts/run_e5_rrf_validation.py` điều phối trực tiếp service CLIP/E5/RRF đã
+merge qua PR #107, tái sử dụng metric W3 có xử lý no-positive query. Config
+mặc định giữ `pending` và từ chối chạy trước khi canonical query artifact/hash
+được xác nhận. Xem [guide runner](../docs/guides/e5-rrf-validation-runner-91.md).
+Runner không thay adapter/metric CLI tổng quát hoặc bật fusion API mặc định.

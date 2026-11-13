@@ -1,0 +1,96 @@
+{
+  "benchmark_run": false,
+  "branch": "feat/91-e5-rrf-validation-runner",
+  "canonical_inputs_confirmed": false,
+  "checked_at_utc": "2026-11-13T16:52:47.142487+00:00",
+  "code_commit": "8d6eb3d35414a110aadfe577430f37b361b536f1",
+  "fixture_assertions_verified": {
+    "candidate_count": 200,
+    "cli_lifecycle": "mock encoder loaders called once each; real temporary Qdrant storage; both persisted fingerprints unchanged after reopen",
+    "configurations_per_run": 3,
+    "failure_bookkeeping": "partial files retained; phase/configuration/query/repetition plus completed sample counts and unfinished queries recorded",
+    "hit_ndcg_denominator": 28,
+    "measured_samples_per_configuration": 280,
+    "metric_implementation": "evaluation.run_keyword_baseline.compute_metrics",
+    "nearest_rank_for_280": {
+      "p50_position": 140,
+      "p95_position": 266
+    },
+    "raw_query_configuration_records": 84,
+    "raw_sample": "first measured repetition",
+    "recall_denominator": 21,
+    "rrf_implementation": "app.search.rrf.reciprocal_rank_fusion via ExperimentalFusionService",
+    "source_providers_and_clock": "fixture; no model-quality or real-model latency claim",
+    "test_queries_not_searched": 42,
+    "total_measured_samples": 840,
+    "validation_queries": 28,
+    "warmup_requests_per_configuration": 5
+  },
+  "limitations": [
+    "Default config remains pending. Do not mark issue91 raw validation or quality/latency criteria complete from these tests.",
+    "No real-model validation run or configuration selection; fixture timings are synthetic.",
+    "CI, reviewer approval and merge for this runner branch have not occurred.",
+    "Shared API/schema/runtime/search events and benchmark source files are unchanged."
+  ],
+  "module_sha256": {
+    "backend/app/search/experimental_text_search.py": "9dbb5ef4d939c974e397c62dddb96729f0b7b6cc77f81be893aba1ed47719bbb",
+    "backend/app/search/rrf.py": "1e25edfc74d365fb289bf423d75513dbe36b59ab20adc9df13c7f84d967ee748",
+    "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+    "backend/tests/unit/test_e5_rrf_validation.py": "d499893507cf0b66f6de1207a591a06e87356f116c091d36a2fe427f2de10803",
+    "evaluation/configs/issue91-e5-rrf-validation.pending.json": "146b8c1d926b10fd88f1a74654cc78650f6e50315b73c8ccc9599df758bfb129",
+    "evaluation/e5_rrf_validation.py": "c6371a9c6c3388d67343d13d67e29c7144e3492c5bfda2b8571fb9a613792427",
+    "evaluation/run_keyword_baseline.py": "961e5f5c8d0dd4be466638b6f82018941b782580536825f46b9be6c4e48e4dca",
+    "scripts/run_e5_rrf_validation.py": "9787938af5a528ffaae266d128c74dd88d6e13cd09ac3ed4c021958a290884e8",
+    "scripts/smoke_e5_rrf_service.py": "09049e7dd5ac1c8c7ec1d09c56ae9b704f88ca3b4e5d88b82c4bc63ed8f9eafe"
+  },
+  "preflight": {
+    "actual_exit_code": 2,
+    "benchmark_run": false,
+    "checked_at_utc": "2026-11-13T16:48:21.982536+00:00",
+    "command": [
+      "backend/.venv/Scripts/python.exe",
+      "-B",
+      "scripts/run_e5_rrf_validation.py",
+      "--preflight-only"
+    ],
+    "expected_exit_code": 2,
+    "help_exit_code": 0,
+    "module_sha256": {
+      "backend/tests/unit/test_e5_rrf_validation.py": "d499893507cf0b66f6de1207a591a06e87356f116c091d36a2fe427f2de10803",
+      "evaluation/configs/issue91-e5-rrf-validation.pending.json": "146b8c1d926b10fd88f1a74654cc78650f6e50315b73c8ccc9599df758bfb129",
+      "evaluation/e5_rrf_validation.py": "c6371a9c6c3388d67343d13d67e29c7144e3492c5bfda2b8571fb9a613792427",
+      "scripts/run_e5_rrf_validation.py": "9787938af5a528ffaae266d128c74dd88d6e13cd09ac3ed4c021958a290884e8"
+    },
+    "result": {
+      "models_loaded": false,
+      "reason": "canonical_query_artifact_not_confirmed",
+      "status": "blocked"
+    },
+    "syntax_whitespace_json": "passed"
+  },
+  "readiness": "canonical_input_confirmation_pending",
+  "schema_version": "issue91-validation-runner-fixture-checks-v1",
+  "scope": "Runner fixture tests, existing regression suites and pending preflight. No real benchmark.",
+  "status": "passed",
+  "tests": {
+    "backend_unit": {
+      "command": "backend/.venv/Scripts/python.exe -B -m pytest -c backend/pytest.ini backend/tests/unit -q -p no:cacheprovider -o faulthandler_timeout=30",
+      "elapsed_seconds": 182.22,
+      "log_sha256": "ce2b6d92d9fd69cc916c184dbfed5f329b780a29bb72bd7b2a1ee3efbdd66e5e",
+      "passed": 930
+    },
+    "evaluation": {
+      "command": "backend/.venv/Scripts/python.exe -B -m pytest -c evaluation/pytest.ini evaluation/tests -q -p no:cacheprovider",
+      "elapsed_seconds": 9.1,
+      "log_sha256": "c78d4e48061f209da766c32bd9dc64a10f5aa5e1868482a0b837c7516d0c1245",
+      "passed": 23
+    },
+    "runner": {
+      "command": "backend/.venv/Scripts/python.exe -B -m pytest -c backend/pytest.ini backend/tests/unit/test_e5_rrf_validation.py -q -p no:cacheprovider -o faulthandler_timeout=30",
+      "elapsed_seconds": 28.23,
+      "log_sha256": "1f75bfb0b55c841429754051ece133d5b1886240896667690e32c3f52ebd4cb8",
+      "passed": 56
+    }
+  },
+  "working_tree_dirty": true
+}

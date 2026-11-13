@@ -1,0 +1,49 @@
+{
+  "schema_version": "issue91-validation-config-v1",
+  "protocol": {
+    "version": "issue91-validation-28-all200-v1",
+    "benchmark_version": "home-interior-text-v2",
+    "snapshot": "home-interior-clear-200-v3",
+    "query_count": 70,
+    "validation_count": 28,
+    "test_count": 42,
+    "candidate_count": 200,
+    "positive_threshold": 1,
+    "recall_defined_count": 21,
+    "no_positive_count": 7,
+    "source_window": 200,
+    "cutoff": 200,
+    "filters": {},
+    "metric_cutoffs": [
+      5,
+      10
+    ],
+    "allowed_rrf_constants": [
+      10,
+      20,
+      60
+    ],
+    "warmup_per_configuration": 5,
+    "repetitions_per_query": 10,
+    "ordering": "configuration_then_csv_query_order_then_repetition",
+    "raw_ranking_sample": "first_measured_repetition",
+    "latency_scope": "service call including encode/retrieval/audits/fusion; excluding load/export/metrics",
+    "percentile_method": "nearest-rank"
+  },
+  "input_confirmation": {
+    "status": "pending",
+    "evidence_url": null,
+    "queries_byte_policy": null
+  },
+  "paths": {
+    "manifest": "data/benchmark/manifest.yaml",
+    "queries": "data/benchmark/queries.csv",
+    "qrels": "data/benchmark/qrels.csv",
+    "candidates": "data/manifests/objaverse_200.json"
+  },
+  "expected_sha256": {
+    "queries.csv": "f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788",
+    "qrels.csv": "cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5",
+    "candidate_metadata": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  }
+}
