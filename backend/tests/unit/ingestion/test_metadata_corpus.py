@@ -131,7 +131,7 @@ def test_export_preserves_all_ids_and_records_hash(run_export):
     assert manifest["asset_count"] == 200
     assert manifest["nonempty_passage_count"] == 200
     assert manifest["prefix_in_corpus"] is False
-    assert manifest["status"] == "draft_recipe_pending_confirmation"
+    assert manifest["status"] == "recipe_confirmed"
 
 
 def test_export_is_independent_of_input_order(run_export):

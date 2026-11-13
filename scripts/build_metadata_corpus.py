@@ -118,7 +118,7 @@ def main():
     ).encode("utf-8")
 
     manifest = {
-        "status": "draft_recipe_pending_confirmation",
+        "status": "recipe_confirmed",
         "snapshot": "home-interior-clear-200-v3",
         "source_path": SOURCE_PATH,
         "source_commit": git(repo, "rev-parse", "HEAD").decode().strip(),

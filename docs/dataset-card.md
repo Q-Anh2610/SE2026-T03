@@ -18,6 +18,7 @@ Bằng chứng kiểm chứng dữ liệu W4: #92 và PR #94.
 Nguồn dữ liệu là Objaverse, kèm metadata và liên kết nguồn của từng asset.
 
 Thông tin truy vết được lưu trong:
+
 - `asset_id`: định danh trong hệ thống.
 - `source`, `source_id`: nguồn và định danh gốc.
 - `source_url`: liên kết trang nguồn.
@@ -161,57 +162,104 @@ Dataset card này không giải quyết hoặc thay đổi hash đang khóa.
 
 ## 7. Corpus metadata E5 — công việc W5
 
-Nguồn đề xuất cho corpus là manifest cố định của bộ 200.
+### Nguồn và recipe đã được xác nhận
 
-Passage recipe đang được trao đổi tại #91, dự kiến dùng thứ tự:
+Corpus sử dụng manifest cố định của snapshot
+`home-interior-clear-200-v3`:
 
-`name` → `description` → `tags` → `category`.
+`data/manifests/objaverse_200.json`
 
-Không đưa asset ID, license, formats, nhãn curation, qrels hoặc caption
-sinh thêm vào semantic passage. Asset ID vẫn được lưu riêng để mapping
-và truy provenance.
+Source manifest SHA-256:
 
-Chưa coi recipe là đã chốt hoặc corpus đã bàn giao.
+`9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd`
 
-Sau khi thống nhất và triển khai, cập nhật:
+[Lê Thị Linh Chi](https://github.com/LLC536) đã review, chạy tái lập
+tại commit `a85c8fa` của PR #102, xác nhận recipe và tiếp nhận corpus.
 
-- Recipe version và quy tắc xử lý whitespace, tags, null/rỗng.
-- Quy định nơi thêm prefix `passage: `.
-- Source commit và manifest hash.
-- Candidate IDs, coverage và danh sách lỗi nếu có.
-- Serialization, encoding, BOM và newline.
-- SHA-256 của corpus artifact thực tế.
-- Lệnh tái lập và xác nhận tiếp nhận.
+[Bằng chứng xác nhận tại #91](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6848528349).
 
-Hash manifest nguồn không phải hash corpus.
+Recipe version giữ nguyên: `e5-metadata-passage-v1-draft`.
+Tên version chứa `draft` được giữ để truy vết đúng bản đã tiếp nhận.
+
+### Quy tắc tạo passage
+
+- Thứ tự trường: `name` → `description` → `tags` → `category`.
+- Chuỗi được bỏ khoảng trắng đầu/cuối và gom mỗi dãy whitespace
+  thành một dấu cách; giữ nguyên hoa/thường và ngôn ngữ nguồn.
+- Tags được chuẩn hóa, bỏ rỗng, dedup chính xác sau chuẩn hóa,
+  giữ thứ tự xuất hiện đầu tiên và nối bằng `, `.
+- Bỏ qua trường thiếu/null/rỗng; từ chối sai kiểu dữ liệu
+  hoặc passage hoàn toàn rỗng.
+- Các phần có nội dung được nối bằng LF, không có newline cuối passage.
+- Corpus chưa chứa prefix; encoder thêm `passage: ` đúng một lần.
+- Không đưa asset ID, license, formats, nhãn curation, qrels
+  hoặc caption sinh thêm vào semantic passage.
+- Asset ID được lưu riêng để mapping và truy provenance.
+
 Không âm thầm loại asset có metadata lỗi hoặc passage rỗng.
+Hash manifest nguồn không phải hash corpus.
 
-Phối hợp phần corpus/retrieval:
-[Lê Thị Linh Chi](https://github.com/LLC536).
-
-### Kết quả tạo corpus draft
+### Corpus được tiếp nhận
 
 - Recipe: `e5-metadata-passage-v1-draft`.
-- Trạng thái: chờ xác nhận recipe tại #91.
-- Đã xuất 200 record, 200 asset ID duy nhất và 200 passage không rỗng.
-- Hai lần chạy liên tiếp tạo corpus và manifest giống nhau theo bytes.
+- Commit triển khai được bên nhận kiểm chứng: `a85c8fa`.
+- Có 200 record, 200 asset IDs duy nhất và 200 passage không rỗng.
+- JSONL dùng UTF-8 không BOM, sắp xếp theo asset ID tăng dần,
+  có LF cuối file.
+- Hai lần export trên cùng revision và môi trường đã tạo corpus
+  và manifest khớp bytes.
 - Corpus SHA-256:
   `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
 - Script: `scripts/build_metadata_corpus.py`.
 - Output kiểm chứng nằm trong `work/`, không đưa vào Git.
-- Đây là kiểm chứng tạo corpus tái lập, chưa phải E5 weights smoke, index build hoặc benchmark retrieval.
 
-### Kiểm thử exporter
+Trạng thái xác nhận dùng cho exporter là `recipe_confirmed`.
+Việc cập nhật trạng thái không thay đổi recipe version,
+serialization hoặc nội dung corpus.
 
-- 16 test cases đạt trên môi trường local.
+Manifest có thể khác bytes so với bản trước do trạng thái và source
+commit thay đổi; corpus JSONL phải giữ nguyên SHA-256 nêu trên.
+
+### Kiểm thử và bằng chứng
+
+Các kết quả đã ghi nhận trước lần cập nhật trạng thái:
+
+- 16 corpus test cases đạt trên môi trường local.
+- Toàn bộ unit tests ingestion: 164 passed trong 1,20 giây,
+  exit code 0; số này đã bao gồm 16 corpus tests.
 - Bao phủ thứ tự trường, whitespace, tags/dedup, null/rỗng,
   sai kiểu dữ liệu, ID trùng/không hợp lệ, sai số lượng,
   source hash sai và checkout metadata bị thay đổi.
-- Kiểm tra output có đúng IDs, UTF-8 không BOM, LF,
-  corpus hash đúng và không phụ thuộc thứ tự input.
+- Kiểm tra đúng IDs, UTF-8 không BOM, LF, corpus hash
+  và tính độc lập với thứ tự input.
 - Pytest dùng thư mục tạm riêng trong `work/` vì thư mục
   pytest mặc định của Windows bị lỗi quyền truy cập.
-- Kết quả local không thay thế CI hoặc xác nhận recipe.
+- Bên nhận đã chạy lại 16 corpus tests và xác nhận hash tại #91.
+
+### Kiểm chứng sau cập nhật trạng thái
+
+- Toàn bộ unit tests ingestion: 164 passed trong 1,45 giây;
+  số này đã bao gồm 16 corpus tests.
+- Hai lần export đều có 200 IDs duy nhất và 200 passage không rỗng.
+- Trạng thái exporter: `recipe_confirmed`.
+- Corpus và manifest của hai lần export khớp bytes qua `cmp`.
+- Recipe version giữ nguyên: `e5-metadata-passage-v1-draft`.
+- SHA-256 corpus được kiểm tra độc lập bằng `sha256sum`, giữ nguyên:
+  `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
+- Kết quả này được ghi nhận sau khi sửa trạng thái trong script/tests,
+  trước commit cập nhật; chưa thay thế CI của commit mới.
+
+Kết quả local, kiểm chứng của bên nhận và CI được ghi nhận riêng.
+
+### Phạm vi xác nhận và phần còn lại
+
+Xác nhận tại #91 chỉ áp dụng cho recipe/corpus.
+Không chứng minh PostgreSQL/Qdrant đã được đối chiếu,
+index E5 đã được build hoặc benchmark đã chạy.
+
+Phần đối chiếu metadata/payload tiếp tục theo #101.
+Nếu recipe hoặc nội dung thay đổi, cần version hóa phù hợp,
+cập nhật hashes/tests và xác nhận lại bên nhận.
 
 Hướng dẫn tái lập và bằng chứng kiểm chứng:
 [metadata-corpus-101.md](guides/metadata-corpus-101.md).
@@ -282,4 +330,4 @@ Mỗi thay đổi dữ liệu cần ghi phạm vi, lý do, version và ảnh hư
 đến corpus/index/benchmark. Không chỉnh dữ liệu đã khóa theo kết quả test.
 
 Phối hợp tính tái lập và inputs benchmark:
-[Đoàn Thị Minh Khuê](https://github.com/doanminhkhue25).
+[Đoàn Thị Minh Khuê](https://github.com/doanminhkhue25).
