@@ -1,0 +1,179 @@
+{
+  "all_query_ram_transitions_exactly_verified": true,
+  "case_counts": {
+    "and_metadata_filters": 57,
+    "empty_category": 0,
+    "english_unfiltered": 200,
+    "nullable_face_count": 0,
+    "vietnamese_diagnostic": 200
+  },
+  "code_commit": "2c18b1da0d0353f2d4bb75e06eb6beb4407d8bb8",
+  "command": [
+    "scripts/smoke_e5_rrf_service.py",
+    "--clip-index-root",
+    "data/processed/issue89/clip-preflight-76d5d2c095b6",
+    "--clip-input-root",
+    "data/processed/issue89/inputs-1d75f15977be",
+    "--e5-index-root",
+    "data/processed/issue91/e5-index-20261113-2",
+    "--output",
+    "data/processed/issue91/service-smoke-20261113-2",
+    "--rank-constant",
+    "60"
+  ],
+  "configuration_selected_by_validation": false,
+  "device": "cpu",
+  "e5_only_matches_fusion_source_ranks_provenance": true,
+  "e5_only_raw_cosine_max_abs_delta": 2.220446049250313e-16,
+  "elapsed_seconds": 10.711675399972592,
+  "finished_at_utc": "2026-11-13T15:11:26.915812+00:00",
+  "limitations": [
+    "Local/uncommitted service branch feat/91-e5-rrf-service; CI/review/merge not observed for this work.",
+    "Diagnostic k=60 is explicit, not chosen by validation; synthetic English/Vietnamese queries do not establish relevance quality.",
+    "No benchmark query/qrels read or tuned by this smoke. Canonical benchmark query artifact/hash remains unresolved.",
+    "Sequential experimental callers; shared API/runtime/search events and concurrency integration require separate review."
+  ],
+  "local_tests": {
+    "backend_unit": {
+      "command": "backend/.venv/Scripts/python.exe -B -m pytest -c backend/pytest.ini backend/tests/unit -q -p no:cacheprovider -o faulthandler_timeout=30",
+      "log_sha256": "c7b07b33944fd738b85e373bafcef09578bc04ae785cd555a674428adb6790d6",
+      "result": "874 passed",
+      "seconds": 119.96
+    },
+    "regression_before_fix": {
+      "failure": "Second search rejected a legitimate local cosine RAM normalization as index drift.",
+      "result": "1 failed, 37 deselected",
+      "seconds": 8.19,
+      "test": "test_dense_local_cosine_normalization_preserves_repeat_and_persistence[dense]"
+    },
+    "target": {
+      "command": "backend/.venv/Scripts/python.exe -B -m pytest -c backend/pytest.ini backend/tests/unit/test_experimental_text_search.py -q -p no:cacheprovider -o faulthandler_timeout=30",
+      "log_sha256": "8d4a1979d13417cb6a6eb01722ab2e3049733c3daa4251d39a0de153d799f055",
+      "result": "43 passed",
+      "seconds": 71.89
+    },
+    "test_module_sha256": "b53a8c669d47eeb6f66605e3836585d6cb6e84b4245737c9a6e895c7e726867c"
+  },
+  "model_load_seconds": 2.5871711000218056,
+  "module_sha256": {
+    "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+    "backend/app/embedding/e5_encoder.py": "14e29e2c37fd92086cf282b85b2c95fbf06272cdbb2ba89495ec592a9b578552",
+    "backend/app/search/e5_index.py": "fdf63b7c92d0fa3206aea0792d9d9d3cd71042f610a2ec04eae87f0717fd7348",
+    "backend/app/search/experimental_text_search.py": "57d66156780985c6e10e270b015604f06dbe0b4df6cc683374249b04eb84a6a2",
+    "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+    "backend/app/search/rrf.py": "1e25edfc74d365fb289bf423d75513dbe36b59ab20adc9df13c7f84d967ee748",
+    "backend/app/search/smoke.py": "eb6f39b2f54f02064dd9695b13e0b161b9de3b6ba926e9997f9264e960c4762d",
+    "backend/app/search/text_search.py": "021fa376a9b86f4bb58d9ae16e07fd67144d196718cc1bda25f0ed640abac809",
+    "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+    "scripts/smoke_e5_rrf_service.py": "09049e7dd5ac1c8c7ec1d09c56ae9b704f88ca3b4e5d88b82c4bc63ed8f9eafe"
+  },
+  "original_smoke_report_sha256": "7af3a4f0f375c04b7c0482f0867b806c78c0b0701259bb61e03066817466a861",
+  "package_versions": {
+    "numpy": "2.5.4",
+    "pydantic": "2.14.1",
+    "qdrant-client": "1.15.1",
+    "torch": "2.8.0",
+    "transformers": "4.57.1"
+  },
+  "persisted_after_reopen": {
+    "clip": {
+      "exact_point_count": 200,
+      "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+      "point_payload_vector_sha256": "5db69a3156a6b1a428d1f0c1f7d2d891c9ec99266d55ebc7d93a7926fb2093e9",
+      "scrolled_point_count": 200,
+      "unique_asset_ids": 200,
+      "unique_point_ids": 200
+    },
+    "e5": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+    }
+  },
+  "persisted_before": {
+    "clip": {
+      "exact_point_count": 200,
+      "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+      "point_payload_vector_sha256": "5db69a3156a6b1a428d1f0c1f7d2d891c9ec99266d55ebc7d93a7926fb2093e9",
+      "scrolled_point_count": 200,
+      "unique_asset_ids": 200,
+      "unique_point_ids": 200
+    },
+    "e5": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+    }
+  },
+  "persisted_fingerprints_unchanged": true,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.7",
+  "ram_after_queries": {
+    "clip": {
+      "exact_point_count": 200,
+      "point_id_set_sha256": "242a487d3dfae4298b91ec3302a5259edd3fcf455b1a7034405179ea4d1ba772",
+      "point_payload_vector_sha256": "81d971fff2d57cee8099e7843627928403a45775a75a2619731112553c305053",
+      "scrolled_point_count": 200,
+      "unique_asset_ids": 200,
+      "unique_point_ids": 200
+    },
+    "e5": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "5986ab2b05f62f313351ddd4990b49191c95d5ba991363ba78f9648653eed905"
+    }
+  },
+  "rank_constant": 60,
+  "raw_cosine_repeat_max_abs_delta": {
+    "clip_text_to_preview": 1.1102230246251565e-16,
+    "e5_text_to_metadata": 2.220446049250313e-16
+  },
+  "raw_cosine_repeat_tolerance": 1e-12,
+  "raw_rankings_sha256": "85377c824afb9e0030f7e2ec8f425f7567321bb266844a047c2a221f365d1241",
+  "repeat_fusion_and_source_ranks_provenance_exact": true,
+  "schema_version": "issue91-experimental-service-smoke-v1",
+  "scope": "synthetic queries and filter/repeat/index integrity diagnostics; not relevance or latency benchmark",
+  "source_versions": [
+    {
+      "audit_policy": "exact-pre-post-local-cosine-transition-v1",
+      "candidate_limit": 200,
+      "collection": "issue89_image_previews",
+      "config_version": "clip-text-exact-all-filtered-v1-k200",
+      "corpus_manifest_sha256": null,
+      "corpus_sha256": null,
+      "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "index_manifest_ref": "clip-index-manifest.json",
+      "index_manifest_sha256": "7ebba709c46fec69dc4485cd0b358e82ca48c60ce568b3a03111ac943b882528",
+      "index_version": "issue89-clip-preflight-76d5d2c095b6",
+      "model_id": "openai/clip-vit-base-patch32",
+      "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "recipe_version": null,
+      "source": "clip_text_to_preview",
+      "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "vector_name": "clip_bdd84b49a263010b"
+    },
+    {
+      "audit_policy": "exact-pre-post-local-cosine-transition-v1",
+      "candidate_limit": 200,
+      "collection": "issue91_e5_metadata",
+      "config_version": "e5-metadata-exact-all-filtered-maskmean512-l2-v1-k200",
+      "corpus_manifest_sha256": "d069a0f126812e39785a6395aec5e0c03195abbe596abb5a2e3aecc7a5d6f922",
+      "corpus_sha256": "66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5",
+      "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "index_manifest_ref": "e5-index-manifest.json",
+      "index_manifest_sha256": "b89e50f8dbf3a5d6e57e41f5302a585fd06afb05f09eeb41fe0e09fdaf22a51d",
+      "index_version": "issue91-e5-metadata-1588f4dc33fbe62609d8",
+      "model_id": "intfloat/multilingual-e5-small",
+      "model_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+      "recipe_version": "e5-metadata-passage-v1-draft",
+      "source": "e5_text_to_metadata",
+      "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "vector_name": "e5_0c0cbdfd79bca607"
+    }
+  ],
+  "started_at_utc": "2026-11-13T15:11:16.281319+00:00",
+  "status": "passed",
+  "torch_interop_threads": 4,
+  "torch_threads": 4,
+  "working_tree_dirty": true
+}

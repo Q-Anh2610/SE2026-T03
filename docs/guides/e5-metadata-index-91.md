@@ -1,8 +1,9 @@
 # Index metadata E5 — phần tiếp theo của #91
 
 Phạm vi: nhận corpus #101 đã được Chi kiểm chứng, build index local riêng và
-audit compatibility/persistence. Chưa nối HTTP API, chưa có E5-only/RRF service
-orchestration hoặc benchmark validation. CLIP vẫn là mặc định.
+audit compatibility/persistence. Service E5-only/RRF thử nghiệm được bổ sung
+ở [guide service](e5-rrf-service-91.md). Chưa nối HTTP API hoặc chạy benchmark
+validation; CLIP vẫn là mặc định.
 
 ## Đầu vào đã tiếp nhận
 
@@ -102,9 +103,9 @@ và index corruption, giữ metadata thiếu, encode thiếu batch, từ chối 
 persistence sau reopen. Chúng không thay thế build bằng weights thật hoặc đo
 quality/latency retrieval. Kết quả local/CI và build thật phải ghi riêng sau chạy.
 [Quỳnh Anh đã xác nhận contract fusion thử nghiệm](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6849816002).
-E5-only/orchestration/DTO còn phải triển khai riêng; shared API/runtime/search
-event cần review trước tích hợp, CLIP vẫn mặc định. Hash query canonical vẫn
-chưa chốt; chưa chạy benchmark.
+E5-only/orchestration/DTO thử nghiệm được ghi ở [guide service](e5-rrf-service-91.md);
+shared API/runtime/search event cần review trước tích hợp, CLIP vẫn mặc định.
+Hash query canonical vẫn chưa chốt; chưa chạy benchmark.
 
 Kiểm chứng local ngày 13/11/2026, Windows/Python 3.13.7:
 
@@ -120,4 +121,6 @@ Kiểm chứng local ngày 13/11/2026, Windows/Python 3.13.7:
   9,831393 s. Các số này không phải p50/p95 retrieval latency.
 - [Bằng chứng portable](../evidence/issue91-e5-index-build-20261113.json) ghi
   hashes, machine/packages/threads, command, code dirty flag và tests. Gói index,
-  corpus và vectors vẫn ở local, ngoài Git. Chưa có CI/review nhánh index này.
+  corpus và vectors vẫn ở local, ngoài Git. PR #106 đã có 5 checks passed, Khuê
+  approve trên `ebbdb98` và merge vào `develop` tại `2c18b1d`; review service
+  thử nghiệm là bước riêng.
