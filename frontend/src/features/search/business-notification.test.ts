@@ -61,17 +61,17 @@ it('contains constructor failure and reports no notification delivery', () => {
 
 const pairwiseCases = [
   ['granted', 'ok', 'under', 'under'],
-  ['denied', 'throws', 'exact', 'over'],
-  ['default', 'ok', 'over', 'under'],
-  ['unsupported', 'throws', 'under', 'over'],
-  ['denied', 'ok', 'exact', 'under'],
-  ['granted', 'throws', 'over', 'over'],
-  ['unsupported', 'ok', 'under', 'over'],
+  ['granted', 'throws', 'exact', 'under'],
+  ['granted', 'ok', 'over', 'over'],
+  ['denied', 'throws', 'under', 'over'],
+  ['denied', 'ok', 'exact', 'over'],
+  ['denied', 'throws', 'over', 'under'],
+  ['default', 'ok', 'under', 'under'],
   ['default', 'throws', 'exact', 'under'],
-  ['granted', 'throws', 'over', 'under'],
-  ['denied', 'ok', 'under', 'under'],
-  ['default', 'throws', 'exact', 'over'],
-  ['unsupported', 'ok', 'over', 'over'],
+  ['default', 'ok', 'over', 'over'],
+  ['unsupported', 'throws', 'under', 'over'],
+  ['unsupported', 'ok', 'exact', 'over'],
+  ['unsupported', 'throws', 'over', 'under'],
 ] as const
 
 it.each(pairwiseCases)('pairwise: permission=%s sender=%s title=%s body=%s', (permission, sender, titleSize, bodySize) => {
