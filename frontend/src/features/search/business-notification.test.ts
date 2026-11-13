@@ -20,22 +20,22 @@ afterEach(() => {
 it('accepts a title exactly at the 120-character boundary', () => {
   vi.stubGlobal('Notification', FakeNotification)
 
-  expect(notifyBusinessEvent('x'.repeat(MAX_NOTIFICATION_TITLE_LENGTH), 'saved')).toBe(true)
+  expect(notifyBusinessEvent('😀'.repeat(MAX_NOTIFICATION_TITLE_LENGTH), 'saved')).toBe(true)
   expect(construct).toHaveBeenCalledOnce()
 })
 
 it('rejects a title over the 120-character boundary', () => {
   vi.stubGlobal('Notification', FakeNotification)
 
-  expect(notifyBusinessEvent('x'.repeat(MAX_NOTIFICATION_TITLE_LENGTH + 1), 'saved')).toBe(false)
+  expect(notifyBusinessEvent('😀'.repeat(MAX_NOTIFICATION_TITLE_LENGTH + 1), 'saved')).toBe(false)
   expect(construct).not.toHaveBeenCalled()
 })
 
 it('truncates an oversized body to the configured cap', () => {
   vi.stubGlobal('Notification', FakeNotification)
 
-  expect(notifyBusinessEvent('Saved', 'x'.repeat(MAX_NOTIFICATION_BODY_LENGTH + 30))).toBe(true)
-  expect(construct.mock.calls[0][1].body).toHaveLength(MAX_NOTIFICATION_BODY_LENGTH)
+  expect(notifyBusinessEvent('Saved', '😀'.repeat(MAX_NOTIFICATION_BODY_LENGTH + 30))).toBe(true)
+  expect(Array.from(construct.mock.calls[0][1].body)).toHaveLength(MAX_NOTIFICATION_BODY_LENGTH)
 })
 
 it.each(['default', 'denied'] as const)('skips notification when permission is %s without prompting', (permission) => {
