@@ -139,18 +139,21 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
    [guide service](e5-rrf-service-91.md). Xác nhận contract không thay cho
    benchmark hoặc review PR service; chưa tích hợp shared API/runtime.
 3. Khuê đã [đề xuất protocol](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6829347357)
-   ngày 12/11/2026; chi tiết ở dưới. Hash query canonical vẫn chưa được xác
-   nhận, nên chưa chạy/chọn cấu hình bằng input hiện tại.
-4. Đối chiếu query hash: local `queries.csv` có BOM, 70 query, split 28/42;
+   ngày 12/11/2026; chi tiết ở dưới. Sau đó Khuê đã
+   [chốt hướng đính chính artifact](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6859981671):
+   dùng nguyên blob `ff7b64a` làm căn cứ PR erratum. Chỉ sau review/merge mới
+   tạo config confirmed và chạy/chọn cấu hình W5; config hiện vẫn pending.
+4. Đối chiếu trước erratum: checkout local ban đầu có BOM/CRLF, 70 query, split 28/42;
    SHA-256 bytes là
    `80e7de4db77929bc79c87ddb1da1bdb1f101832d39a2fd3c6549ec8db7ae30b9`,
    khác manifest khóa `f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788`.
    Blob tại commit khóa `ff7b64a` và HEAD đều có SHA-256
    `e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470`.
    Đổi CRLF của local thành LF tái tạo blob Git; parse CSV sau chuẩn hóa cho
-   commit khóa = HEAD = local. Mâu thuẫn với `f627…` còn cần truy artifact/quy
-   ước bytes, không quy cho thay đổi nội dung query trong W5. Chưa tự sửa
-   file/manifest hoặc chạy benchmark. Qrels bytes vẫn khớp
+   commit khóa = HEAD = local. Artifact `f627…` của baseline cũ vẫn chưa tái
+   tạo được; không xác nhận ngược provenance từ việc giống nội dung sau parse.
+   PR erratum đính chính active lock theo đề nghị `e202…`, giữ BOM/LF/4 LF cuối;
+   không sửa report lịch sử hoặc chạy benchmark. Qrels bytes vẫn khớp
    `cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5`,
    source 200 vẫn khớp `9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd`.
 
@@ -174,9 +177,9 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
   retrieval + fusion; loại model load/index build/report writing. p50/p95
   nearest-rank; ghi thiết bị, packages và thread settings thực tế. Chưa đo
   được đúng phạm vi thì ghi chưa có latency; không dùng số image #88 thay thế.
-- Canonical query hash chưa giải quyết thì chưa chạy hoặc chọn cấu hình.
-  Khi xác nhận phải ghi artifact/commit và BOM/newline vào run record; nếu
-  hash khóa sai cần cập nhật benchmark có review.
+- Review/merge PR erratum trước khi tạo config confirmed và chạy/chọn cấu
+  hình. Khi xác nhận phải ghi source/merge commit, hashes và byte policy vào
+  config/run record. Active lock đề nghị mới không xác nhận baseline cũ.
 
 ## Truy provenance W3
 
@@ -186,8 +189,9 @@ SHA-256 `cbcf9e7df90a144f096ac0386e2b6fffcb1d31d37d93e76a4c5c6b56400a7d77`.
 `provenance.json` ghi `queries_sha256=f627…`; exporter kiểm raw bytes của path
 `--queries` do caller truyền. Tuy nhiên ZIP không chứa `queries.csv`, nên gói
 này chưa đủ tái tạo bytes canonical. Không chạy exporter/benchmark hoặc đọc
-ranked results W3 trong lượt truy provenance này; còn cần bản input gốc hoặc
-quy ước bytes được owner xác nhận.
+ranked results W3 trong lượt truy provenance này. Theo phản hồi Khuê, chưa có
+artifact tái tạo `f627…`; giữ nguyên provenance/report cũ. W5 đề nghị dùng blob
+`ff7b64a`/`e202…` qua PR erratum và chạy mới các baseline sau confirmation.
 
 Không đọc/chạy lại 42 test query để chọn cấu hình. Không thay text qrels bằng
 image qrels; không trộn index 354 với phép so sánh candidate 200. Không suy
@@ -222,3 +226,14 @@ Config mặc định `evaluation/configs/issue91-e5-rrf-validation.pending.json`
 chặn trước khi đọc CSV hoặc nạp weights. Chỉ kiểm chứng runner bằng fixtures;
 chưa xác nhận canonical inputs, chạy raw validation thật hoặc chọn k. Tests
 runner không thay bằng chứng quality/latency thật của tiêu chí 5/6.
+
+
+## Đính chính query artifact — đề nghị ngày 14/11/2026
+
+Xem [erratum raw bytes](../evaluation/query-artifact-erratum-91.md) và
+[record máy đọc được](../../data/benchmark/query-artifact-erratum-91.json).
+Query Git blob không đổi IDs/wording/groups/split; active lock/pending pins
+được đính chính theo blob gốc `ff7b64a`. Qrels/labels/candidate/snapshot và
+report/provenance/script baseline lịch sử được bảo toàn. `.gitattributes`
+pin query LF và các CSV còn lại CRLF theo raw hashes đã có; checker kiểm cả
+hai chế độ autocrlf mà không chuẩn hóa hash. Chưa tạo config confirmed.

@@ -9,8 +9,12 @@ CLIP vẫn mặc định; runner không nối API/runtime/search events hoặc t
 
 Config `evaluation/configs/issue91-e5-rrf-validation.pending.json` cố ý giữ
 `input_confirmation.status="pending"`, evidence URL và byte policy là `null`.
-Hash query khóa `f627…` chưa khớp artifact đã tìm được; không tự thay bằng
-`e202…` hoặc `80e7…` để vượt gate. Xem [đối chiếu query](e5-rrf-validation-91.md).
+Theo [phản hồi của Khuê](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6859981671),
+PR đính chính đề nghị dùng nguyên blob `ff7b64a`, SHA-256 `e202a0dc…`, 7.851
+byte/BOM/LF/4 LF cuối. Active manifest và pending config trong nhánh erratum
+cùng ghi pin đề nghị mới; chỉ sau review và merge mới tạo config confirmed.
+Xem [erratum và giới hạn baseline cũ](../evaluation/query-artifact-erratum-91.md).
+Không dùng hash checkout CRLF `80e7…` hoặc chuẩn hóa ngầm để vượt gate.
 
 Kiểm tra gate hiện tại từ gốc repo:
 
@@ -129,7 +133,8 @@ Fixture outputs luôn ghi `execution_kind="fixture"`, `benchmark=false`.
 
 Việc có runner/tests không hoàn thành tiêu chí 5/6 của #91. Canonical input
 confirmation, raw validation thật, quality/latency report và bàn giao cuối vẫn
-còn chờ. Phần `evaluation/` và protocol cần Khuê review trong PR riêng.
+còn chờ. Runner đã được Khuê review và merge qua PR #108 tại `522a466`;
+PR đính chính artifact/benchmark được review riêng trước bước confirmed.
 
 
 ## Kết quả local — 13/11/2026
@@ -143,5 +148,6 @@ còn chờ. Phần `evaluation/` và protocol cần Khuê review trong PR riêng
   fixtures. Không coi các số metric/timing fixture là kết quả mô hình thật.
 - [Bằng chứng local](../evidence/issue91-validation-runner-fixtures-20261113.json)
   ghi commands, log/module hashes, base `8d6eb3d` và dirty=true theo lúc chạy.
-  CI/review/merge cho nhánh runner được theo dõi riêng; canonical inputs còn
-  pending, chưa chạy validation weights thật hoặc chọn k.
+  Các số trên thuộc lần chạy local trước commit; sau đó PR #108 có 5 checks
+  passed, Khuê approve `9e7660f` và merge tại `522a466`. Erratum/input confirmation
+  vẫn là bước riêng; chưa chạy validation weights thật hoặc chọn k.

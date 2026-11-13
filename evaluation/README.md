@@ -109,3 +109,9 @@ merge qua PR #107, tái sử dụng metric W3 có xử lý no-positive query. Co
 mặc định giữ `pending` và từ chối chạy trước khi canonical query artifact/hash
 được xác nhận. Xem [guide runner](../docs/guides/e5-rrf-validation-runner-91.md).
 Runner không thay adapter/metric CLI tổng quát hoặc bật fusion API mặc định.
+
+
+Phần [đính chính query artifact #91](../docs/evaluation/query-artifact-erratum-91.md)
+ghi blob/raw-byte policy, các hashes được bảo toàn và giới hạn provenance
+baseline lịch sử. Review/merge erratum trước khi tạo config confirmed; không
+chạy lại entrypoint baseline cũ để sửa report/provenance lịch sử.
