@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { Feedback } from './Feedback'
+import { notifyBusinessEvent } from './business-notification'
+vi.mock('./business-notification', () => ({ notifyBusinessEvent: vi.fn(() => true) }))
 const fetchMock = vi.fn()
 let schemaMock = true
 let postResponse = () => new Response('{}', { status: 500 })
@@ -9,6 +11,7 @@ beforeEach(() => {
   fetchMock.mockReset()
   schemaMock = true
   postResponse = () => new Response('{}', { status: 500 })
+  vi.mocked(notifyBusinessEvent).mockClear()
   fetchMock.mockImplementation((url: string) => String(url).endsWith('/openapi.json') ? openapi(schemaMock) : postResponse())
   vi.stubGlobal('fetch', fetchMock)
 })
@@ -18,6 +21,7 @@ it.each([true, false])('sends Boolean relevance %s with exact event and asset', 
   render(<Feedback eventId="event" assetId="asset" mock />)
   fireEvent.click(screen.getByRole('button', { name: relevance ? 'Phù hợp' : 'Không phù hợp' }))
   expect(await screen.findByText('Đã gửi đánh giá minh họa (lưu tạm).')).toBeVisible()
+  expect(notifyBusinessEvent).not.toHaveBeenCalled()
   expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ search_event_id: 'event', asset_id: 'asset', relevance })
   expect(screen.getByRole('button', { name: 'Phù hợp' })).toBeDisabled()
 })
@@ -26,7 +30,21 @@ it('shows failure and allows retry instead of claiming success', async () => {
   render(<Feedback eventId="event" assetId="asset" mock />)
   fireEvent.click(screen.getByRole('button', { name: 'Phù hợp' }))
   expect(await screen.findByRole('alert')).toHaveTextContent('Chưa gửi được')
+  expect(notifyBusinessEvent).not.toHaveBeenCalled()
   expect(screen.getByRole('button', { name: 'Phù hợp' })).toBeEnabled()
+})
+
+it('keeps committed feedback successful when browser notification delivery fails', async () => {
+  schemaMock = false
+  respond({ feedback_id: 'f2', search_event_id: 'live-event', asset_id: 'asset-2', relevance: true, created_at: '2026-11-10T00:00:00Z', mock: false, storage: 'postgresql' })
+  vi.mocked(notifyBusinessEvent).mockImplementation(() => { throw new Error('browser notification failed') })
+  render(<Feedback eventId="live-event" assetId="asset-2" mock={false} />)
+
+  fireEvent.click(screen.getByRole('button', { name: 'Phù hợp' }))
+
+  expect(await screen.findByText('Đã lưu đánh giá.')).toBeVisible()
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(notifyBusinessEvent).toHaveBeenCalledOnce()
 })
 it('does not send live events when OpenAPI advertises memory-only feedback', async () => {
   schemaMock = true
@@ -73,6 +91,7 @@ it('stores live feedback only after PostgreSQL response matches event, asset and
   fireEvent.click(screen.getByRole('button', { name: 'Không phù hợp' }))
   expect(await screen.findByText('Đã lưu đánh giá.')).toBeVisible()
   expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ search_event_id: 'live-event', asset_id: 'asset-2', relevance: false })
+  expect(notifyBusinessEvent).toHaveBeenCalledWith('Đã lưu đánh giá', 'Phản hồi của bạn đã được lưu thành công.')
 })
 it.each([
   ['SEARCH_EVENT_RESULTS_UNAVAILABLE', 'chưa lưu danh sách kết quả'],
