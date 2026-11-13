@@ -207,5 +207,18 @@ Xem [guide service](e5-rrf-service-91.md) và
 [bằng chứng](../evidence/issue91-e5-rrf-service-smoke-20261113.json).
 
 Các kiểm chứng service chạy từ working tree chưa commit trên
-`feat/91-e5-rrf-service`; CI/review/merge cần theo dõi riêng. Chưa chạy raw validation hoặc quality/latency benchmark,
-chưa chọn k bằng validation, chưa nối shared API/runtime/search event.
+`feat/91-e5-rrf-service`. Sau đó PR #107 có 5 checks passed, Khuê approve trên
+`3673445` và merge vào `develop` tại `8d6eb3d`. Chưa chạy raw validation hoặc
+quality/latency benchmark, chưa chọn k bằng validation, chưa nối shared API/runtime/search event.
+
+## Chuẩn bị runner/export validation
+
+Runner tại `scripts/run_e5_rrf_validation.py` dùng nguyên service CLIP/E5/RRF
+đã merge qua PR #107 và metric `compute_metrics` W3. Xem
+[guide runner](e5-rrf-validation-runner-91.md) về raw format, 5 warm-up + 280
+measured samples/cấu hình, nearest-rank p50/p95 và cách giữ lỗi/partial output.
+
+Config mặc định `evaluation/configs/issue91-e5-rrf-validation.pending.json`
+chặn trước khi đọc CSV hoặc nạp weights. Chỉ kiểm chứng runner bằng fixtures;
+chưa xác nhận canonical inputs, chạy raw validation thật hoặc chọn k. Tests
+runner không thay bằng chứng quality/latency thật của tiêu chí 5/6.
