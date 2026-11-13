@@ -168,11 +168,34 @@ python -m pytest backend/tests/unit/ingestion \
 Thư mục tạm riêng trong `work/` giúp tránh lỗi quyền truy cập
 thư mục pytest mặc định đã gặp trên máy Windows.
 
-Ghi kết quả sau cập nhật trạng thái khi lệnh thực sự hoàn tất.
+### Kết quả sau cập nhật trạng thái
+
+Đã kiểm chứng local sau khi sửa script/tests, trước commit cập nhật:
+
+- Toàn bộ unit tests ingestion: 164 passed trong 1,45 giây;
+  đã bao gồm 16 corpus tests.
+- Hai lần export đều có 200 IDs duy nhất và 200 passage không rỗng.
+- Trạng thái exporter: `recipe_confirmed`.
+- Recipe version giữ nguyên: `e5-metadata-passage-v1-draft`.
+- Hai lệnh `cmp` xác nhận corpus và manifest của hai lần export
+  khớp bytes.
+- SHA-256 corpus được kiểm tra độc lập bằng `sha256sum`, giữ nguyên:
+  `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
+
+Kết quả này không thay thế CI của commit cập nhật.
 Không commit thư mục tạm hoặc log kiểm thử.
 
 Các tests dùng fixture không thay thế kiểm chứng PostgreSQL/Qdrant thật.
 Kết quả local, kiểm chứng của bên nhận và CI là các bằng chứng riêng.
+
+### Môi trường kiểm chứng local
+
+- Hệ điều hành: Windows.
+- Terminal: Git Bash.
+- Môi trường Python: `backend/.venv`.
+- Python: `3.13.17`.
+- pytest: `9.1.1`.
+- Git: `2.56.0.windows.4`.
 
 ## 9. Phần còn lại của W5
 
