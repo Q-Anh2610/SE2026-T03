@@ -201,6 +201,21 @@ Phối hợp phần corpus/retrieval:
 - Output kiểm chứng nằm trong `work/`, không đưa vào Git.
 - Đây là kiểm chứng tạo corpus tái lập, chưa phải E5 weights smoke, index build hoặc benchmark retrieval.
 
+### Kiểm thử exporter
+
+- 16 test cases đạt trên môi trường local.
+- Bao phủ thứ tự trường, whitespace, tags/dedup, null/rỗng,
+  sai kiểu dữ liệu, ID trùng/không hợp lệ, sai số lượng,
+  source hash sai và checkout metadata bị thay đổi.
+- Kiểm tra output có đúng IDs, UTF-8 không BOM, LF,
+  corpus hash đúng và không phụ thuộc thứ tự input.
+- Pytest dùng thư mục tạm riêng trong `work/` vì thư mục
+  pytest mặc định của Windows bị lỗi quyền truy cập.
+- Kết quả local không thay thế CI hoặc xác nhận recipe.
+
+Hướng dẫn tái lập và bằng chứng kiểm chứng:
+[metadata-corpus-101.md](guides/metadata-corpus-101.md).
+
 ## 8. PostgreSQL và payload index — công việc W5
 
 PostgreSQL lưu metadata nghiệp vụ; payload Qdrant phục vụ retrieval
