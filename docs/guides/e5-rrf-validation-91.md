@@ -36,7 +36,8 @@ Nguồn: [model card chính thức](https://huggingface.co/intfloat/multilingual
 retrieval và `RRFConfig` tường minh. Output là kiểu nội bộ. Quỳnh Anh đã
 [xác nhận contract candidate/fusion ngày 13/11/2026](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6849816002):
 có thể giữ `RRFResult` cho hàm thuần; tầng orchestration dùng DTO riêng.
-Chưa triển khai service orchestration hoặc adapter HTTP trong nhánh index này.
+Service thử nghiệm E5-only/CLIP/RRF đã được bổ sung ở bước tiếp theo, xem
+[hướng dẫn service](e5-rrf-service-91.md). Chưa có adapter HTTP cho fusion.
 
 Mỗi asset nhận `sum(1 / (rank_constant + rank))` từ những luồng có asset đó;
 rank bắt đầu 1, weights bằng nhau. Không nhận/cộng cosine hoặc embedding.
@@ -52,7 +53,7 @@ nguồn/rank/contribution thực. Ví dụ `rank_constant=60` trong unit tests c
 fixture biết đáp án, không phải kết quả tối ưu.
 
 Hàm này không tự retrieval, kiểm tra snapshot hoặc áp dụng filters. Service
-tương lai phải xác nhận cùng candidate snapshot và filters trước retrieval,
+thử nghiệm xác nhận cùng candidate snapshot và filters trước retrieval,
 truyền các cửa sổ ứng viên đã sắp xếp, ghi model/index/corpus versions của
 từng luồng và gọi chính hàm này. Evaluation chỉ gọi service đó; không viết
 phép retrieval/fusion thứ hai trong runner.
@@ -121,7 +122,8 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
    corpus hash `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
    Xem [build/audit index E5](e5-metadata-index-91.md): weights thật đã đạt
    trên 200 passages sau bản sửa persistence; 831 unit tests đạt. Phần retrieval/
-   fusion/benchmark và review nhánh mới còn tiếp tục.
+   fusion/benchmark và review service tiếp tục theo [guide service](e5-rrf-service-91.md).
+   PR index #106 đã merge tại `2c18b1d`.
 2. Quỳnh Anh đã chốt contract thử nghiệm: cùng candidate snapshot và filters;
    dedup first occurrence, đánh lại rank từ 1 rồi cắt candidate window; weights
    mỗi luồng bằng 1, missing source góp 0 và tie-break asset ID tăng dần.
@@ -133,8 +135,9 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
    fallback. Luồng thành công nhưng rỗng hợp lệ. Khi nối API, unavailable
    map 503, lỗi nội bộ bất ngờ map 500; shared schema/API/runtime/search event
    cần review riêng. Giữ CLIP mặc định, chưa bật fusion production.
-   Phần E5-only/orchestration và DTO này còn phải triển khai/kiểm chứng ở bước
-   tiếp theo; xác nhận contract không thay cho code, benchmark hoặc review PR.
+   E5-only/orchestration và DTO đã có implementation thử nghiệm, xem
+   [guide service](e5-rrf-service-91.md). Xác nhận contract không thay cho
+   benchmark hoặc review PR service; chưa tích hợp shared API/runtime.
 3. Khuê đã [đề xuất protocol](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6829347357)
    ngày 12/11/2026; chi tiết ở dưới. Hash query canonical vẫn chưa được xác
    nhận, nên chưa chạy/chọn cấu hình bằng input hiện tại.
@@ -189,3 +192,20 @@ quy ước bytes được owner xác nhận.
 Không đọc/chạy lại 42 test query để chọn cấu hình. Không thay text qrels bằng
 image qrels; không trộn index 354 với phép so sánh candidate 200. Không suy
 trạng thái W4 hiện tại từ ghi chú lịch sử trong issue/docs.
+
+## E5-only và orchestration RRF — kiểm chứng local 13/11/2026
+
+Đã triển khai service thử nghiệm theo contract Quỳnh Anh: cùng snapshot/source
+hash/200 IDs/metadata, cùng filters trước retrieval, source window 200, RRF/DTO
+riêng và provenance đầy đủ. Dùng nguyên shared exact retrieval/TextSearchService
+và hàm RRF hiện có. Một nguồn lỗi làm cả fusion unavailable; empty stream hợp lệ.
+
+43 service tests và toàn backend unit 874 tests passed. Smoke offline bằng cả
+CLIP/E5 thật passed trên các query/filter tự tạo, giữ nguyên persisted index sau
+reopen; repeat giữ thứ tự/RRF/provenance với raw cosine roundoff được ghi riêng.
+Xem [guide service](e5-rrf-service-91.md) và
+[bằng chứng](../evidence/issue91-e5-rrf-service-smoke-20261113.json).
+
+Các kiểm chứng service chạy từ working tree chưa commit trên
+`feat/91-e5-rrf-service`; CI/review/merge cần theo dõi riêng. Chưa chạy raw validation hoặc quality/latency benchmark,
+chưa chọn k bằng validation, chưa nối shared API/runtime/search event.
