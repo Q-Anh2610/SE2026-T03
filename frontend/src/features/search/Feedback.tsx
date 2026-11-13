@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { FeedbackApiError, sendFeedback } from './feedback-client'
+import { notifyBusinessEvent } from './business-notification'
 
 export function Feedback({ eventId, assetId, mock }: { eventId: string; assetId: string; mock: boolean }) {
   const [state, setState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -13,7 +14,13 @@ export function Feedback({ eventId, assetId, mock }: { eventId: string; assetId:
     setState('loading')
     try {
       await sendFeedback(eventId, assetId, relevance, mock, current.signal)
-      if (!current.signal.aborted) setState('success')
+      if (!current.signal.aborted) {
+        setState('success')
+        if (!mock) {
+          try { notifyBusinessEvent('Đã lưu đánh giá', 'Phản hồi của bạn đã được lưu thành công.') }
+          catch { /* Feedback is committed; notification failure cannot undo it. */ }
+        }
+      }
     } catch (error) {
       if (!current.signal.aborted) {
         const code = await readErrorCode(error)
