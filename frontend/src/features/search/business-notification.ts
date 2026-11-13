@@ -27,7 +27,7 @@ function takeCharacters(value: string, limit: number): string {
   let result = ''
   let count = 0
   for (const character of value) {
-    if (count >= limit) break
+    if (count === limit) break
     result += character
     count += 1
   }
