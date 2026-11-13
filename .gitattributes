@@ -1,2 +1,9 @@
 data/manifests/home-interior-354-v1/*.json text eol=lf
 docs/evidence/issue89-*.json text eol=lf
+
+# #91: pin raw-byte artifacts; query LF, existing label/qrels/candidate pins CRLF.
+data/benchmark/queries.csv text eol=lf
+data/benchmark/qrels.csv text eol=crlf
+data/benchmark/labels_khue.csv text eol=crlf
+data/benchmark/labels_huyen.csv text eol=crlf
+data/benchmark/candidate_assets.csv text eol=crlf

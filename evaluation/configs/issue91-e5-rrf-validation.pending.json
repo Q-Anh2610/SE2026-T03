@@ -42,7 +42,7 @@
     "candidates": "data/manifests/objaverse_200.json"
   },
   "expected_sha256": {
-    "queries.csv": "f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788",
+    "queries.csv": "e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470",
     "qrels.csv": "cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5",
     "candidate_metadata": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
   }
