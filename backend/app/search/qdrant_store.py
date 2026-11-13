@@ -41,7 +41,10 @@ def index_vector_name(config: IndexConfig) -> str:
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
-    prefix = "siglip2" if config.model_id == "google/siglip2-base-patch16-224" else "clip"
+    prefix = {
+        "google/siglip2-base-patch16-224": "siglip2",
+        "intfloat/multilingual-e5-small": "e5",
+    }.get(config.model_id, "clip")
     return f"{prefix}_{sha256(encoded).hexdigest()[:16]}"
 
 

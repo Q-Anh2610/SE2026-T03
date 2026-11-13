@@ -1,0 +1,124 @@
+{
+  "artifacts_sha256": {
+    "audit.json": "9b08d07b3a1d25c4f450c23d6599163ecc51c0dc11156194a8dca73bb08202bf",
+    "build-report.json": "0942941b4199f4a9a9ac89b0b462b85eb4e361534909486e3642246c5a135b8f",
+    "corpus-manifest.json": "d069a0f126812e39785a6395aec5e0c03195abbe596abb5a2e3aecc7a5d6f922",
+    "corpus.jsonl": "66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5",
+    "index-manifest.json": "b89e50f8dbf3a5d6e57e41f5302a585fd06afb05f09eeb41fe0e09fdaf22a51d",
+    "persistence-audit.json": "628c047111abdd1d361349f13529810175fc29e03d608d7301c5a2781c71870c",
+    "source.json": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  },
+  "asset_ids_sha256": "de91cb2d214d3240ff6a5b4c705d4f8ef57c7b13c789fdfbd8a5210e09ea9af1",
+  "build_report": {
+    "batch_size": 16,
+    "corpus_sha256": "66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5",
+    "device": "cpu",
+    "encode_build_audit_seconds": 9.831392999971285,
+    "finished_at_utc": "2026-11-13T09:33:13.124676+00:00",
+    "index_manifest_sha256": "b89e50f8dbf3a5d6e57e41f5302a585fd06afb05f09eeb41fe0e09fdaf22a51d",
+    "load_seconds": 0.9657359999837354,
+    "package_versions": {
+      "pydantic": "2.14.1",
+      "qdrant-client": "1.15.1",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.8.0",
+      "transformers": "4.57.1"
+    },
+    "persistence_audit_sha256": "628c047111abdd1d361349f13529810175fc29e03d608d7301c5a2781c71870c",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.7",
+    "reopened_audit": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+    },
+    "schema_version": "issue91-e5-index-build-v1",
+    "scope": "200-passage index build and compatibility audit; not retrieval benchmark",
+    "started_at_utc": "2026-11-13T09:33:02.213727+00:00",
+    "status": "passed",
+    "torch_interop_threads": 4,
+    "torch_threads": 4
+  },
+  "command": "backend/.venv/Scripts/python.exe -B scripts/build_e5_metadata_index.py --corpus-root work/issue101-corpus-review-1 --output data/processed/issue91/e5-index-20261113-2 --device cpu --batch-size 16",
+  "index": {
+    "asset_count": 200,
+    "code_commit": "ccd7e01e21a7712af8688c59feedd53fc3ea5364",
+    "collection": "issue91_e5_metadata",
+    "corpus_file": "corpus.jsonl",
+    "corpus_manifest": "corpus-manifest.json",
+    "corpus_manifest_sha256": "d069a0f126812e39785a6395aec5e0c03195abbe596abb5a2e3aecc7a5d6f922",
+    "corpus_sha256": "66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5",
+    "corpus_source_commit": "a85c8fafa475eecfeaace9a66d3f4ed1d6c4bbc9",
+    "created_at_utc": "2026-11-13T09:33:12.717430Z",
+    "index_config": {
+      "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+      "dimension": 384,
+      "index_version": "issue91-e5-metadata-1588f4dc33fbe62609d8",
+      "model_id": "intfloat/multilingual-e5-small",
+      "model_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+      "preprocessing_version": "e5-fast-right-truncate512-mask-mean-fp32-l2-v1"
+    },
+    "max_text_tokens": 512,
+    "module_sha256": {
+      "backend/app/embedding/e5_encoder.py": "14e29e2c37fd92086cf282b85b2c95fbf06272cdbb2ba89495ec592a9b578552",
+      "backend/app/schemas/text_search.py": "27ff38934bdc1285a0a83ad26cb4a4bddd45f6c4d665ca067e761b643bab920e",
+      "backend/app/search/e5_index.py": "fcec9892b318e0bd36e9a96cf247903a924e93b98ea1378d3c3aa29bbe1e4c4f",
+      "backend/app/search/index_manifest.py": "40c5da3c8344a88ea53dc8f024709e41ec5334618a5b3898bd5f69bdf084abc9",
+      "backend/app/search/qdrant_store.py": "57c4989b58e6e6c2f9d3c03db6e0d361de589d41a2d468adaaec9e887721a8e4",
+      "scripts/build_e5_metadata_index.py": "dab7661ba066231dd4313282c5c8858d58f0c8b1c0d78b8fc05e88370c0e8f58"
+    },
+    "normalization": "L2",
+    "observed_at_utc": "2026-11-13T09:33:12.717425Z",
+    "package_versions": {
+      "pydantic": "2.14.1",
+      "qdrant-client": "1.15.1",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.8.0",
+      "transformers": "4.57.1"
+    },
+    "passage_prefix": "passage: ",
+    "point_count": 200,
+    "query_prefix": "query: ",
+    "recipe_version": "e5-metadata-passage-v1-draft",
+    "schema_version": "e5-metadata-index-manifest-v1",
+    "similarity": "Cosine",
+    "source_manifest": "source.json",
+    "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+    "tokenizer_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "vector_name": "e5_0c0cbdfd79bca607",
+    "working_tree_dirty": true
+  },
+  "limitations": [
+    "No retrieval quality or latency benchmark.",
+    "No shared API/fusion contract change.",
+    "Code uncommitted at build; exact module byte hashes recorded.",
+    "First build -1 failed and retained for diagnosis; this report covers only build -2."
+  ],
+  "persistence": {
+    "expected_submitted": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+    },
+    "in_memory_after_upsert": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "16d14e5e759bf7c362926ab9c4affbaa23568a5883e5404cc24588ac376ff3c7"
+    },
+    "persisted_after_reopen": {
+      "asset_count": 200,
+      "point_count": 200,
+      "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+    },
+    "policy": "qdrant-local-submitted-vectors-exact-v1"
+  },
+  "schema_version": "issue91-e5-index-evidence-v1",
+  "scope": "200-passage index build and compatibility audit; not retrieval benchmark",
+  "tests": {
+    "backend_unit_after_fix": "831 passed in 52.60s",
+    "e5_index_after_fix": "43 passed in 42.91s",
+    "regression_before_fix": "1 failed in 6.50s, reproduced pre-close versus persisted fingerprint mismatch"
+  }
+}

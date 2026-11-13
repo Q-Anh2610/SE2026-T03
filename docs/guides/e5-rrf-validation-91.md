@@ -1,9 +1,10 @@
 # E5/RRF validation — phần độc lập của #91
 
 Trạng thái: encoder và fusion nội bộ đã có trong [PR #100](https://github.com/Q-Anh2610/SE2026-T03/pull/100)
-đang Draft, chưa merge.
-Đã có smoke encoder E5 bằng weights thật ngày 13/11/2026; chưa có E5
-corpus/index hoặc raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
+đã được Khuê approve và merge vào `develop` tại `ccd7e01` ngày 13/11/2026.
+Đã có smoke encoder E5 bằng weights thật và tiếp nhận corpus ngày 13/11/2026.
+Build/audit index E5 bằng weights thật đã đạt trên 200 passages; xem
+[bằng chứng index](../evidence/issue91-e5-index-build-20261113.json). Chưa có raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
 CLIP mặc định; không đổi shared schema/API/runtime.
 
 ## Encoder
@@ -15,8 +16,8 @@ CLIP mặc định; không đổi shared schema/API/runtime.
   và special tokens; không tự dịch hoặc bỏ dấu. Query trim 1–500 Unicode code
   points, nội dung passage trim và phải không rỗng.
 - `encode_text(query)` thêm `query: `; `encode_passages(texts)` thêm `passage: `.
-  Caller truyền nội dung chưa có prefix. Chưa chọn trường/thứ tự ghép metadata;
-  không encode asset ID hoặc caption bịa thay passage rỗng.
+  Caller truyền nội dung chưa có prefix. Corpus #101 đã được tiếp nhận theo
+  version/hash cụ thể; xem [hướng dẫn index E5](e5-metadata-index-91.md).
 - Average pooling có attention mask, float32 rồi L2; từ chối shape sai,
   vector zero/non-finite. Không nhân score với 100.
 - Preprocessing: `e5-fast-right-truncate512-mask-mean-fp32-l2-v1`.
@@ -32,8 +33,10 @@ Nguồn: [model card chính thức](https://huggingface.co/intfloat/multilingual
 ## RRF nội bộ
 
 `app.search.rrf.reciprocal_rank_fusion` nhận hai sequence asset ID theo thứ tự
-retrieval và `RRFConfig` tường minh. Output là kiểu nội bộ, chưa phải interface
-đã được Quỳnh Anh chấp thuận. Chưa có service orchestration hoặc adapter HTTP.
+retrieval và `RRFConfig` tường minh. Output là kiểu nội bộ. Quỳnh Anh đã
+[xác nhận contract candidate/fusion ngày 13/11/2026](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6849816002):
+có thể giữ `RRFResult` cho hàm thuần; tầng orchestration dùng DTO riêng.
+Chưa triển khai service orchestration hoặc adapter HTTP trong nhánh index này.
 
 Mỗi asset nhận `sum(1 / (rank_constant + rank))` từ những luồng có asset đó;
 rank bắt đầu 1, weights bằng nhau. Không nhận/cộng cosine hoặc embedding.
@@ -111,14 +114,27 @@ Raw report gốc giữ ở `data/processed/issue91/` (Git ignore).
 mở index. Thời gian trên không phải p50/p95 benchmark; chưa có kết quả
 relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
 
-## Các xác nhận còn cần
+## Các xác nhận và việc còn lại
 
-1. Huyền: nguồn metadata gốc trên đúng 200 asset; các trường/thứ tự ghép,
-   tags order/dedup, whitespace/newline/Unicode, null/empty và asset không có
-   nội dung. Chốt recipe version, asset IDs, source/corpus hash trước index.
-2. Quỳnh Anh: candidate/fusion interface, `score_type` RRF, provenance mỗi
-   nguồn, versions, lỗi dependency và phạm vi integration; không nhét score
-   RRF vào contract cosine W3. Chưa sửa shared DTO/API.
+1. Corpus của Huyền tại PR #102, commit `a85c8fa`, đã được Chi chạy tái lập
+   và tiếp nhận ngày 13/11/2026. Recipe giữ tên `e5-metadata-passage-v1-draft`;
+   corpus hash `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
+   Xem [build/audit index E5](e5-metadata-index-91.md): weights thật đã đạt
+   trên 200 passages sau bản sửa persistence; 831 unit tests đạt. Phần retrieval/
+   fusion/benchmark và review nhánh mới còn tiếp tục.
+2. Quỳnh Anh đã chốt contract thử nghiệm: cùng candidate snapshot và filters;
+   dedup first occurrence, đánh lại rank từ 1 rồi cắt candidate window; weights
+   mỗi luồng bằng 1, missing source góp 0 và tie-break asset ID tăng dần.
+   DTO orchestration riêng có `score_type="rrf"`, hits/contributions,
+   config version, filters thực tế và provenance snapshot/source hash,
+   corpus hash/recipe, model/revision/index/config/manifest mỗi luồng.
+   Source names: `clip_text_to_preview`, `e5_text_to_metadata`.
+   Một luồng lỗi/index không tương thích làm cả fusion unavailable; không
+   fallback. Luồng thành công nhưng rỗng hợp lệ. Khi nối API, unavailable
+   map 503, lỗi nội bộ bất ngờ map 500; shared schema/API/runtime/search event
+   cần review riêng. Giữ CLIP mặc định, chưa bật fusion production.
+   Phần E5-only/orchestration và DTO này còn phải triển khai/kiểm chứng ở bước
+   tiếp theo; xác nhận contract không thay cho code, benchmark hoặc review PR.
 3. Khuê đã [đề xuất protocol](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6829347357)
    ngày 12/11/2026; chi tiết ở dưới. Hash query canonical vẫn chưa được xác
    nhận, nên chưa chạy/chọn cấu hình bằng input hiện tại.
