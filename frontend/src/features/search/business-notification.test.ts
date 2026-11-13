@@ -5,6 +5,7 @@ const construct = vi.fn()
 
 class FakeNotification {
   static permission: NotificationPermission = 'granted'
+  static requestPermission = vi.fn().mockResolvedValue('granted' as NotificationPermission)
   constructor(title: string, options?: NotificationOptions) {
     construct(title, options)
   }
@@ -15,6 +16,7 @@ afterEach(() => {
   vi.restoreAllMocks()
   construct.mockReset()
   FakeNotification.permission = 'granted'
+  FakeNotification.requestPermission.mockReset()
 })
 
 it('accepts a title exactly at the 120-character boundary', () => {
@@ -44,6 +46,7 @@ it.each(['default', 'denied'] as const)('skips notification when permission is %
 
   expect(notifyBusinessEvent('Saved', 'done')).toBe(false)
   expect(construct).not.toHaveBeenCalled()
+  expect(FakeNotification.requestPermission).not.toHaveBeenCalled()
 })
 
 it('skips safely when the browser has no Notification API', () => {

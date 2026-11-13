@@ -84,6 +84,23 @@ it.each([true, false])('ignores a completed feedback request after unmount (succ
   })
 })
 
+it('does not notify for live feedback that completes after unmount', async () => {
+  schemaMock = false
+  let resolve!: (value: Response) => void
+  postResponse = () => new Promise<Response>((res) => { resolve = res }) as unknown as Response
+  const view = render(<Feedback eventId="live-event" assetId="asset-2" mock={false} />)
+  fireEvent.click(screen.getByRole('button', { name: 'Phù hợp' }))
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+  view.unmount()
+  expect(fetchMock.mock.calls[1][1].signal.aborted).toBe(true)
+
+  await act(async () => {
+    resolve(new Response(JSON.stringify({ feedback_id: 'f-live', search_event_id: 'live-event', asset_id: 'asset-2', relevance: true, created_at: '2026-11-10T00:00:00Z', mock: false, storage: 'postgresql' }), { status: 201 }))
+  })
+
+  expect(notifyBusinessEvent).not.toHaveBeenCalled()
+})
+
 it('stores live feedback only after PostgreSQL response matches event, asset and relevance', async () => {
   schemaMock = false
   respond({ feedback_id: 'f2', search_event_id: 'live-event', asset_id: 'asset-2', relevance: false, created_at: '2026-11-10T00:00:00Z', mock: false, storage: 'postgresql' })
