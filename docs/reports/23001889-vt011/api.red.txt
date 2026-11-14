@@ -1,0 +1,9 @@
+"""Scaffold test-first: ứng dụng chưa có endpoint export."""
+from fastapi import FastAPI
+from app.core.errors import install_error_handlers
+
+
+def create_export_app(engine, grants):
+    app = FastAPI(title='VT-011 export harness')
+    install_error_handlers(app)
+    return app
