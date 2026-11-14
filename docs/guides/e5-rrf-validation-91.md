@@ -4,8 +4,13 @@ Trạng thái: encoder và fusion nội bộ đã có trong [PR #100](https://gi
 đã được Khuê approve và merge vào `develop` tại `ccd7e01` ngày 13/11/2026.
 Đã có smoke encoder E5 bằng weights thật và tiếp nhận corpus ngày 13/11/2026.
 Build/audit index E5 bằng weights thật đã đạt trên 200 passages; xem
-[bằng chứng index](../evidence/issue91-e5-index-build-20261113.json). Chưa có raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
-CLIP mặc định; không đổi shared schema/API/runtime.
+[bằng chứng index](../evidence/issue91-e5-index-build-20261113.json). Ngày 14/11/2026,
+ba gói validation thật k=10/20/60 đã passed và được audit: xem
+[báo cáo quality/latency](../evaluation/issue91-e5-rrf-validation-20261114.md) và
+[guide tái lập](e5-rrf-validation-results-91.md). Đã có raw local, chưa khóa k;
+chờ Khuê review báo cáo và PR kết quả. Chưa nghiệm thu toàn bộ #91.
+Giữ CLIP mặc định; không đổi shared schema/API/runtime. Các checkpoint có ngày
+ở phần dưới ghi lại bằng chứng tại thời điểm tương ứng.
 
 ## Encoder
 
@@ -142,7 +147,9 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
    ngày 12/11/2026; chi tiết ở dưới. Sau đó Khuê đã
    [chốt hướng đính chính artifact](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6859981671):
    dùng nguyên blob `ff7b64a` làm căn cứ PR erratum. Chỉ sau review/merge mới
-   tạo config confirmed và chạy/chọn cấu hình W5; config hiện vẫn pending.
+   tạo config confirmed và chạy/chọn cấu hình W5. PR #109 đã merge tại
+   `63122a3`; file confirmed v2 đã tạo và ba gói đã chạy, còn default config
+   giữ pending để CLI không tự bật benchmark. Chưa khóa k.
 4. Đối chiếu trước erratum: checkout local ban đầu có BOM/CRLF, 70 query, split 28/42;
    SHA-256 bytes là
    `80e7de4db77929bc79c87ddb1da1bdb1f101832d39a2fd3c6549ec8db7ae30b9`,
@@ -157,7 +164,7 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
    `cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5`,
    source 200 vẫn khớp `9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd`.
 
-## Protocol Khuê đề xuất — chưa chạy
+## Protocol đã thống nhất — grid đã chạy ngày 14/11/2026
 
 - Chỉ 28 validation query tiếng Anh, candidate universe đúng 200 asset,
   filters `{}`; CLIP-only, E5-only, CLIP+E5 RRF cùng inputs.
@@ -167,7 +174,7 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
   runner tổng quát hiện tại từ chối query không có relevant IDs.
 - Lấy đủ 200 ứng viên mỗi luồng và xuất raw top 200 source/fused. Nếu không
   đủ phải báo/chốt lại protocol; không âm thầm so cửa sổ ứng viên khác nhau.
-- Grid k thuộc `{10,20,60}` là đề xuất validation, chưa phải lựa chọn đã đo;
+- Grid k thuộc `{10,20,60}` đã đo đầy đủ; chưa khóa lựa chọn k;
   rank từ 1, tie-break asset ID tăng dần, version hóa k/candidate count.
 - Raw có query ID, asset ID, rank, raw score, source, RRF contribution, cả
   source/fused rankings; kèm input hashes, model/index/config versions,
@@ -223,9 +230,9 @@ Runner tại `scripts/run_e5_rrf_validation.py` dùng nguyên service CLIP/E5/RR
 measured samples/cấu hình, nearest-rank p50/p95 và cách giữ lỗi/partial output.
 
 Config mặc định `evaluation/configs/issue91-e5-rrf-validation.pending.json`
-chặn trước khi đọc CSV hoặc nạp weights. Chỉ kiểm chứng runner bằng fixtures;
-chưa xác nhận canonical inputs, chạy raw validation thật hoặc chọn k. Tests
-runner không thay bằng chứng quality/latency thật của tiêu chí 5/6.
+chặn trước khi đọc CSV hoặc nạp weights. Sau review/merge PR #109, dùng file
+confirmed v2 để chạy ba gói thật và audit kết quả. Tests runner là bằng chứng
+fixtures riêng; quality/latency thật nằm trong báo cáo ngày 14/11/2026.
 
 
 ## Đính chính query artifact — đề nghị ngày 14/11/2026
@@ -236,4 +243,5 @@ Query Git blob không đổi IDs/wording/groups/split; active lock/pending pins
 được đính chính theo blob gốc `ff7b64a`. Qrels/labels/candidate/snapshot và
 report/provenance/script baseline lịch sử được bảo toàn. `.gitattributes`
 pin query LF và các CSV còn lại CRLF theo raw hashes đã có; checker kiểm cả
-hai chế độ autocrlf mà không chuẩn hóa hash. Chưa tạo config confirmed.
+hai chế độ autocrlf mà không chuẩn hóa hash. PR #109 đã merge; config confirmed
+v2 ghi đầy đủ source/head/merge commits và pin raw record. Xem guide results ở trên.
