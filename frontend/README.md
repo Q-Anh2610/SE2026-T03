@@ -247,19 +247,53 @@ Không dùng bộ `test:integration` hiện tại làm smoke thật vì nó ch�
 backend fixture. Không tải model/dataset hoặc rebuild index dùng chung để chạy
 smoke frontend.
 
-## Admin job status — Issue #70
+## Admin job status — Issue #103 (tiếp nối #70)
 
-Mở `/#admin-status` (hoặc chọn **Trạng thái job** trên thanh điều hướng) để xem UI.
-Trang hiện dùng fixtures xem trước; trạng thái và progress trong đó chỉ minh họa,
-không phải contract backend. Endpoint jobs/status chưa có, nên chưa thể nghiệm thu
-việc kết nối API thật. Lỗi tải được hiển thị riêng và không thay bằng fixtures.
+Mở `/#admin-status` hoặc chọn **Trạng thái job**. Trang gọi
+`GET /api/v1/admin/jobs` theo [contract W5](../docs/contracts/jobs-status-w5.md),
+lọc AND theo kind/status và phân trang 12 job. Đổi bộ lọc về trang 1; Tải lại và
+Thử lại giữ bộ lọc/trang của lượt đọc. Không có thao tác tạo/retry job hoặc reindex.
 
-Kiểm tra riêng các trạng thái loading, empty, danh sách fixture, lỗi và retry:
+Backend cần PostgreSQL, migration `0003` và `APP_ADMIN_API_KEY`; xem
+[hướng dẫn backend](../docs/guides/jobs-status-api.md). Từ thư mục frontend:
 
-```bash
-npm test -- src/features/admin/AdminStatusPage.test.tsx
+```powershell
+$env:VITE_API_BASE_URL = 'http://127.0.0.1:8000'
+rtk proxy npm.cmd run dev:api
 ```
 
-Component nhận prop `loadJobs` để tests thay loader và điều khiển kết quả; loader
-mặc định chỉ trả fixtures. Việc nối API thật và smoke test với dữ liệu backend
-được để lại cho W5 sau khi contract và nguồn trạng thái được chốt.
+Nhập khóa vào ô password rồi nhấn **Kết nối**. Khóa chỉ giữ trong state của trang,
+truyền qua `X-Admin-Key`; không đặt khóa trong biến `VITE_*`, URL, localStorage,
+sessionStorage hoặc logs. Rời trang, tải lại trang hoặc **Xóa khóa khỏi phiên**
+đưa UI về yêu cầu nhập khóa; request cũ được hủy và kết quả đến muộn bị bỏ qua.
+Frontend khác origin cần backend cho phép origin/CORS và header quản trị.
+
+UI xử lý loading, empty, lỗi HTTP/mạng/contract, retry đọc dữ liệu và phân trang.
+403 yêu cầu nhập lại khóa; 503 `ADMIN_API_UNAVAILABLE` thông báo backend chưa cấu
+hình. Job failed trong response 200 vẫn là dữ liệu, khác lỗi tải API. Progress
+null hiển thị chưa xác định; 100% không đồng nghĩa thành công. Ingestion succeeded
+chưa xác nhận searchable; indexing standalone chưa xác nhận đổi active index.
+Không fallback fixtures khi API lỗi. Trang không tự polling; dùng **Tải lại**.
+
+Fixtures W3 chỉ còn ở `/#admin-status-preview` khi development, có nhãn preview;
+route này không bật trong build production. Component preview và tests cũ vẫn giữ.
+
+```powershell
+rtk proxy npm.cmd test -- src/features/admin
+rtk proxy npm.cmd run test:coverage
+rtk proxy npm.cmd run lint
+rtk proxy npm.cmd run build
+```
+
+E2E dùng HTTP interception, khóa giả và jobs giả; chạy trên API desktop và
+production mobile. Để request cùng origin trong môi trường E2E, từ frontend:
+
+```powershell
+$env:VITE_API_BASE_URL = ''
+rtk proxy npm.cmd run test:e2e
+```
+
+Lệnh E2E build trước rồi tự quản lý server ở 5193/5194/5195; cần các cổng trống
+và Chrome đã cài theo cấu hình repo. E2E không gọi DB/model hoặc tải asset thật.
+Các smoke HTTP/UI với PostgreSQL và runner thật, kết quả local và giới hạn được
+ghi riêng tại [bàn giao Admin W5](../docs/guides/admin-jobs-w5.md).

@@ -14,8 +14,8 @@ export default defineConfig({
   projects: [
     { name: 'mock-desktop', testMatch: 'mock.spec.ts', use: { baseURL: 'http://127.0.0.1:5193', viewport: { width: 1280, height: 900 } } },
     { name: 'mock-mobile', testMatch: 'mock.spec.ts', use: { baseURL: 'http://127.0.0.1:5193', viewport: { width: 390, height: 844 } } },
-    { name: 'api-desktop', testMatch: 'api.spec.ts', use: { baseURL: 'http://127.0.0.1:5194', viewport: { width: 1280, height: 900 } } },
-    { name: 'production-mobile', testMatch: 'api.spec.ts', use: { baseURL: 'http://127.0.0.1:5195', viewport: { width: 390, height: 844 } } },
+    { name: 'api-desktop', testMatch: ['api.spec.ts', 'admin.spec.ts'], use: { baseURL: 'http://127.0.0.1:5194', viewport: { width: 1280, height: 900 } } },
+    { name: 'production-mobile', testMatch: ['api.spec.ts', 'admin.spec.ts'], use: { baseURL: 'http://127.0.0.1:5195', viewport: { width: 390, height: 844 } } },
   ],
   webServer: [
     { command: 'npm run dev -- --host 127.0.0.1 --port 5193 --strictPort', url: 'http://127.0.0.1:5193', reuseExistingServer: false },

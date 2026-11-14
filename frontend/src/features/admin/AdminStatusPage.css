@@ -158,3 +158,130 @@
     display: grid;
   }
 }
+
+.admin-status-page--live h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.admin-status-page--live .admin-status-page__auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+  max-width: 640px;
+  margin-bottom: 1.5rem;
+}
+
+.admin-status-page--live .admin-status-page__auth label {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.admin-status-page--live input,
+.admin-status-page--live select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--input);
+  color: var(--ink);
+}
+
+.admin-status-page--live button {
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.admin-status-page--live button:hover:not(:disabled) {
+  background: var(--wash);
+  border-color: var(--ink);
+}
+
+.admin-status-page--live button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-status-page--live .admin-status-page__auth button {
+  background: var(--accent);
+  color: var(--button-ink);
+  border-color: var(--accent);
+}
+
+.admin-status-page--live .admin-status-page__auth button:hover {
+  background: var(--accent);
+  opacity: 0.85;
+}
+
+.admin-status-page--live .admin-status-page__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-status-page--live .admin-status-page__filters > div {
+  display: grid;
+  gap: 0.5rem;
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+
+.admin-status-page--live .admin-status-page__actions,
+.admin-status-page--live .admin-status-page__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-status-page--live .admin-status-page__actions {
+  margin-bottom: 1.5rem;
+}
+
+.admin-status-page--live .admin-status-page__pagination {
+  margin-top: 0.5rem;
+}
+
+.admin-status-page--live .admin-job-card {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+.admin-status-page--live .admin-job-card__details dt,
+.admin-status-page--live .admin-job-card__type,
+.admin-status-page--live .admin-status-page__state,
+.admin-status-page--live .admin-status-page__intro p:last-child {
+  color: var(--muted);
+}
+
+.admin-status-page--live .admin-status-page__state {
+  border-color: var(--line);
+}
+
+.admin-status-page--live .admin-status-page__error {
+  background: var(--surface);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.admin-status-page--live .admin-job-card__error {
+  color: var(--error);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .admin-status-page--live .admin-status-page__auth {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-status-page--live .admin-status-page__filters > div {
+    max-width: none;
+  }
+}

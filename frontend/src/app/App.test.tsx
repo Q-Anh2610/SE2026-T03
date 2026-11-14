@@ -95,6 +95,30 @@ describe('admin status routing', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Trạng thái job' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Khóa quản trị')).toBeInTheDocument()
+    expect(screen.queryByText('job-ingestion-001')).not.toBeInTheDocument()
+  })
+
+  it('keeps fixtures on an explicitly selected development preview route', async () => {
+    vi.stubEnv('DEV', true)
+    window.location.hash = '#admin-status-preview'
+
+    render(<App />)
+
+    expect(await screen.findByText('job-ingestion-001')).toBeInTheDocument()
+    expect(screen.getByText(/Đây là chế độ preview riêng/)).toBeInTheDocument()
+    expect(screen.queryByLabelText('Khóa quản trị')).not.toBeInTheDocument()
+  })
+
+  it('does not expose the fixture preview route in production', () => {
+    vi.stubEnv('DEV', false)
+    window.location.hash = '#admin-status-preview'
+
+    render(<App />)
+
+    expect(document.querySelector('#search-panel')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Trạng thái job' })).not.toBeInTheDocument()
+    expect(screen.queryByText('job-ingestion-001')).not.toBeInTheDocument()
   })
 
   it('switches to the admin status page when the hash changes', async () => {

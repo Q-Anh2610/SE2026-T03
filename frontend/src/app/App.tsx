@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { SearchPage } from '../features/search/SearchPage'
 import { ImageSearchPage } from '../features/search/image/ImageSearchPage'
 import { AdminStatusPage } from '../features/admin/AdminStatusPage'
+import { LiveAdminStatusPage } from '../features/admin/LiveAdminStatusPage'
 
 export function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -46,7 +47,15 @@ export function App() {
         </button>
       </header>
       <main id="main" tabIndex={-1}>
-        {route === '#admin-status' ? <AdminStatusPage /> : route === '#image-search' ? <ImageSearchPage /> : <SearchPage />}
+        {route === '#admin-status' ? (
+          <LiveAdminStatusPage />
+        ) : route === '#admin-status-preview' && import.meta.env.DEV ? (
+          <AdminStatusPage />
+        ) : route === '#image-search' ? (
+          <ImageSearchPage />
+        ) : (
+          <SearchPage />
+        )}
       </main>
       <footer className="site-footer"><div><strong>Connected</strong></div><span>Thư viện 3D</span></footer>
     </div>

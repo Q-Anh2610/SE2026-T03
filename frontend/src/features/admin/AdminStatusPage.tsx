@@ -115,7 +115,7 @@ export function AdminStatusPage({ loadJobs = loadFixtureJobs }: AdminStatusPageP
         <p>Theo dõi tình trạng ingestion và indexing.</p>
         <p>
           Dữ liệu dưới đây là fixtures xem trước; trạng thái và tiến độ chỉ là ví dụ,
-          không phải contract backend. API jobs/status chưa được nối.
+          không phải contract backend. Đây là chế độ preview riêng.
         </p>
       </div>
 
