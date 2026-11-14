@@ -109,6 +109,12 @@ asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 ## Kiểm thử
 
+Jobs/status W5 (#115): [contract và JSON](../docs/contracts/jobs-status-w5.md),
+[migration, runner CLI và smoke](../docs/guides/jobs-status-api.md).
+Hai GET `/api/v1/admin/jobs` và `/api/v1/admin/jobs/{job_id}` đọc PostgreSQL;
+cần migration `0003` và `APP_ADMIN_API_KEY` (header `X-Admin-Key`).
+Chưa cấu hình khóa thì API quản trị trả 503. Chưa có HTTP tạo/retry/reindex job.
+
 Quy trình kiểm chứng migration, lỗi và Frontend–PostgreSQL của Issue #49:
 [hướng dẫn và lệnh chạy lại](../docs/guides/asset-api-verification.md).
 
