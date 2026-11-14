@@ -5,10 +5,22 @@ from dataclasses import asdict, dataclass
 from hashlib import sha256
 import json
 from math import isclose, isfinite, sqrt
+import time
 from typing import Any
 from uuid import NAMESPACE_URL, uuid5
 
+import httpx
 from qdrant_client import QdrantClient, models
+from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedResponse
+
+
+def _is_retryable_upsert_error(error: Exception) -> bool:
+    """Chỉ thử lại lỗi HTTP tạm thời, không coi lỗi parse là lỗi mạng."""
+    if isinstance(error, UnexpectedResponse):
+        return error.status_code in {408, 429, 500, 502, 503, 504}
+    return isinstance(error, ResponseHandlingException) and isinstance(
+        error.source, (httpx.TimeoutException, httpx.NetworkError)
+    )
 
 
 @dataclass(frozen=True)
@@ -55,13 +67,27 @@ class QdrantStore:
         *,
         collection_name: str,
         config: IndexConfig,
+        max_attempts: int = 3,
+        retry_delay: float = 0.1,
     ) -> None:
         if not collection_name.strip():
             raise ValueError("collection_name không được rỗng.")
 
+        if type(max_attempts) is not int or not 1 <= max_attempts <= 3:
+            raise ValueError("max_attempts phải là số nguyên trong khoảng 1..3.")
+        if (
+            isinstance(retry_delay, bool)
+            or not isinstance(retry_delay, (int, float))
+            or not isfinite(retry_delay)
+            or not 0 <= retry_delay <= 0.5
+        ):
+            raise ValueError("retry_delay phải hữu hạn trong khoảng 0..0.5 giây.")
+
         self.client = client
         self.collection_name = collection_name
         self.config = config
+        self.max_attempts = max_attempts
+        self.retry_delay = retry_delay
         self._versions = {
             **asdict(config),
             "distance": models.Distance.COSINE.value,
@@ -177,11 +203,19 @@ class QdrantStore:
             return 0
 
         self.ensure_collection()
-        operation = self.client.upsert(
-            collection_name=self.collection_name,
-            points=points,
-            wait=True,
-        )
+        # Retry cùng points: timeout không chứng minh remote chưa ghi dữ liệu.
+        for attempt in range(1, self.max_attempts + 1):
+            try:
+                operation = self.client.upsert(
+                    collection_name=self.collection_name,
+                    points=points,
+                    wait=True,
+                )
+                break
+            except (ResponseHandlingException, UnexpectedResponse) as exc:
+                if not _is_retryable_upsert_error(exc) or attempt == self.max_attempts:
+                    raise
+                time.sleep(self.retry_delay * (2 ** (attempt - 1)))
 
         if operation.status != models.UpdateStatus.COMPLETED:
             raise RuntimeError("Qdrant chưa xác nhận ghi hoàn tất.")
