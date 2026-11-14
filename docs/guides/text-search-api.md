@@ -108,6 +108,10 @@ trước/sau; dừng server và dọn schema của lượt chạy. Report runtim
 
 ## OpenAPI và Frontend
 
+Cập nhật #116: [explanation W5](../contracts/search-explanation-w5.md) thống nhất
+lời giải thích baseline và bổ sung `results[].score_type="cosine"` ở response
+thật, giữ nguyên score/versions và request. Chưa tích hợp E5/RRF vào HTTP API.
+
 - [docs/openapi.json](../openapi.json): chế độ mock mặc định hiện có.
 - [docs/openapi-text-search.json](../openapi-text-search.json): text router service,
   request/response #63, ví dụ cấu trúc minh họa và lỗi 400/500/503. Chế độ

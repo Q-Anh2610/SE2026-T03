@@ -125,6 +125,56 @@
       "title": "AssetMetadata",
       "type": "object"
     },
+    "LiveSearchResult": {
+      "description": "Kết quả baseline CLIP thật; metadata/score mock vẫn dùng SearchResult riêng.",
+      "properties": {
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "asset": {
+          "$ref": "#/$defs/AssetMetadata"
+        },
+        "retrieval_sources": {
+          "description": "Một nguồn CLIP thực tế: clip_text_to_preview hoặc clip_image_to_preview theo endpoint.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Retrieval Sources",
+          "type": "array"
+        },
+        "explanation": {
+          "description": "Giải thích tín hiệu retrieval bằng tiếng Việt; không khẳng định mesh, license hoặc thuộc tính chưa biết.",
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "score": {
+          "description": "Cosine giữa embedding query và preview, [-1,1], cao hơn xếp trước; không phải xác suất hoặc phần trăm chính xác.",
+          "maximum": 1,
+          "minimum": -1,
+          "title": "Score",
+          "type": "number"
+        },
+        "score_type": {
+          "const": "cosine",
+          "default": "cosine",
+          "description": "Loại score của baseline CLIP; không dùng contract này để chứa RRF score.",
+          "title": "Score Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rank",
+        "asset",
+        "retrieval_sources",
+        "explanation",
+        "score"
+      ],
+      "title": "LiveSearchResult",
+      "type": "object"
+    },
     "LiveTextSearchRequest": {
       "additionalProperties": false,
       "properties": {
@@ -181,7 +231,7 @@
         },
         "results": {
           "items": {
-            "$ref": "#/$defs/SearchResult"
+            "$ref": "#/$defs/LiveSearchResult"
           },
           "title": "Results",
           "type": "array"
@@ -280,49 +330,6 @@
         "dataset_snapshot"
       ],
       "title": "SearchExecutionVersions",
-      "type": "object"
-    },
-    "SearchResult": {
-      "properties": {
-        "rank": {
-          "minimum": 1,
-          "title": "Rank",
-          "type": "integer"
-        },
-        "asset": {
-          "$ref": "#/$defs/AssetMetadata"
-        },
-        "retrieval_sources": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Retrieval Sources",
-          "type": "array"
-        },
-        "explanation": {
-          "title": "Explanation",
-          "type": "string"
-        },
-        "score": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Score"
-        }
-      },
-      "required": [
-        "rank",
-        "asset",
-        "retrieval_sources",
-        "explanation"
-      ],
-      "title": "SearchResult",
       "type": "object"
     },
     "TextSearchCandidates": {

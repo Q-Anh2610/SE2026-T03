@@ -7,6 +7,10 @@ Detail dùng cùng asset ID và metadata mapping.
 
 ## Request và response
 
+Contract explanation cập nhật #116: [text/image W5](../contracts/search-explanation-w5.md).
+Response thật bổ sung `results[].score_type="cosine"`; explanation vẫn là chuỗi,
+score không chuyển thành phần trăm và versions giữ nguyên từ service.
+
 | Trường multipart | Quy tắc |
 | --- | --- |
 | `image` | Bytes JPEG/PNG, tối đa 5 MiB, 4096 px mỗi chiều, decode được |

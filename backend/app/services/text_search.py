@@ -8,14 +8,15 @@ from sqlalchemy.orm import Session
 
 from app.core.errors import api_error
 from app.models import Asset
-from app.schemas.api import Pagination, SearchResult
+from app.schemas.api import Pagination
 from app.schemas.text_search import (
-    LiveTextSearchRequest, LiveTextSearchResponse, TextSearchCandidates, TextSearchFilters,
+    LiveSearchResult, LiveTextSearchRequest, LiveTextSearchResponse, TextSearchCandidates, TextSearchFilters,
 )
 from app.services.assets import asset_metadata
 from app.services.search_events import persist_text_search_event
 from app.services.search_events import persist_image_search_event
 from app.schemas.image_search import LiveImageSearchRequest, LiveImageSearchResponse
+from app.services.search_explanation import clip_explanation
 
 
 class SearchUnavailable(RuntimeError):
@@ -72,14 +73,14 @@ def execute_search(
     # Kiểm tra mapping + response trước commit. UUID tạm chỉ tồn tại nội bộ,
     # sau commit thay đúng hai trường ID bằng UUID do persistence cấp.
     response_model = LiveImageSearchResponse if image_search else LiveTextSearchResponse
+    explanation = clip_explanation(response_model.retrieval_source)
     response = response_model(
         query_id=UUID(int=0), search_event_id=UUID(int=0),
         query=request.query_image_ref if image_search else request.query,
-        results=[SearchResult(
+        results=[LiveSearchResult(
             rank=rank, asset=asset_metadata(assets[hit.asset_id]), score=hit.score,
             retrieval_sources=[response_model.retrieval_source],
-            explanation=("Xếp hạng theo tương đồng cosine giữa ảnh truy vấn và ảnh preview bằng CLIP."
-                         if image_search else "Xếp hạng theo tương đồng cosine giữa văn bản và ảnh preview bằng CLIP."),
+            score_type="cosine", explanation=explanation,
         ) for rank, hit in enumerate(selected, 1)],
         versions=candidates.versions,
         pagination=Pagination(page=request.page, limit=request.limit, total=total, pages=pages,
