@@ -27,7 +27,7 @@ Kết quả mong đợi hiện tại: `status="blocked"`,
 Chưa đọc CSV benchmark, nạp weights, mở index hoặc tạo output khi config pending.
 `--help` chỉ in hướng dẫn. Không có cờ force/bỏ kiểm tra hash.
 
-Để chạy thật cần một config confirmed **được review**, ghi:
+Config confirmed ghi lại canonical input **đã được review**, gồm:
 
 - Xác nhận của owner về artifact/commit queries và SHA-256 raw bytes tái lập.
 - Liên kết issue comment/PR xác nhận canonical inputs; xác nhận contract fusion
@@ -46,8 +46,10 @@ không positive, mẫu số Recall 21; không âm thầm đổi protocol nếu s
 
 ## Cách gọi sau khi input đã được xác nhận
 
-Ví dụ dưới đây yêu cầu file confirmed sau review; file đó **chưa được tạo**
-trong nhánh chuẩn bị runner này:
+Sau review và merge PR #109, config confirmed v2 đã được tạo trên nhánh
+kết quả validation. Config ghi source/head/merge commits và pin raw bản ghi
+erratum. Xem [guide confirmed/results](e5-rrf-validation-results-91.md).
+Chạy preflight trước khi nạp model:
 
 ```bash
 backend/.venv/Scripts/python.exe -B scripts/run_e5_rrf_validation.py --config evaluation/configs/issue91-e5-rrf-validation.confirmed.json --preflight-only
@@ -131,10 +133,11 @@ orchestration/RRF thật. Một test tích hợp DTO dùng encoder fixture + Qdr
 thật từ tests service; không nạp weights hoặc mở benchmark query/qrels thật.
 Fixture outputs luôn ghi `execution_kind="fixture"`, `benchmark=false`.
 
-Việc có runner/tests không hoàn thành tiêu chí 5/6 của #91. Canonical input
-confirmation, raw validation thật, quality/latency report và bàn giao cuối vẫn
-còn chờ. Runner đã được Khuê review và merge qua PR #108 tại `522a466`;
-PR đính chính artifact/benchmark được review riêng trước bước confirmed.
+Việc có runner/tests không tự hoàn thành tiêu chí 5/6 của #91. Sau review/merge
+PR #109, ba gói raw validation thật đã passed ngày 14/11/2026; xem
+[báo cáo quality/latency](../evaluation/issue91-e5-rrf-validation-20261114.md).
+Runner cũ được Khuê review và merge qua PR #108 tại `522a466`; loader confirmed,
+báo cáo và lựa chọn k của đợt mới vẫn cần review riêng.
 
 
 ## Kết quả local — 13/11/2026

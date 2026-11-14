@@ -99,14 +99,70 @@ def _byte_policy(raw, policy):
         raise ValueError("Query final newline không đúng xác nhận.")
 
 
+def _artifact_provenance(config, repo, queries):
+    """Bind recorded Git provenance to the reviewed erratum and exact bytes.
+
+    GitHub approval/merge is recorded evidence, not authenticated by this
+    offline validator. No newline normalization or network lookup is used.
+    """
+    provenance = config["artifact_provenance"]
+    keys = {"source_commit", "source_path", "erratum_pr_url", "erratum_head_commit",
+            "erratum_merge_commit", "record_path", "record_sha256"}
+    if not isinstance(provenance, dict) or set(provenance) != keys:
+        raise ValueError("Artifact provenance fields không hợp lệ.")
+    for key in ("source_commit", "erratum_head_commit", "erratum_merge_commit"):
+        value = provenance[key]
+        if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{40}", value) or value == "0" * 40:
+            raise ValueError("Artifact provenance cần Git commit đầy đủ.")
+    url = provenance["erratum_pr_url"]
+    if (not isinstance(url, str) or not re.fullmatch(
+            r"https://github\.com/Q-Anh2610/SE2026-T03/pull/[1-9][0-9]*", url)
+            or config["input_confirmation"]["evidence_url"] != url):
+        raise ValueError("Artifact provenance cần PR evidence nhất quán.")
+    if provenance["source_path"] != config["paths"]["queries"]:
+        raise ValueError("Artifact provenance source path không khớp queries.")
+    relative = provenance["record_path"]
+    if not isinstance(relative, str) or "\\" in relative:
+        raise ValueError("Artifact record path không portable.")
+    path = (repo / relative).resolve()
+    if Path(relative).is_absolute() or ".." in Path(relative).parts or not path.is_relative_to(repo):
+        raise ValueError("Artifact record phải nằm trong repository.")
+    digest = provenance["record_sha256"]
+    if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+        raise ValueError("Artifact record cần SHA-256 đầy đủ.")
+    raw = path.read_bytes()
+    if sha(raw) != digest:
+        raise ValueError("Artifact record hash mismatch.")
+    record = json.loads(raw.decode("utf-8-sig"))
+    expected_source = {
+        "commit": provenance["source_commit"], "path": provenance["source_path"],
+        "sha256": sha(queries), "byte_count": len(queries), "encoding": "UTF-8",
+        "bom_hex": "efbbbf" if queries.startswith(b"\xef\xbb\xbf") else "",
+        "newline": "LF", "contains_cr": False,
+        "trailing_lf_count": len(queries) - len(queries.rstrip(b"\n")),
+    }
+    if (not isinstance(record, dict)
+            or record.get("schema_version") != "issue91-query-artifact-erratum-v1"
+            or record.get("issue") != 91 or record.get("source") != expected_source
+            or b"\r" in queries
+            or config["input_confirmation"]["queries_byte_policy"] != {
+                "bom": queries.startswith(b"\xef\xbb\xbf"), "newline": "LF", "final_newline": True}):
+        raise ValueError("Artifact record không khớp source commit/bytes/byte policy.")
+    return path, raw
+
+
 def load_inputs(config_path: Path, repo: Path) -> ValidationInputs:
     """Chặn pending trước đọc CSV/nạp model; giữ nguyên bytes dùng để hash."""
     config_path, repo = Path(config_path).resolve(), Path(repo).resolve()
     raw_config = config_path.read_bytes()
     config = json.loads(raw_config.decode("utf-8-sig"))
-    if (not isinstance(config, dict) or set(config) != {
-            "schema_version", "protocol", "input_confirmation", "paths", "expected_sha256"}
-            or config["schema_version"] != "issue91-validation-config-v1"):
+    if not isinstance(config, dict):
+        raise ValueError("Config validation không hợp lệ.")
+    keys = {"schema_version", "protocol", "input_confirmation", "paths", "expected_sha256"}
+    schema = config.get("schema_version")
+    if schema == "issue91-validation-config-v2":
+        keys.add("artifact_provenance")
+    if schema not in ("issue91-validation-config-v1", "issue91-validation-config-v2") or set(config) != keys:
         raise ValueError("Config validation không hợp lệ.")
     confirmation = config["input_confirmation"]
     if not isinstance(confirmation, dict) or set(confirmation) != {"status", "evidence_url", "queries_byte_policy"}:
@@ -142,6 +198,8 @@ def load_inputs(config_path: Path, repo: Path) -> ValidationInputs:
         if sha(contents[key]) != expected[name]:
             raise ValueError("Input thay đổi trong preflight.")
     _byte_policy(contents["queries"], confirmation["queries_byte_policy"])
+    if schema == "issue91-validation-config-v2":
+        files["artifact_record"], contents["artifact_record"] = _artifact_provenance(config, repo, contents["queries"])
     assets = json.loads(contents["candidates"].decode("utf-8-sig"))
     if not isinstance(assets, list) or len(assets) != 200 or any(not isinstance(a, dict) for a in assets):
         raise ValueError("Candidate metadata cần đúng 200 records.")
@@ -187,6 +245,8 @@ def load_inputs(config_path: Path, repo: Path) -> ValidationInputs:
         raise ValueError("Protocol cần 7 validation query không positive, Recall denominator 21.")
     queries = tuple(ValidationQuery(qid, text, group, tuple(sorted(relevant[qid]))) for qid, text, group in validation)
     hashes = {**expected, "manifest": sha(contents["manifest"]), "config": sha(raw_config)}
+    if "artifact_record" in contents:
+        hashes["artifact_record"] = sha(contents["artifact_record"])
     return ValidationInputs(queries, tuple(sorted(ids)), metadata, hashes, config,
                             {**files, "config": config_path}, raw_config)
 
@@ -299,6 +359,12 @@ def run_validation(inputs, factory, output: Path, *, rank_constant: int,
     failure = None
     try:
         (output / "run-config.json").write_bytes(inputs.config_bytes)
+        if "artifact_provenance" in inputs.config:
+            report["artifact_provenance"] = inputs.config["artifact_provenance"]
+            record_bytes = inputs.files["artifact_record"].read_bytes()
+            if sha(record_bytes) != inputs.hashes["artifact_record"]:
+                raise ValueError("Artifact record changed after preflight.")
+            (output / "query-artifact-erratum.json").write_bytes(record_bytes)
         with ExitStack() as streams:
             raw = streams.enter_context((output / "raw-rankings.jsonl").open("xb"))
             latency = streams.enter_context((output / "latency-samples.jsonl").open("xb"))
@@ -369,6 +435,8 @@ def run_validation(inputs, factory, output: Path, *, rank_constant: int,
                 "qrels.csv": sha(inputs.files["qrels"].read_bytes()),
                 "candidate_metadata": sha(inputs.files["candidates"].read_bytes()),
                 "manifest": sha(inputs.files["manifest"].read_bytes()), "config": sha(inputs.files["config"].read_bytes())}
+            if "artifact_record" in inputs.files:
+                after["artifact_record"] = sha(inputs.files["artifact_record"].read_bytes())
             if after != inputs.hashes:
                 raise ValueError("Input/config thay đổi trong lúc chạy.")
         report["status"] = "passed"
