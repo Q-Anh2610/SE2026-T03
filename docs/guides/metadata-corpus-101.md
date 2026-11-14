@@ -197,21 +197,18 @@ Kết quả local, kiểm chứng của bên nhận và CI là các bằng chứ
 - pytest: `9.1.1`.
 - Git: `2.56.0.windows.4`.
 
-## 9. Phần còn lại của W5
+## 9. Audit metadata/payload và phần còn lại của W5
 
-- Đối chiếu metadata PostgreSQL/payload theo phạm vi thống nhất tại #101.
-- Ghi nhận snapshot, database/schema và collection/named vector thực tế.
-- Báo cáo IDs thiếu/thừa, metadata lệch và compatibility theo từng index.
-- Phối hợp xử lý sai lệch nếu có.
-- Hoàn tất CI mới nhất, review và tích hợp PR theo quy trình nhóm.
+Audit PostgreSQL–CLIP–E5 đã passed trên DB test dựng từ frozen manifest và bản sao hai index candidate 200. Xem [báo cáo audit và lệnh tái lập](../reports/issue101/metadata-payload-audit-20261115.md) và [JSON bằng chứng](../evidence/issue101-metadata-payload-audit-20261115.json).
 
-Phối hợp PostgreSQL:
-[Vũ Nguyễn Quỳnh Anh](https://github.com/Q-Anh2610).
+Kết quả local: mỗi nguồn đủ 200 IDs, không metadata/compatibility mismatch, DB transaction read-only và hash SQLite trước/sau giữ nguyên. Không có sai lệch nên không phát sinh sửa cơ chế đồng bộ. Không suy ra DB nghiệp vụ hiện hành đã được đồng bộ từ DB test được nạp bằng chính manifest.
 
-Phối hợp retrieval/index:
-[Lê Thị Linh Chi](https://github.com/LLC536).
+Còn cần bên nhận review/xác nhận bàn giao kết quả audit, CI trên head mới nhất và tích hợp PR theo quy trình nhóm.
 
-Xác nhận corpus không thay thế E5 weights smoke, index build
-hoặc benchmark. Mâu thuẫn canonical query hash tại #91 được xử lý riêng.
+Phối hợp PostgreSQL: Vũ Nguyễn Quỳnh Anh (https://github.com/Q-Anh2610).
+
+Phối hợp retrieval/index: Lê Thị Linh Chi (https://github.com/LLC536).
+
+Phần việc này không chạy model weights, build index hoặc benchmark. Đính chính artifact query canonical của #91 đã có tại PR #109; không sửa input/kết quả benchmark để thực hiện audit #101.
 
 Nếu recipe hoặc nội dung thay đổi về sau, cần version hóa phù hợp, cập nhật hashes/tests và xác nhận lại bên nhận.

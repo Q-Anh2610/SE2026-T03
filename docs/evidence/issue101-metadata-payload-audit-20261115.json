@@ -1,0 +1,120 @@
+{
+  "issue": 101,
+  "status": "passed",
+  "audited_at_utc": "2026-11-14T17:38:45.360709+00:00",
+  "scope": "frozen-source / isolated-DB-fixture / received-index-copies; not business-DB sync",
+  "python": "3.13.17",
+  "qdrant_client": "1.15.1",
+  "auditor_sha256": "c348e3ae1f3e738b021599fc0dec1e8831378d12889b7b572c668776e5839989",
+  "business_database_sync": "not_verified",
+  "benchmark": "not_run",
+  "errors": [],
+  "inputs": {
+    "checksummed_entries": 223,
+    "candidate_count": 200,
+    "corpus_hash": "66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5",
+    "recipe_version": "e5-metadata-passage-v1-draft",
+    "historical_corpus_status": "draft_recipe_pending_confirmation"
+  },
+  "database": {
+    "database": "test_issue101",
+    "schema": "test_asset_api_65b587c1206f475a8fb7a4caec3c3e1b",
+    "server_version": "18.6",
+    "migration_revision": "0002",
+    "transaction_read_only": true,
+    "fixture_from_frozen_manifest": true,
+    "status": "passed",
+    "record_count": 200,
+    "unique_valid_ids": 200,
+    "matched_candidate_ids": 200,
+    "missing_ids": [],
+    "out_of_scope_ids": [],
+    "duplicate_ids": [],
+    "invalid_id_count": 0,
+    "metadata_mismatches": [],
+    "rows_sha256": "c9a65143a9be9fee5a7dbb50d763a3d4d044e4807b1e930dab19848649a98a0b",
+    "source_versions": {
+      "status": "passed",
+      "record_count": 200,
+      "unique_valid_ids": 200,
+      "matched_candidate_ids": 200,
+      "missing_ids": [],
+      "out_of_scope_ids": [],
+      "duplicate_ids": [],
+      "invalid_id_count": 0,
+      "metadata_mismatches": []
+    }
+  },
+  "indexes": {
+    "clip": {
+      "status": "passed",
+      "record_count": 200,
+      "unique_valid_ids": 200,
+      "matched_candidate_ids": 200,
+      "missing_ids": [],
+      "out_of_scope_ids": [],
+      "duplicate_ids": [],
+      "invalid_id_count": 0,
+      "metadata_mismatches": [],
+      "collection": "issue89_image_previews",
+      "vector_name": "clip_bdd84b49a263010b",
+      "index_version": "issue89-clip-preflight-76d5d2c095b6",
+      "exact_point_count": 200,
+      "compatibility_mismatches": [],
+      "sqlite_bytes_unchanged": true,
+      "sqlite_sha256_before": {
+        "collection\\issue89_image_previews\\storage.sqlite": "a03e10dec77dd34e317a1843deba85933dd94041d11bc33f6d6e5dcd0bbed8ca"
+      },
+      "sqlite_sha256_after": {
+        "collection\\issue89_image_previews\\storage.sqlite": "a03e10dec77dd34e317a1843deba85933dd94041d11bc33f6d6e5dcd0bbed8ca"
+      },
+      "payload_fingerprint": "8d2f2291ed3a8016567f033397e2a8e6ab043a757bdc96424072e2f88f463523",
+      "database_comparison": {
+        "status": "passed",
+        "record_count": 200,
+        "unique_valid_ids": 200,
+        "matched_candidate_ids": 200,
+        "missing_ids": [],
+        "out_of_scope_ids": [],
+        "duplicate_ids": [],
+        "invalid_id_count": 0,
+        "metadata_mismatches": []
+      }
+    },
+    "e5": {
+      "status": "passed",
+      "record_count": 200,
+      "unique_valid_ids": 200,
+      "matched_candidate_ids": 200,
+      "missing_ids": [],
+      "out_of_scope_ids": [],
+      "duplicate_ids": [],
+      "invalid_id_count": 0,
+      "metadata_mismatches": [],
+      "collection": "issue91_e5_metadata",
+      "vector_name": "e5_0c0cbdfd79bca607",
+      "index_version": "issue91-e5-metadata-1588f4dc33fbe62609d8",
+      "exact_point_count": 200,
+      "compatibility_mismatches": [],
+      "sqlite_bytes_unchanged": true,
+      "sqlite_sha256_before": {
+        "collection\\issue91_e5_metadata\\storage.sqlite": "3d84d988d1a8cf769419e805c2246c6cc283af3589aea3bd453a1d3308e67367"
+      },
+      "sqlite_sha256_after": {
+        "collection\\issue91_e5_metadata\\storage.sqlite": "3d84d988d1a8cf769419e805c2246c6cc283af3589aea3bd453a1d3308e67367"
+      },
+      "payload_fingerprint": "eb3f5f866b2c176d8214d642570c23be545a5a6b112d602b3d5e911de3807a58",
+      "database_comparison": {
+        "status": "passed",
+        "record_count": 200,
+        "unique_valid_ids": 200,
+        "matched_candidate_ids": 200,
+        "missing_ids": [],
+        "out_of_scope_ids": [],
+        "duplicate_ids": [],
+        "invalid_id_count": 0,
+        "metadata_mismatches": []
+      }
+    }
+  }
+}

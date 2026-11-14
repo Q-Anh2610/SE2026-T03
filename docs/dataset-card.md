@@ -150,8 +150,7 @@ Theo protocol đang trao đổi tại #91, thử nghiệm W5 chỉ dùng
 28 validation query tiếng Anh trên candidate 200.
 Không dùng 42 test query để chọn passage, model hoặc tham số fusion.
 
-Mâu thuẫn hash query canonical đã được ghi tại #91 và cần xác nhận riêng.
-Dataset card này không giải quyết hoặc thay đổi hash đang khóa.
+Artifact query canonical W5 đã được đính chính và khóa qua [PR #109](https://github.com/Q-Anh2610/SE2026-T03/pull/109), với raw SHA-256 `e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470`. Giới hạn provenance của baseline lịch sử vẫn được giữ riêng; phần việc #101 không sửa queries/qrels hoặc chạy lại benchmark.
 
 ### Nguyên tắc
 
@@ -266,26 +265,24 @@ Hướng dẫn tái lập và bằng chứng kiểm chứng:
 
 ## 8. PostgreSQL và payload index — công việc W5
 
-PostgreSQL lưu metadata nghiệp vụ; payload Qdrant phục vụ retrieval
-và filters. Source manifest là input có phiên bản để đối chiếu,
-không tự chứng minh hai hệ lưu trữ đang đồng bộ.
+Đã chạy audit chỉ đọc ngày 15/11/2026 theo giờ Asia/Bangkok (report ghi UTC `2026-11-14T17:38:45.360709+00:00`) trên candidate 200, PostgreSQL test dựng từ frozen manifest và bản sao storage CLIP/E5 được bàn giao.
 
-Trước khi cập nhật cần thống nhất:
+- PostgreSQL: `test_issue101`, schema UUID cô lập, PostgreSQL `18.6`, migration `0002`; transaction `REPEATABLE READ, READ ONLY`.
+- PostgreSQL, CLIP và E5 đều đủ 200 IDs duy nhất; không có IDs thiếu, ngoài phạm vi hoặc trùng trong lần chạy.
+- Metadata gốc khớp nguồn và khớp giữa DB với hai payload; không có metadata/compatibility mismatch.
+- Mỗi index được kiểm theo model/index version và manifest riêng; không yêu cầu CLIP và E5 có cùng version.
+- Corpus manifest lịch sử được index pin được giữ nguyên, kể cả trạng thái `draft_recipe_pending_confirmation`.
+- Hash SQLite của cả hai bản sao index giữ nguyên trước/sau audit; không seed, upsert, migration hoặc rebuild trong bước audit.
 
-- Snapshot và index cần đối chiếu.
-- Các trường phải đồng bộ và nguồn dữ liệu có thẩm quyền.
-- Cách xử lý bản ghi thiếu/thừa hoặc giá trị sai lệch.
-- Quy tắc retry, idempotency và ghi nhận lỗi.
+Kết quả là kiểm chứng tích hợp trên DB test được nạp từ manifest và các index được bàn giao; **chưa chứng minh DB nghiệp vụ hiện hành đã đồng bộ**. Không có sai lệch nên không phát sinh sửa dữ liệu hoặc cơ chế đồng bộ trong lượt này. Các tiêu chí idempotency/retry của cơ chế đồng bộ mới là không phát sinh, không ghi nhận như đã triển khai.
 
-Chưa có báo cáo reconciliation W5 được xác nhận trong dataset card này.
-Không tự ghi đè index dùng chung hoặc đánh dấu đồng bộ thành công
-khi một bước thất bại.
+Bằng chứng: [audit JSON](evidence/issue101-metadata-payload-audit-20261115.json). Phạm vi, provenance và cách tái lập: [báo cáo audit](reports/issue101/metadata-payload-audit-20261115.md).
 
-Phối hợp PostgreSQL:
-[Vũ Nguyễn Quỳnh Anh](https://github.com/Q-Anh2610).
+Chuẩn bị DB có ghi dữ liệu được tách khỏi audit chỉ đọc. Schema tạm đã được người chạy báo dọn bằng helper sau khi lưu báo cáo; không xóa database hoặc dữ liệu nghiệp vụ. Kết quả local này còn cần bên nhận review/tiếp nhận và CI của PR mới nhất.
 
-Phối hợp payload/index:
-[Lê Thị Linh Chi](https://github.com/LLC536).
+Phối hợp PostgreSQL: Vũ Nguyễn Quỳnh Anh (https://github.com/Q-Anh2610).
+
+Phối hợp payload/index: Lê Thị Linh Chi (https://github.com/LLC536).
 
 ## 9. Nhận dữ liệu và tái lập
 
