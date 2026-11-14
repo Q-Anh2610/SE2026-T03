@@ -39,7 +39,10 @@ def verify(args, *, configure_app=None, extra_checks=None):
     from app.ingestion.source_adapter import SourceAdapter
     from app.main import create_app
     from app.models import Asset, SearchEvent
+    from app.schemas.text_search import TextSearchFilters
+    from app.services.search_explanation import clip_explanation
     from app.search.index_manifest import load_index_manifest
+    from app.search.retrieval_config import SCORE_ROUNDOFF_TOLERANCE
     from scripts.asset_api_test_support import isolated_asset_database
 
     if not (args.qdrant_local_path / "meta.json").is_file():
@@ -89,6 +92,7 @@ def verify(args, *, configure_app=None, extra_checks=None):
         thread.start()
         events = []
         checks = []
+        score_deltas = []
         try:
             deadline = time.monotonic() + 180
             while not server.started and thread.is_alive() and time.monotonic() < deadline:
@@ -98,14 +102,27 @@ def verify(args, *, configure_app=None, extra_checks=None):
                 assert client.get("/healthz").json() == {"status": "ok"}
 
                 def search(payload):
+                    direct = app.state.text_search_service.search_text(payload["query"],
+                        TextSearchFilters(**payload.get("filters", {})), candidate_limit=200)
                     response = client.post("/api/v1/search/text", json=payload)
                     assert response.status_code == 200, "Text search did not return HTTP 200."
                     body = response.json()
                     assert body["mock"] is False and body["versions"] == manifest.execution_versions().model_dump()
                     assert body["query_id"] == body["search_event_id"]
                     events.append((body["search_event_id"], payload))
+                    start = (payload.get("page", 1) - 1) * payload.get("limit", 12)
+                    selected = direct.hits[start:start + payload.get("limit", 12)]
+                    assert [r["asset"]["asset_id"] for r in body["results"]] == [h.asset_id for h in selected]
+                    # Đây là hai lần inference độc lập ở thread gọi trực tiếp/HTTP;
+                    # dùng tolerance cosine có sẵn, không yêu cầu float bit-identical.
+                    deltas = [abs(row["score"] - hit.score) for row, hit in zip(body["results"], selected, strict=True)]
+                    score_deltas.extend(deltas)
+                    assert all(delta <= SCORE_ROUNDOFF_TOLERANCE for delta in deltas)
                     for item in body["results"]:
                         assert item["asset"]["asset_id"] in metadata_by_id
+                        assert item["score_type"] == "cosine"
+                        assert item["retrieval_sources"] == ["clip_text_to_preview"]
+                        assert item["explanation"] == clip_explanation("clip_text_to_preview")
                     return body
 
                 first = search(dict(query="wooden chair", page=1, limit=12))
@@ -117,6 +134,7 @@ def verify(args, *, configure_app=None, extra_checks=None):
                 for result in first["results"][:3]:
                     assert client.get("/api/v1/assets/" + result["asset"]["asset_id"]).json()["asset"] == result["asset"]
                 checks.append("live_http_pagination_unique_ids_detail")
+                checks.append("clip_explanation_score_type_and_actual_versions")
                 row = next(r for r in metadata if r["category"] and r["formats"] and r["face_count"] is not None)
                 filters = dict(category=row["category"], license=row["license"], format=row["formats"][0],
                                face_count_min=row["face_count"], face_count_max=row["face_count"])
@@ -158,6 +176,8 @@ def verify(args, *, configure_app=None, extra_checks=None):
         versions=manifest.execution_versions().model_dump(), collection=manifest.collection,
         vector_name=manifest.vector_name, fingerprint_before_after=before,
         query="wooden chair", sample_ids=ids[:3], storage_mode="qdrant_persistent_local",
+        text_score_comparison_tolerance=SCORE_ROUNDOFF_TOLERANCE,
+        text_score_max_independent_inference_delta=max(score_deltas, default=0.0),
         platform=platform.platform(), python=platform.python_version(),
         integration=integration,
         limits="Backend HTTP/DB/CLIP/local-Qdrant smoke; frontend coverage recorded separately in integration; not server-mode Qdrant or quality benchmark.")

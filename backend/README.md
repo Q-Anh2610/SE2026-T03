@@ -109,6 +109,10 @@ asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 ## Kiểm thử
 
+Explanation text/image W5 (#116): [contract và bàn giao cho frontend](../docs/contracts/search-explanation-w5.md).
+Response search thật thêm `results[].score_type=cosine`, giữ explanation dạng
+chuỗi, nguồn retrieval và versions thực tế; không đổi search mock hoặc bật RRF.
+
 Jobs/status W5 (#115): [contract và JSON](../docs/contracts/jobs-status-w5.md),
 [migration, runner CLI và smoke](../docs/guides/jobs-status-api.md).
 Hai GET `/api/v1/admin/jobs` và `/api/v1/admin/jobs/{job_id}` đọc PostgreSQL;

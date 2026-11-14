@@ -72,13 +72,26 @@ class TextSearchCandidates(BaseModel):
         return self
 
 
+class LiveSearchResult(SearchResult):
+    """Kết quả baseline CLIP thật; metadata/score mock vẫn dùng SearchResult riêng."""
+
+    score: float = Field(ge=-1, le=1, allow_inf_nan=False,
+        description="Cosine giữa embedding query và preview, [-1,1], cao hơn xếp trước; không phải xác suất hoặc phần trăm chính xác.")
+    score_type: Literal["cosine"] = Field(default="cosine",
+        description="Loại score của baseline CLIP; không dùng contract này để chứa RRF score.")
+    retrieval_sources: list[str] = Field(
+        description="Một nguồn CLIP thực tế: clip_text_to_preview hoặc clip_image_to_preview theo endpoint.")
+    explanation: str = Field(min_length=1,
+        description="Giải thích tín hiệu retrieval bằng tiếng Việt; không khẳng định mesh, license hoặc thuộc tính chưa biết.")
+
+
 class LiveTextSearchResponse(BaseModel):
     retrieval_source: ClassVar[str] = "clip_text_to_preview"
     model_config = ConfigDict(extra="forbid")
     query_id: UUID
     search_event_id: UUID
     query: str = Field(min_length=1, max_length=500)
-    results: list[SearchResult]
+    results: list[LiveSearchResult]
     versions: SearchExecutionVersions
     pagination: Pagination
     mock: Literal[False]  # Bắt buộc, không default để che lỗi mapping.

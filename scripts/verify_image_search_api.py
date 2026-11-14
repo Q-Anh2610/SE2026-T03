@@ -23,6 +23,7 @@ def check_image_http(app, db, text_manifest, metadata, origin, *, args):
     from sqlalchemy import func, select
     from sqlalchemy.orm import Session
     from app.models import SearchEvent
+    from app.services.search_explanation import clip_explanation
     from app.schemas.text_search import TextSearchFilters
     from app.search.image_index_manifest import load_image_index_manifest
     from app.search.image_search import ImageRetrievalConfig
@@ -84,6 +85,8 @@ def check_image_http(app, db, text_manifest, metadata, origin, *, args):
             for result, hit in zip(body["results"], hits):
                 assert abs(result["score"] - hit.score) <= 1e-6
                 assert result["retrieval_sources"] == ["clip_image_to_preview"]
+                assert result["score_type"] == "cosine"
+                assert result["explanation"] == clip_explanation("clip_image_to_preview")
                 assert client.get("/api/v1/assets/" + hit.asset_id).json()["asset"] == result["asset"]
             check_event(body, payload)
             successful.append(body["search_event_id"])
@@ -121,7 +124,8 @@ def check_image_http(app, db, text_manifest, metadata, origin, *, args):
         assert recovered.status_code == 200
         check_event(recovered.json(), {})
         assert count() == baseline + 1
-    return dict(status="passed", versions=expected_versions, query_image_sha256=sha256(content).hexdigest(),
+    return dict(status="passed", explanation_score_type_check="passed",
+        versions=expected_versions, query_image_sha256=sha256(content).hexdigest(),
         cases=results, errors=errors, recovery_status=200, image_event_count=len(successful) + 1,
         final_event_count=count(), query_source="indexed_preview_self_match_diagnostic",
         image_source_manifest_sha256=manifest.source_manifest_sha256,
@@ -172,7 +176,7 @@ def main():
     result["base_commit"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     modules = [Path(__file__), ROOT / "scripts/verify_text_search_api.py"]
     modules += [p for p in (ROOT / "backend/app").rglob("*.py")
-                if any(token in p.name for token in ("image_search", "text_search", "search_events"))]
+                if any(token in p.name for token in ("image_search", "text_search", "search_events", "search_explanation"))]
     result["module_sha256"] = {p.relative_to(ROOT).as_posix(): sha256(p.read_bytes()).hexdigest() for p in modules}
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Image API #80: {result['status']}; report: {args.output}")
