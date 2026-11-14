@@ -732,7 +732,7 @@
           "search"
         ],
         "summary": "Tìm kiếm văn bản qua search service",
-        "description": "Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
+        "description": "CLIP text-to-preview; score_type=cosine trong [-1,1], không phải phần trăm chính xác. Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Ví dụ dùng dữ liệu minh họa. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
         "operationId": "search_text_api_v1_search_text_post",
         "requestBody": {
           "content": {
@@ -795,10 +795,11 @@
                         "license": null
                       },
                       "score": 0.25,
+                      "score_type": "cosine",
                       "retrieval_sources": [
                         "clip_text_to_preview"
                       ],
-                      "explanation": "Ví dụ cấu trúc response cosine CLIP; không phải kết quả đo thật."
+                      "explanation": "CLIP so khớp văn bản truy vấn với ảnh preview; xếp hạng theo cosine giảm dần. Điểm cosine không phải xác suất hay phần trăm chính xác."
                     }
                   ]
                 }
@@ -865,7 +866,7 @@
           "search"
         ],
         "summary": "Tìm asset bằng ảnh qua CLIP",
-        "description": "JPEG/PNG tối đa 5 MiB và 4096 px mỗi chiều. Filters AND, cửa sổ 200 ứng viên. Query là SHA-256 bytes ảnh gốc; event được commit trước HTTP 200.",
+        "description": "CLIP image-to-preview; score_type=cosine trong [-1,1], không phải phần trăm chính xác. JPEG/PNG tối đa 5 MiB và 4096 px mỗi chiều. Filters AND, cửa sổ 200 ứng viên. Query là SHA-256 bytes ảnh gốc; event được commit trước HTTP 200. Ví dụ dùng dữ liệu minh họa.",
         "operationId": "search_image_api_v1_search_image_post",
         "requestBody": {
           "content": {
@@ -928,10 +929,11 @@
                         "license": null
                       },
                       "score": 0.25,
+                      "score_type": "cosine",
                       "retrieval_sources": [
                         "clip_image_to_preview"
                       ],
-                      "explanation": "Ví dụ cấu trúc cosine CLIP giữa ảnh truy vấn và preview."
+                      "explanation": "CLIP so khớp ảnh truy vấn với ảnh preview; xếp hạng theo cosine giảm dần. Điểm cosine không phải xác suất hay phần trăm chính xác."
                     }
                   ]
                 }
@@ -1760,7 +1762,7 @@
           },
           "results": {
             "items": {
-              "$ref": "#/components/schemas/SearchResult"
+              "$ref": "#/components/schemas/LiveSearchResult"
             },
             "type": "array",
             "title": "Results"
@@ -1789,6 +1791,56 @@
           "mock"
         ],
         "title": "LiveImageSearchResponse"
+      },
+      "LiveSearchResult": {
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Rank"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/AssetMetadata"
+          },
+          "retrieval_sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Retrieval Sources",
+            "description": "Một nguồn CLIP thực tế: clip_text_to_preview hoặc clip_image_to_preview theo endpoint."
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Explanation",
+            "description": "Giải thích tín hiệu retrieval bằng tiếng Việt; không khẳng định mesh, license hoặc thuộc tính chưa biết."
+          },
+          "score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": -1.0,
+            "title": "Score",
+            "description": "Cosine giữa embedding query và preview, [-1,1], cao hơn xếp trước; không phải xác suất hoặc phần trăm chính xác."
+          },
+          "score_type": {
+            "type": "string",
+            "const": "cosine",
+            "title": "Score Type",
+            "description": "Loại score của baseline CLIP; không dùng contract này để chứa RRF score.",
+            "default": "cosine"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rank",
+          "asset",
+          "retrieval_sources",
+          "explanation",
+          "score"
+        ],
+        "title": "LiveSearchResult",
+        "description": "Kết quả baseline CLIP thật; metadata/score mock vẫn dùng SearchResult riêng."
       },
       "LiveTextSearchRequest": {
         "properties": {
@@ -1845,7 +1897,7 @@
           },
           "results": {
             "items": {
-              "$ref": "#/components/schemas/SearchResult"
+              "$ref": "#/components/schemas/LiveSearchResult"
             },
             "type": "array",
             "title": "Results"
@@ -1946,48 +1998,6 @@
         ],
         "title": "SearchExecutionVersions",
         "description": "Lấy từ cấu hình thực sự dùng để retrieval, không dùng defaults mock."
-      },
-      "SearchResult": {
-        "properties": {
-          "rank": {
-            "type": "integer",
-            "minimum": 1.0,
-            "title": "Rank"
-          },
-          "asset": {
-            "$ref": "#/components/schemas/AssetMetadata"
-          },
-          "retrieval_sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Retrieval Sources"
-          },
-          "explanation": {
-            "type": "string",
-            "title": "Explanation"
-          },
-          "score": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Score"
-          }
-        },
-        "type": "object",
-        "required": [
-          "rank",
-          "asset",
-          "retrieval_sources",
-          "explanation"
-        ],
-        "title": "SearchResult"
       },
       "TextSearchFilters": {
         "properties": {

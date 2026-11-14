@@ -19,13 +19,14 @@ from app.schemas.image_search import LiveImageSearchRequest, LiveImageSearchResp
 from app.schemas.text_search import TextSearchCandidates, TextSearchFilters
 from app.search.image_search import InvalidQueryImageError
 from app.services.text_search import SearchUnavailable, execute_search, unavailable
+from app.services.search_explanation import clip_explanation
 
 logger = logging.getLogger(__name__)
 IMAGE_EXAMPLE = {
     **EXAMPLE, "query": "sha256:" + "0" * 64,
     "results": [{
         **EXAMPLE["results"][0], "retrieval_sources": ["clip_image_to_preview"],
-        "explanation": "Ví dụ cấu trúc cosine CLIP giữa ảnh truy vấn và preview.",
+        "explanation": clip_explanation("clip_image_to_preview"),
     }],
 }
 router = APIRouter(prefix="/api/v1", responses=ERRORS)
@@ -91,7 +92,7 @@ def image_session(request: Request, candidates: Annotated[TextSearchCandidates, 
 @router.post(
     "/search/image", response_model=LiveImageSearchResponse, tags=["search"],
     summary="Tìm asset bằng ảnh qua CLIP",
-    description="JPEG/PNG tối đa 5 MiB và 4096 px mỗi chiều. Filters AND, cửa sổ 200 ứng viên. Query là SHA-256 bytes ảnh gốc; event được commit trước HTTP 200.",
+    description="CLIP image-to-preview; score_type=cosine trong [-1,1], không phải phần trăm chính xác. JPEG/PNG tối đa 5 MiB và 4096 px mỗi chiều. Filters AND, cửa sổ 200 ứng viên. Query là SHA-256 bytes ảnh gốc; event được commit trước HTTP 200. Ví dụ dùng dữ liệu minh họa.",
     responses={
         200: response_example(IMAGE_EXAMPLE),
         400: {"description": "INVALID_REQUEST, INVALID_FILTERS, INVALID_IMAGE, UNSUPPORTED_IMAGE, IMAGE_TOO_LARGE, IMAGE_DIMENSIONS_EXCEEDED.", **ERRORS[400]},

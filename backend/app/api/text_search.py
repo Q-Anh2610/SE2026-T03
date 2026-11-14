@@ -13,6 +13,7 @@ from app.db.dependencies import get_db_session
 from app.schemas.api import ErrorResponse
 from app.schemas.text_search import LiveTextSearchRequest, LiveTextSearchResponse, TEXT_CANDIDATE_LIMIT, TextSearchCandidates
 from app.services.text_search import SearchUnavailable, execute_text_search, unavailable
+from app.services.search_explanation import clip_explanation
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +33,8 @@ EXAMPLE = {
                  "config_version": "example-top200", "dataset_snapshot": "example-snapshot"},
     "pagination": PAGINATION_EXAMPLE,
     "results": [{"rank": 1, "asset": {**ASSET_EXAMPLE, "asset_id": "example-chair", "source": "example"},
-                 "score": 0.25, "retrieval_sources": ["clip_text_to_preview"],
-                 "explanation": "Ví dụ cấu trúc response cosine CLIP; không phải kết quả đo thật."}],
+                 "score": 0.25, "score_type": "cosine", "retrieval_sources": ["clip_text_to_preview"],
+                 "explanation": clip_explanation("clip_text_to_preview")}],
 }
 router = APIRouter(prefix="/api/v1", responses=ERRORS)
 
@@ -64,7 +65,7 @@ def text_session(request: Request, candidates: Annotated[TextSearchCandidates, D
 
 @router.post("/search/text", response_model=LiveTextSearchResponse, tags=["search"],
              summary="Tìm kiếm văn bản qua search service",
-             description="Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
+             description="CLIP text-to-preview; score_type=cosine trong [-1,1], không phải phần trăm chính xác. Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Ví dụ dùng dữ liệu minh họa. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
              responses={200: response_example(EXAMPLE)})
 def search_text(
     value: Annotated[LiveTextSearchRequest, Depends(text_parameters)],
