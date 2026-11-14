@@ -10,6 +10,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
 
 from app.api.health import router as health_router
+from app.api.jobs import router as jobs_router
 from app.core.config import Settings
 from app.core.errors import install_error_handlers
 from app.api.mock import router as mock_router
@@ -72,6 +73,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
     application.state.image_search_service = image_search_service
     install_error_handlers(application)
     application.include_router(health_router)
+    application.include_router(jobs_router)
     mocks_enabled = settings.mock_api_enabled and settings.env != "production"
     list_router = mock_list_router if (
         mocks_enabled and settings.asset_list_source == "fixture"
@@ -99,7 +101,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
     if settings.cors_origins:
         application.add_middleware(
             CORSMiddleware, allow_origins=settings.cors_origins,
-            allow_methods=["GET", "POST"], allow_headers=["Content-Type"],
+            allow_methods=["GET", "POST"], allow_headers=["Content-Type", "X-Admin-Key"],
         )
 
     def openapi_contract():
@@ -116,7 +118,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
                 schema.get("components", {}).get("schemas", {}).pop(name, None)
             # FastAPI excludes None while encoding OpenAPI metadata. Preserve
             # explicit nulls in examples: frontend requires nullable keys present.
-            for route in [*list_router.routes, *(selected_text_router.routes if selected_text_router else []),
+            for route in [*jobs_router.routes, *list_router.routes, *(selected_text_router.routes if selected_text_router else []),
                           *(selected_image_router.routes if selected_image_router else []),
                           *(selected_feedback_router.routes if selected_feedback_router else [])]:
                 if not isinstance(route, APIRoute):
