@@ -16,6 +16,28 @@ function createDeferred<T>() {
 }
 
 describe('AdminStatusPage', () => {
+  it('uses the default loader only for explicitly rendered preview', async () => {
+    render(<AdminStatusPage />)
+
+    expect(await screen.findByText('job-ingestion-001')).toBeInTheDocument()
+    expect(screen.getByText(/Đây là chế độ preview riêng/)).toBeInTheDocument()
+  })
+
+  it('ignores a fulfilled preview request after unmount', async () => {
+    const deferred = createDeferred<AdminJob[]>()
+    const loadJobs = vi.fn<AdminJobsLoader>(() => deferred.promise)
+    const { unmount } = render(<AdminStatusPage loadJobs={loadJobs} />)
+
+    await waitFor(() => expect(loadJobs).toHaveBeenCalledOnce())
+    unmount()
+
+    await act(async () => {
+      deferred.resolve(adminJobFixtures)
+      await deferred.promise
+    })
+    expect(screen.queryByText('job-ingestion-001')).not.toBeInTheDocument()
+  })
+
   it('renders job statuses and progress returned by the loader', async () => {
     const loadJobs = vi.fn<AdminJobsLoader>().mockResolvedValue(adminJobFixtures)
 
