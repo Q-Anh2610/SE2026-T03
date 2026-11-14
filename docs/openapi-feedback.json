@@ -31,6 +31,375 @@
         }
       }
     },
+    "/api/v1/admin/jobs": {
+      "get": {
+        "tags": [
+          "admin jobs"
+        ],
+        "summary": "Danh sách jobs từ PostgreSQL",
+        "description": "Lọc AND theo kind/status; created_at DESC, job_id DESC. Không fallback fixture.",
+        "operationId": "jobs_api_v1_admin_jobs_get",
+        "security": [
+          {
+            "AdminKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "ingestion",
+                    "indexing"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "queued",
+                    "running",
+                    "succeeded",
+                    "failed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 12,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobListResponse"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "job_id": "a0b674d2-1286-401f-b73b-72cae159fcad",
+                      "kind": "ingestion",
+                      "runner": "ingestion.run_batch",
+                      "status": "succeeded",
+                      "created_at": "2026-11-14T08:00:00Z",
+                      "updated_at": "2026-11-14T08:01:00Z",
+                      "started_at": "2026-11-14T08:00:01Z",
+                      "finished_at": "2026-11-14T08:01:00Z",
+                      "progress": {
+                        "unit": "assets",
+                        "processed": 2,
+                        "total": 2,
+                        "percent": 100.0
+                      },
+                      "result": {
+                        "persistence": "postgresql",
+                        "input_count": 2,
+                        "succeeded": 1,
+                        "failed": 0,
+                        "skipped": 1,
+                        "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                        "exit_code": null
+                      },
+                      "error": null
+                    }
+                  ],
+                  "mock": false,
+                  "pagination": {
+                    "page": 1,
+                    "limit": 12,
+                    "total": 1,
+                    "pages": 1,
+                    "has_next": false
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ADMIN_ACCESS_DENIED",
+                    "message": "Không có quyền truy cập quản trị.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "JOB_NOT_FOUND",
+                    "message": "Không tìm thấy job.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ADMIN_API_UNAVAILABLE",
+                    "message": "API quản trị chưa được cấu hình.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/jobs/{job_id}": {
+      "get": {
+        "tags": [
+          "admin jobs"
+        ],
+        "summary": "Chi tiết job từ PostgreSQL",
+        "operationId": "job_detail_api_v1_admin_jobs__job_id__get",
+        "security": [
+          {
+            "AdminKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobDetailResponse"
+                },
+                "example": {
+                  "job": {
+                    "job_id": "a0b674d2-1286-401f-b73b-72cae159fcad",
+                    "kind": "ingestion",
+                    "runner": "ingestion.run_batch",
+                    "status": "succeeded",
+                    "created_at": "2026-11-14T08:00:00Z",
+                    "updated_at": "2026-11-14T08:01:00Z",
+                    "started_at": "2026-11-14T08:00:01Z",
+                    "finished_at": "2026-11-14T08:01:00Z",
+                    "progress": {
+                      "unit": "assets",
+                      "processed": 2,
+                      "total": 2,
+                      "percent": 100.0
+                    },
+                    "result": {
+                      "persistence": "postgresql",
+                      "input_count": 2,
+                      "succeeded": 1,
+                      "failed": 0,
+                      "skipped": 1,
+                      "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "exit_code": null
+                    },
+                    "error": null
+                  },
+                  "mock": false
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ADMIN_ACCESS_DENIED",
+                    "message": "Không có quyền truy cập quản trị.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "JOB_NOT_FOUND",
+                    "message": "Không tìm thấy job.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ADMIN_API_UNAVAILABLE",
+                    "message": "API quản trị chưa được cấu hình.",
+                    "details": []
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/api/v1/assets": {
       "get": {
         "tags": [
@@ -363,7 +732,7 @@
           "search"
         ],
         "summary": "Tìm kiếm văn bản qua search service",
-        "description": "Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
+        "description": "CLIP text-to-preview; score_type=cosine trong [-1,1], không phải phần trăm chính xác. Tối đa 200 ứng viên, metadata PostgreSQL và event durable. Ví dụ dùng dữ liệu minh họa. Trả 503 nếu adapter/index chưa sẵn sàng; không fallback mock.",
         "operationId": "search_text_api_v1_search_text_post",
         "requestBody": {
           "content": {
@@ -426,10 +795,11 @@
                         "license": null
                       },
                       "score": 0.25,
+                      "score_type": "cosine",
                       "retrieval_sources": [
                         "clip_text_to_preview"
                       ],
-                      "explanation": "Ví dụ cấu trúc response cosine CLIP; không phải kết quả đo thật."
+                      "explanation": "CLIP so khớp văn bản truy vấn với ảnh preview; xếp hạng theo cosine giảm dần. Điểm cosine không phải xác suất hay phần trăm chính xác."
                     }
                   ]
                 }
@@ -496,7 +866,7 @@
           "search"
         ],
         "summary": "Tìm asset bằng ảnh qua CLIP",
-        "description": "JPEG/PNG tối đa 5 MiB và 4096 px mỗi chiều. Filters AND, cửa sổ 200 ứng viên. Query là SHA-256 bytes ảnh gốc; event được commit trước HTTP 200.",
+        "description": "CLIP image-to-preview; score_type=cosine trong [-1,1], không phải phần trăm chính xác. JPEG/PNG tối đa 5 MiB và 4096 px mỗi chiều. Filters AND, cửa sổ 200 ứng viên. Query là SHA-256 bytes ảnh gốc; event được commit trước HTTP 200. Ví dụ dùng dữ liệu minh họa.",
         "operationId": "search_image_api_v1_search_image_post",
         "requestBody": {
           "content": {
@@ -559,10 +929,11 @@
                         "license": null
                       },
                       "score": 0.25,
+                      "score_type": "cosine",
                       "retrieval_sources": [
                         "clip_image_to_preview"
                       ],
-                      "explanation": "Ví dụ cấu trúc cosine CLIP giữa ảnh truy vấn và preview."
+                      "explanation": "CLIP so khớp ảnh truy vấn với ảnh preview; xếp hạng theo cosine giảm dần. Điểm cosine không phải xác suất hay phần trăm chính xác."
                     }
                   ]
                 }
@@ -983,6 +1354,316 @@
         ],
         "title": "ErrorResponse"
       },
+      "JobDetailResponse": {
+        "properties": {
+          "job": {
+            "$ref": "#/components/schemas/JobMetadata"
+          },
+          "mock": {
+            "type": "boolean",
+            "const": false,
+            "title": "Mock",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "job"
+        ],
+        "title": "JobDetailResponse"
+      },
+      "JobError": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "JobError"
+      },
+      "JobListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/JobMetadata"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "mock": {
+            "type": "boolean",
+            "const": false,
+            "title": "Mock",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "pagination"
+        ],
+        "title": "JobListResponse"
+      },
+      "JobMetadata": {
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Job Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ingestion",
+              "indexing"
+            ],
+            "title": "Kind"
+          },
+          "runner": {
+            "type": "string",
+            "title": "Runner"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/JobProgress"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "job_id",
+          "kind",
+          "runner",
+          "status",
+          "created_at",
+          "updated_at",
+          "started_at",
+          "finished_at",
+          "progress",
+          "result",
+          "error"
+        ],
+        "title": "JobMetadata"
+      },
+      "JobProgress": {
+        "properties": {
+          "unit": {
+            "type": "string",
+            "const": "assets",
+            "title": "Unit",
+            "default": "assets"
+          },
+          "processed": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Processed"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "percent": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "processed",
+          "total",
+          "percent"
+        ],
+        "title": "JobProgress"
+      },
+      "JobResult": {
+        "properties": {
+          "persistence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "postgresql",
+                  "local_files_only"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persistence"
+          },
+          "input_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Count"
+          },
+          "succeeded": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Succeeded"
+          },
+          "failed": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failed"
+          },
+          "skipped": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skipped"
+          },
+          "manifest_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manifest Sha256"
+          },
+          "exit_code": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Code"
+          }
+        },
+        "type": "object",
+        "title": "JobResult"
+      },
       "LiveFeedbackRequest": {
         "properties": {
           "search_event_id": {
@@ -1077,7 +1758,7 @@
           },
           "results": {
             "items": {
-              "$ref": "#/components/schemas/SearchResult"
+              "$ref": "#/components/schemas/LiveSearchResult"
             },
             "type": "array",
             "title": "Results"
@@ -1106,6 +1787,56 @@
           "mock"
         ],
         "title": "LiveImageSearchResponse"
+      },
+      "LiveSearchResult": {
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Rank"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/AssetMetadata"
+          },
+          "retrieval_sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Retrieval Sources",
+            "description": "Một nguồn CLIP thực tế: clip_text_to_preview hoặc clip_image_to_preview theo endpoint."
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Explanation",
+            "description": "Giải thích tín hiệu retrieval bằng tiếng Việt; không khẳng định mesh, license hoặc thuộc tính chưa biết."
+          },
+          "score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": -1.0,
+            "title": "Score",
+            "description": "Cosine giữa embedding query và preview, [-1,1], cao hơn xếp trước; không phải xác suất hoặc phần trăm chính xác."
+          },
+          "score_type": {
+            "type": "string",
+            "const": "cosine",
+            "title": "Score Type",
+            "description": "Loại score của baseline CLIP; không dùng contract này để chứa RRF score.",
+            "default": "cosine"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rank",
+          "asset",
+          "retrieval_sources",
+          "explanation",
+          "score"
+        ],
+        "title": "LiveSearchResult",
+        "description": "Kết quả baseline CLIP thật; metadata/score mock vẫn dùng SearchResult riêng."
       },
       "LiveTextSearchRequest": {
         "properties": {
@@ -1162,7 +1893,7 @@
           },
           "results": {
             "items": {
-              "$ref": "#/components/schemas/SearchResult"
+              "$ref": "#/components/schemas/LiveSearchResult"
             },
             "type": "array",
             "title": "Results"
@@ -1264,48 +1995,6 @@
         "title": "SearchExecutionVersions",
         "description": "Lấy từ cấu hình thực sự dùng để retrieval, không dùng defaults mock."
       },
-      "SearchResult": {
-        "properties": {
-          "rank": {
-            "type": "integer",
-            "minimum": 1.0,
-            "title": "Rank"
-          },
-          "asset": {
-            "$ref": "#/components/schemas/AssetMetadata"
-          },
-          "retrieval_sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Retrieval Sources"
-          },
-          "explanation": {
-            "type": "string",
-            "title": "Explanation"
-          },
-          "score": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Score"
-          }
-        },
-        "type": "object",
-        "required": [
-          "rank",
-          "asset",
-          "retrieval_sources",
-          "explanation"
-        ],
-        "title": "SearchResult"
-      },
       "TextSearchFilters": {
         "properties": {
           "category": {
@@ -1372,6 +2061,13 @@
         "additionalProperties": false,
         "type": "object",
         "title": "TextSearchFilters"
+      }
+    },
+    "securitySchemes": {
+      "AdminKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Admin-Key"
       }
     }
   }

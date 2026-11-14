@@ -1,0 +1,62 @@
+{
+  "schema_version": "issue91-validation-config-v2",
+  "protocol": {
+    "version": "issue91-validation-28-all200-v1",
+    "benchmark_version": "home-interior-text-v2",
+    "snapshot": "home-interior-clear-200-v3",
+    "query_count": 70,
+    "validation_count": 28,
+    "test_count": 42,
+    "candidate_count": 200,
+    "positive_threshold": 1,
+    "recall_defined_count": 21,
+    "no_positive_count": 7,
+    "source_window": 200,
+    "cutoff": 200,
+    "filters": {},
+    "metric_cutoffs": [
+      5,
+      10
+    ],
+    "allowed_rrf_constants": [
+      10,
+      20,
+      60
+    ],
+    "warmup_per_configuration": 5,
+    "repetitions_per_query": 10,
+    "ordering": "configuration_then_csv_query_order_then_repetition",
+    "raw_ranking_sample": "first_measured_repetition",
+    "latency_scope": "service call including encode/retrieval/audits/fusion; excluding load/export/metrics",
+    "percentile_method": "nearest-rank"
+  },
+  "input_confirmation": {
+    "status": "confirmed",
+    "evidence_url": "https://github.com/Q-Anh2610/SE2026-T03/pull/109",
+    "queries_byte_policy": {
+      "bom": true,
+      "newline": "LF",
+      "final_newline": true
+    }
+  },
+  "paths": {
+    "manifest": "data/benchmark/manifest.yaml",
+    "queries": "data/benchmark/queries.csv",
+    "qrels": "data/benchmark/qrels.csv",
+    "candidates": "data/manifests/objaverse_200.json"
+  },
+  "expected_sha256": {
+    "queries.csv": "e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470",
+    "qrels.csv": "cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5",
+    "candidate_metadata": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  },
+  "artifact_provenance": {
+    "source_commit": "ff7b64abbbb21677fc2fc6f6ac7daf6f2025742a",
+    "source_path": "data/benchmark/queries.csv",
+    "erratum_pr_url": "https://github.com/Q-Anh2610/SE2026-T03/pull/109",
+    "erratum_head_commit": "5472abea7fcd6a9b279be30f236b3e6305ebb16c",
+    "erratum_merge_commit": "63122a3a05a920a847793253a4527a871d5aa6e8",
+    "record_path": "data/benchmark/query-artifact-erratum-91.json",
+    "record_sha256": "cf6bbdf14eff1b9b2de201ddddcac0f461d1a7e138561e6b02f5103912cb5048"
+  }
+}

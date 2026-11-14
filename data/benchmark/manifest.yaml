@@ -28,9 +28,9 @@ query_review_status: reviewed
 query_reviewed_by: Doan Thi Minh Khue
 query_reviewed_at_utc: 2026-11-01T13:55:42Z
 locked_at: 2026-11-03T14:23:32Z
-locked_revision: "sha256-bundle:queries.csv=f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788;qrels.csv=cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5"
+locked_revision: "sha256-bundle:queries.csv=e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470;qrels.csv=cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5"
 locked_files_sha256:
-  queries.csv: f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788
+  queries.csv: e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470
   qrels.csv: cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5
 annotators:
   - Doan Thi Minh Khue
@@ -48,12 +48,12 @@ qrels_pair_count: 14000
 qrels_status_counts:
   Adjudicated: 14000
 file_sha256:
-  queries.csv: f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788
+  queries.csv: e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470
   labels_khue.csv: 011c888834d8bbdc4cc391d22b02fb27779a0f2303ea64f999ce88b4ae09c5b1
   labels_huyen.csv: a8b7846de582174085084a55642638064583aa501847837dceae1ae9b4614882
   qrels.csv: cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5
   candidate_assets.csv: 260599cbf4ad9ea56777122ffdf03826ccbe6dfc0e6f0f896f00de2ffe6d785e
-updated_at_utc: 2026-11-03T14:29:24Z
+updated_at_utc: 2026-11-13T17:30:06.660231+00:00
 diagnostic_keyword_run:
   result_file: evaluation/results/home-interior-text-v2-keyword-baseline.json
   report_file: docs/evaluation/home-interior-text-v2-keyword-baseline.md
@@ -93,3 +93,8 @@ notes:
   - A W2 keyword metadata diagnostic was run once with the locked config; it is not the CLIP text-retrieval baseline requested from Chi and does not complete the retrieval-evaluation acceptance criteria. Keep its output for traceability only.
   - Chi confirmed that no ranked results are available yet for home-interior-clear-200-v3: text retrieval/export and indexing the new snapshot remain pending. Do not substitute the old W1 index or this metadata keyword diagnostic.
   - Eleven queries have no asset labeled relevance >= 1 (7 validation, 4 test); Recall is undefined for these queries and they are excluded from the Recall macro denominator. Review is needed before drawing broader quality conclusions; do not modify this locked benchmark based on the test results.
+query_artifact_erratum:
+  record_file: data/benchmark/query-artifact-erratum-91.json
+  proposal_evidence: https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6859981671
+  confirmation_gate: review-and-merge-before-confirmed
+  historical_baseline_provenance: unresolved-do-not-relabel-or-reuse-as-equivalent-w5-control

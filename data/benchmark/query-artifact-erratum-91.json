@@ -1,0 +1,69 @@
+{
+  "checkout_eol": {
+    "data/benchmark/candidate_assets.csv": "crlf",
+    "data/benchmark/labels_huyen.csv": "crlf",
+    "data/benchmark/labels_khue.csv": "crlf",
+    "data/benchmark/qrels.csv": "crlf",
+    "data/benchmark/queries.csv": "lf"
+  },
+  "historical_baseline_limitation": "Old f627 query artifact has not been reproduced; parsed-content equality does not authenticate previous runs. Preserve historical reports/provenance and do not treat them as equivalent W5 controls. Run fresh CLIP/E5/RRF on the reviewed canonical artifact.",
+  "historical_files_git_blob_sha256": {
+    "docs/evaluation/home-interior-clear-200-v3-clip-baseline.md": "41c83fc80a3c1acbe35d4e8eb538c170dc94c13fb1d5dd80ef2303764d422f3e",
+    "docs/evaluation/home-interior-text-v2-keyword-baseline.md": "d00c7b39ab2e01a77c4a2df518f3f249c0dffe4aa52e0e0d8b8ae934a740f894",
+    "evaluation/configs/home-interior-text-v2-keyword.json": "340de3dc1bb42ef63ea8ac070c99cd5b238be3a74c948a485b4797e5d4974289",
+    "evaluation/results/home-interior-clear-200-v3-clip-baseline.json": "36800b0e5e9bc9ee419efcc0ae092f34b8ed8436263dcef70049c0434b2378e4",
+    "evaluation/results/home-interior-text-v2-keyword-baseline.json": "ef86f7cbf017f6a5788310f380c7297c4b88eb25474cb0581778d6ef6174150a",
+    "evaluation/run_issue71_clip.py": "1b295e7075b860ff60c156a5b86fbf91f15b8812fef2f150514d5fc9744892a8",
+    "evaluation/run_keyword_baseline.py": "baa9d0e1ae9c87e7984437478e77cc6388be949b61c93714566218e7d80b5481"
+  },
+  "history_comparison_basis": "Raw Git blob SHA-256 plus worktree-vs-HEAD Git path-filter identity; no historical file rewrite.",
+  "issue": 91,
+  "preserved_input_artifacts_raw_sha256": {
+    "data/benchmark/candidate_assets.csv": "260599cbf4ad9ea56777122ffdf03826ccbe6dfc0e6f0f896f00de2ffe6d785e",
+    "data/benchmark/labels_huyen.csv": "a8b7846de582174085084a55642638064583aa501847837dceae1ae9b4614882",
+    "data/benchmark/labels_khue.csv": "011c888834d8bbdc4cc391d22b02fb27779a0f2303ea64f999ce88b4ae09c5b1",
+    "data/benchmark/qrels.csv": "cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5",
+    "data/manifests/objaverse_200.json": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  },
+  "preserved_inputs_git_blob_sha256": {
+    "data/benchmark/candidate_assets.csv": "0351bd4de59ee664e880f043665570db7d5669dd59985a85d395949777f996d4",
+    "data/benchmark/labels_huyen.csv": "6ac2510812a3b12b6cce4adc0c1319c2825a0bd3f27ffc26c20aba3c9421ae8e",
+    "data/benchmark/labels_khue.csv": "1ae8c3ff6a006eb68c38699afa7fb36d917b473e8154a6643005db62ce18d8c5",
+    "data/benchmark/qrels.csv": "39392e9edc8d017a7d0654044f7da4b1153ef782209c2286f1edc69c353bd058",
+    "data/manifests/objaverse_200.json": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  },
+  "preserved_manifest_projection_sha256": "ef985dd3fc37780a28817a0f4d471501a2936c7c0184efa9b7389de3188b41f6",
+  "previous_lock": {
+    "artifact_reproduced": false,
+    "historical_run_raw_byte_provenance_confirmed": false,
+    "queries_sha256": "f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788"
+  },
+  "proposal_evidence": "https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6859981671",
+  "proposed_at_utc": "2026-11-13T17:30:06.660231+00:00",
+  "runner": {
+    "confirmation_prerequisite": "Review and merge this erratum before creating a confirmed config and running validation.",
+    "pending_config": "evaluation/configs/issue91-e5-rrf-validation.pending.json",
+    "required_status": "pending"
+  },
+  "schema_version": "issue91-query-artifact-erratum-v1",
+  "source": {
+    "bom_hex": "efbbbf",
+    "byte_count": 7851,
+    "commit": "ff7b64abbbb21677fc2fc6f6ac7daf6f2025742a",
+    "contains_cr": false,
+    "encoding": "UTF-8",
+    "newline": "LF",
+    "path": "data/benchmark/queries.csv",
+    "sha256": "e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470",
+    "trailing_lf_count": 4
+  },
+  "structural_invariants": {
+    "groups_overlap": false,
+    "query_count": 70,
+    "query_group_count": 10,
+    "test_count": 42,
+    "test_group_count": 6,
+    "validation_count": 28,
+    "validation_group_count": 4
+  }
+}

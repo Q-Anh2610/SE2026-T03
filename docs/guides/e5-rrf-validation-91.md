@@ -1,10 +1,16 @@
 # E5/RRF validation — phần độc lập của #91
 
 Trạng thái: encoder và fusion nội bộ đã có trong [PR #100](https://github.com/Q-Anh2610/SE2026-T03/pull/100)
-đang Draft, chưa merge.
-Đã có smoke encoder E5 bằng weights thật ngày 13/11/2026; chưa có E5
-corpus/index hoặc raw validation results. Chưa nghiệm thu toàn bộ #91. Giữ
-CLIP mặc định; không đổi shared schema/API/runtime.
+đã được Khuê approve và merge vào `develop` tại `ccd7e01` ngày 13/11/2026.
+Đã có smoke encoder E5 bằng weights thật và tiếp nhận corpus ngày 13/11/2026.
+Build/audit index E5 bằng weights thật đã đạt trên 200 passages; xem
+[bằng chứng index](../evidence/issue91-e5-index-build-20261113.json). Ngày 14/11/2026,
+ba gói validation thật k=10/20/60 đã passed và được audit: xem
+[báo cáo quality/latency](../evaluation/issue91-e5-rrf-validation-20261114.md) và
+[guide tái lập](e5-rrf-validation-results-91.md). Đã có raw local, chưa khóa k;
+chờ Khuê review báo cáo và PR kết quả. Chưa nghiệm thu toàn bộ #91.
+Giữ CLIP mặc định; không đổi shared schema/API/runtime. Các checkpoint có ngày
+ở phần dưới ghi lại bằng chứng tại thời điểm tương ứng.
 
 ## Encoder
 
@@ -15,8 +21,8 @@ CLIP mặc định; không đổi shared schema/API/runtime.
   và special tokens; không tự dịch hoặc bỏ dấu. Query trim 1–500 Unicode code
   points, nội dung passage trim và phải không rỗng.
 - `encode_text(query)` thêm `query: `; `encode_passages(texts)` thêm `passage: `.
-  Caller truyền nội dung chưa có prefix. Chưa chọn trường/thứ tự ghép metadata;
-  không encode asset ID hoặc caption bịa thay passage rỗng.
+  Caller truyền nội dung chưa có prefix. Corpus #101 đã được tiếp nhận theo
+  version/hash cụ thể; xem [hướng dẫn index E5](e5-metadata-index-91.md).
 - Average pooling có attention mask, float32 rồi L2; từ chối shape sai,
   vector zero/non-finite. Không nhân score với 100.
 - Preprocessing: `e5-fast-right-truncate512-mask-mean-fp32-l2-v1`.
@@ -32,8 +38,11 @@ Nguồn: [model card chính thức](https://huggingface.co/intfloat/multilingual
 ## RRF nội bộ
 
 `app.search.rrf.reciprocal_rank_fusion` nhận hai sequence asset ID theo thứ tự
-retrieval và `RRFConfig` tường minh. Output là kiểu nội bộ, chưa phải interface
-đã được Quỳnh Anh chấp thuận. Chưa có service orchestration hoặc adapter HTTP.
+retrieval và `RRFConfig` tường minh. Output là kiểu nội bộ. Quỳnh Anh đã
+[xác nhận contract candidate/fusion ngày 13/11/2026](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6849816002):
+có thể giữ `RRFResult` cho hàm thuần; tầng orchestration dùng DTO riêng.
+Service thử nghiệm E5-only/CLIP/RRF đã được bổ sung ở bước tiếp theo, xem
+[hướng dẫn service](e5-rrf-service-91.md). Chưa có adapter HTTP cho fusion.
 
 Mỗi asset nhận `sum(1 / (rank_constant + rank))` từ những luồng có asset đó;
 rank bắt đầu 1, weights bằng nhau. Không nhận/cộng cosine hoặc embedding.
@@ -49,7 +58,7 @@ nguồn/rank/contribution thực. Ví dụ `rank_constant=60` trong unit tests c
 fixture biết đáp án, không phải kết quả tối ưu.
 
 Hàm này không tự retrieval, kiểm tra snapshot hoặc áp dụng filters. Service
-tương lai phải xác nhận cùng candidate snapshot và filters trước retrieval,
+thử nghiệm xác nhận cùng candidate snapshot và filters trước retrieval,
 truyền các cửa sổ ứng viên đã sắp xếp, ghi model/index/corpus versions của
 từng luồng và gọi chính hàm này. Evaluation chỉ gọi service đó; không viết
 phép retrieval/fusion thứ hai trong runner.
@@ -111,31 +120,51 @@ Raw report gốc giữ ở `data/processed/issue91/` (Git ignore).
 mở index. Thời gian trên không phải p50/p95 benchmark; chưa có kết quả
 relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
 
-## Các xác nhận còn cần
+## Các xác nhận và việc còn lại
 
-1. Huyền: nguồn metadata gốc trên đúng 200 asset; các trường/thứ tự ghép,
-   tags order/dedup, whitespace/newline/Unicode, null/empty và asset không có
-   nội dung. Chốt recipe version, asset IDs, source/corpus hash trước index.
-2. Quỳnh Anh: candidate/fusion interface, `score_type` RRF, provenance mỗi
-   nguồn, versions, lỗi dependency và phạm vi integration; không nhét score
-   RRF vào contract cosine W3. Chưa sửa shared DTO/API.
+1. Corpus của Huyền tại PR #102, commit `a85c8fa`, đã được Chi chạy tái lập
+   và tiếp nhận ngày 13/11/2026. Recipe giữ tên `e5-metadata-passage-v1-draft`;
+   corpus hash `66efd87e34447c23b4171e13ac77d78a9c193519141d0dd6a31985c01e65b4f5`.
+   Xem [build/audit index E5](e5-metadata-index-91.md): weights thật đã đạt
+   trên 200 passages sau bản sửa persistence; 831 unit tests đạt. Phần retrieval/
+   fusion/benchmark và review service tiếp tục theo [guide service](e5-rrf-service-91.md).
+   PR index #106 đã merge tại `2c18b1d`.
+2. Quỳnh Anh đã chốt contract thử nghiệm: cùng candidate snapshot và filters;
+   dedup first occurrence, đánh lại rank từ 1 rồi cắt candidate window; weights
+   mỗi luồng bằng 1, missing source góp 0 và tie-break asset ID tăng dần.
+   DTO orchestration riêng có `score_type="rrf"`, hits/contributions,
+   config version, filters thực tế và provenance snapshot/source hash,
+   corpus hash/recipe, model/revision/index/config/manifest mỗi luồng.
+   Source names: `clip_text_to_preview`, `e5_text_to_metadata`.
+   Một luồng lỗi/index không tương thích làm cả fusion unavailable; không
+   fallback. Luồng thành công nhưng rỗng hợp lệ. Khi nối API, unavailable
+   map 503, lỗi nội bộ bất ngờ map 500; shared schema/API/runtime/search event
+   cần review riêng. Giữ CLIP mặc định, chưa bật fusion production.
+   E5-only/orchestration và DTO đã có implementation thử nghiệm, xem
+   [guide service](e5-rrf-service-91.md). Xác nhận contract không thay cho
+   benchmark hoặc review PR service; chưa tích hợp shared API/runtime.
 3. Khuê đã [đề xuất protocol](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6829347357)
-   ngày 12/11/2026; chi tiết ở dưới. Hash query canonical vẫn chưa được xác
-   nhận, nên chưa chạy/chọn cấu hình bằng input hiện tại.
-4. Đối chiếu query hash: local `queries.csv` có BOM, 70 query, split 28/42;
+   ngày 12/11/2026; chi tiết ở dưới. Sau đó Khuê đã
+   [chốt hướng đính chính artifact](https://github.com/Q-Anh2610/SE2026-T03/issues/91#issuecomment-6859981671):
+   dùng nguyên blob `ff7b64a` làm căn cứ PR erratum. Chỉ sau review/merge mới
+   tạo config confirmed và chạy/chọn cấu hình W5. PR #109 đã merge tại
+   `63122a3`; file confirmed v2 đã tạo và ba gói đã chạy, còn default config
+   giữ pending để CLI không tự bật benchmark. Chưa khóa k.
+4. Đối chiếu trước erratum: checkout local ban đầu có BOM/CRLF, 70 query, split 28/42;
    SHA-256 bytes là
    `80e7de4db77929bc79c87ddb1da1bdb1f101832d39a2fd3c6549ec8db7ae30b9`,
    khác manifest khóa `f62762c4a0b392ddc310d1d64e0bdb685b2010347e3790395bbb523428c38788`.
    Blob tại commit khóa `ff7b64a` và HEAD đều có SHA-256
    `e202a0dc62406826ec29a2946d489c359a222133e6c530a9954832760d965470`.
    Đổi CRLF của local thành LF tái tạo blob Git; parse CSV sau chuẩn hóa cho
-   commit khóa = HEAD = local. Mâu thuẫn với `f627…` còn cần truy artifact/quy
-   ước bytes, không quy cho thay đổi nội dung query trong W5. Chưa tự sửa
-   file/manifest hoặc chạy benchmark. Qrels bytes vẫn khớp
+   commit khóa = HEAD = local. Artifact `f627…` của baseline cũ vẫn chưa tái
+   tạo được; không xác nhận ngược provenance từ việc giống nội dung sau parse.
+   PR erratum đính chính active lock theo đề nghị `e202…`, giữ BOM/LF/4 LF cuối;
+   không sửa report lịch sử hoặc chạy benchmark. Qrels bytes vẫn khớp
    `cc1d42f6e3f41f92fab1b842c7a70ca68be4341cdd30e4262e13989f99019df5`,
    source 200 vẫn khớp `9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd`.
 
-## Protocol Khuê đề xuất — chưa chạy
+## Protocol đã thống nhất — grid đã chạy ngày 14/11/2026
 
 - Chỉ 28 validation query tiếng Anh, candidate universe đúng 200 asset,
   filters `{}`; CLIP-only, E5-only, CLIP+E5 RRF cùng inputs.
@@ -145,7 +174,7 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
   runner tổng quát hiện tại từ chối query không có relevant IDs.
 - Lấy đủ 200 ứng viên mỗi luồng và xuất raw top 200 source/fused. Nếu không
   đủ phải báo/chốt lại protocol; không âm thầm so cửa sổ ứng viên khác nhau.
-- Grid k thuộc `{10,20,60}` là đề xuất validation, chưa phải lựa chọn đã đo;
+- Grid k thuộc `{10,20,60}` đã đo đầy đủ; chưa khóa lựa chọn k;
   rank từ 1, tie-break asset ID tăng dần, version hóa k/candidate count.
 - Raw có query ID, asset ID, rank, raw score, source, RRF contribution, cả
   source/fused rankings; kèm input hashes, model/index/config versions,
@@ -155,9 +184,9 @@ relevance, E5 index compatibility hoặc chất lượng tiếng Việt.
   retrieval + fusion; loại model load/index build/report writing. p50/p95
   nearest-rank; ghi thiết bị, packages và thread settings thực tế. Chưa đo
   được đúng phạm vi thì ghi chưa có latency; không dùng số image #88 thay thế.
-- Canonical query hash chưa giải quyết thì chưa chạy hoặc chọn cấu hình.
-  Khi xác nhận phải ghi artifact/commit và BOM/newline vào run record; nếu
-  hash khóa sai cần cập nhật benchmark có review.
+- Review/merge PR erratum trước khi tạo config confirmed và chạy/chọn cấu
+  hình. Khi xác nhận phải ghi source/merge commit, hashes và byte policy vào
+  config/run record. Active lock đề nghị mới không xác nhận baseline cũ.
 
 ## Truy provenance W3
 
@@ -167,9 +196,52 @@ SHA-256 `cbcf9e7df90a144f096ac0386e2b6fffcb1d31d37d93e76a4c5c6b56400a7d77`.
 `provenance.json` ghi `queries_sha256=f627…`; exporter kiểm raw bytes của path
 `--queries` do caller truyền. Tuy nhiên ZIP không chứa `queries.csv`, nên gói
 này chưa đủ tái tạo bytes canonical. Không chạy exporter/benchmark hoặc đọc
-ranked results W3 trong lượt truy provenance này; còn cần bản input gốc hoặc
-quy ước bytes được owner xác nhận.
+ranked results W3 trong lượt truy provenance này. Theo phản hồi Khuê, chưa có
+artifact tái tạo `f627…`; giữ nguyên provenance/report cũ. W5 đề nghị dùng blob
+`ff7b64a`/`e202…` qua PR erratum và chạy mới các baseline sau confirmation.
 
 Không đọc/chạy lại 42 test query để chọn cấu hình. Không thay text qrels bằng
 image qrels; không trộn index 354 với phép so sánh candidate 200. Không suy
 trạng thái W4 hiện tại từ ghi chú lịch sử trong issue/docs.
+
+## E5-only và orchestration RRF — kiểm chứng local 13/11/2026
+
+Đã triển khai service thử nghiệm theo contract Quỳnh Anh: cùng snapshot/source
+hash/200 IDs/metadata, cùng filters trước retrieval, source window 200, RRF/DTO
+riêng và provenance đầy đủ. Dùng nguyên shared exact retrieval/TextSearchService
+và hàm RRF hiện có. Một nguồn lỗi làm cả fusion unavailable; empty stream hợp lệ.
+
+43 service tests và toàn backend unit 874 tests passed. Smoke offline bằng cả
+CLIP/E5 thật passed trên các query/filter tự tạo, giữ nguyên persisted index sau
+reopen; repeat giữ thứ tự/RRF/provenance với raw cosine roundoff được ghi riêng.
+Xem [guide service](e5-rrf-service-91.md) và
+[bằng chứng](../evidence/issue91-e5-rrf-service-smoke-20261113.json).
+
+Các kiểm chứng service chạy từ working tree chưa commit trên
+`feat/91-e5-rrf-service`. Sau đó PR #107 có 5 checks passed, Khuê approve trên
+`3673445` và merge vào `develop` tại `8d6eb3d`. Chưa chạy raw validation hoặc
+quality/latency benchmark, chưa chọn k bằng validation, chưa nối shared API/runtime/search event.
+
+## Chuẩn bị runner/export validation
+
+Runner tại `scripts/run_e5_rrf_validation.py` dùng nguyên service CLIP/E5/RRF
+đã merge qua PR #107 và metric `compute_metrics` W3. Xem
+[guide runner](e5-rrf-validation-runner-91.md) về raw format, 5 warm-up + 280
+measured samples/cấu hình, nearest-rank p50/p95 và cách giữ lỗi/partial output.
+
+Config mặc định `evaluation/configs/issue91-e5-rrf-validation.pending.json`
+chặn trước khi đọc CSV hoặc nạp weights. Sau review/merge PR #109, dùng file
+confirmed v2 để chạy ba gói thật và audit kết quả. Tests runner là bằng chứng
+fixtures riêng; quality/latency thật nằm trong báo cáo ngày 14/11/2026.
+
+
+## Đính chính query artifact — đề nghị ngày 14/11/2026
+
+Xem [erratum raw bytes](../evaluation/query-artifact-erratum-91.md) và
+[record máy đọc được](../../data/benchmark/query-artifact-erratum-91.json).
+Query Git blob không đổi IDs/wording/groups/split; active lock/pending pins
+được đính chính theo blob gốc `ff7b64a`. Qrels/labels/candidate/snapshot và
+report/provenance/script baseline lịch sử được bảo toàn. `.gitattributes`
+pin query LF và các CSV còn lại CRLF theo raw hashes đã có; checker kiểm cả
+hai chế độ autocrlf mà không chuẩn hóa hash. PR #109 đã merge; config confirmed
+v2 ghi đầy đủ source/head/merge commits và pin raw record. Xem guide results ở trên.
