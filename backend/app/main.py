@@ -11,6 +11,7 @@ from fastapi.routing import APIRoute
 
 from app.api.health import router as health_router
 from app.api.jobs import router as jobs_router
+from app.api.reindex import router as reindex_router
 from app.core.config import Settings
 from app.core.errors import install_error_handlers
 from app.api.mock import router as mock_router
@@ -26,7 +27,7 @@ from app.services.text_search import TextSearchService
 
 
 def create_app(settings: Settings | None = None, *, text_search_service: TextSearchService | None = None,
-               image_search_service=None) -> FastAPI:
+               image_search_service=None, reindex_operation=None) -> FastAPI:
     if settings is None:
         settings = Settings()
 
@@ -43,6 +44,9 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
                 application.state.image_search_service = await run_in_threadpool(build_image_search_service, settings)
             yield
         finally:
+            if application.state.reindex_manager is not None:
+                from starlette.concurrency import run_in_threadpool
+                await run_in_threadpool(application.state.reindex_manager.close)
             try:
                 # Service instance is reused for this app's lifetime. Future adapter
                 # may expose close() to release its Qdrant client on shutdown.
@@ -71,9 +75,12 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
     application.state.db_engine_lock = Lock()
     application.state.text_search_service = text_search_service
     application.state.image_search_service = image_search_service
+    application.state.reindex_manager = None
+    application.state.reindex_operation = reindex_operation
     install_error_handlers(application)
     application.include_router(health_router)
     application.include_router(jobs_router)
+    application.include_router(reindex_router)
     mocks_enabled = settings.mock_api_enabled and settings.env != "production"
     list_router = mock_list_router if (
         mocks_enabled and settings.asset_list_source == "fixture"
@@ -118,7 +125,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
                 schema.get("components", {}).get("schemas", {}).pop(name, None)
             # FastAPI excludes None while encoding OpenAPI metadata. Preserve
             # explicit nulls in examples: frontend requires nullable keys present.
-            for route in [*jobs_router.routes, *list_router.routes, *(selected_text_router.routes if selected_text_router else []),
+            for route in [*reindex_router.routes, *jobs_router.routes, *list_router.routes, *(selected_text_router.routes if selected_text_router else []),
                           *(selected_image_router.routes if selected_image_router else []),
                           *(selected_feedback_router.routes if selected_feedback_router else [])]:
                 if not isinstance(route, APIRoute):
