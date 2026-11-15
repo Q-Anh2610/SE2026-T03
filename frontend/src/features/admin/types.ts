@@ -21,6 +21,14 @@ export interface JobResult {
   skipped: number | null
   manifest_sha256: string | null
   exit_code: number | null
+  index_version?: string | null
+  model_version?: string | null
+  dataset_snapshot?: string | null
+  asset_count?: number | null
+  point_count?: number | null
+  index_ref?: string | null
+  index_manifest_sha256?: string | null
+  search_verified?: boolean | null
 }
 
 export interface JobError {

@@ -129,7 +129,31 @@
 }
 
 .admin-job-card__details dd {
+  overflow-wrap: anywhere;
   margin: 0.25rem 0 0;
+}
+
+.admin-reindex,
+.admin-job-tracker {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+.admin-reindex h2,
+.admin-job-tracker h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.admin-reindex a,
+.admin-job-tracker a {
+  display: inline-block;
+  padding: 0.65rem 0;
+  text-decoration: underline;
 }
 
 .admin-job-card__progress-label {

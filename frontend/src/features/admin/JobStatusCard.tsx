@@ -124,6 +124,16 @@ export function JobStatusCard({ job }: { job: JobMetadata }) {
       {result !== null && job.kind === 'indexing' && (
         <div className="admin-job-card__result">
           <p>Mã thoát runner: {formatCount(result.exit_code)}</p>
+          <dl className="admin-job-card__details">
+            <div><dt>Index version</dt><dd>{result.index_version ?? 'Chưa có'}</dd></div>
+            <div><dt>Model version</dt><dd>{result.model_version ?? 'Chưa có'}</dd></div>
+            <div><dt>Dataset snapshot</dt><dd>{result.dataset_snapshot ?? 'Chưa có'}</dd></div>
+            <div><dt>Số asset / point</dt><dd>{formatCount(result.asset_count ?? null)} / {formatCount(result.point_count ?? null)}</dd></div>
+            <div><dt>Tham chiếu index</dt><dd>{result.index_ref ?? 'Chưa có'}</dd></div>
+            <div><dt>SHA-256 manifest index</dt><dd>{result.index_manifest_sha256 ?? 'Chưa có'}</dd></div>
+            <div><dt>Kiểm chứng search trên index mới</dt><dd>{result.search_verified === true ? 'Đã kiểm chứng' : result.search_verified === false ? 'Chưa đạt' : 'Chưa có thông tin'}</dd></div>
+            <div><dt>Đầu vào / thành công / thất bại / bỏ qua</dt><dd>{formatCount(result.input_count)} / {formatCount(result.succeeded)} / {formatCount(result.failed)} / {formatCount(result.skipped)}</dd></div>
+          </dl>
           <p>Kết quả indexing chưa xác nhận index đang phục vụ đã được đổi.</p>
         </div>
       )}

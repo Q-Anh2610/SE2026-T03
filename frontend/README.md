@@ -252,7 +252,8 @@ smoke frontend.
 Mở `/#admin-status` hoặc chọn **Trạng thái job**. Trang gọi
 `GET /api/v1/admin/jobs` theo [contract W5](../docs/contracts/jobs-status-w5.md),
 lọc AND theo kind/status và phân trang 12 job. Đổi bộ lọc về trang 1; Tải lại và
-Thử lại giữ bộ lọc/trang của lượt đọc. Không có thao tác tạo/retry job hoặc reindex.
+Thử lại giữ bộ lọc/trang của lượt đọc. Phần danh sách chỉ đọc; thao tác reindex
+của #104 được mô tả ở mục riêng bên dưới.
 
 Backend cần PostgreSQL, migration `0003` và `APP_ADMIN_API_KEY`; xem
 [hướng dẫn backend](../docs/guides/jobs-status-api.md). Từ thư mục frontend:
@@ -297,3 +298,21 @@ Lệnh E2E build trước rồi tự quản lý server ở 5193/5194/5195; cần
 và Chrome đã cài theo cấu hình repo. E2E không gọi DB/model hoặc tải asset thật.
 Các smoke HTTP/UI với PostgreSQL và runner thật, kết quả local và giới hạn được
 ghi riêng tại [bàn giao Admin W5](../docs/guides/admin-jobs-w5.md).
+
+## Admin reindex — Issue #104
+
+Sau khi kết nối tại `/#admin-status`, chọn **Yêu cầu reindex** và xác nhận để
+dựng index CLIP riêng cho candidate 200. UI chỉ gửi profile cố định và UUID,
+không nhận path/model/URL tùy ý. Loading chặn gửi lặp; khi timeout/mất response,
+**Gửi lại cùng yêu cầu** giữ UUID. Không coi 202 hoặc replay 200 là job thành công.
+
+**Theo dõi job này** mở `/#admin-status/job/<UUID>` và dùng GET mỗi 3 giây đến
+terminal; lỗi tải dừng polling và cho retry đọc. Khóa giữ trong phiên Admin,
+không vào URL/storage; tải lại hoặc mở bookmark cần nhập lại khóa. Rời trang
+không hủy operation backend đã nhận. Result hiển thị versions/count và kiểm
+chứng search; succeeded chưa có nghĩa active index đã chuyển.
+
+Backend cần API #117, migration `0004`, bật reindex và cache/model/output riêng
+được owner chuẩn bị. Không chạy smoke trên index dùng chung. Chi tiết contract,
+commands, kiểm thử giả lập và checklist smoke thật còn chờ tại
+[bàn giao reindex UI W5](../docs/guides/admin-reindex-w5.md).

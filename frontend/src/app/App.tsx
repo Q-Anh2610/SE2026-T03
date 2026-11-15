@@ -36,6 +36,8 @@ export function App() {
     try { localStorage.setItem('connected-theme', next) } catch { /* Keep the choice for this session. */ }
   }
 
+  const jobRoute = /^#admin-status\/job\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.exec(route)
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">Đến nội dung chính</a>
@@ -47,8 +49,8 @@ export function App() {
         </button>
       </header>
       <main id="main" tabIndex={-1}>
-        {route === '#admin-status' ? (
-          <LiveAdminStatusPage />
+        {route === '#admin-status' || jobRoute !== null ? (
+          <LiveAdminStatusPage jobId={jobRoute?.[1]} />
         ) : route === '#admin-status-preview' && import.meta.env.DEV ? (
           <AdminStatusPage />
         ) : route === '#image-search' ? (

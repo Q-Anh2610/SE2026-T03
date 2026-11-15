@@ -49,6 +49,7 @@ function isResult(value: unknown): boolean {
   if (!isRecord(value)) return false
 
   const counts = ['input_count', 'succeeded', 'failed', 'skipped']
+  const extraStrings = ['index_version', 'model_version', 'dataset_snapshot', 'index_ref', 'index_manifest_sha256']
 
   return (
     value.persistence === null
@@ -56,6 +57,9 @@ function isResult(value: unknown): boolean {
     || value.persistence === 'local_files_only'
   )
     && counts.every((key) => isNullableCount(value[key]))
+    && extraStrings.every((key) => !(key in value) || value[key] === null || typeof value[key] === 'string')
+    && ['asset_count', 'point_count'].every((key) => !(key in value) || isNullableCount(value[key]))
+    && (!('search_verified' in value) || value.search_verified === null || typeof value.search_verified === 'boolean')
     && (
       value.manifest_sha256 === null
       || typeof value.manifest_sha256 === 'string'

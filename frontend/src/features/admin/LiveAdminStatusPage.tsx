@@ -3,6 +3,8 @@ import './AdminStatusPage.css'
 import { listAdminJobs } from './client'
 import { AdminJobsError } from './errors'
 import { JobStatusCard } from './JobStatusCard'
+import { ReindexPanel } from './ReindexPanel'
+import { AdminJobTracker } from './AdminJobTracker'
 import type { JobKind, JobListResponse, JobStatus } from './types'
 
 type JobsRequest = {
@@ -18,7 +20,7 @@ type JobsState =
   | { status: 'error'; error: AdminJobsError; page: number }
   | { status: 'success'; data: JobListResponse }
 
-export function LiveAdminStatusPage() {
+export function LiveAdminStatusPage({ jobId }: { jobId?: string }) {
   const [draftKey, setDraftKey] = useState('')
   const [request, setRequest] = useState<JobsRequest | null>(null)
   const [state, setState] = useState<JobsState>({ status: 'idle' })
@@ -131,6 +133,19 @@ export function LiveAdminStatusPage() {
         />
         <button type="submit">Kết nối</button>
       </form>
+
+      {request !== null && (
+        <>
+          <ReindexPanel
+            key={request.adminKey}
+            adminKey={request.adminKey}
+            disabled={state.status !== 'success'}
+          />
+          {jobId !== undefined && (
+            <AdminJobTracker key={`${request.adminKey}:${jobId}`} jobId={jobId} adminKey={request.adminKey} />
+          )}
+        </>
+      )}
 
       {request !== null && (
         <div className="admin-status-page__filters">
