@@ -89,6 +89,13 @@ describe('theme preference', () => {
 })
 
 describe('admin status routing', () => {
+  it('opens a bookmarked job route without putting the admin key in the URL', () => {
+    window.location.hash = '#admin-status/job/a0b674d2-1286-401f-b73b-72cae159fcad'
+    render(<App />)
+    expect(screen.getByRole('heading', { name: 'Trạng thái job' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Khóa quản trị')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Theo dõi job đã chọn' })).not.toBeInTheDocument()
+  })
   it('renders the admin status page when loaded with the admin hash', () => {
     window.location.hash = '#admin-status'
 
