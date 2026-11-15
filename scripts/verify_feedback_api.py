@@ -36,7 +36,7 @@ def check_feedback(app, db, manifest, metadata, origin):
 
         with Session(db.engine) as reader:
             revision = reader.scalar(text("SELECT version_num FROM alembic_version"))
-            assert revision == "0003"
+            assert revision == "0004"
             events = {kind: reader.scalar(select(SearchEvent).where(SearchEvent.query_type == kind,
                 func.jsonb_array_length(SearchEvent.result_asset_ids) > 0).order_by(SearchEvent.created_at))
                 for kind in ("text", "image")}

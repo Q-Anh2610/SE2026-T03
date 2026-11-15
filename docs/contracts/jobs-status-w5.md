@@ -1,8 +1,14 @@
 # Jobs/status API W5 — Issue #115
 
 Backend: Quỳnh Anh. Bên nhận Admin UI: Khuê tại #103 (tách từ #70).
-Đây là contract backend đề xuất và triển khai local; **chưa có xác nhận của
-Huyền/Chi/Khuê**. Không coi tài liệu này là bằng chứng các owner đã duyệt.
+Phạm vi #115 đã được Huyền/Chi/Khuê xác nhận tại
+[PR #119](https://github.com/Q-Anh2610/SE2026-T03/pull/119), gồm giới hạn khóa
+admin local/nội bộ. Phần mở rộng reindex #117 cần xác nhận riêng, xem
+[contract reindex](reindex-w5.md).
+
+Mở rộng #117 giữ routes/fields cũ, thêm các trường result nullable về
+index/version/count. Chỉ job `reindex.clip_candidate200` sau xác minh đầy đủ
+mới ghi progress 200/200. CLI indexing cũ vẫn có progress null như dưới đây.
 
 ## Route và quyền truy cập
 
@@ -146,12 +152,12 @@ từ exception/report ra API. Retry tải danh sách không chạy lại job.
 
 ## Điểm cần owner xác nhận trước nghiệm thu chung
 
-- [ ] Huyền: dùng `run_batch` qua wrapper và summary/status/persistence như trên;
+- [x] Huyền: dùng `run_batch` qua wrapper và summary/status/persistence như trên;
   xác nhận giới hạn tiến độ chỉ có ở cuối lượt.
-- [ ] Chi: runner CLIP standalone là nguồn indexing ban đầu; xác nhận exit_code,
+- [x] Chi: runner CLIP standalone là nguồn indexing ban đầu; xác nhận exit_code,
   giới hạn progress null, phạm vi runner khác và việc không đổi active index.
-- [ ] Khuê (#103): tiếp nhận route/DTO, auth header, null progress, pagination,
+- [x] Khuê (#103): tiếp nhận route/DTO, auth header, null progress, pagination,
   job failed khác lỗi HTTP và không fallback fixture.
-- [ ] Khuê/nhóm: xác nhận phương án khóa admin nội bộ phù hợp môi trường sử dụng.
+- [x] Khuê: xác nhận khóa admin cho local/nội bộ; chưa thay xác nhận triển khai từ xa.
 
 Hướng dẫn migration/chạy/kiểm chứng: [jobs-status-api.md](../guides/jobs-status-api.md).
