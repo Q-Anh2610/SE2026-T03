@@ -56,6 +56,24 @@ Qdrant storage hoặc runtime reports vào Git. Screenshot trong hội thoại k
 - Hai ảnh UI bổ sung xác nhận reset/nhập khóa sai báo lỗi quản trị; nhập lại
   khóa đúng xem lại được cùng job succeeded, không cần yêu cầu operation mới.
 
+## Hồi quy sau tích hợp backend
+
+Nhánh #104 đã đồng bộ tới `89c2ba6`, gồm merge PR #122 tại `66d60f8` và backend
+`7a43d79`, không có conflict. Agent đối chiếu 10 file contract/API/schema/runner
+với worktree đã smoke, nội dung giống nhau; xem hướng dẫn bàn giao.
+
+Output người dùng cung cấp ngày 15/11/2026, lượt 23:03:
+
+- Admin/App: 225/225 tests trên 11 files đạt.
+- Production build/typecheck: đạt, Vite 7.3.7.
+- Backend unit: reindex API/builder, jobs API và OpenAPI đạt 38/38, 13,16 giây.
+- Sau khi chuyển backend sang checkout đã tích hợp, UI ban đầu báo không thể tải
+  job khi PostgreSQL dừng. Người dùng khởi động lại PostgreSQL và cung cấp output
+  container `healthy`; tải lại UI sau đó hiển thị đúng job cũ succeeded, progress
+  100%, 200/200, exit_code=0, index/model/snapshot và hash khớp bằng chứng trên.
+  Đây là kiểm tra đọc lại job đã lưu và phục hồi sau gián đoạn DB; không phải
+  một lượt POST/reindex mới trên checkout đã tích hợp.
+
 ## Giới hạn và việc còn kiểm chứng
 
 - Chưa có bằng chứng smoke thật riêng cho hủy xác nhận, progress null khi running,
@@ -66,4 +84,7 @@ Qdrant storage hoặc runtime reports vào Git. Screenshot trong hội thoại k
   đang phục vụ hoặc benchmark chất lượng. Không có bước activate index.
 - Không chạy lại fingerprint baseline độc lập trong lượt UI này; phạm vi không
   ghi đè dựa trên output riêng/cấu hình và code backend đã đối chiếu.
-- Chưa commit/push/PR/CI/review/merge cho thay đổi UI #104 trong phiên này.
+- UI đã commit/push tại `ff77f0a`, có [Draft PR #123](https://github.com/Q-Anh2610/SE2026-T03/pull/123)
+  vào develop; nhánh sau đó đồng bộ `89c2ba6`. Bản cập nhật tài liệu này chưa commit.
+  Lượt CI 5/5 trước tích hợp đã được quan sát; chưa xác minh lại CI/review hiện tại
+  sau tích hợp, không coi kiểm thử local là bằng chứng approve hoặc merge PR #123.

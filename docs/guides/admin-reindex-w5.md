@@ -85,12 +85,12 @@ artifact, search_verified=true, error=null. Ảnh UI xác nhận khóa sai bị 
 và nhập lại khóa đúng xem được cùng job cũ. Không dùng kết quả này thay tests
 lỗi/replay/409 riêng hoặc benchmark.
 
-Kiểm tra GitHub ngày 15/11/2026 sau lượt E2E: PR #122 vẫn Draft tại `7a43d79`,
+Tại thời điểm kiểm tra GitHub sau lượt E2E ban đầu ngày 15/11/2026, PR #122 còn Draft tại `7a43d79`,
 5 checks đạt, chưa approve/merge. Chi và Huyền đã xác nhận bàn giao qua comment
 riêng (runner/model/config và frozen input/cache); Khuê đã tiếp nhận POST contract.
-Các xác nhận này không thay approve PR hoặc smoke UI. Checkout #104 hiện chưa có
-route reindex và tài liệu backend #117; cần backend được bàn giao đang chạy hoặc
-checkout riêng cho backend để smoke, không chép backend vào diff frontend.
+Các xác nhận này không thay approve PR hoặc smoke UI. Lượt smoke ban đầu dùng
+checkout riêng cho backend. PR #122 sau đó đã merge vào develop và được tích hợp
+vào nhánh #104 như phần đối chiếu bên dưới.
 
 Trước smoke cần owner bàn giao SHA/API origin, CORS, PostgreSQL test/local,
 migration `0004`, khóa admin, `APP_REINDEX_ENABLED=true`, preview cache hợp lệ,
@@ -111,13 +111,36 @@ mở quyền ghi index chung hoặc thay active index để kiểm thử UI.
 5. Ghi thời điểm, SHA frontend/backend, UUID job, status, versions/count và kết
    quả quan sát. Không dùng fixture hoặc kết quả smoke CLI #117 thay smoke UI.
 
-## Checklist
+## Đối chiếu sau tích hợp backend
+
+Người dùng đã fast-forward nhánh #104 từ `ff77f0a` lên `89c2ba6`, gồm merge PR
+#122 tại `66d60f8` và backend `7a43d79`; không có conflict. Agent so sánh byte
+giữa checkout đã tích hợp và worktree backend đã smoke: hai contracts
+reindex/jobs-status, API reindex, hai schemas reindex/jobs, service reindex,
+main/config/model job và script prepare_text_search_index đều giống nhau.
+Không có thay đổi contract/runner cần Chi/Huyền xác nhận lại ở bước này.
+
+Bằng chứng smoke 200/200 trước đó dùng đúng nội dung backend đã đối chiếu này.
+Người dùng chạy hồi quy sau merge ngày 15/11/2026 lúc 23:03: Admin/App đạt
+225/225 tests trên 11 files; build/typecheck đạt (Vite 7.3.7); backend unit
+reindex API/builder, jobs API và OpenAPI đạt 38/38 tests (13,16 giây).
+Sau khi chuyển backend sang checkout đã tích hợp, UI báo lỗi tải job do PostgreSQL
+đang dừng. Người dùng khởi động lại DB, xác nhận container `healthy` và cung cấp ảnh
+UI tải lại đúng job cũ: succeeded, 100%, 200/200, exit_code=0 cùng index/model/
+snapshot/hash đã đối chiếu. Kiểm tra này xác nhận đọc lại dữ liệu đã lưu và phục hồi
+sau gián đoạn DB; không tạo POST/reindex mới hoặc chuyển active index.
+
+## Checklist bàn giao
 
 - [x] Unit/component/contract tests và hồi quy Admin/App đã chạy đạt (580 tests).
 - [x] Typecheck/lint/build/coverage đạt; E2E desktop/mobile đạt (10/10 Admin sau sửa fixture; các ca ngoài Admin đạt ở lượt trước).
 - [x] Đối chiếu contract `7a43d79` và các comment xác nhận của Chi/Huyền/Khuê trên PR #122; nếu backend đổi commit cần đối chiếu lại.
 - [x] Smoke UI với backend thật được ghi riêng, có SHA/job ID/kết quả; đối chiếu DB/artifact và xác thực khóa sai/đúng.
-- [ ] PR vào develop, CI thực tế đạt, reviewer khác approve; merge theo quyền.
+- [x] Draft PR [#123](https://github.com/Q-Anh2610/SE2026-T03/pull/123) vào develop; lượt CI 5/5 trước tích hợp đã được quan sát.
+- [x] Đọc lại job qua backend từ checkout đã tích hợp và phục hồi sau gián đoạn PostgreSQL.
+- [ ] Xác minh CI trên commit hiện tại, reviewer khác approve và merge theo quyền.
 
-Hiện code/tests/docs là thay đổi local chưa commit; không ghi nhận đã nghiệm
-thu #104, không cập nhật tiến độ hoàn tất hoặc tự đóng Issue.
+Code/tests/docs ban đầu đã commit/push tại `ff77f0a`, Draft PR #123 vào develop;
+sau đó nhánh đã đồng bộ `89c2ba6` như trên. Ghi nhận đối chiếu sau tích hợp này
+là thay đổi tài liệu local tiếp theo, chưa commit. Review và nghiệm thu tích hợp
+cuối còn riêng; không tự đóng Issue.
