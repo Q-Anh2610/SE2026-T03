@@ -109,6 +109,12 @@ asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 ## Kiểm thử
 
+Reindex W5 (#117): [contract](../docs/contracts/reindex-w5.md),
+[migration/cấu hình/smoke](../docs/guides/reindex-api.md).
+POST `/api/v1/admin/reindex` dùng profile CLIP candidate 200 cố định, request UUID
+chống trùng và jobs/status; mặc định tắt. Cần migration `0004`, khóa admin và
+cache preview. Chỉ dựng index riêng, không tự chuyển active index.
+
 Explanation text/image W5 (#116): [contract và bàn giao cho frontend](../docs/contracts/search-explanation-w5.md).
 Response search thật thêm `results[].score_type=cosine`, giữ explanation dạng
 chuỗi, nguồn retrieval và versions thực tế; không đổi search mock hoặc bật RRF.

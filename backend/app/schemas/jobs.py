@@ -27,6 +27,14 @@ class JobProgress(BaseModel):
 
 
 class JobResult(BaseModel):
+    index_version: str | None = None
+    model_version: str | None = None
+    dataset_snapshot: str | None = None
+    asset_count: int | None = Field(default=None, ge=0)
+    point_count: int | None = Field(default=None, ge=0)
+    index_ref: str | None = None
+    index_manifest_sha256: str | None = None
+    search_verified: bool | None = None
     persistence: Literal["postgresql", "local_files_only"] | None = None
     input_count: int | None = Field(default=None, ge=0)
     succeeded: int | None = Field(default=None, ge=0)

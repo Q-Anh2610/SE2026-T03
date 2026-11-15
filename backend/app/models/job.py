@@ -3,7 +3,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import BigInteger, CheckConstraint, DateTime, Index, String, func
+from sqlalchemy import BigInteger, CheckConstraint, DateTime, Index, String, func, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -27,11 +27,16 @@ class Job(Base):
         CheckConstraint("started_at IS NULL OR started_at >= created_at", name="start_order"),
         CheckConstraint("finished_at IS NULL OR finished_at >= started_at", name="finish_order"),
         Index("ix_jobs_created_job", "created_at", "job_id"),
+        Index("uq_jobs_request_id", "request_id", unique=True),
+        Index("uq_jobs_active_resource", "resource_key", unique=True,
+              postgresql_where=text("resource_key IS NOT NULL AND status IN ('queued', 'running')")),
     )
 
     job_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     kind: Mapped[str] = mapped_column(String(16))
     runner: Mapped[str] = mapped_column(String(80))
+    request_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True))
+    resource_key: Mapped[str | None] = mapped_column(String(128))
     status: Mapped[str] = mapped_column(String(16), default="queued")
     processed: Mapped[int | None] = mapped_column(BigInteger)
     total: Mapped[int | None] = mapped_column(BigInteger)

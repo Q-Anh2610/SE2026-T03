@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     env: Literal["development", "test", "production"] = "development"
     debug: bool = False
     admin_api_key: SecretStr | None = Field(default=None, min_length=32)
+    reindex_enabled: bool = False
+    reindex_cache_ready: Path | None = None
+    reindex_output_root: Path = Path(__file__).resolve().parents[3] / "data/processed/reindex"
+    reindex_timeout_seconds: int = Field(default=1800, ge=10, le=7200)
     database_url: SecretStr | None = Field(default=None, validation_alias="DATABASE_URL")
     postgres_host: str = Field(default="localhost", validation_alias="POSTGRES_HOST")
     postgres_port: int = Field(default=5432, ge=1, le=65535, validation_alias="POSTGRES_PORT")

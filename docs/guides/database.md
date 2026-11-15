@@ -21,7 +21,7 @@ cd backend
 .\.venv\Scripts\python.exe -m app.db.seed
 ```
 
-Mong đợi revision `0003`, không có schema drift và seed thêm 7 bản ghi lần đầu,
+Mong đợi revision `0004`, không có schema drift và seed thêm 7 bản ghi lần đầu,
 0 bản ghi lần sau. Các lệnh Alembic trên chạy từ `backend/`; từ gốc repo có thể dùng
 `backend/.venv/Scripts/python.exe -m alembic -c backend/alembic.ini upgrade head`.
 
@@ -59,6 +59,10 @@ Migration và seed là lệnh riêng, không tự chạy khi Uvicorn khởi đ�
 `GET /healthz` giữ nguyên liveness, không thay bằng DB readiness.
 
 ## Schema
+
+Migration `0004` thêm request_id/resource_key và unique indexes cho jobs để
+chống reindex trùng/đồng thời; không đổi dữ liệu bảng cũ. Xem
+[reindex W5](../contracts/reindex-w5.md).
 
 Migration `0003` bổ sung bảng `jobs` để lưu lịch sử runner W5; không thay dữ
 liệu ba bảng cũ. Xem [contract jobs/status](../contracts/jobs-status-w5.md)

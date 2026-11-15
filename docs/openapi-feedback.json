@@ -400,6 +400,150 @@
         }
       }
     },
+    "/api/v1/admin/reindex": {
+      "post": {
+        "tags": [
+          "admin reindex"
+        ],
+        "summary": "Dựng index CLIP candidate 200 riêng và theo dõi job",
+        "description": "Không chuyển active index. request_id UUID chống gửi trùng; cùng request trả job cũ (200), request khác khi bận trả 409. Không nhận URL/path/command/model tùy ý.",
+        "operationId": "reindex_api_v1_admin_reindex_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReindexRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReindexResponse"
+                },
+                "example": {
+                  "job_id": "a0b674d2-1286-401f-b73b-72cae159fcad",
+                  "status": "queued",
+                  "status_url": "/api/v1/admin/jobs/a0b674d2-1286-401f-b73b-72cae159fcad",
+                  "reused": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INVALID_REQUEST",
+                    "message": "Yêu cầu không hợp lệ.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ADMIN_ACCESS_DENIED",
+                    "message": "Không có quyền truy cập quản trị.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Lỗi máy chủ. Vui lòng thử lại sau.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "REINDEX_UNAVAILABLE",
+                    "message": "Reindex chưa được cấu hình sẵn sàng.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "REINDEX_IN_PROGRESS",
+                    "message": "Đã có lượt reindex trên tài nguyên này.",
+                    "details": []
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReindexResponse"
+                },
+                "example": {
+                  "job_id": "a0b674d2-1286-401f-b73b-72cae159fcad",
+                  "status": "queued",
+                  "status_url": "/api/v1/admin/jobs/a0b674d2-1286-401f-b73b-72cae159fcad",
+                  "reused": true
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AdminKey": []
+          }
+        ]
+      }
+    },
     "/api/v1/assets": {
       "get": {
         "tags": [
@@ -1575,6 +1719,96 @@
       },
       "JobResult": {
         "properties": {
+          "index_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Version"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version"
+          },
+          "dataset_snapshot": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Snapshot"
+          },
+          "asset_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Count"
+          },
+          "point_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Point Count"
+          },
+          "index_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Ref"
+          },
+          "index_manifest_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Index Manifest Sha256"
+          },
+          "search_verified": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Search Verified"
+          },
           "persistence": {
             "anyOf": [
               {
@@ -1960,6 +2194,62 @@
           "has_next"
         ],
         "title": "Pagination"
+      },
+      "ReindexRequest": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "profile": {
+            "type": "string",
+            "const": "clip-candidate200-v1",
+            "title": "Profile",
+            "default": "clip-candidate200-v1"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id"
+        ],
+        "title": "ReindexRequest"
+      },
+      "ReindexResponse": {
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Job Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "status_url": {
+            "type": "string",
+            "title": "Status Url"
+          },
+          "reused": {
+            "type": "boolean",
+            "title": "Reused"
+          }
+        },
+        "type": "object",
+        "required": [
+          "job_id",
+          "status",
+          "status_url",
+          "reused"
+        ],
+        "title": "ReindexResponse"
       },
       "SearchExecutionVersions": {
         "properties": {

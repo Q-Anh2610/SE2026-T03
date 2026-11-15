@@ -17,13 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--snapshot", required=True)
-    parser.add_argument("--download-previews", action="store_true", required=True,
-                        help="Explicitly download only previews in the selected manifest.")
-    args = parser.parse_args()
+def build_index(args):
+    """CLI cũ và reindex HTTP dùng chung embedding/store, output luôn mới."""
     from app.ingestion.downloader import download_preview_with_retry
     from app.ingestion.source_adapter import SourceAdapter
 
@@ -31,33 +26,71 @@ def main():
     metadata, invalid = adapter.normalize_and_validate(adapter.load_manifest())
     if invalid or not metadata:
         raise ValueError("Manifest must contain only valid nonempty metadata.")
-    output = ROOT / "data/processed/issue65" / ("index-" + uuid4().hex[:12])
+    output = args.output_dir or ROOT / "data/processed/issue65" / ("index-" + uuid4().hex[:12])
     output.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(args.manifest, output / "source.json")
     previews = output / "previews"
     previews.mkdir()
     results, errors = {}, []
-    print(f"Downloading {len(metadata)} selected previews; no model download.", flush=True)
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        futures = {pool.submit(download_preview_with_retry, row["thumbnail_path"], previews, max_attempts=2): row
-                   for row in metadata}
-        for index, future in enumerate(as_completed(futures), 1):
-            row = futures[future]
-            try:
-                result = future.result()
-                results[row["asset_id"]] = {**result, "asset_id": row["asset_id"]}
-            except Exception as exc:
-                errors.append({"asset_id": row["asset_id"], "code": type(exc).__name__})
-            if index % 25 == 0 or index == len(metadata):
-                print(f"Preview progress {index}/{len(metadata)}, failed={len(errors)}", flush=True)
+    if args.cache_ready:
+        # Chỉ đọc cache do operator cấu hình; ảnh phải khớp URL và checksum.
+        cache_root = args.cache_ready.resolve().parent
+        cache = json.loads(args.cache_ready.read_text(encoding="utf-8"))
+        by_id = {row["metadata"]["asset_id"]: row for row in cache}
+        if len(by_id) != len(cache):
+            raise ValueError("Duplicate cache IDs.")
+        for asset in metadata:
+            row = by_id[asset["asset_id"]]
+            path = (cache_root / row["image_path"]).resolve()
+            if not path.is_relative_to(cache_root) or row["metadata"]["thumbnail_path"] != asset["thumbnail_path"]:
+                raise ValueError("Cache source/path mismatch.")
+            content = path.read_bytes()
+            checksum = row.get("checksum", row.get("preview_sha256"))
+            if sha256(content).hexdigest() != checksum:
+                raise ValueError("Cache checksum mismatch.")
+            target = previews / (checksum + path.suffix)
+            target.write_bytes(content)
+            results[asset["asset_id"]] = {"preview_local_path": str(target), "checksum": checksum}
+    else:
+        print(f"Downloading {len(metadata)} selected previews; no model download.", flush=True)
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            futures = {pool.submit(download_preview_with_retry, row["thumbnail_path"], previews, max_attempts=2): row
+                       for row in metadata}
+            for index, future in enumerate(as_completed(futures), 1):
+                row = futures[future]
+                try:
+                    result = future.result()
+                    results[row["asset_id"]] = {**result, "asset_id": row["asset_id"]}
+                except Exception as exc:
+                    errors.append({"asset_id": row["asset_id"], "code": type(exc).__name__})
+                if index % 25 == 0 or index == len(metadata):
+                    print(f"Preview progress {index}/{len(metadata)}, failed={len(errors)}", flush=True)
     (output / "downloads.json").write_text(json.dumps({"results": list(results.values()), "errors": errors},
                                                      ensure_ascii=False, indent=2), encoding="utf-8")
     if errors:
-        print("Input incomplete; report retained, no index built: " + str(output), flush=True)
         return 1
     ready = [{"metadata": row, "image_path": Path(results[row["asset_id"]]["preview_local_path"]).resolve().relative_to(output).as_posix(),
               "checksum": results[row["asset_id"]]["checksum"]} for row in metadata]
     (output / "ready.json").write_text(json.dumps(ready, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return embed_index(args, output, metadata, ready)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--snapshot", required=True)
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--download-previews", action="store_true",
+                        help="Explicitly download only previews in the selected manifest.")
+    inputs.add_argument("--cache-ready", type=Path, help="Read existing checked previews; no network download.")
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--index-version")
+    parser.add_argument("--verify-search", action="store_true")
+    args = parser.parse_args()
+    return build_index(args)
+
+
+def embed_index(args, output, metadata, ready):
     from app.embedding.batch import AssetImage, embed_assets
     from app.services.text_search_runtime import load_encoder
     from app.search.index_manifest import IndexManifest, save_index_manifest
@@ -75,7 +108,7 @@ def main():
     config = IndexConfig(model_id=encoder.model_id, model_revision=encoder.revision, dimension=encoder.dimension,
         preprocessing_version=encoder.preprocessing_version,
         dataset_snapshot=args.snapshot + "-sha256:" + digest(output / "source.json"),
-        index_version="issue65-" + args.snapshot + "-clip-v1")
+        index_version=args.index_version or "issue65-" + args.snapshot + "-clip-v1")
     with closing(QdrantClient(path=str(output / "qdrant"))) as client:
         store = QdrantStore(client, collection_name="issue65_text_search", config=config)
         assert store.upsert(batch.embedded) == len(metadata)
@@ -98,6 +131,15 @@ def main():
             retrieval_config=RetrievalConfig(),
         )
         save_index_manifest(manifest, output / "index-manifest.json")
+        if args.verify_search:
+            from app.search.text_search import TextSearchService
+            from app.schemas.text_search import TextSearchFilters
+            found = TextSearchService(encoder, store).search_text("wooden chair", TextSearchFilters(), candidate_limit=200)
+            if not found.hits or found.versions != manifest.execution_versions():
+                raise ValueError("New index search verification failed.")
+            (output / "search-check.json").write_text(json.dumps({
+                "passed": True, "hit_count": len(found.hits), "versions": found.versions.model_dump(),
+            }, indent=2) + "\n", encoding="utf-8")
     print("Prepared standalone index: " + str(output), flush=True)
     return 0
 
