@@ -1,0 +1,191 @@
+{
+  "schema_version": "issue105-archive-metrics-review-v1",
+  "status": "passed",
+  "audited_at_utc": "2026-11-16T03:26:09.786Z",
+  "auditor_sha256": "12679addedb74cdf1e4f05cfd6747ec2f969c4137fb8a1d103beadc65868b212",
+  "node_version": "v24.18.1",
+  "bundle_hash_table_sha256": "f6c75aab3f90be33b0ab2d2c330e487d410ebf8f648841843d763bb73b665a75",
+  "hashed_files": 46,
+  "raw_records": 252,
+  "measured_samples": 2520,
+  "metrics_source": "archived validation qrels and raw rankings",
+  "benchmark_executed": false,
+  "results": [
+    {
+      "k": 10,
+      "configuration": "clip_only",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.3294725949229055,
+        "recall@10": 0.4929962147353452,
+        "hit@5": 0.6785714285714286,
+        "hit@10": 0.75,
+        "ndcg@10": 0.46982432199959334
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 430.5169,
+        "p95_ms": 548.8721
+      }
+    },
+    {
+      "k": 10,
+      "configuration": "e5_only",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.1665112377845297,
+        "recall@10": 0.35015505543455855,
+        "hit@5": 0.5714285714285714,
+        "hit@10": 0.6785714285714286,
+        "ndcg@10": 0.36222952012516674
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 375.714,
+        "p95_ms": 449.9935
+      }
+    },
+    {
+      "k": 10,
+      "configuration": "clip_e5_rrf",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.35005967692303097,
+        "recall@10": 0.5641388000083654,
+        "hit@5": 0.7142857142857143,
+        "hit@10": 0.75,
+        "ndcg@10": 0.5258855186865705
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 821.3459,
+        "p95_ms": 897.5952
+      }
+    },
+    {
+      "k": 20,
+      "configuration": "clip_only",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.3294725949229055,
+        "recall@10": 0.4929962147353452,
+        "hit@5": 0.6785714285714286,
+        "hit@10": 0.75,
+        "ndcg@10": 0.46982432199959334
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 425.2213,
+        "p95_ms": 597.5722
+      }
+    },
+    {
+      "k": 20,
+      "configuration": "e5_only",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.1665112377845297,
+        "recall@10": 0.35015505543455855,
+        "hit@5": 0.5714285714285714,
+        "hit@10": 0.6785714285714286,
+        "ndcg@10": 0.36222952012516674
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 388.8025,
+        "p95_ms": 488.2697
+      }
+    },
+    {
+      "k": 20,
+      "configuration": "clip_e5_rrf",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.3584792766469785,
+        "recall@10": 0.5562022920718573,
+        "hit@5": 0.7142857142857143,
+        "hit@10": 0.75,
+        "ndcg@10": 0.5312592302605591
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 911.907,
+        "p95_ms": 1217.068
+      }
+    },
+    {
+      "k": 60,
+      "configuration": "clip_only",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.3294725949229055,
+        "recall@10": 0.4929962147353452,
+        "hit@5": 0.6785714285714286,
+        "hit@10": 0.75,
+        "ndcg@10": 0.46982432199959334
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 489.8918,
+        "p95_ms": 684.1397
+      }
+    },
+    {
+      "k": 60,
+      "configuration": "e5_only",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.1665112377845297,
+        "recall@10": 0.35015505543455855,
+        "hit@5": 0.5714285714285714,
+        "hit@10": 0.6785714285714286,
+        "ndcg@10": 0.36222952012516674
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 395.0304,
+        "p95_ms": 497.3914
+      }
+    },
+    {
+      "k": 60,
+      "configuration": "clip_e5_rrf",
+      "query_count": 28,
+      "recall_denominator": 21,
+      "metrics": {
+        "recall@5": 0.3193258374935393,
+        "recall@10": 0.5380900471738981,
+        "hit@5": 0.6785714285714286,
+        "hit@10": 0.75,
+        "ndcg@10": 0.5214932441580442
+      },
+      "latency": {
+        "sample_count": 280,
+        "method": "nearest-rank",
+        "p50_ms": 886.5773,
+        "p95_ms": 1139.0006
+      }
+    }
+  ],
+  "limitations": [
+    "No weights/retrieval, full Fraction RRF, unexported repeat DTO or live persisted-index audit.",
+    "Numeric metric comparisons use absolute tolerance 1e-12; raw file hashes remain exact.",
+    "Reading split metadata is structural verification; no test rankings or test quality metric was computed."
+  ]
+}
