@@ -109,6 +109,10 @@ asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 ## Kiểm thử
 
+Kiểm chứng tích hợp W5 (#118): [ma trận, tests và smoke API/browser thật](../docs/guides/w5-api-integration.md).
+Verifier dùng app/DB test riêng để kiểm search/image/feedback/explanation cùng
+jobs/reindex, giữ baseline index đang phục vụ và kiểm output mới qua app riêng.
+
 Reindex W5 (#117): [contract](../docs/contracts/reindex-w5.md),
 [migration/cấu hình/smoke](../docs/guides/reindex-api.md).
 POST `/api/v1/admin/reindex` dùng profile CLIP candidate 200 cố định, request UUID
