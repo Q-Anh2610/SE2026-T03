@@ -65,6 +65,15 @@ npm run test:e2e
 
 Máy ít RAM có thể dùng `npm test -- --maxWorkers=2`; vẫn chạy toàn bộ tests.
 
+Theo góp ý tại PR #125, chạy lại toàn bộ E2E với một worker từ `frontend/`:
+
+```powershell
+npm run test:e2e -- --workers=1
+```
+
+Lệnh vẫn build và chạy cả bốn projects, không lọc test hoặc bật retry. Lượt
+ngày 17/11/2026 đạt 46/46; xem [bằng chứng chạy lại đầy đủ](../evidence/issue118-w5-integration.md#chạy-lại-toàn-bộ-e2e-theo-review--17112026).
+
 E2E hiện có gồm các response fixtures/interception, không gọi đó là live backend
 smoke. Script bên dưới chạy browser thật với API thật, không page.route/mock.
 
@@ -120,6 +129,6 @@ máy hạn chế RAM, nên chạy smoke model và bộ E2E thành các lượt r
   khai Docker/worker recovery ngoài phạm vi #118.
 - Các xác nhận contract/PR trước không tự là approval hoặc xác nhận chạy lại
   #118. Nhờ Duy review luồng search/feedback/explanation và Khuê review admin/
-  reindex/bằng chứng browser của PR #118; không tự tích thay hai người.
+  reindex/bằng chứng browser của PR #125 (Issue #118); không tự tích thay hai người.
 
 Báo cáo kết quả thực tế: [issue118-w5-integration.md](../evidence/issue118-w5-integration.md).
