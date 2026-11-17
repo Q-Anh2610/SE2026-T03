@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 
 @contextmanager
-def http_server(app):
+def http_server(app, *, startup_timeout=30, shutdown_timeout=15):
     import uvicorn
 
     with socket.socket() as listener:
@@ -29,7 +29,7 @@ def http_server(app):
         thread = Thread(target=server.run, kwargs={"sockets": [listener]}, daemon=True)
         thread.start()
         try:
-            deadline = time.monotonic() + 30
+            deadline = time.monotonic() + startup_timeout
             while not server.started and thread.is_alive() and time.monotonic() < deadline:
                 time.sleep(.05)
             if not server.started:
@@ -37,7 +37,7 @@ def http_server(app):
             yield f"http://127.0.0.1:{port}"
         finally:
             server.should_exit = True
-            thread.join(timeout=15)
+            thread.join(timeout=shutdown_timeout)
             if thread.is_alive():
                 raise RuntimeError("Uvicorn chưa dừng.")
 
