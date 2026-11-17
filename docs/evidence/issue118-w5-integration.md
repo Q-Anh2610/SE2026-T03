@@ -42,8 +42,9 @@ Reindex: frozen candidate 200 `home-interior-clear-200-v3`, source SHA-256
   đây là bộ fixtures, tách với smoke thật bên dưới.
 - Chạy lại riêng ca đó, không sửa test/source:
   `npx playwright test --project=mock-desktop --grep "preserves the query" --workers=1`
-  → **1 passed**, 28,9 giây (thao tác test 10,8 giây). Chưa có lượt chạy lại
-  toàn bộ 46 ca đạt cùng lúc; ghi riêng hai kết quả để không che timeout đầu.
+  → **1 passed**, 28,9 giây (thao tác test 10,8 giây). Tại lần kiểm chứng
+  16/11 chưa có lượt toàn bộ 46 ca đạt cùng lúc; kết quả chạy lại đầy đủ ngày
+  17/11 được bổ sung riêng bên dưới, giữ nguyên lịch sử timeout đầu.
 - `git diff --check` đạt.
 
 ### Smoke HTTP/browser/model thật
@@ -95,6 +96,39 @@ Output `data/processed/issue118/reindex/<job UUID>/`, không đưa ảnh/index/c
 vào PR. Các lượt thử trước đã gặp timeout startup và selector trùng trong
 verifier; đã tăng hạn chờ riêng và scope selector, sau đó chạy lại trọn luồng đạt.
 
+## Chạy lại toàn bộ E2E theo review — 17/11/2026
+
+Theo [góp ý của Khuê tại PR #125](https://github.com/Q-Anh2610/SE2026-T03/pull/125#issuecomment-6917985765),
+sửa tham chiếu bàn giao trong hai tài liệu từ PR #118 thành **PR #125**;
+số Issue vẫn là **#118**. Bổ sung một lượt E2E đầy đủ sau khi PR #125 đã merge.
+
+- Nhánh local: `test/118-w5-review-followup`.
+- Base checkout: `bdca59aa56a6400eb06415f4e85f7edee7854d59` (merge PR #125).
+  Working tree dirty do sửa tài liệu; source, tests và cấu hình frontend không đổi.
+- Môi trường: Windows, Node `v24.19.0`, Playwright `1.64.0`, Chrome headless
+  theo cấu hình repo; một worker, retries=0 trên cả bốn projects.
+- Bắt đầu `2026-11-17T16:51:49.226Z` (23:51:49 ngày 17/11 Asia/Bangkok).
+- Lệnh từ `frontend/`: `npm run test:e2e -- --workers=1`.
+- Build TypeScript/Vite `7.3.7` đạt. Playwright exit 0: **46 passed**, 0 skipped,
+  0 unexpected failures, 0 flaky, không lỗi global; thời gian **92,21 giây**
+  cho lượt Playwright (không tính build).
+- Chạy đủ `mock-desktop` (10), `mock-mobile` (10), `api-desktop` (13),
+  `production-mobile` (13). Ca đổi theme/khôi phục query từng timeout cũng đạt;
+  không dùng grep, không bỏ ca hoặc thay assertions để lấy kết quả xanh.
+- Report local `frontend/test-results/e2e.json`, SHA-256
+  `5c7e80d01d6518acf875c2b75df1f3abf222d15768abe698ad3ff6faca2ca89c`.
+  Report/screenshots/build output tiếp tục nằm ngoài Git theo quy định repo.
+- SHA-256 raw checkout `frontend/package-lock.json`:
+  `543833684b304938baf6ec6ffcc13abc76c3d3cca66c26a7c4f5d4ac5bb729ca`;
+  `frontend/playwright.config.ts`:
+  `cf180b6be157a288ae46c68e54bf7f655dfa9617ece8ae12154b4c333b5d8898`.
+
+Đây là lượt E2E với fixtures/HTTP interception, không chạy lại backend DB,
+CLIP/Qdrant hoặc benchmark. Bằng chứng smoke thật ngày 16/11 và provenance
+của nó giữ nguyên. Hai góp ý về số PR và lượt E2E đầy đủ đã được xử lý local;
+cần PR bổ sung để tích hợp tài liệu và nhờ Khuê đối chiếu. Kết quả local không
+thay CI/review của PR bổ sung hoặc xác nhận frontend riêng của Duy.
+
 ## Giới hạn và bàn giao
 
 - Smoke ảnh dùng preview đã nằm trong index, chỉ kiểm upload/API/UI; không
@@ -105,7 +139,7 @@ verifier; đã tăng hạn chờ riêng và scope selector, sau đó chạy lạ
   xác nhận không báo succeeded giả. Tự phục hồi worker/DB không thuộc #118.
 - Duy đã review contract explanation ở PR #120; Khuê đã bàn giao Admin UI qua
   PR #121/#123. Các phản hồi trước không phải review kết quả mới #118.
-- Bàn giao PR #118 cho Duy review search/feedback/explanation và Khuê review
+- Bàn giao PR #125 (Issue #118) cho Duy review search/feedback/explanation và Khuê review
   jobs/reindex/UI cùng bằng chứng này. Chưa tự tích xác nhận của hai người,
   CI hoặc merge; không tự đóng Issue hay đánh dấu toàn W5 hoàn thành.
 
