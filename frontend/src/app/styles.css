@@ -1,7 +1,7 @@
 @import './fonts.css';
 
 :root {
-  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-family: 'Google Sans Flex', 'Be Vietnam Pro', Arial, sans-serif;
   color: var(--ink); background: var(--page); font-synthesis: none;
   text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; color-scheme: light;
   --page: #f8f8f6; --ink: #202020; --muted: #747470; --surface: #ffffff;
@@ -182,11 +182,14 @@ dd { margin: 0; line-height: 1.7; overflow-wrap: anywhere; }
 }
 @media (max-width: 480px) {
   .app-shell { padding: 0 16px; }
-  .site-header { padding: 20px 16px; gap: 12px; }
-  .header-nav a { font-size: 11px; }
+  .site-header { flex-wrap: wrap; padding: 12px 16px; gap: 8px 12px; }
+  .header-identity { flex-direction: row; align-items: center; gap: 10px; }
+  .site-title { font-size: 11px; }
+  .header-nav { order: 3; flex: 0 0 100%; justify-content: space-between; gap: 8px; margin-left: 0; }
+  .header-nav a { display: flex; min-height: 44px; align-items: center; font-size: 12px; white-space: nowrap; }
   .brand { font-size: 20px; }
   .brand span { font-size: 10px; }
-  .theme-toggle { width: 44px; }
+  .theme-toggle { width: 44px; margin-left: auto; }
   h1 { font-size: 44px; }
   .intro-copy > p { font-size: 16px; }
   .featured-preview { padding: 16px; }
@@ -212,6 +215,7 @@ dd { margin: 0; line-height: 1.7; overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  h1 { transform: none !important; }
   .asset-card:hover, .asset-card:focus-within, .featured-preview:hover > svg { transform: none; }
   .asset-card:hover .placeholder-object, .asset-card:hover .asset-preview img, .asset-card:focus-within .asset-preview img { transform: none; }
 }

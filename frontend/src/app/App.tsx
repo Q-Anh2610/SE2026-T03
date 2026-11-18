@@ -13,30 +13,32 @@ export function App() {
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
   const [route, setRoute] = useState(
-  () => window.location.hash,
+    () => window.location.hash,
   )
+  const jobRoute = /^#admin-status\/job\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.exec(route)
+  const isLiveAdmin = route === '#admin-status' || jobRoute !== null
+  const isAdminPreview = route === '#admin-status-preview' && import.meta.env.DEV
+  const isImageSearch = route === '#image-search'
+  const isSearchRoute = !isLiveAdmin && !isAdminPreview && !isImageSearch
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#171717' : '#f8f8f6')
-  }, [theme])
+    const themeColor = theme === 'dark' && isSearchRoute ? '#202130' : theme === 'dark' ? '#171717' : '#f8f8f6'
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor)
+  }, [theme, isSearchRoute])
 
   useEffect(() => {
-  const handleHashChange = () => {
-    setRoute(window.location.hash)
-  }
+    const handleHashChange = () => setRoute(window.location.hash)
 
-  window.addEventListener('hashchange', handleHashChange)
-  return () => window.removeEventListener('hashchange', handleHashChange)
-}, [])
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
 
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark'
     setTheme(next)
     try { localStorage.setItem('connected-theme', next) } catch { /* Keep the choice for this session. */ }
   }
-
-  const jobRoute = /^#admin-status\/job\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.exec(route)
 
   return (
     <div className="app-shell">
@@ -49,11 +51,11 @@ export function App() {
         </button>
       </header>
       <main id="main" tabIndex={-1}>
-        {route === '#admin-status' || jobRoute !== null ? (
+        {isLiveAdmin ? (
           <LiveAdminStatusPage jobId={jobRoute?.[1]} />
-        ) : route === '#admin-status-preview' && import.meta.env.DEV ? (
+        ) : isAdminPreview ? (
           <AdminStatusPage />
-        ) : route === '#image-search' ? (
+        ) : isImageSearch ? (
           <ImageSearchPage />
         ) : (
           <SearchPage />

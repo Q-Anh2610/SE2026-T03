@@ -176,6 +176,8 @@ export function parseResponse(value: unknown, request: SearchRequest): SearchRes
     if (!isRecord(result) || result.rank !== position + 1 || !isAsset(result.asset)
       || !isStringArray(result.retrieval_sources) || typeof result.explanation !== 'string'
       || (result.score !== null && (typeof result.score !== 'number' || !Number.isFinite(result.score)))
+      || (result.score_type !== undefined && (result.score_type !== 'cosine'
+        || value.mock || typeof result.score !== 'number' || result.score < -1 || result.score > 1))
       || identifiers.has(result.asset.asset_id)) {
       throw invalid()
     }

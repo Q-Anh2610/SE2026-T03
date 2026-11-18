@@ -1,16 +1,25 @@
 # Frontend — Nguyễn Văn Duy
 
-React + TypeScript + Vite cho UI tìm kiếm W1. Bố cục responsive, ô tìm kiếm hỗ trợ Enter, trạng thái idle/loading/empty/error/retry, xóa truy vấn có trả focus, lọc danh mục cục bộ và thẻ asset với preview/metadata/nguồn.
+React, TypeScript và Vite cho thư viện mô hình 3D. Màn khám phá có ô tìm kiếm,
+bộ lọc thuộc tính và các ảnh gợi ý có thể chọn bằng bàn phím. Chọn gợi ý sẽ
+điền và đưa focus về ô truy vấn để người dùng chỉnh sửa hoặc nhấn Enter.
+Ảnh gợi ý chỉ minh họa cho màn khám phá. [Nguồn ảnh](public/images/discovery/README.md)
 
-Giao diện lấy cảm hứng từ Cosmos: nền sáng trung tính hoặc tối, header có tên thư viện bên trái và nút đổi theme bên phải; thanh tìm kiếm căn giữa. Font Be Vietnam Pro được self-hosted, nguồn/license tại [public/fonts](public/fonts/README.md). Không có slogan, hướng dẫn thường trực hoặc badge phát triển.
+Tìm bằng văn bản, duyệt danh sách và mở chi tiết dùng cùng bố cục kết quả
+responsive. URL có thể lưu truy vấn văn bản đã gửi, bộ lọc, trang và danh
+mục đang xem. Nút giao diện sáng/tối giữ trạng thái tìm kiếm và lưu lựa chọn
+trong trình duyệt khi storage khả dụng. [Font và giấy phép](public/fonts/README.md)
 
-Màn đầu cao 100svh, có ảnh nền hồ và núi Alpine phong cách ảnh chụp, sinh bằng imagegen và thanh tìm kiếm ở chính giữa; gallery 6 ảnh bắt đầu ở phần trang phía dưới. Gallery dùng hai cột bằng nhau trên máy tính, một cột trên điện thoại; ảnh cùng kích thước trong mỗi hàng, không có độ lệch dọc, tiêu đề 22px. Gallery mở rộng gần sát hai mép màn hình, mỗi mục ưu tiên diện tích ảnh vuông bên trái, tên và mô tả hình ảnh ngắn bên phải căn theo chân ảnh, không dùng khung viền hoặc nhãn đè lên ảnh. Ảnh hiển thị trọn đồ vật. Chưa gửi request và chưa hiện khu vực kết quả hoặc bộ chọn số kết quả. Khi gửi truy vấn hợp lệ, nền/gallery được thay bằng loading/kết quả/lỗi. Xóa truy vấn đưa trang trở lại màn giới thiệu, giữ bộ lọc danh mục hiện tại cùng nút xóa bộ lọc. Gallery là hình trang trí độc lập với dữ liệu retrieval, không thay thế thumbnail thật hoặc fallback của AssetCard. Nguồn ảnh và prompt tại [public/images/discovery](public/images/discovery/README.md).
+## Giải thích kết quả W5
 
-Nền có parallax nhẹ theo cuộn trang bằng listener passive và requestAnimationFrame, không cập nhật React state theo từng frame. Khung hình trôi/zoom rất chậm và ánh nước chuyển nhẹ bằng CSS trên ảnh tĩnh; dừng khi nền ra khỏi viewport. `prefers-reduced-motion` tắt mọi chuyển động nền. Đây không phải video hồ nước. Không có video, WebGL hoặc dependency mới.
+Thẻ kết quả text và ảnh hiển thị lời giải thích và nguồn truy xuất từ API.
+Khi API khai báo `score_type="cosine"`, thẻ ghi **Điểm cosine** và hiển thị
+giá trị dạng số, kể cả điểm âm hoặc 0. Response cũ có điểm nhưng thiếu
+`score_type` dùng nhãn **Điểm API**. [Contract W5](../docs/contracts/search-explanation-w5.md)
 
-Nút mặt trăng/mặt trời ở header bật/tắt chế độ tối; mặc định theo hệ thống khi chưa có lựa chọn, lưu trong `localStorage` (`connected-theme`) và khôi phục khi tải lại. Đổi giao diện không xóa truy vấn, kết quả hay bộ lọc. Nếu storage bị chặn, vẫn đổi được trong phiên; áp dụng theme trước render để tránh lóe nền sáng. Tìm kiếm giữ ô nhập/nút gửi trong cùng một khối; không thêm dependency UI.
-
-Sau tìm kiếm, thanh nhập gọn được căn trái, tiêu đề và số lượng kết quả đi cùng nhau; bộ chọn số kết quả ở bên phải. Kết quả dùng lưới 3/2/1 cột theo màn hình, preview vuông không đệm ảnh, thẻ không có khung bao ngoài; metadata và nguồn nằm trong “Chi tiết”. Skeleton cùng tỷ lệ với preview. Không lấy ảnh gallery làm thumbnail khi API thiếu ảnh.
+Thông tin phiên hiển thị ID và phiên bản model/index/config, cùng dataset
+snapshot khi có. Feedback dùng đúng cặp event ID và asset ID của kết quả
+đang xem. UI ghi rõ kết quả minh họa và phản hồi lưu tạm khi chạy mock.
 
 ## Chạy local
 

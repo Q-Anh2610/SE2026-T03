@@ -31,17 +31,25 @@ describe('asset result card', () => {
     expect(screen.getByText('Chưa có thông tin')).not.toBeVisible()
     expect(screen.getByText('Dữ liệu minh họa tự tạo')).not.toBeVisible()
     expect(screen.getByText('Chưa có ảnh xem trước')).toBeVisible()
-    expect(screen.getByText('Nguồn truy xuất: test_metadata')).not.toBeVisible()
+    expect(screen.getByText('test_metadata')).toBeVisible()
     fireEvent.click(screen.getByText('Chi tiết'))
     expect(screen.getByText('GLB')).toBeVisible()
     expect(screen.getByText('Chưa có thông tin')).toBeVisible()
     expect(screen.getByText('Dữ liệu minh họa tự tạo')).toBeVisible()
-    expect(screen.getByText('Nguồn truy xuất: test_metadata')).toBeVisible()
     fireEvent.click(screen.getByText('Chi tiết'))
     expect(screen.getByText('GLB')).not.toBeVisible()
-    expect(screen.getByText('Nguồn truy xuất: test_metadata')).not.toBeVisible()
+    expect(screen.getByText('test_metadata')).toBeVisible()
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
+  })
+
+  it('labels the image fixture source and handles a blank explanation', () => {
+    const result = makeResponse().results[0]
+    result.explanation = '  '
+    result.retrieval_sources = ['mock_preview_fixture']
+    render(<ul><AssetCard result={result} /></ul>)
+    expect(screen.getByText('Ảnh xem trước · mock')).toBeVisible()
+    expect(screen.getByText('API chưa cung cấp giải thích cho kết quả này.')).toBeVisible()
   })
 
   it('renders a provided image and an external source link with safe link attributes', () => {
@@ -81,7 +89,7 @@ describe('asset result card', () => {
     expect(screen.getByText('Test source')).not.toBeVisible()
     fireEvent.click(screen.getByText('Chi tiết'))
     expect(screen.getByText('Test source')).toBeVisible()
-    expect(screen.getByText('Nguồn truy xuất: Chưa có')).toBeVisible()
+    expect(screen.getByText('API chưa cung cấp nguồn truy xuất.')).toBeVisible()
   })
 
   it('keeps details focusable and toggles all metadata while keeping the title visible', async () => {
