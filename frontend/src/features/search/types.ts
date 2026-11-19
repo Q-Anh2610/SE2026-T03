@@ -34,6 +34,7 @@ export interface SearchResult {
   retrieval_sources: string[]
   explanation: string
   score: number | null
+  score_type?: 'cosine'
 }
 
 export interface Pagination {

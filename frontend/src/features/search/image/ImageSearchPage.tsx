@@ -4,6 +4,7 @@ import { AssetDetailView, type DetailState } from '../../assets/AssetDetailView'
 import { createHttpAssetClient } from '../../../lib/api/search'
 import type { AssetFilters, SearchResponse } from '../types'
 import { searchImage, validateImage } from './client'
+import { SearchResultsGuide } from '../SearchResultsGuide'
 import '../SearchPage.css'
 
 type State = { status: 'idle' | 'validating' | 'loading' }
@@ -86,17 +87,24 @@ export function ImageSearchPage() {
     return <AssetDetailView state={detail} onRetry={() => { void openDetail(assetId) }} onBack={() => { detailController.current?.abort(); setDetail(null) }} />
   }
 
-  return <section className="results-section" aria-label="Tìm kiếm bằng ảnh">
-    <h1>Tìm kiếm bằng ảnh</h1>
-    <p>Chọn ảnh và bộ lọc để tìm asset. Kết quả minh họa được ghi rõ khi API trả mock.</p>
-    <form onSubmit={(event) => { event.preventDefault(); if (file) void search({ file, page: 1, filters: { ...filters } }) }}>
-      <label htmlFor="query-image">Chọn hoặc thay ảnh JPEG/PNG (tối đa 5 MiB, mỗi chiều 4096 px)</label>
-      <input ref={input} id="query-image" type="file" accept="image/jpeg,image/png" aria-invalid={state.status === 'error' && !state.retryable || undefined} aria-describedby={state.status === 'error' && !state.retryable ? 'image-error' : undefined} onChange={(event) => {
+  return <section id="image-search" className="image-search-page results-section" aria-labelledby="image-search-title">
+    <header className="image-search-heading">
+      <p className="intro-eyebrow">TÌM KIẾM TRỰC QUAN</p>
+      <h1 id="image-search-title">Tìm kiếm bằng ảnh</h1>
+      <p>Chọn ảnh tham chiếu, rồi lọc theo danh mục, định dạng, license hoặc số mặt.</p>
+    </header>
+    <form className="image-search-form" onSubmit={(event) => { event.preventDefault(); if (file) void search({ file, page: 1, filters: { ...filters } }) }}>
+      <input className="image-file-input visually-hidden" ref={input} id="query-image" type="file" accept="image/jpeg,image/png" aria-label="Chọn hoặc thay ảnh JPEG/PNG (tối đa 5 MiB, mỗi chiều 4096 px)" aria-invalid={state.status === 'error' && !state.retryable || undefined} aria-describedby={state.status === 'error' && !state.retryable ? 'image-error' : undefined} onChange={(event) => {
         const chosen = event.target.files?.[0]
         event.target.value = ''
         if (chosen) void select(chosen)
       }} />
-      <fieldset disabled={state.status === 'loading'}><legend>Bộ lọc ảnh</legend>
+      <label className="image-file-drop" htmlFor="query-image" aria-hidden="true">
+        <span className="image-file-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v5h14v-5" /></svg></span>
+        <span className="image-file-copy"><strong>{file ? 'Đổi ảnh tham chiếu' : 'Chọn ảnh tham chiếu'}</strong><small>{file ? file.name : 'JPEG hoặc PNG · tối đa 5 MiB · mỗi chiều tối đa 4096 px'}</small></span>
+        <span className="image-file-button">Chọn ảnh</span>
+      </label>
+      <fieldset className="image-search-filters" disabled={state.status === 'loading'}><legend>Bộ lọc ảnh</legend>
         {(['category', 'license', 'format'] as const).map((key) => <label key={key}>
           {{ category: 'Danh mục', license: 'License', format: 'Định dạng' }[key]}
           <input value={filters[key] ?? ''} onChange={(event) => setFilters({ ...filters, [key]: event.target.value || undefined })} />
@@ -107,17 +115,30 @@ export function ImageSearchPage() {
         </label>)}
         <button type="button" onClick={() => setFilters({})}>Xóa bộ lọc</button>
       </fieldset>
-      {preview && <div><img src={preview} alt={`Ảnh truy vấn: ${file!.name}`} style={{ maxWidth: '100%', width: 240, maxHeight: 240, objectFit: 'contain' }} /></div>}
-      {file && <button type="button" onClick={() => { reset(); input.current!.focus() }}>Xóa ảnh</button>}
-      <button type="submit" disabled={!file || state.status === 'loading'}>Tìm bằng ảnh</button>
+      {preview && <figure className="image-query-preview"><img src={preview} alt={`Ảnh truy vấn: ${file!.name}`} /><figcaption>Ảnh tham chiếu</figcaption></figure>}
+      <div className="image-search-actions">
+        {file && <button className="image-search-secondary" type="button" onClick={() => { reset(); input.current!.focus() }}>Xóa ảnh</button>}
+        <button className="image-search-submit" type="submit" disabled={!file || state.status === 'loading'}>Tìm bằng ảnh</button>
+      </div>
     </form>
     <div aria-busy={state.status === 'loading' || state.status === 'validating'}>
       {state.status === 'validating' && <p role="status">Đang kiểm tra ảnh…</p>}
       {state.status === 'loading' && <p role="status">Đang tìm ảnh…</p>}
       {state.status === 'error' && <div role="alert"><p id={!state.retryable ? 'image-error' : undefined}>{state.message}</p>{state.retryable && <button type="button" onClick={() => { void search(last.current!) }}>Thử lại</button>}</div>}
       {state.status === 'success' && <>
-        <p role="status">{state.response.results.length ? (state.response.mock ? 'Kết quả minh họa (mock)' : 'Kết quả tìm kiếm bằng ảnh') : 'Chưa có asset phù hợp'}</p>
-        {state.response.results.length > 0 && <ul className="asset-grid" aria-label="Kết quả ảnh">{state.response.results.map((result) => <AssetCard key={`${state.response.search_event_id}-${result.asset.asset_id}`} result={result} onOpenDetail={(assetId) => { void openDetail(assetId) }} feedback={{ eventId: state.response.search_event_id, mock: state.response.mock }} />)}</ul>}
+        {state.response.results.length > 0 ? (
+          <>
+            <p className="image-result-status" role="status">{state.response.mock ? 'Kết quả minh họa (mock)' : 'Kết quả tìm kiếm bằng ảnh'}</p>
+            <SearchResultsGuide results={state.response.results} mock={state.response.mock} />
+            <ul className={`asset-grid${state.response.results.length <= 2 ? ` asset-grid--count-${state.response.results.length}` : ''}`} aria-label="Kết quả ảnh">{state.response.results.map((result) => <AssetCard key={`${state.response.search_event_id}-${result.asset.asset_id}`} result={result} onOpenDetail={(assetId) => { void openDetail(assetId) }} feedback={{ eventId: state.response.search_event_id, mock: state.response.mock }} />)}</ul>
+          </>
+        ) : (
+          <div className="image-empty-state" role="status">
+            <h2>Chưa có asset phù hợp</h2>
+            <p>Thử một ảnh khác hoặc xóa bớt bộ lọc để mở rộng kết quả.</p>
+            <button type="button" onClick={() => input.current?.click()}>Chọn ảnh khác</button>
+          </div>
+        )}
         <details className="search-session">
           <summary>Thông tin phiên tìm ảnh</summary>
           <dl>

@@ -4,7 +4,7 @@ export class SearchPage {
   constructor(readonly page: Page) {}
   get query() { return this.page.getByRole('searchbox', { name: 'Bạn đang tìm asset nào?' }) }
   get results() { return this.page.getByRole('list', { name: 'Kết quả asset' }).getByRole('listitem') }
-  get gallery() { return this.page.getByRole('region', { name: 'Hình ảnh 3D' }) }
+  get gallery() { return this.page.getByRole('region', { name: 'Bạn đang tìm gì?' }) }
   get resultsRegion() { return this.page.getByRole('region', { name: 'Kết quả tìm kiếm' }) }
   get catalogRegion() { return this.page.getByRole('region', { name: 'Danh sách asset' }) }
   get detailRegion() { return this.page.getByRole('region', { name: 'Chi tiết asset' }) }
@@ -28,8 +28,8 @@ export class SearchPage {
   async reset() { await this.page.getByRole('button', { name: 'Xóa tìm kiếm và bộ lọc' }).click() }
   async galleryImages() {
     await this.gallery.scrollIntoViewIfNeeded()
-    await this.gallery.getByRole('img').evaluateAll((images) => Promise.all(images.map((image) => (image as HTMLImageElement).decode())))
-    return this.gallery.getByRole('img').evaluateAll((images) => images.map((image) => {
+    await this.gallery.locator('img').evaluateAll((images) => Promise.all(images.map((image) => (image as HTMLImageElement).decode())))
+    return this.gallery.locator('img').evaluateAll((images) => images.map((image) => {
       const { x, y, width, height } = image.getBoundingClientRect()
       return { x, y, width, height }
     }))

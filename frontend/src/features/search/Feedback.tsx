@@ -29,14 +29,15 @@ export function Feedback({ eventId, assetId, mock }: { eventId: string; assetId:
       }
     }
   }
-  return <fieldset aria-label="Đánh giá kết quả" disabled={state === 'loading' || state === 'success'}>
+  return <fieldset className={`feedback-panel feedback-panel--${state}`} aria-label="Đánh giá kết quả" disabled={state === 'loading' || state === 'success'}>
     <legend>Kết quả có phù hợp không?</legend>
-    <button type="button" onClick={() => { void send(true) }}>Phù hợp</button>
-    <button type="button" onClick={() => { void send(false) }}>Không phù hợp</button>
-    <p>{mock ? 'Feedback mock chỉ lưu tạm trong bộ nhớ API; không dùng làm nhãn benchmark.' : 'Đánh giá được lưu vào PostgreSQL cho lượt tìm kiếm này.'}</p>
-    {state === 'loading' && <p role="status">Đang gửi đánh giá…</p>}
-    {state === 'success' && <p role="status">{mock ? 'Đã gửi đánh giá minh họa (lưu tạm).' : 'Đã lưu đánh giá.'}</p>}
-    {state === 'error' && <p role="alert">{errorMessage}</p>}
+    <div className="feedback-actions">
+      <button className="feedback-choice" type="button" onClick={() => { void send(true) }}>Phù hợp</button>
+      <button className="feedback-choice" type="button" onClick={() => { void send(false) }}>Không phù hợp</button>
+    </div>
+    {state === 'loading' && <p className="feedback-message" role="status">Đang gửi đánh giá…</p>}
+    {state === 'success' && <p className="feedback-message" role="status">{mock ? 'Đã gửi đánh giá minh họa (lưu tạm).' : 'Đã lưu đánh giá.'}</p>}
+    {state === 'error' && <p className="feedback-message feedback-message--error" role="alert">{errorMessage}</p>}
   </fieldset>
 }
 

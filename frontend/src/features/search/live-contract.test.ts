@@ -10,6 +10,26 @@ describe('live text search W3 response invariants (#63)', () => {
     expect(response.query_id).toBe(response.search_event_id)
   })
 
+  it.each([-1, 0, 1])('accepts an explicit cosine score of %s', (score) => {
+    const response = makeLiveResponse()
+    Object.assign(response.results[0], { score_type: 'cosine', score })
+    expect(parseResponse(response, makeRequest()).results[0]).toMatchObject({ score_type: 'cosine', score })
+  })
+
+  it.each([
+    ['cosine', null], ['cosine', -1.01], ['cosine', 1.01], ['rrf', 0.25], [null, 0.25],
+  ])('rejects inconsistent score metadata %s, %s', (scoreType, score) => {
+    const response = makeLiveResponse()
+    Object.assign(response.results[0], { score_type: scoreType, score })
+    expect(() => parseResponse(response, makeRequest())).toThrow('không đúng contract')
+  })
+
+  it('rejects a cosine score in a mock payload', () => {
+    const response = makeResponse()
+    Object.assign(response.results[0], { score_type: 'cosine', score: 0.25 })
+    expect(() => parseResponse(response, makeRequest())).toThrow('không đúng contract')
+  })
+
   it.each([undefined, null, 'false', 0])('rejects a missing or non-boolean mock flag %s', (mock) => {
     expect(() => parseResponse({ ...makeLiveResponse(), mock }, makeRequest())).toThrow('không đúng contract')
   })
