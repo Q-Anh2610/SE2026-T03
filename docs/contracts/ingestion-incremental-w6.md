@@ -24,7 +24,7 @@ Baseline trước thay đổi: develop tại f1c65e8; ingestion unit tests đạ
 - Không dùng cùng source/source_id cho một asset ID khác.
 - Xung đột phải được báo lỗi, không ghi đè bản ghi đang có.
 
-## Semantics metadata đề xuất
+## Semantics metadata đã thống nhất
 
 Đợt kiểm chứng đầu tiên áp dụng full-record ingestion, không phải PATCH.
 
@@ -60,7 +60,36 @@ Không bỏ guard để làm test passed. Cập nhật metadata/payload cho asse
 - Retry preview có giới hạn theo max_attempts.
 - Chưa coi replay batch là cơ chế tự động retry DB hoặc đồng bộ PostgreSQL–Qdrant.
 
-## Kiểm chứng dự kiến
+## Retry và phục hồi sau lỗi
+
+### Preview
+
+- download_preview_with_retry() giới hạn số lần thử bằng max_attempts; giá trị này bao gồm lần thử đầu tiên, mặc định là 3.
+- Chỉ retry lỗi được downloader phân loại là tạm thời; lỗi vĩnh viễn không bị retry.
+- Khi hết số lần thử, lưu số attempts và lỗi cuối. Pipeline ghi asset failed tại stage preview, không gọi persistence cho asset đó.
+- Cache hợp lệ được tái sử dụng với attempts=0; bước persistence vẫn được thực hiện.
+
+Các tests hiện có trong backend/tests/unit/ingestion/test_downloader.py kiểm chứng:
+
+- test_retry_succeeds_after_temporary_failure
+- test_retry_stops_at_limit_and_keeps_last_error
+- test_permanent_failure_is_not_retried
+- test_http_503_is_retried
+- test_invalid_attempt_limit_is_rejected
+
+Những tests này thuộc suite ingestion 203 tests đã chạy đạt; dùng phản hồi mạng giả lập, không phụ thuộc mạng thật.
+
+### PostgreSQL
+
+- DatabaseWriter không có vòng lặp retry DB tự động.
+- Mỗi asset được ghi trong transaction riêng. Khi gặp lỗi SQLAlchemy, transaction asset rollback và lỗi được chuyển thành PersistenceError với thông báo an toàn.
+- Pipeline ghi status=failed, stage=persistence và database_status=failed; preview thành công hoặc cache hit không được hiểu là DB đã lưu thành công.
+- Batch tiếp tục xử lý asset tiếp theo. Integration test tạo lỗi constraint PostgreSQL sau insert và xác nhận insert đó rollback, trong khi asset tiếp theo vẫn được lưu.
+- Có thể chạy lại batch sau khi xử lý nguyên nhân lỗi; đây là một lần chạy mới, không phải cơ chế retry DB tự động.
+- Không cam kết tái sử dụng preview từ một record có status=failed trong báo cáo trước: loader cache hiện chỉ nhận record downloaded/skipped, nên lần chạy lại có thể tải lại ảnh.
+- Không có cơ chế phục hồi hoặc đồng bộ PostgreSQL–Qdrant tại entrypoint này; phần payload được ghi N/A theo phạm vi đã thống nhất.
+
+## Phạm vi kiểm chứng
 
 - Thêm mới và chạy lại không trùng.
 - Cập nhật metadata đầy đủ cho asset chưa index.
@@ -95,3 +124,130 @@ Fixtures không dùng benchmark đã khóa. Không tải model hoặc cập nh�
 - Không gọi mạng, model hoặc Qdrant trong các tests mới.
 - Chưa phát hiện lỗi production qua các tests đã chạy; thay đổi hiện tại bổ sung kiểm chứng hành vi hiện có.
 - Kết quả local không thay thế CI, review hoặc xác nhận tiếp nhận.
+
+## Môi trường kiểm chứng
+
+- Windows, Git Bash.
+- Chạy từ repository root, dùng virtualenv backend/.venv.
+- Python 3.13.17 và pytest 9.1.1 theo môi trường local đã kiểm tra.
+- PostgreSQL local tại 127.0.0.1:5432; database test_issue101 phải tồn tại trước khi chạy integration tests.
+- Tài khoản test cần quyền tạo/dọn schema và chạy migrations trong database test.
+- Mỗi integration test dùng schema UUID do isolated_asset_database() tạo và tự dọn sau test. Database test_issue101 được giữ lại.
+- Preview là fixture; không cần model weights, Qdrant hoặc mạng để chạy các tests mới.
+- Các lệnh bên dưới không cài đặt hoặc nâng cấp dependency.
+
+### Chuẩn bị
+
+```bash
+cd /d/SE/SE2026-T03
+source backend/.venv/Scripts/activate
+
+python --version
+python -m pytest --version
+git --version
+mkdir -p work
+```
+
+Nếu checkout ở vị trí khác, thay lệnh cd bằng repository root tương ứng.
+
+### Unit tests ingestion
+
+```bash
+ingestion_test_tmp="$(mktemp -d "$PWD/work/pytest-131-unit-XXXXXX")"
+
+python -m pytest backend/tests/unit/ingestion \
+  --basetemp="$(cygpath -w "$ingestion_test_tmp")" \
+  --tb=short -q
+
+ingestion_test_exit=$?
+echo "Exit code: $ingestion_test_exit"
+```
+
+Kết quả local đã ghi nhận: 203 passed, exit code 0. Số tests có thể thay đổi khi tích hợp thêm code; ghi đúng kết quả của commit được kiểm tra.
+
+### Integration tests PostgreSQL
+
+Chạy nguyên khối dưới đây trong Git Bash. Mật khẩu được nhập ẩn; TEST_DATABASE_URL chỉ được truyền vào tiến trình pytest, không ghi vào file hoặc in ra terminal.
+
+```bash
+python - <<'PY'
+import getpass
+import importlib.metadata
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+from sqlalchemy import URL, create_engine, text
+
+password = getpass.getpass("PostgreSQL password (hidden): ")
+url = URL.create(
+    "postgresql+psycopg",
+    username="postgres",
+    password=password,
+    host="127.0.0.1",
+    port=5432,
+    database="test_issue101",
+)
+
+print("Python:", sys.version.split()[0], flush=True)
+for package in ("pytest", "SQLAlchemy", "psycopg", "Pillow"):
+    print(
+        f"{package}: {importlib.metadata.version(package)}",
+        flush=True,
+    )
+
+engine = create_engine(
+    url,
+    hide_parameters=True,
+    connect_args={"connect_timeout": 5},
+)
+try:
+    with engine.connect() as connection:
+        version = connection.scalar(text("SHOW server_version"))
+        print("PostgreSQL:", version, flush=True)
+finally:
+    engine.dispose()
+
+environment = os.environ.copy()
+environment["TEST_DATABASE_URL"] = url.render_as_string(
+    hide_password=False
+)
+
+work = Path("work").resolve()
+work.mkdir(exist_ok=True)
+temporary = tempfile.mkdtemp(prefix="pytest-131-postgres-", dir=work)
+log = work / "issue131-integration-tests.log"
+
+with log.open("w", encoding="utf-8") as output:
+    result = subprocess.run(
+        [
+            sys.executable, "-m", "pytest",
+            "backend/tests/integration/test_ingestion_incremental.py",
+            "--basetemp", temporary,
+            "--tb=short", "-v",
+        ],
+        env=environment,
+        stdout=output,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+
+print(log.read_text(encoding="utf-8"))
+print(f"Exit code: {result.returncode}")
+raise SystemExit(result.returncode)
+PY
+```
+
+Nếu tài khoản hoặc cổng PostgreSQL khác, điều chỉnh cấu hình kết nối trong runner cho môi trường test tương ứng.
+
+Kết quả local đã ghi nhận: 8 passed, exit code 0. Kết quả skipped không được tính là đã kiểm chứng PostgreSQL.
+
+### Đọc kết quả và dọn tài nguyên
+
+- Có lỗi kết nối, migration hoặc test thất bại: giữ log, xử lý nguyên nhân rồi chạy lại; không đổi sang database nghiệp vụ để vượt lỗi.
+- Nếu tiến trình kết thúc bình thường, helper tự dọn schema test kể cả khi test thất bại.
+- Nếu tiến trình bị kill hoặc máy tắt đột ngột, có thể còn schema tạm; chỉ xử lý sau khi xác định đúng schema do lần chạy đó tạo.
+- Log và thư mục pytest nằm trong work/, không đưa vào Git. Không xóa database hoặc schema dùng chung.
+- CI và review được xác nhận riêng trên head PR; kết quả local không thay thế các bước này.
