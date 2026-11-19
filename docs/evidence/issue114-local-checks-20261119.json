@@ -1,0 +1,45 @@
+{
+  "schema_version": "issue114-prepared-local-checks-v1",
+  "observed_at_utc": "2026-11-19T13:13:38Z",
+  "execution_context": "isolated prepared copy outside repository; user has not applied patch yet",
+  "repository_git_commands_executed_by_agent": false,
+  "checkout_files_changed_by_agent": false,
+  "config_version": "w6-clip-e5-rrf-k20-candidate200-v1",
+  "artifact_raw_sha256": "1e1962058528e22b5235d989a3613b5077c02d479b8ac19e8dbc28fee0bd08d5",
+  "prepared_code_raw_sha256": {
+    "backend/app/search/frozen_retrieval_config.py": "6c2ec2ec0274164bff0b948647be38ad42c831887b84d91c6331ad0d78b9864c",
+    "backend/tests/unit/test_issue114_frozen_config.py": "dba8bc920d36656451dded62ec70e98a3075ae985c7f65e03f83f666b23ffe2a",
+    "scripts/verify_issue114_frozen_config.py": "eeb271b89979ad97e06b8786208e57be702bbe5ccf94696525a2f4a3ce64537c"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "pytest": "9.1.1",
+    "platform": "Windows AMD64"
+  },
+  "tests": {
+    "command": "python -B -m pytest -c work/issue114-ci-preview/backend/pytest.ini work/issue114-ci-preview/backend/tests/unit/test_issue114_frozen_config.py work/issue114-ci-preview/backend/tests/unit/test_rrf.py -q -p no:cacheprovider --basetemp work/issue114-pytest-final",
+    "interpreter": "existing repository backend/.venv/Scripts/python.exe invoked by absolute path",
+    "exit_code": 0,
+    "result": "107 passed in 5.90s",
+    "preview_has_data_processed": false,
+    "local_dependency_fixtures": "synthetic bytes and matching fixture manifests",
+    "real_models_or_benchmark_queries_executed": false
+  },
+  "preflight": {
+    "command": "python -B work/issue114-stage/scripts/verify_issue114_frozen_config.py --repo work/issue114-stage --expected-sha256 1e1962058528e22b5235d989a3613b5077c02d479b8ac19e8dbc28fee0bd08d5 --local-inputs",
+    "exit_code": 0,
+    "status": "frozen_config_verified",
+    "local_inputs_verified": true,
+    "scope": "byte-identical copies of existing manifests/corpus/inputs; not live index or weights",
+    "models_loaded": false,
+    "live_qdrant_verified": false,
+    "benchmark_executed": false,
+    "test_authorized": false
+  },
+  "limits": [
+    "Patch has not been applied or checked by Git in the user's checkout.",
+    "Local prepared-copy tests do not establish GitHub CI, review, merge or Khue handoff.",
+    "No new model quality or latency measurement; W5 evidence remains historical and unchanged.",
+    "Re-run the documented checks after applying in checkout before commit/PR handoff."
+  ]
+}

@@ -10,3 +10,20 @@ data/benchmark/qrels.csv text eol=crlf
 data/benchmark/labels_khue.csv text eol=crlf
 data/benchmark/labels_huyen.csv text eol=crlf
 data/benchmark/candidate_assets.csv text eol=crlf
+
+# #114: stable W6 artifact/code bytes; keep raw archived E5 snapshots unchanged.
+evaluation/configs/issue114-w6-retrieval.frozen.json text eol=lf
+evaluation/configs/issue114-w6-retrieval.frozen.sha256 text eol=lf
+evaluation/configs/issue114/*.json -text
+backend/app/search/frozen_retrieval_config.py text eol=lf
+backend/tests/unit/test_issue114_frozen_config.py text eol=lf
+scripts/verify_issue114_frozen_config.py text eol=lf
+docs/adr/0001-w6-retrieval-config.md text eol=lf
+docs/guides/issue114-w6-freeze.md text eol=lf
+docs/evidence/issue114-local-checks-20261119.json text eol=lf
+# Preserve the already-recorded input bytes on every checkout; no input edits.
+data/manifests/objaverse_200.json text eol=lf
+data/benchmark/manifest.yaml text eol=crlf
+data/benchmark/image_benchmark_v1.yaml text eol=crlf
+data/benchmark/image_queries_v1.csv text eol=crlf
+data/benchmark/image_qrels_v1.csv text eol=crlf
