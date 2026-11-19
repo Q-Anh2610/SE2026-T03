@@ -91,6 +91,21 @@ Từ gốc repo, sau khi cài `requirements-dev.txt`, chạy evaluation tests:
 backend\.venv\Scripts\python.exe -m pytest -c evaluation/pytest.ini evaluation/tests
 ```
 
+CI chạy cùng bộ evaluation regression tests trong job backend và xác minh SHA-256
+của config W6 đã đóng băng. Các bước này chỉ dùng fixtures nhỏ, không khởi tạo
+Search API và không tải model hoặc dataset benchmark.
+
+Chạy lại riêng các bước evaluation từ gốc repository trên PowerShell:
+
+```powershell
+backend\.venv\Scripts\python.exe -m pytest -c evaluation/pytest.ini evaluation/tests
+Get-FileHash evaluation/configs/issue114-w6-retrieval.frozen.json -Algorithm SHA256
+```
+
+Đối chiếu giá trị hash với `evaluation/configs/issue114-w6-retrieval.frozen.sha256`.
+Trong CI, bước xác minh dùng `sha256sum --check`; nếu thất bại, kiểm tra thay đổi
+ở config đóng băng và hash mong đợi. Không cập nhật hash chỉ để làm CI xanh.
+
 Chạy backend tests riêng (từ thư mục `backend/`):
 
 ```powershell

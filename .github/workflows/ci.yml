@@ -47,6 +47,13 @@ jobs:
         working-directory: backend
         run: python -m pytest
 
+      - name: Verify frozen W6 evaluation config
+        working-directory: evaluation/configs
+        run: sha256sum --check issue114-w6-retrieval.frozen.sha256
+
+      - name: Run evaluation regression tests
+        run: python -m pytest -c evaluation/pytest.ini evaluation/tests
+
       - name: Smoke test /healthz
         working-directory: backend
         shell: bash
