@@ -10,6 +10,7 @@ const api = vi.hoisted(() => ({ getSearchClient: vi.fn() }))
 vi.mock('../../src/lib/api/search', () => ({ isMockMode: true, getSearchClient: api.getSearchClient }))
 const searchMock = vi.fn<SearchClient['search']>()
 beforeEach(() => {
+  window.history.replaceState(null, '', window.location.pathname)
   searchMock.mockReset()
   searchMock.mockImplementation(async (request) => createMockSearchResponse(request.query, request.limit))
   api.getSearchClient.mockReset().mockResolvedValue({ search: searchMock })
@@ -98,7 +99,8 @@ describe('search UI after contract consolidation', () => {
     render(<App />)
     await submit(userEvent.setup(), response.query)
     expect(screen.getByRole('status')).toHaveTextContent(response.query)
-    expect(document.querySelector('img')).toBeNull()
+    expect(screen.getByRole('searchbox')).toHaveValue(response.query)
+    expect(document.querySelector('img[src="x"][onerror]')).toBeNull()
   })
   it('supports keyboard access to search submission', async () => {
     const user = userEvent.setup(); render(<App />)

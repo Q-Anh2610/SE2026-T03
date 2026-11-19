@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from './App'
@@ -23,7 +23,7 @@ describe('theme preference', () => {
     expect(screen.getByRole('link', { name: 'Connected, trang chủ' })).toHaveAttribute('href', './')
     const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' })
     expect(navigation.querySelectorAll('a')).toHaveLength(3)
-    expect(screen.getByRole('link', { name: 'Tìm bằng ảnh' })).toHaveAttribute('href', '#image-search')
+    expect(within(navigation).getByRole('link', { name: 'Tìm bằng ảnh' })).toHaveAttribute('href', '#image-search')
     expect(screen.getByRole('link', { name: 'Trạng thái job' })).toHaveAttribute(
       'href',
       '#admin-status',
@@ -72,11 +72,34 @@ describe('theme preference', () => {
     await user.keyboard('{Enter}')
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
     expect(localStorage.getItem('connected-theme')).toBe('dark')
-    expect(meta).toHaveAttribute('content', '#171717')
+    expect(meta).toHaveAttribute('content', '#202130')
     await user.keyboard(' ')
     expect(document.documentElement).toHaveAttribute('data-theme', 'light')
     expect(localStorage.getItem('connected-theme')).toBe('light')
     expect(meta).toHaveAttribute('content', '#f8f8f6')
+  })
+
+  it('updates the dark browser theme color when switching between search and non-search routes', async () => {
+    localStorage.setItem('connected-theme', 'dark')
+    const meta = document.createElement('meta')
+    meta.name = 'theme-color'
+    document.head.append(meta)
+    window.location.hash = '#search-panel'
+    render(<App />)
+
+    expect(meta).toHaveAttribute('content', '#202130')
+
+    window.location.hash = '#image-search'
+    window.dispatchEvent(new Event('hashchange'))
+    await waitFor(() => expect(meta).toHaveAttribute('content', '#171717'))
+
+    window.location.hash = '#admin-status'
+    window.dispatchEvent(new Event('hashchange'))
+    await waitFor(() => expect(meta).toHaveAttribute('content', '#171717'))
+
+    window.location.hash = '#search-panel'
+    window.dispatchEvent(new Event('hashchange'))
+    await waitFor(() => expect(meta).toHaveAttribute('content', '#202130'))
   })
 
   it('keeps the theme switch working when browser storage is unavailable', async () => {

@@ -11,7 +11,7 @@ test('selects and previews an image, retries the fixture API and clears the imag
     else await route.fulfill({ json: makeResponse('mock-image:fixture') })
   })
   await page.goto('/#image-search')
-  await expect(page.getByText(/Chọn ảnh và bộ lọc/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tìm kiếm bằng ảnh' })).toBeVisible()
   const upload = page.getByLabel(/Chọn hoặc thay ảnh/)
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nO8AAAAASUVORK5CYII=', 'base64')
   await upload.setInputFiles({ name: 'query.png', mimeType: 'image/png', buffer: png })
@@ -34,6 +34,8 @@ test('selects and previews an image, retries the fixture API and clears the imag
 test('shows the live response snapshot and API event IDs without generating request IDs', async ({ page }) => {
   const view = new SearchPage(page)
   const response = makeLiveResponse('ghế')
+  response.results[0].score_type = 'cosine'
+  response.results[0].explanation = 'CLIP so khớp truy vấn với ảnh xem trước.'
   await page.route('**/api/v1/search/text', async (route) => {
     expect(route.request().postDataJSON()).toEqual({ query: 'ghế', filters: {}, page: 1, limit: 12 })
     await route.fulfill({ json: response })
@@ -41,6 +43,10 @@ test('shows the live response snapshot and API event IDs without generating requ
   await view.open()
   await view.search('  ghế  ')
   await expect(view.results).toHaveCount(1)
+  await expect(page.getByText('Văn bản → ảnh xem trước', { exact: true })).toBeVisible()
+  await expect(page.getByText(response.results[0].explanation, { exact: true })).toBeVisible()
+  await expect(page.getByText('Điểm cosine', { exact: true })).toBeVisible()
+  await expect(page.getByText('0,25', { exact: true })).toBeVisible()
   await page.getByText('Thông tin phiên tìm kiếm').click()
   await expect(page.getByText(response.versions.dataset_snapshot)).toBeVisible()
   await expect(page.getByText(response.search_event_id, { exact: true })).toHaveCount(2)
@@ -261,6 +267,8 @@ test('browses asset list, handles error/retry, request race, and detail 404/erro
 
 test('renders the live image contract and rejects a malformed service result', async ({ page }) => {
   const response = makeLiveResponse(`sha256:${'a'.repeat(64)}`)
+  response.results[0].score_type = 'cosine'
+  response.results[0].explanation = 'CLIP so khớp truy vấn với ảnh xem trước.'
   response.results[0].retrieval_sources = ['clip_image_to_preview']
   let calls = 0
   await page.route('**/api/v1/search/image', async route => {
@@ -273,6 +281,10 @@ test('renders the live image contract and rejects a malformed service result', a
   await expect(page.getByRole('img', { name: 'Ảnh truy vấn: query.png' })).toBeVisible()
   await page.getByRole('button', { name: 'Tìm bằng ảnh', exact: true }).click()
   await expect(page.getByRole('status')).toHaveText('Kết quả tìm kiếm bằng ảnh')
+  await expect(page.getByText('Ảnh → ảnh xem trước', { exact: true })).toBeVisible()
+  await expect(page.getByText(response.results[0].explanation, { exact: true })).toBeVisible()
+  await expect(page.getByText('Điểm cosine', { exact: true })).toBeVisible()
+  await expect(page.getByText('0,25', { exact: true })).toBeVisible()
   await page.getByText('Thông tin phiên tìm ảnh').click()
   await expect(page.getByText(response.versions.dataset_snapshot)).toBeVisible()
   await expect(page.getByText(response.search_event_id, { exact: true })).toHaveCount(2)

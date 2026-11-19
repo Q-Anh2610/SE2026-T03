@@ -16,6 +16,8 @@ test('preserves the query and results when switching themes and restores the sav
   await page.reload()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
   await view.explore()
+  await expect(view.query).toHaveValue('glb')
+  await expect(view.results).toHaveCount(6)
   await view.search('ghe go')
   await expect(view.results).toHaveCount(1)
   await view.toggleTheme()
@@ -31,24 +33,13 @@ test('searches by Enter and returns focus after clearing', async ({ page }) => {
   await expect(page.getByText('Bản mẫu tuần 1')).toHaveCount(0)
   await expect(page.locator('.site-title')).toHaveText('Thư viện 3D')
   await expect(page.getByRole('region', { name: 'Kết quả tìm kiếm' })).toHaveCount(0)
-  const heroImage = page.locator('.hero-landscape')
-  await expect.poll(() => heroImage.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
-  const centered = await page.locator('.search-panel').evaluate((panel) => {
-    const bounds = panel.getBoundingClientRect()
-    const gallery = document.querySelector('.discovery-gallery')!.getBoundingClientRect()
-    return {
-      horizontal: Math.abs(bounds.x + bounds.width / 2 - innerWidth / 2),
-      vertical: Math.abs(bounds.y + bounds.height / 2 - innerHeight / 2),
-      galleryTop: gallery.top,
-      viewport: innerHeight,
-    }
-  })
-  expect(centered.horizontal).toBeLessThanOrEqual(2)
-  expect(centered.vertical).toBeLessThanOrEqual(2)
-  expect(centered.galleryTop).toBeGreaterThanOrEqual(centered.viewport)
-  const gallery = page.getByRole('region', { name: 'Hình ảnh 3D' })
-  await expect(gallery.getByRole('img')).toHaveCount(6)
-  for (const img of await gallery.getByRole('img').all()) {
+  const heroImages = page.locator('.hero-showcase img')
+  await expect(heroImages).toHaveCount(2)
+  await expect.poll(() => heroImages.evaluateAll((images) =>
+    images.every((image) => (image as HTMLImageElement).naturalWidth > 0))).toBe(true)
+  const gallery = view.gallery
+  await expect(gallery.locator('img')).toHaveCount(4)
+  for (const img of await gallery.locator('img').all()) {
     await img.scrollIntoViewIfNeeded()
     await expect(img).toBeVisible()
     await expect.poll(() => img.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
@@ -61,9 +52,8 @@ test('searches by Enter and returns focus after clearing', async ({ page }) => {
   await expect(gallery).toHaveCount(0)
   await expect(view.results).toHaveCount(1)
   await expect(page.getByRole('heading', { name: 'Ghế gỗ đơn giản' })).toBeVisible()
-  await expect(page.getByText('Nguồn truy xuất: mock_metadata')).toBeHidden()
+  await expect(page.getByText('Metadata · mock')).toBeVisible()
   await view.showAssetDetails()
-  await expect(page.getByText('Nguồn truy xuất: mock_metadata')).toBeVisible()
   await view.clearQuery()
   await expect(gallery).toBeVisible()
   await expect(page.getByRole('region', { name: 'Kết quả tìm kiếm' })).toHaveCount(0)
@@ -72,16 +62,18 @@ test('searches by Enter and returns focus after clearing', async ({ page }) => {
   await view.checkWidth()
 })
 
-test('moves the background on scroll and respects reduced motion', async ({ page }) => {
+test('uses a discovery suggestion with the keyboard and respects reduced motion', async ({ page }) => {
   const view = new SearchPage(page)
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await view.open()
-  await page.evaluate(() => window.scrollTo({ top: 240, behavior: 'instant' }))
-  const background = page.locator('.hero-landscape')
-  await expect.poll(() => background.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m42)).toBeGreaterThan(0)
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await expect(background).toHaveCSS('transform', 'none')
-  await expect(page.locator('.hero-water-light')).toBeHidden()
+  await view.open()
+  const suggestion = view.gallery.getByRole('button', { name: 'Điền gợi ý tìm kiếm: Ghế gỗ' })
+  await expect(suggestion).toHaveCSS('transition-duration', '0s')
+  await suggestion.focus()
+  await page.keyboard.press('Enter')
+  await expect(view.query).toBeFocused()
+  await expect(view.query).toHaveValue('Ghế gỗ')
+  await page.keyboard.press('Enter')
+  await expect(view.results).toHaveCount(1)
   await view.checkWidth()
 })
 
@@ -91,22 +83,17 @@ for (const theme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' })
     await view.open()
     const images = await view.galleryImages()
-    expect(images).toHaveLength(6)
-    const mobile = (page.viewportSize()?.width ?? 0) <= 700
+    expect(images).toHaveLength(4)
     for (const image of images) {
-      expect(Math.abs(image.width - image.height)).toBeLessThan(1)
+      expect(image.width / image.height).toBeGreaterThan(1)
       expect(Math.abs(image.width - images[0].width)).toBeLessThan(1)
     }
-    if (mobile) {
-      expect(images[0].x).toBeLessThanOrEqual(16)
-      for (const image of images) expect(Math.abs(image.x - images[0].x)).toBeLessThan(1)
-    } else {
-      expect(images[0].x).toBeLessThanOrEqual(24)
-      for (let index = 0; index < images.length; index += 2) {
-        expect(Math.abs(images[index].y - images[index + 1].y)).toBeLessThan(1)
-      }
+    for (let index = 0; index < images.length; index += 2) {
+      expect(Math.abs(images[index].y - images[index + 1].y)).toBeLessThan(1)
+      expect(images[index + 1].x).toBeGreaterThan(images[index].x)
+      expect(Math.abs(images[index].x - images[0].x)).toBeLessThan(1)
     }
-    const captionsFit = await view.gallery.locator('figcaption').evaluateAll((captions) => captions.every((caption) => caption.scrollWidth <= caption.clientWidth))
+    const captionsFit = await view.gallery.locator('.discovery-tile-copy').evaluateAll((captions) => captions.every((caption) => caption.scrollWidth <= caption.clientWidth))
     expect(captionsFit).toBe(true)
     await view.checkWidth()
     await view.gallery.screenshot({ path: testInfo.outputPath(`gallery-${theme}.png`), style: ".site-header, .skip-link { visibility: hidden !important; }" })
@@ -130,7 +117,7 @@ for (const theme of ['light', 'dark'] as const) {
     const width = page.viewportSize()!.width
     const columns = width <= 700 ? 1 : width <= 1000 ? 2 : 3
     for (const card of layout) {
-      expect(Math.abs(card.width - card.height)).toBeLessThan(1)
+      expect(Math.abs(card.width * 3 / 4 - card.height)).toBeLessThan(1)
       expect(Math.abs(card.width - layout[0].width)).toBeLessThan(1)
     }
     for (let index = 1; index < columns; index++) {
@@ -184,8 +171,8 @@ test('keeps search compact and resets a genuine empty result', async ({ page }) 
   await expect(page.getByText('Thử với', { exact: true })).toHaveCount(0)
   await expect(page.getByText('Thử trạng thái giao diện')).toHaveCount(0)
   await expect(view.query).not.toHaveAttribute('aria-describedby')
-  const bounds = await page.locator('.search-panel').boundingBox()
-  expect(bounds?.width).toBeLessThanOrEqual(760)
+  await expect(view.query).toBeInViewport()
+  await view.checkWidth()
   await view.search('glb')
   await expect(view.results).toHaveCount(6)
   const limitSpacing = await page.locator('.limit-label').evaluate((label) => {

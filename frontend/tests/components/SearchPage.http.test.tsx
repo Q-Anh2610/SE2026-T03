@@ -28,6 +28,7 @@ function resultNames() {
 }
 
 beforeEach(() => {
+  window.history.replaceState(null, '', window.location.pathname)
   fetchMock.mockReset()
   vi.stubGlobal('fetch', fetchMock)
 })
