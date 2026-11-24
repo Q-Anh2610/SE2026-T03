@@ -109,6 +109,10 @@ asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 ## Kiểm thử
 
+Rà lỗi API/DB W6 (#136): [lỗi parser đã sửa, ma trận rà soát và bằng chứng PostgreSQL](../docs/evidence/issue136-api-db-error-review.md).
+Tests bổ sung kiểm tra lỗi ngay tại COMMIT, rollback và request tiếp theo phục hồi;
+không thay schema, retrieval config hoặc dependencies.
+
 Kiểm chứng tích hợp W5 (#118): [ma trận, tests và smoke API/browser thật](../docs/guides/w5-api-integration.md).
 Verifier dùng app/DB test riêng để kiểm search/image/feedback/explanation cùng
 jobs/reindex, giữ baseline index đang phục vụ và kiểm output mới qua app riêng.
