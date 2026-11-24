@@ -27,10 +27,17 @@ def install_error_handlers(application: FastAPI) -> None:
 
     @application.exception_handler(StarletteHTTPException)
     async def http_error(request: Request, exc: StarletteHTTPException):
-        detail = exc.detail if isinstance(exc.detail, dict) else {
-            "code": f"HTTP_{exc.status_code}",
-            "message": "Không tìm thấy tài nguyên." if exc.status_code == 404 else "Không thể thực hiện yêu cầu.",
-        }
+        if isinstance(exc.detail, dict):
+            detail = exc.detail
+        elif exc.status_code == 400:
+            # Parser JSON/multipart có thể raise HTTPException thay vì lỗi DTO.
+            # Giữ cùng contract 400; không trả thông báo parser hoặc input gốc.
+            detail = {"code": "INVALID_REQUEST", "message": "Yêu cầu không hợp lệ."}
+        else:
+            detail = {
+                "code": f"HTTP_{exc.status_code}",
+                "message": "Không tìm thấy tài nguyên." if exc.status_code == 404 else "Không thể thực hiện yêu cầu.",
+            }
         body = ErrorResponse(error=detail)
         return JSONResponse(status_code=exc.status_code, content=body.model_dump(mode="json"), headers=exc.headers)
 
