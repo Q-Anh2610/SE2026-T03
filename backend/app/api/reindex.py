@@ -1,5 +1,6 @@
 """POST kích hoạt reindex nội bộ; trả job ID, worker thực thi sau commit."""
 
+import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request, Response
@@ -9,10 +10,13 @@ from app.api.examples import response_example
 from app.api.jobs import ERRORS
 from app.core.admin import require_admin
 from app.core.errors import api_error
+from app.core.request_logging import log_request_error
 from app.db.session import create_db_engine
 from app.schemas.api import ErrorResponse
 from app.schemas.reindex import ReindexRequest, ReindexResponse
 from app.services.reindex import ReindexManager, validate_configuration
+
+logger = logging.getLogger(__name__)
 
 EXAMPLE = {"job_id": "a0b674d2-1286-401f-b73b-72cae159fcad", "status": "queued",
            "status_url": "/api/v1/admin/jobs/a0b674d2-1286-401f-b73b-72cae159fcad", "reused": False}
@@ -46,6 +50,7 @@ def reindex(request: Request, response: Response, value: Annotated[ReindexReques
             manager = request.app.state.reindex_manager
         result = manager.submit(value)
     except (SQLAlchemyError, ValueError):
+        log_request_error(logger, "Reindex submission failed", stage="reindex_submission")
         raise api_error(500, "INTERNAL_ERROR", "Không ghi được yêu cầu reindex.") from None
     response.status_code = 200 if result.reused else 202
     return result

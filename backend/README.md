@@ -109,6 +109,12 @@ asset fixture, để dùng cùng nguồn metadata và asset IDs với search.
 
 ## Kiểm thử
 
+Request/error logging W6 (#137): [contract header/CORS và tra log](../docs/contracts/request-logging-w6.md),
+[tests và bằng chứng](../docs/evidence/issue137-request-logging.md).
+Server trả `X-Request-ID` UUID v4 trên mỗi request; không đổi response body.
+Khi dùng structured app logs, khởi chạy Uvicorn với `--no-access-log` để tránh
+access log riêng chứa raw URL. Header truy vết khác search event/job/reindex ID.
+
 Rà lỗi API/DB W6 (#136): [lỗi parser đã sửa, ma trận rà soát và bằng chứng PostgreSQL](../docs/evidence/issue136-api-db-error-review.md).
 Tests bổ sung kiểm tra lỗi ngay tại COMMIT, rollback và request tiếp theo phục hồi;
 không thay schema, retrieval config hoặc dependencies.

@@ -7,6 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.core.errors import api_error
+from app.core.request_logging import log_request_error
 from app.models import Asset, Feedback, SearchEvent
 from app.schemas.feedback import LiveFeedbackRequest, LiveFeedbackResponse
 
@@ -44,7 +45,7 @@ def record_feedback(session: Session, value: LiveFeedbackRequest) -> LiveFeedbac
         response.model_dump_json()
         session.commit()
         return response
-    except SQLAlchemyError as exc:
+    except SQLAlchemyError:
         session.rollback()
-        logger.error("Feedback persistence failed: %s", type(exc).__name__)
+        log_request_error(logger, "Feedback persistence failed", stage="feedback_persistence")
         raise api_error(500, "INTERNAL_ERROR", "Lỗi máy chủ. Vui lòng thử lại sau.") from None

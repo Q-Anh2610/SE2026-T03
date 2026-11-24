@@ -7,6 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.core.errors import api_error
+from app.core.request_logging import log_request_error
 from app.models import SearchEvent
 from app.schemas.text_search import LiveTextSearchRequest, SearchExecutionVersions
 from app.schemas.image_search import LiveImageSearchRequest
@@ -58,9 +59,9 @@ def _commit_event(session: Session, event: SearchEvent) -> UUID:
     try:
         session.add(event)
         session.commit()
-    except SQLAlchemyError as exc:
+    except SQLAlchemyError:
         session.rollback()
         # Không log query, filters, exception text, SQL hoặc URL kết nối.
-        logger.error("Search event persistence failed: %s", type(exc).__name__)
+        log_request_error(logger, "Search event persistence failed", stage="search_event_persistence")
         raise api_error(500, "INTERNAL_ERROR", "Lỗi máy chủ. Vui lòng thử lại sau.") from None
     return identifier

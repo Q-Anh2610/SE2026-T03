@@ -2,6 +2,26 @@ import { expect, test } from '@playwright/test'
 
 const api = 'http://127.0.0.1:5196/api/v1'
 
+test('reads server request IDs across origins on success and validation errors', async ({ page }) => {
+  await page.goto('/')
+  // Fetch thật từ origin Vite tới FastAPI; không intercept response hoặc đổi client sản phẩm.
+  const observed = await page.evaluate(async base => {
+    const results = []
+    for (const path of ['/assets?limit=1', '/assets?limit=0']) {
+      const response = await fetch(base + path)
+      results.push({ status: response.status, requestId: response.headers.get('X-Request-ID'),
+        body: await response.json() })
+    }
+    return results
+  }, api)
+  expect(observed.map(result => result.status)).toEqual([200, 400])
+  for (const result of observed) {
+    expect(result.requestId).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+  }
+  expect(observed[0].requestId).not.toBe(observed[1].requestId)
+  expect(observed[1].body.error.code).toBe('INVALID_REQUEST')
+})
+
 test('shows a genuine backend 400 and retries without mock fallback', async ({ page }) => {
   let reject = true
   await page.route('**/api/v1/search/text', async route => {

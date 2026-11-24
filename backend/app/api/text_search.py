@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.api.examples import ASSET_EXAMPLE, PAGINATION_EXAMPLE, response_example
 from app.core.errors import api_error
+from app.core.request_logging import log_request_error
 from app.db.dependencies import get_db_session
 from app.schemas.api import ErrorResponse
 from app.schemas.text_search import LiveTextSearchRequest, LiveTextSearchResponse, TEXT_CANDIDATE_LIMIT, TextSearchCandidates
@@ -53,8 +54,8 @@ def retrieve_candidates(request: Request, value: Annotated[LiveTextSearchRequest
         return TextSearchCandidates.model_validate(result.model_dump() if isinstance(result, TextSearchCandidates) else result)
     except SearchUnavailable:
         raise unavailable() from None
-    except Exception as exc:
-        logger.error("Text retrieval failed: %s", type(exc).__name__)
+    except Exception:
+        log_request_error(logger, "Text retrieval failed", stage="text_retrieval")
         raise api_error(500, "INTERNAL_ERROR", "Lỗi máy chủ. Vui lòng thử lại sau.") from None
 
 
