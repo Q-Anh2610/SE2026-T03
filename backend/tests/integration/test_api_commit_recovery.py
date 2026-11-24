@@ -2,6 +2,7 @@
 
 from contextlib import contextmanager
 from io import BytesIO
+import json
 import os
 
 from fastapi.testclient import TestClient
@@ -99,9 +100,9 @@ def test_commit_time_failure_rolls_back_and_next_request_recovers(database, kind
     app.state.db_engine = database.engine
     # Alembic fileConfig bỏ capture handler của pytest; chỉ gắn lại logger cần kiểm.
     import logging
-    for name in ("app.services.feedback", "app.services.search_events", "app.db.dependencies"):
+    for name in ("app.services.feedback", "app.services.search_events", "app.db.dependencies", "app.request"):
         logger = logging.getLogger(name)
-        monkeypatch.setattr(logger, "handlers", [*logger.handlers, caplog.handler])
+        monkeypatch.setattr(logger, "handlers", [*[h for h in logger.handlers if h is not caplog.handler], caplog.handler])
     with TestClient(app, raise_server_exceptions=False) as client:
         if kind == "feedback":
             event_id = search(client, "text").json()["search_event_id"]
@@ -123,6 +124,14 @@ def test_commit_time_failure_rolls_back_and_next_request_recovers(database, kind
                 "message": "Lỗi máy chủ. Vui lòng thử lại sau.", "details": []}}
             assert not any(value in response.text + caplog.text for value in (
                 "fixture-private-commit-detail", "INSERT INTO", "fixture_reject_commit136", "Traceback"))
+            identifier = response.headers["X-Request-ID"]
+            traced = [json.loads(record.getMessage()) for record in caplog.records
+                      if record.getMessage().startswith("{")]
+            traced = [row for row in traced if row.get("request_id") == identifier]
+            summary, = [row for row in traced if row["event"] == "request.completed"]
+            expected_stage = "feedback_persistence" if kind == "feedback" else "search_event_persistence"
+            assert (summary["status"], summary["error_code"], summary["stage"]) == (500, "INTERNAL_ERROR", expected_stage)
+            assert any(row["event"] != "request.completed" and row["stage"] == expected_stage for row in traced)
             assert database.engine.pool.checkedout() == 0
             assert counts(database) == before
             # Các read requests độc lập vẫn hoạt động, không có dữ liệu ghi dở.
@@ -133,6 +142,11 @@ def test_commit_time_failure_rolls_back_and_next_request_recovers(database, kind
         recovered = request()
         assert recovered.status_code == (201 if kind == "feedback" else 200)
         assert recovered.json()["mock"] is False
+        assert recovered.headers["X-Request-ID"] != identifier
+        recovered_logs = [json.loads(record.getMessage()) for record in caplog.records
+                          if record.name == "app.request" and record.getMessage().startswith("{")]
+        recovered_summary, = [row for row in recovered_logs if row["request_id"] == recovered.headers["X-Request-ID"]]
+        assert recovered_summary["error_code"] is None and recovered_summary["stage"] is None
         if kind != "feedback":
             assert recovered.json()["versions"] == VERSIONS
         assert counts(database) == (before[0] + (kind != "feedback"), before[1] + (kind == "feedback"))

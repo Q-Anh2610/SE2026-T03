@@ -8,6 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.core.errors import api_error
+from app.core.request_logging import log_request_error
 from app.db.session import create_db_engine
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ def get_db_session(request: Request) -> Iterator[Session]:
             except Exception:
                 session.rollback()
                 raise
-    except (SQLAlchemyError, ValueError) as exc:
+    except (SQLAlchemyError, ValueError):
         # Không log exception text/traceback vì có thể chứa credentials hoặc SQL.
-        logger.error("Asset database request failed: %s", type(exc).__name__)
+        log_request_error(logger, "Asset database request failed", stage="database")
         raise api_error(500, "INTERNAL_ERROR", "Lỗi máy chủ. Vui lòng thử lại sau.") from None

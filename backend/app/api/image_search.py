@@ -14,6 +14,7 @@ from app.api.image_upload import read_validated_image
 from app.api.text_search import ERRORS, EXAMPLE
 from app.api.examples import response_example
 from app.core.errors import api_error
+from app.core.request_logging import log_request_error
 from app.db.dependencies import get_db_session
 from app.schemas.image_search import LiveImageSearchRequest, LiveImageSearchResponse
 from app.schemas.text_search import TextSearchCandidates, TextSearchFilters
@@ -80,8 +81,8 @@ def image_candidates(
         raise api_error(500, "INTERNAL_ERROR", "Lỗi máy chủ. Vui lòng thử lại sau.") from None
     except SearchUnavailable:
         raise unavailable() from None
-    except Exception as exc:
-        logger.error("Image retrieval failed: %s", type(exc).__name__)
+    except Exception:
+        log_request_error(logger, "Image retrieval failed", stage="image_retrieval")
         raise api_error(500, "INTERNAL_ERROR", "Lỗi máy chủ. Vui lòng thử lại sau.") from None
 
 

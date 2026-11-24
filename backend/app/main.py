@@ -5,7 +5,6 @@ from contextlib import asynccontextmanager
 from threading import Lock
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
 
@@ -14,6 +13,7 @@ from app.api.jobs import router as jobs_router
 from app.api.reindex import router as reindex_router
 from app.core.config import Settings
 from app.core.errors import install_error_handlers
+from app.core.request_logging import RequestLoggedFastAPI
 from app.api.mock import router as mock_router
 from app.api.mock import list_router as mock_list_router
 from app.api.mock import text_router as mock_text_router
@@ -62,7 +62,7 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
                 if application.state.db_engine is not None:
                     application.state.db_engine.dispose()
 
-    application = FastAPI(
+    application = RequestLoggedFastAPI(
         title=settings.name, debug=settings.debug,
         description=("Danh sách/chi tiết asset đọc PostgreSQL. Search được chọn theo cấu hình text/image; chế độ service dùng CLIP/Qdrant và lưu event PostgreSQL. Dependency chưa sẵn sàng trả 503. Feedback chọn PostgreSQL hoặc mock theo cấu hình."
                      if settings.text_search_source == "service" or settings.image_search_source == "service"
@@ -105,12 +105,6 @@ def create_app(settings: Settings | None = None, *, text_search_service: TextSea
         application.include_router(selected_feedback_router)
     if mocks_enabled:
         application.state.mock_store = MockStore()
-    if settings.cors_origins:
-        application.add_middleware(
-            CORSMiddleware, allow_origins=settings.cors_origins,
-            allow_methods=["GET", "POST"], allow_headers=["Content-Type", "X-Admin-Key"],
-        )
-
     def openapi_contract():
         if application.openapi_schema is None:
             schema = get_openapi(
