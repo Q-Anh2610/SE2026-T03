@@ -2,6 +2,9 @@
 
 Contract: [reindex-w5.md](../contracts/reindex-w5.md).
 
+Chẩn đoán lỗi runner/artifact/commit và job queued/running bất thường:
+[runbook W6 #138](job-failure-diagnostics-w6.md).
+
 ## Cấu hình và migration
 
 Giữ `.env` local ngoài Git, bổ sung khóa admin riêng như #115 và các biến:

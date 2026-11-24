@@ -2,6 +2,7 @@
 
 import argparse
 from dataclasses import dataclass
+import logging
 from pathlib import Path
 import subprocess
 import sys
@@ -14,6 +15,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.db.session import create_db_engine
 from app.schemas.jobs import JobError, JobResult
 from app.services.jobs import create_job, finish_job, start_job
+from app.services.job_diagnostics import job_failure, safe_failure_code
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -24,21 +28,73 @@ class Outcome:
     error: JobError | None = None
 
 
+class InvalidOutcome(ValueError):
+    pass
+
+
+def validate_outcome(outcome):
+    """Không suy ra thành công từ dữ liệu thiếu/sai hoặc dấu hiệu thất bại."""
+    try:
+        if not isinstance(outcome, Outcome) or not isinstance(outcome.result, JobResult):
+            raise ValueError('Invalid runner result.')
+        result = JobResult.model_validate(outcome.result.model_dump())
+        if outcome.error is not None and not isinstance(outcome.error, JobError):
+            raise ValueError('Invalid runner error.')
+        for count in (outcome.processed, outcome.total):
+            if count is not None and (type(count) is not int or count < 0):
+                raise ValueError('Invalid runner progress.')
+        if (outcome.processed is not None and outcome.total is not None
+                and outcome.processed > outcome.total):
+            raise ValueError('Invalid runner progress.')
+        if outcome.error is None and ((result.failed or 0) > 0
+                or result.exit_code not in (None, 0) or result.search_verified is False):
+            raise ValueError('Runner result contradicts success.')
+        error = None if outcome.error is None else JobError(
+            code=safe_failure_code(outcome.error.code),
+            message='Runner chưa hoàn tất toàn bộ công việc; kiểm tra báo cáo local.')
+        return Outcome(result, outcome.processed, outcome.total, error)
+    except Exception:
+        raise InvalidOutcome('Runner output invalid.') from None
+
+
 def execute_job(engine: Engine, *, kind: str, runner: str,
                 operation: Callable[[], Outcome]) -> tuple[UUID, bool]:
-    job_id = create_job(engine, kind=kind, runner=runner)
-    start_job(engine, job_id)
+    try:
+        job_id = create_job(engine, kind=kind, runner=runner)
+    except Exception:
+        job_failure(logger, None, stage='create_state', code='JOB_STATE_UNAVAILABLE', intended_status='queued')
+        raise
+    try:
+        start_job(engine, job_id)
+    except Exception:
+        job_failure(logger, job_id, stage='start_state', code='JOB_STATE_UNAVAILABLE', intended_status='running')
+        raise
     # Nếu DB không ghi được queued/running thì không thực thi operation.
     try:
-        outcome = operation()
-    except (Exception, KeyboardInterrupt):
-        finish_job(engine, job_id, error={"code": "RUNNER_FAILED",
-                   "message": "Runner thất bại hoặc bị gián đoạn; kiểm tra báo cáo local."})
+        outcome = validate_outcome(operation())
+    except (Exception, KeyboardInterrupt) as exc:
+        code = 'RUNNER_OUTPUT_INVALID' if isinstance(exc, InvalidOutcome) else 'RUNNER_FAILED'
+        job_failure(logger, job_id, stage='runner_output' if isinstance(exc, InvalidOutcome) else 'operation', code=code)
+        try:
+            finish_job(engine, job_id, error={"code": code,
+                       "message": "Runner thất bại hoặc bị gián đoạn; kiểm tra báo cáo local."})
+        except Exception:
+            job_failure(logger, job_id, stage='failure_state', code='JOB_STATE_UNAVAILABLE',
+                        operation_code=code, intended_status='failed')
+            raise
         # Không lưu exception text, SQL, stdout/stderr hay filesystem paths.
         return job_id, False
-    finish_job(engine, job_id, result=outcome.result.model_dump(mode="json"),
-               processed=outcome.processed, total=outcome.total,
-               error=outcome.error.model_dump() if outcome.error else None)
+    if outcome.error:
+        job_failure(logger, job_id, stage='operation', code=outcome.error.code)
+    try:
+        finish_job(engine, job_id, result=outcome.result.model_dump(mode="json"),
+                   processed=outcome.processed, total=outcome.total,
+                   error=outcome.error.model_dump() if outcome.error else None)
+    except Exception:
+        job_failure(logger, job_id, stage='final_state', code='JOB_STATE_UNAVAILABLE',
+                    operation_code=outcome.error.code if outcome.error else None,
+                    intended_status='failed' if outcome.error else 'succeeded')
+        raise
     return job_id, outcome.error is None
 
 

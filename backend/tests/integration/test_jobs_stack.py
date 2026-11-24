@@ -13,7 +13,7 @@ from alembic import command
 from alembic.config import Config
 from PIL import Image
 import pytest
-from sqlalchemy import text
+from sqlalchemy import select, text
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -143,6 +143,38 @@ def test_no_operation_when_state_cannot_be_persisted(database):
     finally:
         with database.engine.begin() as connection:
             connection.exec_driver_sql("ALTER TABLE jobs DROP CONSTRAINT reject_job")
+
+
+@pytest.mark.parametrize('phase', ['start', 'final', 'failure'])
+def test_cli_commit_fault_diagnostics_and_recovery(database, caplog, phase):
+    calls = []
+    def operation():
+        calls.append(True)
+        if phase == 'failure':
+            raise RuntimeError('private-cli-diagnostic-fixture')
+        return Outcome(JobResult(exit_code=0))
+    rejected = 'running' if phase == 'start' else ('failed' if phase == 'failure' else 'succeeded')
+    with database.engine.begin() as connection:
+        connection.exec_driver_sql(f"ALTER TABLE jobs ADD CONSTRAINT reject_cli_phase CHECK (status <> '{rejected}') NOT VALID")
+    try:
+        with pytest.raises(SQLAlchemyError):
+            execute_job(database.engine, kind='indexing', runner='fixture-cli', operation=operation)
+        with Session(database.engine) as session:
+            job = session.scalar(select(Job))
+            assert job.status == ('queued' if phase == 'start' else 'running')
+            assert job.result is None and job.error is None
+            identifier = str(job.job_id)
+        records = [json.loads(r.message) for r in caplog.records if r.name == 'app.services.job_runner']
+        assert records[-1]['job_id'] == identifier
+        assert records[-1]['stage'] == {'start': 'start_state', 'final': 'final_state', 'failure': 'failure_state'}[phase]
+        assert len(calls) == (0 if phase == 'start' else 1)
+        assert 'private-cli-diagnostic-fixture' not in caplog.text
+    finally:
+        with database.engine.begin() as connection:
+            connection.exec_driver_sql('ALTER TABLE jobs DROP CONSTRAINT reject_cli_phase')
+    _, succeeded = execute_job(database.engine, kind='indexing', runner='fixture-recovery',
+        operation=lambda: Outcome(JobResult(exit_code=0)))
+    assert succeeded and database.engine.pool.checkedout() == 0
 
 
 @pytest.mark.parametrize("invalid_record", [False, True])

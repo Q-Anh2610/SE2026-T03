@@ -15,7 +15,8 @@ from app.core.errors import api_error
 from app.models import Job
 from app.schemas.jobs import JobResult
 from app.schemas.reindex import ReindexResponse
-from app.services.job_runner import Outcome
+from app.services.job_runner import InvalidOutcome, Outcome, validate_outcome
+from app.services.job_diagnostics import job_failure, safe_failure_code
 from app.services.jobs import finish_job, start_job
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -70,8 +71,11 @@ def run_index(settings, job_id):
     from app.search.index_manifest import load_index_manifest
 
     # Profile cố định; frontend không thể thay command, path, model hay snapshot.
-    validate_configuration(settings)
-    output = settings.reindex_output_root.resolve() / str(job_id)
+    try:
+        validate_configuration(settings)
+        output = settings.reindex_output_root.resolve() / str(job_id)
+    except Exception:
+        raise ReindexFailure('REINDEX_INPUT_INVALID') from None
     version = "reindex-clip-" + job_id.hex
     command = [sys.executable, str(ROOT / "scripts/prepare_text_search_index.py"),
         "--manifest", str(SOURCE), "--snapshot", SNAPSHOT,
@@ -104,13 +108,14 @@ def run_index(settings, job_id):
             store.validate_collection()
             if client.count(manifest.collection, exact=True).count != 200:
                 raise ValueError("Count mismatch.")
+        manifest_hash = sha256((output / "index-manifest.json").read_bytes()).hexdigest()
     except Exception:
         raise ReindexFailure("REINDEX_OUTPUT_INVALID") from None
     return Outcome(result=JobResult(input_count=200, succeeded=200, failed=0, skipped=0,
         manifest_sha256=SOURCE_HASH, exit_code=0, index_version=version,
         model_version=versions.model_version, dataset_snapshot=versions.dataset_snapshot,
         asset_count=200, point_count=200, index_ref="reindex-" + job_id.hex,
-        index_manifest_sha256=sha256((output / "index-manifest.json").read_bytes()).hexdigest(),
+        index_manifest_sha256=manifest_hash,
         search_verified=True), processed=200, total=200)
 
 
@@ -128,35 +133,56 @@ class ReindexManager:
             try:
                 self.executor.submit(self.work, response.job_id)
             except RuntimeError:
-                start_job(self.engine, response.job_id)
-                finish_job(self.engine, response.job_id, error={"code": "REINDEX_SCHEDULING_FAILED",
-                           "message": "Không khởi chạy được worker reindex."})
+                job_failure(logger, response.job_id, stage='scheduling', code='REINDEX_SCHEDULING_FAILED')
+                try:
+                    start_job(self.engine, response.job_id)
+                except Exception:
+                    job_failure(logger, response.job_id, stage='start_state', code='JOB_STATE_UNAVAILABLE',
+                                operation_code='REINDEX_SCHEDULING_FAILED', intended_status='running')
+                    raise
+                try:
+                    finish_job(self.engine, response.job_id, error={"code": "REINDEX_SCHEDULING_FAILED",
+                               "message": "Không khởi chạy được worker reindex."})
+                except Exception:
+                    job_failure(logger, response.job_id, stage='failure_state', code='JOB_STATE_UNAVAILABLE',
+                                operation_code='REINDEX_SCHEDULING_FAILED', intended_status='failed')
+                    raise
                 raise api_error(503, "REINDEX_UNAVAILABLE", "Worker reindex chưa sẵn sàng.") from None
         return response
 
     def work(self, job_id):
         try:
             start_job(self.engine, job_id)
-        except Exception as exc:
-            logger.error("Reindex start state unavailable: %s", type(exc).__name__)
+        except Exception:
+            job_failure(logger, job_id, stage='start_state', code='JOB_STATE_UNAVAILABLE', intended_status='running')
             return  # Không chạy nếu chưa commit running.
         try:
-            outcome = self.operation(self.settings, job_id)
+            outcome = validate_outcome(self.operation(self.settings, job_id))
         except Exception as exc:
-            code = exc.code if isinstance(exc, ReindexFailure) else "RUNNER_FAILED"
+            code = (safe_failure_code(exc.code) if isinstance(exc, ReindexFailure) else
+                    'RUNNER_OUTPUT_INVALID' if isinstance(exc, InvalidOutcome) else 'RUNNER_FAILED')
+            stage = {'REINDEX_TIMEOUT': 'runner_timeout', 'INDEXING_FAILED': 'runner_exit',
+                     'REINDEX_OUTPUT_INVALID': 'artifact', 'REINDEX_INPUT_INVALID': 'input',
+                     'RUNNER_OUTPUT_INVALID': 'runner_output'}.get(code, 'operation')
+            job_failure(logger, job_id, stage=stage, code=code)
             try:
                 finish_job(self.engine, job_id, error={"code": code,
                     "message": "Reindex chưa hoàn tất; kiểm tra artifact local."})
-            except Exception as persistence:
-                logger.error("Reindex failure state unavailable: %s", type(persistence).__name__)
+            except Exception:
+                job_failure(logger, job_id, stage='failure_state', code='JOB_STATE_UNAVAILABLE',
+                            operation_code=code, intended_status='failed')
             return
+        if outcome.error:
+            job_failure(logger, job_id, stage='operation', code=outcome.error.code)
         try:
             finish_job(self.engine, job_id, result=outcome.result.model_dump(mode="json"),
                        error=outcome.error.model_dump() if outcome.error else None,
                        processed=outcome.processed, total=outcome.total)
-        except Exception as exc:
+        except Exception:
             # Không đổi thành succeeded trong RAM nếu commit DB thất bại.
-            logger.error("Reindex final state unavailable: %s", type(exc).__name__)
+            job_failure(logger, job_id, stage='final_state', code='JOB_STATE_UNAVAILABLE',
+                        operation_code=outcome.error.code if outcome.error else None,
+                        intended_status='failed' if outcome.error else 'succeeded')
 
     def close(self):
         self.executor.shutdown(wait=True)
