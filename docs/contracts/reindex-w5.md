@@ -122,6 +122,12 @@ status=failed và error.code: INDEXING_FAILED, REINDEX_TIMEOUT,
 REINDEX_OUTPUT_INVALID, RUNNER_FAILED hoặc REINDEX_SCHEDULING_FAILED.
 Không coi 202 hay GET thành công là job đã succeeded.
 
+Bổ sung W6 (#138): worker có thể trả failed/REINDEX_INPUT_INVALID khi đầu vào
+không còn hợp lệ sau tiếp nhận, hoặc failed/RUNNER_OUTPUT_INVALID khi Outcome
+thiếu/sai hay mâu thuẫn với thành công. DTO/status không đổi. Log
+JOB_STATE_UNAVAILABLE chỉ chẩn đoán lỗi ghi trạng thái; không giả thêm error
+đã lưu vào job. Xem [runbook chẩn đoán](../guides/job-failure-diagnostics-w6.md).
+
 ## Giới hạn vận hành
 
 Worker local một thread/app, không có broker/Redis/Celery. Chạy bằng Python

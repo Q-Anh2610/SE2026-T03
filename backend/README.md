@@ -116,6 +116,11 @@ Khi dùng structured app logs, khởi chạy Uvicorn với `--no-access-log` đ�
 access log riêng chứa raw URL. Header truy vết khác search event/job/reindex ID.
 
 Rà lỗi API/DB W6 (#136): [lỗi parser đã sửa, ma trận rà soát và bằng chứng PostgreSQL](../docs/evidence/issue136-api-db-error-review.md).
+
+Runner/jobs/reindex W6 (#138): [chẩn đoán theo job ID và hướng xử lý queued/running](../docs/guides/job-failure-diagnostics-w6.md),
+[bằng chứng hồi quy và smoke](../docs/evidence/issue138-job-failures.md).
+Outcome không hợp lệ không được báo succeeded; lỗi operation và lỗi lưu trạng thái
+được ghi riêng. Không tự resume, retry, unlock hoặc activate index.
 Tests bổ sung kiểm tra lỗi ngay tại COMMIT, rollback và request tiếp theo phục hồi;
 không thay schema, retrieval config hoặc dependencies.
 

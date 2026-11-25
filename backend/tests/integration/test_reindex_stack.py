@@ -101,12 +101,15 @@ def test_async_running_replay_conflict_completion_and_restart(database, tmp_path
         assert replay.status_code == 200 and replay.json()["job_id"] == identifier
 
 
-def test_concurrent_duplicate_requests_across_two_app_managers(database, tmp_path):
+@pytest.mark.parametrize('fails', [False, True])
+def test_concurrent_duplicate_requests_across_two_app_managers(database, tmp_path, fails):
     release = Event()
     calls = []
     def operation(*_):
         calls.append(True)
         assert release.wait(5)
+        if fails:
+            raise ReindexFailure('REINDEX_TIMEOUT')
         return success()
     with TestClient(application(database, tmp_path, operation)) as first, TestClient(application(database, tmp_path, operation)) as second:
         try:
@@ -118,8 +121,90 @@ def test_concurrent_duplicate_requests_across_two_app_managers(database, tmp_pat
             assert submit(second, uuid4()).status_code == 409
         finally:
             release.set()
-        terminal(first, responses[0].json()["job_id"])
+        body = terminal(first, responses[0].json()["job_id"])
+        assert body['status'] == ('failed' if fails else 'succeeded')
+        assert submit(second, request_id).json()['job_id'] == body['job_id']
         assert len(calls) == 1
+
+
+@pytest.mark.parametrize('outcome', [None, Outcome(JobResult(exit_code=2)), Outcome(JobResult(failed=1))])
+def test_invalid_runner_output_is_durable_failed_and_replay_does_not_rerun(database, tmp_path, outcome):
+    calls = []
+    def operation(*_):
+        calls.append(True)
+        return outcome
+    request_id = uuid4()
+    with TestClient(application(database, tmp_path, operation)) as client:
+        identifier = submit(client, request_id).json()['job_id']
+        body = terminal(client, identifier)
+        assert body['status'] == 'failed' and body['result'] is None
+        assert body['error']['code'] == 'RUNNER_OUTPUT_INVALID'
+        assert submit(client, request_id).json()['job_id'] == identifier
+        assert len(calls) == 1
+    with TestClient(application(database, tmp_path, lambda *_: pytest.fail('Replay must not execute'))) as restarted:
+        assert submit(restarted, request_id).json()['status'] == 'failed'
+    assert database.engine.pool.checkedout() == 0
+
+
+@pytest.mark.parametrize('phase', ['start', 'failure'])
+def test_state_commit_failure_preserves_guard_and_diagnoses_job(database, tmp_path, caplog, phase):
+    import json
+    calls = []
+    def operation(*_):
+        calls.append(True)
+        raise ReindexFailure('REINDEX_OUTPUT_INVALID')
+    rejected = 'running' if phase == 'start' else 'failed'
+    # Literal allowlist fixture, chỉ trong schema UUID của test.
+    with database.engine.begin() as connection:
+        connection.exec_driver_sql(f"ALTER TABLE jobs ADD CONSTRAINT reject_phase CHECK (status <> '{rejected}') NOT VALID")
+    app = application(database, tmp_path, operation)
+    request_id = uuid4()
+    with TestClient(app) as client:
+        identifier = submit(client, request_id).json()['job_id']
+        app.state.reindex_manager.close()
+        body = client.get(f'/api/v1/admin/jobs/{identifier}', headers=HEADERS).json()['job']
+        assert body['status'] == ('queued' if phase == 'start' else 'running')
+        assert body['result'] is None and body['error'] is None
+        assert len(calls) == (0 if phase == 'start' else 1)
+        assert submit(client, request_id).json()['job_id'] == identifier
+        assert submit(client, uuid4()).status_code == 409
+        records = [json.loads(r.message) for r in caplog.records if r.name == 'app.services.reindex']
+        assert records[-1]['stage'] == ('start_state' if phase == 'start' else 'failure_state')
+        assert records[-1]['job_id'] == identifier
+        assert records[-1]['error_code'] == 'JOB_STATE_UNAVAILABLE'
+        if phase == 'failure':
+            assert records[-1]['operation_error_code'] == 'REINDEX_OUTPUT_INVALID'
+    assert database.engine.pool.checkedout() == 0
+
+
+@pytest.mark.parametrize('reject', [None, 'running', 'failed'])
+def test_scheduling_failure_never_runs_or_reports_success(database, tmp_path, caplog, reject):
+    import json
+    app = application(database, tmp_path, lambda *_: pytest.fail('Closed executor must not run'))
+    request_id = uuid4()
+    if reject:
+        with database.engine.begin() as connection:
+            connection.exec_driver_sql(f"ALTER TABLE jobs ADD CONSTRAINT reject_schedule CHECK (status <> '{reject}') NOT VALID")
+    with TestClient(app, raise_server_exceptions=False) as client:
+        # Khởi tạo manager bằng dependency như request thật, rồi đóng executor.
+        from app.services.reindex import ReindexManager
+        app.state.reindex_manager = ReindexManager(database.engine, app.state.settings,
+            operation=lambda *_: pytest.fail('Closed executor must not run'))
+        app.state.reindex_manager.close()
+        response = submit(client, request_id)
+        assert response.status_code == (503 if reject is None else 500)
+        with Session(database.engine) as session:
+            job = session.scalar(select(Job).where(Job.request_id == request_id))
+            identifier, status = str(job.job_id), job.status
+        assert status == {None: 'failed', 'running': 'queued', 'failed': 'running'}[reject]
+        replay = submit(client, request_id)
+        assert replay.status_code == 200 and replay.json()['job_id'] == identifier
+        records = [json.loads(r.message) for r in caplog.records if r.name == 'app.services.reindex']
+        assert records[0]['stage'] == 'scheduling' and records[0]['job_id'] == identifier
+        assert records[0]['request_id'] == response.headers['X-Request-ID']
+        if reject:
+            assert records[-1]['operation_error_code'] == 'REINDEX_SCHEDULING_FAILED'
+    assert database.engine.pool.checkedout() == 0
 
 
 @pytest.mark.parametrize("error", [RuntimeError("private-password-or-path"), ReindexFailure("REINDEX_TIMEOUT")])
@@ -178,20 +263,30 @@ def test_0004_upgrade_preserves_old_job_and_drift_checks(database):
         assert tuple(row) == ("queued", None, None)
 
 
-def test_final_commit_failure_never_claims_success(database, tmp_path):
+def test_final_commit_failure_never_claims_success(database, tmp_path, caplog):
+    import json
     ran = Event()
+    calls = []
     def operation(*_):
+        calls.append(True)
         ran.set()
         return success()
     with database.engine.begin() as connection:
         connection.exec_driver_sql("ALTER TABLE jobs ADD CONSTRAINT reject_final CHECK (status NOT IN ('succeeded','failed')) NOT VALID")
     app = application(database, tmp_path, operation)
+    request_id = uuid4()
     with TestClient(app) as client:
-        identifier = submit(client, uuid4()).json()["job_id"]
+        identifier = submit(client, request_id).json()["job_id"]
         assert ran.wait(5)
         app.state.reindex_manager.close()  # Chờ transaction cuối đã được thử.
         body = client.get(f"/api/v1/admin/jobs/{identifier}", headers=HEADERS).json()["job"]
         assert body["status"] == "running" and body["result"] is None
+        assert submit(client, request_id).json()['job_id'] == identifier
+        assert len(calls) == 1
         assert submit(client, uuid4()).status_code == 409
+        records = [json.loads(r.message) for r in caplog.records if r.name == 'app.services.reindex']
+        assert records[-1]['stage'] == 'final_state' and records[-1]['job_id'] == identifier
+        assert records[-1]['intended_status'] == 'succeeded'
+        assert records[-1]['error_code'] == 'JOB_STATE_UNAVAILABLE'
         with database.engine.begin() as connection:
             connection.exec_driver_sql("ALTER TABLE jobs DROP CONSTRAINT reject_final")
