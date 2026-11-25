@@ -72,7 +72,7 @@ def prepare_sample(repo, output, count=5, source_ref="HEAD"):
     provenance = json_bytes({
         "schema_version": "dataset-sample-provenance-v1-draft",
         "sample_name": "home-interior-setup-sample-v1-draft",
-        "status": "draft_selection_pending_confirmation",
+        "status": "sample_selection_confirmed",
         "purpose": "offline_setup_smoke_not_benchmark",
         "source_snapshot": SNAPSHOT,
         "source_path": SOURCE_PATH,
@@ -109,7 +109,8 @@ def prepare_sample(repo, output, count=5, source_ref="HEAD"):
         with (output / name).open("xb") as destination:
             destination.write(content)
     return {
-        "status": "offline_draft_generated",
+        "status": "offline_sample_generated",
+        "sample_selection_status": "sample_selection_confirmed",
         "asset_count": count,
         "sample_sha256": sha256(assets),
         "source_commit": commit,

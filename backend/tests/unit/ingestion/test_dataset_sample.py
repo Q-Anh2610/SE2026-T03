@@ -6,6 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+from unittest import result
 
 import pytest
 
@@ -95,12 +96,14 @@ def test_export_preserves_source_metadata_and_records_provenance(source_fixture)
         (output / "attribution.json").read_bytes()
     ).hexdigest()
     assert provenance["generator_sha256"] == hashlib.sha256(SCRIPT.read_bytes()).hexdigest()
-    assert provenance["status"] == "draft_selection_pending_confirmation"
+    assert provenance["status"] == "sample_selection_confirmed"
     assert provenance["previews"] == "not_downloaded_or_verified"
     assert provenance["database"] == "not_written"
     assert provenance["index"] == "not_built"
     assert result["previews_verified"] is False
     assert result["sample_sha256"] == provenance["sample_sha256"]
+    assert result["status"] == "offline_sample_generated"
+    assert result["sample_selection_status"] == "sample_selection_confirmed"
     assert source.read_bytes() == original
     assert len(calls) == 2
 

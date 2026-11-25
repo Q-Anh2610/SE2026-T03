@@ -2,18 +2,19 @@
 
 ## Phạm vi và trạng thái
 
-Sample dùng cho setup/smoke dữ liệu, chưa thay thế candidate 200, snapshot W4
-354 asset, corpus E5 hoặc frozen config W6. Chưa xác nhận lựa chọn sample bởi
-bên sử dụng; giữ `draft_selection_pending_confirmation` trong artifact hiện tại.
+Sample dùng cho setup/smoke dữ liệu, không thay thế candidate 200, snapshot W4 354 asset, corpus E5 hoặc frozen config W6.
+
+Đoàn Thị Minh Khuê (@doanminhkhue25) đã xác nhận lựa chọn 5 asset theo quy tắc asset-id-sorted-prefix-v1-draft phù hợp setup/smoke tại https://github.com/Q-Anh2610/SE2026-T03/issues/142#issuecomment-7167942958.
+
+Output tạo mới ghi sample_selection_confirmed. Giữ nguyên recipe, sample name và hash assets.json để truy vết lựa chọn đã xác nhận. Việc xác nhận lựa chọn chưa thay thế tái lập độc lập, xác nhận đầu vào #135 hoặc quyền phân phối gói ảnh.
 
 Trịnh Thị Thu Huyền (@TrinhHuyen05) chuẩn bị dữ liệu; Đoàn Thị Minh Khuê
 (@doanminhkhue25) phối hợp tái lập môi trường; Lê Thị Linh Chi (@LLC536) đối chiếu
 đầu vào #135; Vũ Nguyễn Quỳnh Anh (@Q-Anh2610) review ảnh hưởng ingestion.
 
-Quy trình dưới đây chỉ xuất metadata và tải/kiểm preview. Không ghi PostgreSQL,
-không nạp model, dựng Qdrant hoặc đổi active index.
+Quy trình dưới đây chỉ xuất metadata và tải/kiểm preview. Không ghi PostgreSQL, không nạp model, dựng Qdrant hoặc đổi active index.
 
-## Inputs và sample draft
+## Inputs và sample đã xác nhận
 
 | Thuộc tính | Giá trị |
 |---|---|
@@ -76,8 +77,7 @@ python scripts/prepare_dataset_sample.py \
   --output "$sample_run/sample"
 ```
 
-Cần exit code 0, `offline_draft_generated`, asset_count 5 và sample SHA-256
-khớp bảng trên. `previews_verified=false` là đúng ở bước offline.
+Cần exit code 0, `offline_sample_generated`, asset_count 5 và sample SHA-256 khớp bảng trên. CLI ghi `sample_selection_status=sample_selection_confirmed`. `previews_verified=false` vẫn đúng ở bước xuất metadata offline.
 
 Script kiểm source Git hash, metadata checkout và Source Adapter trước khi tạo
 output; từ chối output đã tồn tại. Nếu chạy lại, tạo run directory mới, không
@@ -239,3 +239,11 @@ việc chạy tái lập và phạm vi đầu vào #135; không gộp thành xá
 Giữ data/runtime trong `work/`. Helper không tự xóa dữ liệu kiểm chứng. Nếu dọn,
 chỉ xóa đúng run directory do mình tạo sau khi đã lưu evidence cần thiết;
 không xóa nguồn, output của người khác hoặc thư mục dùng chung.
+
+### Cập nhật trạng thái lựa chọn
+
+Artifact và ZIP draft cũ giữ nguyên bytes và trạng thái lịch sử tại lúc tạo. Output sau xác nhận được tạo trong thư mục mới.
+
+Recipe asset-id-sorted-prefix-v1-draft, sample name home-interior-setup-sample-v1-draft và assets.json được giữ nguyên. Generator hash, provenance hash và CHECKSUMS.sha256 của output mới sẽ thay đổi do cập nhật code/trạng thái; không yêu cầu chúng khớp gói draft cũ.
+
+Attribution không thay đổi. Evidence preview đã chạy trước đây tiếp tục gắn với provenance draft được ghi trong evidence đó; không sửa hash để gán sang output mới.
