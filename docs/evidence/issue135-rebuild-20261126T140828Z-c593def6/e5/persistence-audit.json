@@ -1,0 +1,18 @@
+{
+  "expected_submitted": {
+    "asset_count": 200,
+    "point_count": 200,
+    "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+  },
+  "in_memory_after_upsert": {
+    "asset_count": 200,
+    "point_count": 200,
+    "point_payload_vector_sha256": "16d14e5e759bf7c362926ab9c4affbaa23568a5883e5404cc24588ac376ff3c7"
+  },
+  "persisted_after_reopen": {
+    "asset_count": 200,
+    "point_count": 200,
+    "point_payload_vector_sha256": "91a0cb9729333d90b38677fa740832a424be57e9d029f896a2c42eb0fdc1be1f"
+  },
+  "policy": "qdrant-local-submitted-vectors-exact-v1"
+}
