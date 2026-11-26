@@ -2,6 +2,9 @@
 
 FastAPI skeleton dùng Python 3.13, Uvicorn, pydantic-settings và pytest.
 
+W7 / #148: [stack Docker đầy đủ và runbook máy sạch](../docs/guides/docker-clean-setup-w7.md).
+Compose chạy migration bằng container riêng trước backend; `/healthz` vẫn chỉ là liveness.
+
 ## Chạy local trên Windows PowerShell
 
 Từ gốc repository, tạo file cấu hình nếu chưa có, không ghi đè `.env` đang dùng:

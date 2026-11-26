@@ -1,0 +1,37 @@
+{
+    "issue":  148,
+    "scope":  "docker_infrastructure_only",
+    "project":  "issue148-clean",
+    "started_at":  "2026-11-26T19:57:33.8784188Z",
+    "os":  "Microsoft Windows NT 10.0.26300.0",
+    "powershell":  "5.1.26100.9818",
+    "status":  "infrastructure_verified",
+    "checks":  {
+                   "postgres":  "running_healthy",
+                   "qdrant":  "running_healthy",
+                   "backend":  "running_healthy",
+                   "frontend":  "running_healthy",
+                   "migration_container":  "exited_0",
+                   "database_revision":  "0004",
+                   "ui_html":  "http_200_react_root",
+                   "backend_and_proxy_liveness":  "http_200_status_ok",
+                   "ui_proxy_postgres_assets":  "http_200_mock_false",
+                   "qdrant_ready":  "http_200",
+                   "qdrant_collection_count":  0
+               },
+    "retrieval_verified":  false,
+    "e2e_verified":  false,
+    "benchmark_verified":  false,
+    "commit":  "3a0e601d84fd7ef95809fe998913b5a6868481ee",
+    "dirty":  true,
+    "compose_version":  "5.3.0",
+    "docker_server_version":  "29.6.1",
+    "image_ids":  [
+                      "60808918d5a115ea1aee3c7ddd0600bed45ccc8bf5ac313e911ae7701ecbd13a",
+                      "97fb53376be3e4fb1a8a61421daa69dcc3bf2fa39bda3259f5245f9a455af1a9",
+                      "b0cc47559194b93db9fb8660f324f584c4ef82f43a32e13a228dbaac0a04102c",
+                      "d122138f76868edba68d36cb0833139c1d1761f00f09e48e61f8314196e6a4c6",
+                      "f034f9aea0eac7ce7f22d4d5d42e5dab0b6bb381a498a7fabd1450415851140d"
+                  ],
+    "finished_at":  "2026-11-26T19:57:41.5814243Z"
+}

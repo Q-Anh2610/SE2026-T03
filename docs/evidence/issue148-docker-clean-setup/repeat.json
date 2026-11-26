@@ -1,0 +1,50 @@
+{
+    "issue":  148,
+    "scope":  "docker_infrastructure_only",
+    "project":  "issue148-clean",
+    "started_at":  "2026-11-26T20:02:53.5933097Z",
+    "os":  "Microsoft Windows NT 10.0.26300.0",
+    "powershell":  "5.1.26100.9818",
+    "status":  "infrastructure_verified",
+    "checks":  {
+                   "postgres":  "running_healthy",
+                   "qdrant":  "running_healthy",
+                   "backend":  "running_healthy",
+                   "frontend":  "running_healthy",
+                   "migration_container":  "exited_0",
+                   "database_revision":  "0004",
+                   "ui_html":  "http_200_react_root",
+                   "backend_and_proxy_liveness":  "http_200_status_ok",
+                   "ui_proxy_postgres_assets":  "http_200_mock_false",
+                   "qdrant_ready":  "http_200",
+                   "qdrant_collection_count":  0
+               },
+    "retrieval_verified":  false,
+    "e2e_verified":  false,
+    "benchmark_verified":  false,
+    "commit":  "3a0e601d84fd7ef95809fe998913b5a6868481ee",
+    "dirty":  true,
+    "source_sha256":  {
+                          "docker-compose.yml":  "b587479af0964522f69b1b543f53ec203d7078f0d038cf9a4aa204db9be9eaf2",
+                          "docker-compose.search.yml":  "286b4f2571055b380963a0725cd92edfc312e6dde0149c10873d96662023d291",
+                          "backend/Dockerfile":  "7c896f67d3634689a8d1caeb38d156419220dfb1ea222773f0c87e9be823e20c",
+                          "backend/.dockerignore":  "dc792bdd1b41363851cfe2ee4c1339ecde7b1511ca981c7aeed0a26b0772f767",
+                          "backend/requirements.txt":  "f2505fc2aeb0e448ac8de7c3ca83d1282fda590d93d810aa60691d51991fd076",
+                          "frontend/Dockerfile":  "fa8ccead2cc1e3cc3b52cdd1269362e906fd4ba9f1c0b6938760aab2e3c980d6",
+                          "frontend/.dockerignore":  "4e45b584330025a3e785033afc47513d5d9c72c2981614e5c57f8ca58a8cf904",
+                          "frontend/nginx.conf":  "bda3c9ad5ed11665263f6ce7dbfcd78359614fcf23f4bdb44696be33832a40eb",
+                          "frontend/package-lock.json":  "543833684b304938baf6ec6ffcc13abc76c3d3cca66c26a7c4f5d4ac5bb729ca",
+                          "scripts/verify_docker_stack.ps1":  "c445158bdeac19764d2bf830606e4d713ea509092141077cedf30dd4e2525867",
+                          ".github/workflows/docker-stack.yml":  "8f94e0353b4d91e08a79f95d4c57c53c77ce22cce2a5729fc0a2310a064ec412"
+                      },
+    "compose_version":  "5.3.0",
+    "docker_server_version":  "29.6.1",
+    "image_ids":  [
+                      "60808918d5a115ea1aee3c7ddd0600bed45ccc8bf5ac313e911ae7701ecbd13a",
+                      "97fb53376be3e4fb1a8a61421daa69dcc3bf2fa39bda3259f5245f9a455af1a9",
+                      "b0cc47559194b93db9fb8660f324f584c4ef82f43a32e13a228dbaac0a04102c",
+                      "d122138f76868edba68d36cb0833139c1d1761f00f09e48e61f8314196e6a4c6",
+                      "f034f9aea0eac7ce7f22d4d5d42e5dab0b6bb381a498a7fabd1450415851140d"
+                  ],
+    "finished_at":  "2026-11-26T20:03:00.2140314Z"
+}

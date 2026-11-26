@@ -6,7 +6,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /code/backend
 
 COPY requirements.txt ./requirements.txt
-RUN python -m pip install --no-cache-dir -r requirements.txt \
+RUN sed '/^nvidia-/d; /^triton==/d' requirements.txt > /tmp/requirements-cpu.txt \
+    && python -m pip install --no-cache-dir --no-deps \
+        --index-url https://download.pytorch.org/whl/cpu 'torch==2.8.0+cpu' \
+    && python -m pip install --no-cache-dir -r /tmp/requirements-cpu.txt \
+    && python -m pip check \
+    && rm /tmp/requirements-cpu.txt \
     && useradd --create-home --uid 10001 appuser
 
 COPY --chown=appuser:appuser app ./app

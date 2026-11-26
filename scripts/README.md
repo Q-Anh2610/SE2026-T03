@@ -11,3 +11,10 @@ Script được chia theo trách nhiệm bằng tên rõ ràng, không gom nghi�
 Nhánh `develop` đã được tạo trên GitHub; không cần script khởi tạo nhánh chung. Bản clone cần remote `origin` đúng repo và fetch được `origin/develop` trước khi tạo nhánh nhiệm vụ.
 
 Script dựng dữ liệu, tạo index và smoke hệ thống chỉ thêm khi module tương ứng đã có implementation. Logic nghiệp vụ nằm trong backend; scripts chỉ gọi/điều phối. Xem `docs/BRANCHING.md` trước khi chạy các script Git.
+
+## Docker infrastructure smoke — Issue #148
+
+`powershell -NoProfile -File scripts/verify_docker_stack.ps1 -ProjectName issue148-clean`
+kiểm stack đã khởi chạy, revision migration, UI/proxy/API/PostgreSQL và Qdrant
+readiness; ghi report nhỏ ngoài Git. Không seed, tải model, rebuild, benchmark hoặc
+xác nhận retrieval thật. Xem [runbook máy sạch](../docs/guides/docker-clean-setup-w7.md).

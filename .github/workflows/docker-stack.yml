@@ -1,0 +1,53 @@
+name: Docker stack smoke
+
+on:
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docker-stack:
+    name: Clean Docker infrastructure and repeat startup
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Prepare isolated local configuration
+        shell: pwsh
+        run: |
+          $bytes = New-Object byte[] 32
+          $rng = [Security.Cryptography.RandomNumberGenerator]::Create()
+          try { $rng.GetBytes($bytes) } finally { $rng.Dispose() }
+          $password = [Convert]::ToBase64String($bytes)
+          $content = [IO.File]::ReadAllText((Join-Path $PWD '.env.example'))
+          $content = $content.Replace('POSTGRES_PASSWORD=change-me-local', 'POSTGRES_PASSWORD=' + $password)
+          [IO.File]::WriteAllText((Join-Path $PWD '.env'), $content, [Text.UTF8Encoding]::new($false))
+
+      - name: Validate, build and start fresh stack
+        run: |
+          docker compose -p issue148-ci -f docker-compose.yml config --quiet
+          docker compose -p issue148-ci -f docker-compose.yml up --build -d --wait --wait-timeout 180
+
+      - name: Verify UI, proxy, DB migrations and Qdrant readiness
+        shell: pwsh
+        run: ./scripts/verify_docker_stack.ps1 -ProjectName issue148-ci
+
+      - name: Repeat startup with existing volumes
+        run: docker compose -p issue148-ci -f docker-compose.yml up -d --wait --wait-timeout 180
+
+      - name: Verify repeat startup
+        shell: pwsh
+        run: ./scripts/verify_docker_stack.ps1 -ProjectName issue148-ci
+
+      - name: Show service state
+        if: always()
+        run: docker compose -p issue148-ci -f docker-compose.yml ps --all
+
+      - name: Stop only this CI project
+        if: always()
+        run: docker compose -p issue148-ci -f docker-compose.yml down
