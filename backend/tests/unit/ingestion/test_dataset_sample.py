@@ -148,7 +148,7 @@ def test_attribution_reports_missing_author_and_keeps_license(source_fixture, au
     assert attribution["status"] == "source_metadata_only_not_distribution_clearance"
 
 
-@pytest.mark.parametrize("count", [0, -1, True, 1.5, 201])
+@pytest.mark.parametrize("count", [0, -1, True, 1.5, 201, 1, 200])
 def test_invalid_count_fails_before_git_or_output(source_fixture, count):
     _, setup, calls = source_fixture
     repo, _, _, _ = setup()

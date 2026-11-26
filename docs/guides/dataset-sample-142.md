@@ -38,6 +38,8 @@ source URL, author và license theo nguồn; trong sample có nhãn `by-nc`.
 Các trường đó chưa phải xác nhận quyền phân phối gói ảnh. License mã nguồn
 project không tự áp dụng cho từng asset. Guide/gói tham chiếu không kèm ảnh.
 
+Recipe hiện tại chỉ hỗ trợ count=5, tương ứng đúng năm asset đã được xác nhận. Các count khác, gồm 1 và 200, bị từ chối trước khi đọc Git hoặc tạo output. Nếu cần sample khác, phải thống nhất lựa chọn và provenance riêng; không tự gán sample_selection_confirmed cho lựa chọn chưa được xác nhận.
+
 ## Prerequisites và ghi môi trường
 
 - Windows/Git Bash, Git và virtualenv backend đã cài dependencies của repo.
@@ -247,3 +249,9 @@ Artifact và ZIP draft cũ giữ nguyên bytes và trạng thái lịch sử t�
 Recipe asset-id-sorted-prefix-v1-draft, sample name home-interior-setup-sample-v1-draft và assets.json được giữ nguyên. Generator hash, provenance hash và CHECKSUMS.sha256 của output mới sẽ thay đổi do cập nhật code/trạng thái; không yêu cầu chúng khớp gói draft cũ.
 
 Attribution không thay đổi. Evidence preview đã chạy trước đây tiếp tục gắn với provenance draft được ghi trong evidence đó; không sửa hash để gán sang output mới.
+
+### Kiểm chứng sau bản sửa giới hạn count
+
+Exporter tests đạt 19 passed trong 0.49s; toàn bộ ingestion unit tests đạt 222 passed trong 4.17s, exit code 0. Tests bổ sung xác nhận count 1 và 200 bị từ chối trước khi đọc Git hoặc tạo output.
+
+Xuất sample với count=5 thành công; recipe, sample name và SHA-256 assets.json giữ nguyên. Không sửa evidence hoặc ZIP tham chiếu lịch sử.

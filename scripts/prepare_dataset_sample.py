@@ -28,8 +28,10 @@ def git(repo, *arguments):
 
 
 def prepare_sample(repo, output, count=5, source_ref="HEAD"):
-    if type(count) is not int or not 1 <= count <= 200:
-        raise ValueError("count phải là số nguyên từ 1 đến 200.")
+    if type(count) is not int or count != 5:
+        raise ValueError(
+            "Recipe đã xác nhận chỉ hỗ trợ count=5."
+        )
     repo = Path(repo).resolve()
     output = Path(output).resolve()
     # Resolve ref once so provenance identifies the bytes actually read.
@@ -123,7 +125,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--count", type=int, default=5)
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=5,
+        help="Recipe đã xác nhận chỉ hỗ trợ count=5.",
+    )
     parser.add_argument("--source-ref", default="HEAD")
     args = parser.parse_args()
     try:
