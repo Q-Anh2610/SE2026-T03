@@ -27,3 +27,14 @@ data/benchmark/manifest.yaml text eol=crlf
 data/benchmark/image_benchmark_v1.yaml text eol=crlf
 data/benchmark/image_queries_v1.csv text eol=crlf
 data/benchmark/image_qrels_v1.csv text eol=crlf
+
+# #135: protocol and new verification artifacts use stable LF bytes.
+docs/configs/issue135-rebuild-protocol-v1.json text eol=lf
+docs/guides/issue135-w7-rebuild.md text eol=lf
+backend/app/search/rebuild_audit.py text eol=lf
+backend/tests/unit/test_issue135_rebuild.py text eol=lf
+scripts/verify_issue135_rebuild.py text eol=lf
+
+# #135: preserve raw local evidence bytes, including archived corpus manifest.
+docs/evidence/issue135-rebuild-*/** -text
+docs/evidence/issue135-w7-rebuild-20261126.md text eol=lf
