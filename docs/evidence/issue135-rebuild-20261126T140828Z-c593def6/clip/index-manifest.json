@@ -1,0 +1,117 @@
+{
+  "schema_version": "image-index-manifest-v1",
+  "created_at_utc": "2026-11-26T14:08:56.853046Z",
+  "observed_at_utc": "2026-11-26T14:08:56.853026Z",
+  "index_config": {
+    "model_id": "openai/clip-vit-base-patch32",
+    "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "dimension": 512,
+    "preprocessing_version": "clip-slow-processor-rgb-l2-v1",
+    "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+    "index_version": "issue135-20261126T140828Z-c593def6-clip"
+  },
+  "collection": "issue89_image_previews",
+  "vector_name": "clip_da7c4f9a11b611a5",
+  "processor_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "processor_class": "CLIPImageProcessor",
+  "processor_config": {
+    "_processor_class": null,
+    "do_resize": true,
+    "size": {
+      "shortest_edge": 224
+    },
+    "resample": 3,
+    "do_center_crop": true,
+    "crop_size": {
+      "height": 224,
+      "width": 224
+    },
+    "do_rescale": true,
+    "rescale_factor": 0.00392156862745098,
+    "do_normalize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "do_convert_rgb": true,
+    "image_processor_type": "CLIPImageProcessor"
+  },
+  "processor_use_fast": false,
+  "image_color_mode": "RGB",
+  "normalization": "L2",
+  "similarity": "Cosine",
+  "source_manifest": "source.json",
+  "source_manifest_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+  "ready_manifest": "ready.json",
+  "ready_manifest_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+  "asset_count": 200,
+  "point_count": 200,
+  "snapshot_confirmation": "https://github.com/Q-Anh2610/SE2026-T03/issues/89#issuecomment-6705482003",
+  "code_commit": "bff65ac2a29ae213042ae942524966ed6cd3ea5f",
+  "working_tree_dirty": true,
+  "module_sha256": {
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+    "backend/app/embedding/clip_poc.py": "0395a33ecb1625218d3a253fc354454eb56aa9e61f8b1cc46d09daf9bf214e02",
+    "backend/app/embedding/e5_encoder.py": "14e29e2c37fd92086cf282b85b2c95fbf06272cdbb2ba89495ec592a9b578552",
+    "backend/app/embedding/image_encoding.py": "0eb39082e326688b7ae33bc28c07445260aa5752f17d7280b30ae9f69e83e980",
+    "backend/app/embedding/siglip2_encoder.py": "513bd37bcf93ee95e2bd4c49c623a814997eb5d56d534a6b7469df37b90ddc4e",
+    "backend/app/ingestion/source_adapter.py": "38ad083b7de231471b7c272b3dcfbb4887cc3a54e9611e661eb6b9a5e7879aa7",
+    "backend/app/schemas/api.py": "f3bd1f583c5b1a4a789e2e755c4e51135a9a2f5bd2a252d7ed32e94f67ae4a16",
+    "backend/app/schemas/text_search.py": "124527b55e350c91ca37631bf875184d8d3c2de88bcb6cbeaab0dd9284bd15ba",
+    "backend/app/search/configurable_search.py": "9a9779c5c6f3f4bdf3a57561baf2bb677b526f3921ed4506b45749620a7b1747",
+    "backend/app/search/e5_index.py": "fdf63b7c92d0fa3206aea0792d9d9d3cd71042f610a2ec04eae87f0717fd7348",
+    "backend/app/search/experimental_text_search.py": "9dbb5ef4d939c974e397c62dddb96729f0b7b6cc77f81be893aba1ed47719bbb",
+    "backend/app/search/filters.py": "358c4cf4822e157c41bab1f2dd5081e41a5087608e7e37318f2a8d8f9f070c72",
+    "backend/app/search/frozen_retrieval_config.py": "6c2ec2ec0274164bff0b948647be38ad42c831887b84d91c6331ad0d78b9864c",
+    "backend/app/search/image_index_manifest.py": "7a9b449e9a2cb684679b72d578d1823a2c6fec673a03f7dd3a81997383436d8d",
+    "backend/app/search/image_search.py": "386386328f06026e4c41969d5254d3bd6334bcb3984879ba53b65eef8f950ed6",
+    "backend/app/search/index_manifest.py": "40c5da3c8344a88ea53dc8f024709e41ec5334618a5b3898bd5f69bdf084abc9",
+    "backend/app/search/keyword.py": "639703a9cf61b3dd177a48ebaa31a698dcf2083494ce88201ea253aa2adc8bf7",
+    "backend/app/search/qdrant_store.py": "124a1a12e79314890c79e7b59d7de45360d161e1fd4ae00a551c4e63961f573f",
+    "backend/app/search/rebuild_audit.py": "775906b0a69012359cb0ac738f9c32969b019d7457c451d5b46d2137ace3993a",
+    "backend/app/search/retrieval_config.py": "ccf4602c51bdf233f77e0cb55c0f5ff822c2709ce93e438fc428aafcee355203",
+    "backend/app/search/rrf.py": "1e25edfc74d365fb289bf423d75513dbe36b59ab20adc9df13c7f84d967ee748",
+    "backend/app/search/smoke.py": "eb6f39b2f54f02064dd9695b13e0b161b9de3b6ba926e9997f9264e960c4762d",
+    "backend/app/search/text_search.py": "021fa376a9b86f4bb58d9ae16e07fd67144d196718cc1bda25f0ed640abac809",
+    "backend/app/search/vector_search.py": "f85aed65312c55dc3c0e7ba2d94dc18c7fbda1af4082411b220fbcbf4263375e",
+    "docs/configs/issue135-rebuild-protocol-v1.json": "01130a382181aed65ac461d7b6a8b55c35d6c301f3ce759b57c77e5baa40900a",
+    "scripts/verify_issue135_rebuild.py": "8502e8e82ffdafd226042d1a6f4df9018d7eb6efe7930c9bc399f76719aa089d",
+    "scripts/verify_issue76_image_retrieval.py": "208a2d4f7a8d0f8248cd5e1eed812e32b0ef66485056a042095caafb55228391"
+  },
+  "package_versions": {
+    "torch": "2.8.0",
+    "transformers": "4.57.1",
+    "Pillow": "13.0.0",
+    "qdrant-client": "1.15.1"
+  },
+  "retrieval_config": {
+    "schema_version": "image-retrieval-config-v1",
+    "config_version": "image-exact-all-filtered-rgb-v1-k200",
+    "candidate_limit": 200,
+    "strategy": "exact_all_filtered_points",
+    "exact": true,
+    "score_threshold": null,
+    "score_roundoff_tolerance": 1e-06,
+    "ordering": [
+      "score_desc",
+      "asset_id_asc"
+    ],
+    "deduplication": "max_score_per_asset",
+    "image_formats": [
+      "JPEG",
+      "PNG"
+    ],
+    "max_image_bytes": 5242880,
+    "max_image_dimension": 4096,
+    "image_color_mode": "RGB",
+    "frame_policy": "first",
+    "exif_orientation": "stored_pixels"
+  }
+}

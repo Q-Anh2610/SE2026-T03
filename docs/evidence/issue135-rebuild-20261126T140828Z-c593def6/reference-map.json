@@ -1,0 +1,32 @@
+{
+  "benchmark_binding_reviewed": false,
+  "frozen_config_sha256": "1e1962058528e22b5235d989a3613b5077c02d479b8ac19e8dbc28fee0bd08d5",
+  "protocol_sha256": "01130a382181aed65ac461d7b6a8b55c35d6c301f3ce759b57c77e5baa40900a",
+  "review_status": "pending",
+  "runtime_activation_authorized": false,
+  "schema_version": "issue135-index-reference-map-v1",
+  "sources": {
+    "clip": {
+      "rebuilt_collection": "issue89_image_previews",
+      "rebuilt_index_version": "issue135-20261126T140828Z-c593def6-clip",
+      "rebuilt_manifest": "clip/index-manifest.json",
+      "rebuilt_manifest_sha256": "f3b7956b73796bf742153c525df52be3c17a6a51a83fb30084a49bcef954086d",
+      "rebuilt_vector_name": "clip_da7c4f9a11b611a5",
+      "reference_collection": "issue89_image_previews",
+      "reference_index_version": "issue89-clip-preflight-76d5d2c095b6",
+      "reference_manifest_sha256": "7ebba709c46fec69dc4485cd0b358e82ca48c60ce568b3a03111ac943b882528",
+      "reference_vector_name": "clip_bdd84b49a263010b"
+    },
+    "e5": {
+      "rebuilt_collection": "issue91_e5_metadata",
+      "rebuilt_index_version": "issue91-e5-metadata-1588f4dc33fbe62609d8",
+      "rebuilt_manifest": "e5/index-manifest.json",
+      "rebuilt_manifest_sha256": "27cc06522f56c1793d4494d6e47b614385b0fddedad20fda8589857d15fa2dab",
+      "rebuilt_vector_name": "e5_0c0cbdfd79bca607",
+      "reference_collection": "issue91_e5_metadata",
+      "reference_index_version": "issue91-e5-metadata-1588f4dc33fbe62609d8",
+      "reference_manifest_sha256": "b89e50f8dbf3a5d6e57e41f5302a585fd06afb05f09eeb41fe0e09fdaf22a51d",
+      "reference_vector_name": "e5_0c0cbdfd79bca607"
+    }
+  }
+}
