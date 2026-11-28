@@ -18,3 +18,4 @@ Script dựng dữ liệu, tạo index và smoke hệ thống chỉ thêm khi mo
 kiểm stack đã khởi chạy, revision migration, UI/proxy/API/PostgreSQL và Qdrant
 readiness; ghi report nhỏ ngoài Git. Không seed, tải model, rebuild, benchmark hoặc
 xác nhận retrieval thật. Xem [runbook máy sạch](../docs/guides/docker-clean-setup-w7.md).
+Nếu gặp `PSSecurityException` trên Windows, xem [Execution Policy cho riêng tiến trình](../docs/guides/docker-clean-setup-w7.md#script-powershell-bị-chặn-trên-windows); không đổi policy lâu dài của máy.

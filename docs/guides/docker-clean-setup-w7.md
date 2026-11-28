@@ -110,6 +110,24 @@ Không công bố overlay đã chạy model thật nếu chưa có đủ đầu 
 Chỉ chia sẻ logs sau khi kiểm thông tin nhạy cảm; không gửi `docker compose config`
 đã resolve, `.env`, output `env` hoặc toàn bộ inspect container.
 
+### Script PowerShell bị chặn trên Windows
+
+Nếu Windows báo `PSSecurityException` hoặc `running scripts is disabled` trước
+khi verifier chạy, mở PowerShell tại repo root và dùng checkout đã kiểm tra:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify_docker_stack.ps1 -ProjectName issue148-clean
+```
+
+Thay `issue148-clean` bằng tên project của lượt kiểm chứng. `-ExecutionPolicy Bypass`
+chỉ áp dụng cho tiến trình PowerShell con này, không đổi policy lâu dài của máy;
+không cần chạy `Set-ExecutionPolicy` cho User/Machine. Verifier vẫn kiểm đầy đủ
+các dịch vụ và trả exit khác 0 khi lỗi. Lỗi policy xảy ra trước khi script thực thi
+chưa tạo bằng chứng smoke; sau khi chạy lại cần giữ report và kết quả thật.
+
+Chi đã dùng cách gọi này ở cả hai lượt [kiểm chứng độc lập](https://github.com/Q-Anh2610/SE2026-T03/issues/148#issuecomment-7224043872).
+Với PowerShell 7/CI hoặc máy cho phép chạy script, giữ lệnh gọi ban đầu.
+
 ## Dừng và dọn
 
 Giữ dữ liệu (mặc định khi bàn giao):

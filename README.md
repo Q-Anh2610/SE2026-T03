@@ -77,6 +77,7 @@ Health/smoke này chỉ nghiệm thu hạ tầng, không chứng minh semantic r
 E2E #149, benchmark #150 hoặc W7 đã hoàn tất. Không tự seed/đổi index/dữ liệu đã khóa.
 
 Xem [runbook máy sạch, chế độ search thật và cách dừng/dọn an toàn](docs/guides/docker-clean-setup-w7.md).
+Nếu Windows chặn verifier bằng Execution Policy, dùng [cách gọi PowerShell cho riêng tiến trình](docs/guides/docker-clean-setup-w7.md#script-powershell-bị-chặn-trên-windows).
 
 ## Quy trình Git
 
