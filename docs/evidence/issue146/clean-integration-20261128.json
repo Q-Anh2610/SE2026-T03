@@ -1,0 +1,226 @@
+{
+  "issue": 146,
+  "observed_at_utc": "2026-11-28T12:14:31.981617+00:00",
+  "scope": "partial_integration_readiness",
+  "release_ready": false,
+  "base_commit": "213472bdeff7b6eef9b9f7ac6c54c79099831589",
+  "benchmark_executed": false,
+  "real_retrieval_verified": false,
+  "browser_e2e_verified": false,
+  "runs": [
+    {
+      "status": "failed",
+      "started_at_utc": "2026-11-28T11:53:12.962106+00:00",
+      "finished_at_utc": "2026-11-28T12:11:09.213835+00:00",
+      "project": "issue146-20261128-137e845b81",
+      "checkout_dirty": false,
+      "checks": {
+        "frozen_config_exit_code": 0,
+        "compose_config": "passed",
+        "compose_up_exit_code": 0
+      },
+      "cleanup_compose_exit_code": 0,
+      "cleanup_worktree_exit_code": 0,
+      "run_id": "20261128-137e845b81",
+      "owned_containers_remaining": 0,
+      "owned_volumes_remaining": 0,
+      "owned_worktree_removed": true,
+      "image_and_build_cache_retained": true,
+      "raw_report_sha256": {
+        "infrastructure-initial.json": "0e0483cc9a5983cd9573b633340af594df8c0f5311eaad4b94f455d5458973d3",
+        "summary.json": "f603f746d8415ebd98740e2ddb72dc5775d0d0fbdc8c0e6e7b8f83cabbf83a61"
+      },
+      "observed_failure": "PowerShell 5.1 verifier could not resolve Get-FileHash; HTTP checks not reached.",
+      "infrastructure_reports": [
+        {
+          "status": "failed",
+          "commit": "213472bdeff7b6eef9b9f7ac6c54c79099831589",
+          "dirty": false,
+          "started_at": "2026-11-28T12:10:53.4923879Z",
+          "finished_at": "2026-11-28T12:10:54.5589226Z",
+          "os": "Microsoft Windows NT 10.0.26200.0",
+          "powershell": "5.1.26100.9818",
+          "compose_version": null,
+          "docker_server_version": null,
+          "image_ids": null,
+          "source_sha256": null,
+          "checks": {},
+          "retrieval_verified": false,
+          "e2e_verified": false,
+          "benchmark_verified": false
+        }
+      ]
+    },
+    {
+      "status": "partial_integration_verified",
+      "started_at_utc": "2026-11-28T12:12:06.154610+00:00",
+      "finished_at_utc": "2026-11-28T12:13:42.609542+00:00",
+      "project": "issue146-20261128-99795272fd",
+      "checkout_dirty": false,
+      "checks": {
+        "frozen_config_exit_code": 0,
+        "compose_config": "passed",
+        "compose_up_exit_code": 0,
+        "new_postgres_assets_empty": true,
+        "proxy_mock_text_and_feedback_http": "200/201",
+        "proxy_mock_image_http": "200",
+        "proxy_validation": "400/INVALID_REQUEST",
+        "repeat_with_same_volumes": "passed"
+      },
+      "cleanup_compose_exit_code": 0,
+      "cleanup_worktree_exit_code": 0,
+      "run_id": "20261128-99795272fd",
+      "owned_containers_remaining": 0,
+      "owned_volumes_remaining": 0,
+      "owned_worktree_removed": true,
+      "image_and_build_cache_retained": true,
+      "raw_report_sha256": {
+        "infrastructure-initial.json": "6ed857d3ab017566dc65ccc138f4481237f5dc5190bb529727740added491e58",
+        "infrastructure-repeat.json": "27161014c43c46c62fe207b47888d227562ab11cba2a8a7025dbac70342f8c72",
+        "summary.json": "7a3db1ba14808a664cff97d5069c1db41f3df38e640b46d803485a7fe07cd094"
+      },
+      "proxy_openapi": {
+        "status": 200,
+        "content_type": "text/html",
+        "is_spa_html": true,
+        "is_json": false
+      },
+      "frozen_git_inputs": {
+        "status": "frozen_config_verified",
+        "config_version": "w6-clip-e5-rrf-k20-candidate200-v1",
+        "artifact_sha256": "1e1962058528e22b5235d989a3613b5077c02d479b8ac19e8dbc28fee0bd08d5",
+        "mode": "clip_e5_rrf",
+        "rrf": {
+          "schema_version": "rrf-config-v1",
+          "rank_constant": 20,
+          "clip_candidate_limit": 200,
+          "e5_candidate_limit": 200,
+          "cutoff": 200,
+          "sources": [
+            "clip_text_to_preview",
+            "e5_text_to_metadata"
+          ],
+          "weights": [
+            1,
+            1
+          ],
+          "rank_origin": 1,
+          "deduplication": "first_occurrence_then_contiguous_unique_rank",
+          "ordering": [
+            "rrf_score_desc",
+            "asset_id_asc"
+          ],
+          "missing_source_contribution": 0
+        },
+        "local_inputs_verified": false,
+        "models_loaded": false,
+        "live_qdrant_verified": false,
+        "benchmark_executed": false,
+        "test_authorized": false,
+        "next_gate": "reviewed commit/hash and Khue handoff; then existing service readiness"
+      },
+      "infrastructure_reports": [
+        {
+          "status": "infrastructure_verified",
+          "commit": "213472bdeff7b6eef9b9f7ac6c54c79099831589",
+          "dirty": false,
+          "started_at": "2026-11-28T12:12:53.7942243Z",
+          "finished_at": "2026-11-28T12:13:08.8745787Z",
+          "os": "Microsoft Windows NT 10.0.26200.0",
+          "powershell": "7.6.9",
+          "compose_version": "5.6.0",
+          "docker_server_version": "29.8.2",
+          "image_ids": [
+            "1aee952d28b46ba3aacf9597d46fb108aba2c052137c4364021c4547e6cf5014",
+            "b994732fcf33f73776c65d3a5bf1f80c00120ba5007e8ab90307b1a743c1fc16",
+            "d122138f76868edba68d36cb0833139c1d1761f00f09e48e61f8314196e6a4c6",
+            "e3c6aec50867b233ef755f2af97d579bf9b007a8fcc204a857b7315710a08722",
+            "ed803c0e9c962dd91ee9526c914c1caa7d1c4191c0ce6c97f9d143b850f0aafd"
+          ],
+          "source_sha256": {
+            "docker-compose.yml": "a0f6c8c7c8fa7507c56bcd4b8dbfd160c0bbbfe7455cfe23728c9fdbc09c573d",
+            "docker-compose.search.yml": "286b4f2571055b380963a0725cd92edfc312e6dde0149c10873d96662023d291",
+            "backend/Dockerfile": "e0338409e1325ce78c792b5ed832ecdc10420d1efd46a03de21330dd04e01910",
+            "backend/.dockerignore": "b03d917346c8c8c1ab04d058cfba7e1de028588d8e92c837f4eca335ea92f04d",
+            "backend/requirements.txt": "039e0797b405e7420ecf9e7b086f8e92078524731c65d95d7b16f4a16f02f637",
+            "frontend/Dockerfile": "fa8ccead2cc1e3cc3b52cdd1269362e906fd4ba9f1c0b6938760aab2e3c980d6",
+            "frontend/.dockerignore": "4e45b584330025a3e785033afc47513d5d9c72c2981614e5c57f8ca58a8cf904",
+            "frontend/nginx.conf": "bda3c9ad5ed11665263f6ce7dbfcd78359614fcf23f4bdb44696be33832a40eb",
+            "frontend/package-lock.json": "3ac641a4ea0e338fbb4809bb4e7a97d59b7d5e6fc015c197ee0bb30a76ab2422",
+            "scripts/verify_docker_stack.ps1": "c445158bdeac19764d2bf830606e4d713ea509092141077cedf30dd4e2525867",
+            ".github/workflows/docker-stack.yml": "8f94e0353b4d91e08a79f95d4c57c53c77ce22cce2a5729fc0a2310a064ec412"
+          },
+          "checks": {
+            "postgres": "running_healthy",
+            "qdrant": "running_healthy",
+            "backend": "running_healthy",
+            "frontend": "running_healthy",
+            "migration_container": "exited_0",
+            "database_revision": "0004",
+            "ui_html": "http_200_react_root",
+            "backend_and_proxy_liveness": "http_200_status_ok",
+            "ui_proxy_postgres_assets": "http_200_mock_false",
+            "qdrant_ready": "http_200",
+            "qdrant_collection_count": 0
+          },
+          "retrieval_verified": false,
+          "e2e_verified": false,
+          "benchmark_verified": false
+        },
+        {
+          "status": "infrastructure_verified",
+          "commit": "213472bdeff7b6eef9b9f7ac6c54c79099831589",
+          "dirty": false,
+          "started_at": "2026-11-28T12:13:23.7767429Z",
+          "finished_at": "2026-11-28T12:13:33.1902479Z",
+          "os": "Microsoft Windows NT 10.0.26200.0",
+          "powershell": "7.6.9",
+          "compose_version": "5.6.0",
+          "docker_server_version": "29.8.2",
+          "image_ids": [
+            "1aee952d28b46ba3aacf9597d46fb108aba2c052137c4364021c4547e6cf5014",
+            "b994732fcf33f73776c65d3a5bf1f80c00120ba5007e8ab90307b1a743c1fc16",
+            "d122138f76868edba68d36cb0833139c1d1761f00f09e48e61f8314196e6a4c6",
+            "e3c6aec50867b233ef755f2af97d579bf9b007a8fcc204a857b7315710a08722",
+            "ed803c0e9c962dd91ee9526c914c1caa7d1c4191c0ce6c97f9d143b850f0aafd"
+          ],
+          "source_sha256": {
+            "docker-compose.yml": "a0f6c8c7c8fa7507c56bcd4b8dbfd160c0bbbfe7455cfe23728c9fdbc09c573d",
+            "docker-compose.search.yml": "286b4f2571055b380963a0725cd92edfc312e6dde0149c10873d96662023d291",
+            "backend/Dockerfile": "e0338409e1325ce78c792b5ed832ecdc10420d1efd46a03de21330dd04e01910",
+            "backend/.dockerignore": "b03d917346c8c8c1ab04d058cfba7e1de028588d8e92c837f4eca335ea92f04d",
+            "backend/requirements.txt": "039e0797b405e7420ecf9e7b086f8e92078524731c65d95d7b16f4a16f02f637",
+            "frontend/Dockerfile": "fa8ccead2cc1e3cc3b52cdd1269362e906fd4ba9f1c0b6938760aab2e3c980d6",
+            "frontend/.dockerignore": "4e45b584330025a3e785033afc47513d5d9c72c2981614e5c57f8ca58a8cf904",
+            "frontend/nginx.conf": "bda3c9ad5ed11665263f6ce7dbfcd78359614fcf23f4bdb44696be33832a40eb",
+            "frontend/package-lock.json": "3ac641a4ea0e338fbb4809bb4e7a97d59b7d5e6fc015c197ee0bb30a76ab2422",
+            "scripts/verify_docker_stack.ps1": "c445158bdeac19764d2bf830606e4d713ea509092141077cedf30dd4e2525867",
+            ".github/workflows/docker-stack.yml": "8f94e0353b4d91e08a79f95d4c57c53c77ce22cce2a5729fc0a2310a064ec412"
+          },
+          "checks": {
+            "postgres": "running_healthy",
+            "qdrant": "running_healthy",
+            "backend": "running_healthy",
+            "frontend": "running_healthy",
+            "migration_container": "exited_0",
+            "database_revision": "0004",
+            "ui_html": "http_200_react_root",
+            "backend_and_proxy_liveness": "http_200_status_ok",
+            "ui_proxy_postgres_assets": "http_200_mock_false",
+            "qdrant_ready": "http_200",
+            "qdrant_collection_count": 0
+          },
+          "retrieval_verified": false,
+          "e2e_verified": false,
+          "benchmark_verified": false
+        }
+      ]
+    }
+  ],
+  "pending_issues": [
+    149,
+    150,
+    151
+  ],
+  "followup_issue": 147
+}

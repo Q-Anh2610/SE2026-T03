@@ -84,6 +84,11 @@ Nếu Windows chặn verifier bằng Execution Policy, dùng [cách gọi PowerS
 
 ## Quy trình Git
 
+Chuẩn bị tích hợp W7/W8: [bảng đầu vào, phần còn chờ và checklist phát hành](docs/release/w7-integration-readiness.md),
+[bằng chứng từng lượt kiểm chứng #146](docs/evidence/issue146-integration-readiness.md).
+Đây là trạng thái chuẩn bị; không coi smoke hạ tầng/mock là nghiệm thu E2E,
+benchmark hoặc quyết định phát hành.
+
 Quy trình nhóm 5 thành viên: `nhánh nhiệm vụ → develop → main`.
 
 - [Quy tắc nhánh, PR và release](docs/BRANCHING.md)
