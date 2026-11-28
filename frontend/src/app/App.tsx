@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SearchPage } from '../features/search/SearchPage'
 import { ImageSearchPage } from '../features/search/image/ImageSearchPage'
 import { AdminStatusPage } from '../features/admin/AdminStatusPage'
 import { LiveAdminStatusPage } from '../features/admin/LiveAdminStatusPage'
 
 export function App() {
+  const main = useRef<HTMLElement>(null)
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     try {
       const saved = localStorage.getItem('connected-theme')
@@ -42,7 +43,10 @@ export function App() {
 
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main">Đến nội dung chính</a>
+      <a className="skip-link" href="#main" onClick={(event) => {
+        event.preventDefault()
+        main.current?.focus()
+      }}>Đến nội dung chính</a>
       <header className="site-header">
         <div className="header-identity"><a className="brand" href="./" aria-label="Connected, trang chủ">Connected</a><span className="site-title">Thư viện 3D</span></div>
         <nav className="header-nav" aria-label="Điều hướng chính"><a href="#search-panel">Khám phá asset</a><a href="#image-search">Tìm bằng ảnh</a><a href="#admin-status">Trạng thái job</a></nav>
@@ -50,7 +54,7 @@ export function App() {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">{theme === 'dark' ? <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></> : <path d="M20.5 14A8.8 8.8 0 0 1 10 3.5 8.8 8.8 0 1 0 20.5 14Z" />}</svg>
         </button>
       </header>
-      <main id="main" tabIndex={-1}>
+      <main id="main" ref={main} tabIndex={-1}>
         {isLiveAdmin ? (
           <LiveAdminStatusPage jobId={jobRoute?.[1]} />
         ) : isAdminPreview ? (

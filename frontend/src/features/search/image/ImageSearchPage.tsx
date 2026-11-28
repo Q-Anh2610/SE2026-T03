@@ -87,6 +87,13 @@ export function ImageSearchPage() {
     return <AssetDetailView state={detail} onRetry={() => { void openDetail(assetId) }} onBack={() => { detailController.current?.abort(); setDetail(null) }} />
   }
 
+  const statusMessage = state.status === 'validating' ? 'Đang kiểm tra ảnh…'
+    : state.status === 'loading' ? 'Đang tìm ảnh…'
+    : state.status === 'success' ? state.response.results.length === 0 ? 'Chưa có asset phù hợp'
+      : state.response.mock ? 'Kết quả minh họa (mock)' : 'Kết quả tìm kiếm bằng ảnh'
+    : ''
+  const hideStatus = !statusMessage || (state.status === 'success' && state.response.results.length === 0)
+
   return <section id="image-search" className="image-search-page results-section" aria-labelledby="image-search-title">
     <header className="image-search-heading">
       <p className="intro-eyebrow">TÌM KIẾM TRỰC QUAN</p>
@@ -121,19 +128,17 @@ export function ImageSearchPage() {
         <button className="image-search-submit" type="submit" disabled={!file || state.status === 'loading'}>Tìm bằng ảnh</button>
       </div>
     </form>
+    <p role="status" className={hideStatus ? 'visually-hidden' : 'image-result-status'}>{statusMessage}</p>
     <div aria-busy={state.status === 'loading' || state.status === 'validating'}>
-      {state.status === 'validating' && <p role="status">Đang kiểm tra ảnh…</p>}
-      {state.status === 'loading' && <p role="status">Đang tìm ảnh…</p>}
       {state.status === 'error' && <div role="alert"><p id={!state.retryable ? 'image-error' : undefined}>{state.message}</p>{state.retryable && <button type="button" onClick={() => { void search(last.current!) }}>Thử lại</button>}</div>}
       {state.status === 'success' && <>
         {state.response.results.length > 0 ? (
           <>
-            <p className="image-result-status" role="status">{state.response.mock ? 'Kết quả minh họa (mock)' : 'Kết quả tìm kiếm bằng ảnh'}</p>
             <SearchResultsGuide results={state.response.results} mock={state.response.mock} />
             <ul className={`asset-grid${state.response.results.length <= 2 ? ` asset-grid--count-${state.response.results.length}` : ''}`} aria-label="Kết quả ảnh">{state.response.results.map((result) => <AssetCard key={`${state.response.search_event_id}-${result.asset.asset_id}`} result={result} onOpenDetail={(assetId) => { void openDetail(assetId) }} feedback={{ eventId: state.response.search_event_id, mock: state.response.mock }} />)}</ul>
           </>
         ) : (
-          <div className="image-empty-state" role="status">
+          <div className="image-empty-state">
             <h2>Chưa có asset phù hợp</h2>
             <p>Thử một ảnh khác hoặc xóa bớt bộ lọc để mở rộng kết quả.</p>
             <button type="button" onClick={() => input.current?.click()}>Chọn ảnh khác</button>

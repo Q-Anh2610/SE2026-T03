@@ -72,7 +72,7 @@ function readSearchUrlState(): SearchUrlState {
   }
 }
 
-function writeSearchUrlState(input: {
+function updateSearchLocation(input: {
   mode: SearchUrlMode
   query?: string
   filters: AssetFilters
@@ -137,6 +137,12 @@ export function SearchPage() {
   const queryInput = useRef<HTMLInputElement | null>(null)
   const filtersDisclosure = useRef<HTMLDetailsElement | null>(null)
   const filtersSummary = useRef<HTMLElement | null>(null)
+  const lastSearchParams = useRef(window.location.search)
+
+  function writeSearchUrlState(input: Parameters<typeof updateSearchLocation>[0]) {
+    updateSearchLocation(input)
+    lastSearchParams.current = window.location.search
+  }
 
   function getFiltersOpen() {
     return Boolean(filtersDisclosure.current?.open)
@@ -290,6 +296,7 @@ export function SearchPage() {
     clearQuery('replace')
     setCategory('')
     setFilters({ ...EMPTY_FILTER_FORM })
+    filtersDisclosure.current?.removeAttribute('open')
     writeSearchUrlState({ mode: null, filters: {}, limit, page: 1, facet: '', filtersOpen: false, history: 'replace' })
   }
 
@@ -346,9 +353,15 @@ export function SearchPage() {
     })
   }
 
-  const restoreUrlStateRef = useRef<() => void>(() => {})
+  const restoreUrlStateRef = useRef<(source: 'initial' | 'history') => void>(() => {})
   const shouldLoadInitialUrlRef = useRef(initialUrlState.mode !== null)
-  restoreUrlStateRef.current = () => {
+  restoreUrlStateRef.current = (source) => {
+    const { search: params, hash } = window.location
+    if (source === 'history' && params === lastSearchParams.current) {
+      if (hash === '#search-panel' || hash === '#asset-query') closeDetail()
+      return
+    }
+    lastSearchParams.current = params
     const next = readSearchUrlState()
     setQuery(next.query)
     setLimit(next.limit)
@@ -388,9 +401,9 @@ export function SearchPage() {
   }
 
   useEffect(() => {
-    const handlePopState = () => restoreUrlStateRef.current()
+    const handlePopState = () => restoreUrlStateRef.current('history')
     window.addEventListener('popstate', handlePopState)
-    if (shouldLoadInitialUrlRef.current) restoreUrlStateRef.current()
+    if (shouldLoadInitialUrlRef.current) restoreUrlStateRef.current('initial')
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 

@@ -10,6 +10,19 @@ responsive. URL có thể lưu truy vấn văn bản đã gửi, bộ lọc, tra
 mục đang xem. Nút giao diện sáng/tối giữ trạng thái tìm kiếm và lưu lựa chọn
 trong trình duyệt khi storage khả dụng. [Font và giấy phép](public/fonts/README.md)
 
+## Điều hướng bằng bàn phím và màn hình hẹp
+
+- Nhấn Tab để đến **Đến nội dung chính**, rồi nhấn Enter để chuyển focus vào
+  nội dung của trang đang mở. Trên trang tìm bằng ảnh, lần Tab tiếp theo
+  đưa focus đến ô chọn tệp và làm hiện viền quanh vùng chọn ảnh.
+- Khi có kết quả tìm văn bản, liên kết **Khám phá asset** giữ kết quả và
+  bản nháp chưa gửi. Nút Back/Forward khôi phục truy vấn, bộ lọc và trang
+  khi tham số tìm kiếm trong URL thay đổi.
+- Trên màn hình hẹp, kết quả xếp một cột và bộ lọc ảnh xếp dọc. Chrome đã
+  được kiểm tra ở 320 CSS px cho kết quả văn bản và bộ lọc ảnh.
+
+Xem [bằng chứng kiểm thử W6 và W7](../docs/evidence/w6-search-navigation.md).
+
 ## Giải thích kết quả W5
 
 Thẻ kết quả text và ảnh hiển thị lời giải thích và nguồn truy xuất từ API.
