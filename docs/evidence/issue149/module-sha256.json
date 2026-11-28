@@ -1,0 +1,10 @@
+{
+  "frontend/tests/stack/search.spec.ts": "6ad67f817668db56e237b283e398f14ad9407d1c4ca3c2f27577656a5fc496fe",
+  "frontend/playwright.stack.config.ts": "85303860e8eb5a93c5e2e1255eb656afe1257c51340929216f7995ecd06b2430",
+  "scripts/prepare_w7_e2e.py": "5652596bbdc24650aa25ca5e3279134d3438b67db3242312eebc16600208bc33",
+  "scripts/audit_w7_e2e.py": "de7883ba309bd97ed87af79b57ae4899d514b512f00ee4ebcbaaddb67f7ebb3b",
+  "backend/tests/unit/test_w7_e2e_preparation.py": "f46cdfc1cd751c906e340883b19aa7033fc9cde97e8467e3fdb19886bcefcdf0",
+  "frontend/nginx.conf": "dad77615f37588122e308319b02d51d08603ace87622e6b948f25ee4fe5b101f",
+  "frontend/src/features/search/feedback-client.ts": "5008251534ca6106df59e49ca7142efd47d1573083b838001c3e7b3ea0939574",
+  "frontend/src/lib/api/http.ts": "53c2e727debf315e7a9f50a17214a108fe06edeecbb01193c4217a4d5b114994"
+}
