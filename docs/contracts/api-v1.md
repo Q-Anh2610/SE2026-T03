@@ -1,232 +1,194 @@
-# API contract v1 - list/detail PostgreSQL và các API mock
+# API v1 — trạng thái hiện hành và các chế độ chạy
 
-> Text search thật W3 được chốt riêng tại [contract Issue #63](text-search-w3.md).
-> Tài liệu này/OpenAPI vẫn mô tả route mock đang chạy; tích hợp service/persistence
-> vào HTTP và cập nhật DTO Frontend thuộc issue tiếp theo.
+Đối chiếu W7 / Issue #145 với backend/frontend đã merge. Đây là tài liệu đầu
+mối cho API hiện có; các contract chuyên biệt bên dưới mô tả chi tiết hơn.
+Không coi các ghi chú bàn giao W1/W3 trong tài liệu lịch sử là trạng thái hiện tại.
 
-## Cập nhật Issue #48
+## Chọn đúng chế độ và OpenAPI
 
-- `GET /api/v1/assets/{asset_id}` đọc cùng PostgreSQL và dùng cùng mapping metadata
-  với list; response giữ `{asset, mock}` và trả `mock=false`.
-- Asset không có trả 404 `ASSET_NOT_FOUND`; DB lỗi trả 500 chuẩn, không fallback
-  fixture. ID dài hơn 128 ký tự trả 400 trước khi khởi tạo kết nối DB.
-- `APP_ASSET_LIST_SOURCE` hiện chọn nguồn cho cả list/detail. Chế độ fixture chỉ
-  có hiệu lực khi bật mock ở development/test; production luôn có cả hai API DB.
-- thumbnail_path là HTTP(S) URL không chứa credentials thì dùng làm thumbnail_url;
-  thiếu, sai định dạng, hoặc là đường dẫn file local thì trả null. source_url cũng
-  chỉ trả HTTP(S) URL không kèm credentials để giữ contract Frontend và không lộ
-  đường dẫn riêng. API không tải URL để kiểm tra ảnh và không phục vụ file local.
-- Name null/rỗng vẫn hiển thị asset_id theo quy ước #47; các metadata thiếu khác
-  giữ null. Không sửa thông tin nguồn, tác giả/license hay metadata gốc trong DB.
-- Search/feedback còn mock, nên ID từ search fixture không mặc định có trong DB.
-  Đối chiếu UI list → detail phải dùng cùng chế độ nguồn dữ liệu.
-- Quy ước preview tái sử dụng #47, cần Huyền/Duy review khi bàn giao dữ liệu thật;
-  kiểm thử tự động không thay cho xác nhận của hai thành viên.
+Base path nghiệp vụ `/api/v1`; JSON UTF-8, upload ảnh dùng multipart/form-data.
+`GET /openapi.json` trên **origin backend** mô tả đúng routes/schemas của tiến
+trình đang chạy; `/docs` là Swagger UI. Các file export trong Git là cấu hình
+đối chiếu xác định, không tự cấu hình server hoặc chứng minh model/DB đã sẵn sàng.
 
-Rà soát trước tích hợp thật W3: xem [bảng đối chiếu và đề xuất chờ owner xác nhận](w3-text-search-review.md).
-Đối chiếu tĩnh code/OpenAPI lưu sẵn tại `65ce5839576949dc5633c05c745887c20913d79a`
-ngày 29/10/2026; chưa sinh lại spec runtime. Tài liệu mô tả API hiện có; chưa phải
-contract retrieval thật đã được Quỳnh Anh/Linh Chi xác nhận.
+| File trong docs/ | Text | Image | Feedback | Assets |
+|---|---|---|---|---|
+| [openapi.json](../openapi.json) | mock | mock | RAM/mock | PostgreSQL |
+| [openapi-text-search.json](../openapi-text-search.json) | service | mock | RAM/mock | PostgreSQL |
+| [openapi-image-search.json](../openapi-image-search.json) | service | service | RAM/mock | PostgreSQL |
+| [openapi-feedback.json](../openapi-feedback.json) | service | service | PostgreSQL | PostgreSQL |
 
-## Cập nhật Issue #47
+Các spec đều có health, jobs/status và reindex routes; route hiện diện không
+đồng nghĩa quyền admin/reindex đã được bật. Exporter dùng development, bật mock
+và không phụ thuộc file `.env`. Feedback thật cần chọn `APP_FEEDBACK_SOURCE=database`;
+chỉ bật search service không tự đổi feedback RAM sang PostgreSQL.
 
-- `GET /api/v1/assets` mặc định đọc PostgreSQL và trả `mock=false`; các keys
-  `items`/`pagination` và filters giữ nguyên. Không fallback fixture khi DB lỗi.
-- `APP_ASSET_LIST_SOURCE=fixture` chọn bộ fixture cũ một cách tường minh, chỉ có
-  hiệu lực khi bật mock ở development/test. Production luôn dùng list DB.
-- List DB lọc AND trước phân trang, ORDER BY asset_id ASC; count và items cùng
-  transaction REPEATABLE READ. Các request khác nhau có thể thấy dữ liệu mới.
-- List hiện liệt kê mọi ingestion_status, không đồng nghĩa asset đã searchable.
-- Name null dùng asset_id làm nhãn hiển thị để tương thích frontend; không sửa
-  metadata gốc trong DB. Các metadata nullable khác giữ null.
-- thumbnail_url chỉ lấy từ thumbnail_path nếu là HTTP(S) URL không kèm credentials;
-  đường dẫn local trả null. Chưa triển khai phục vụ file preview trong issue này.
-- `mock=false` chỉ xác định nguồn đọc DB: bản ghi seed vẫn có source=mock.
-- Detail trước đây còn mock ở #47; từ #48 đã đọc DB như phần cập nhật phía trên.
-- OpenAPI xuất mặc định mô tả list/detail DB và search/image/feedback mock. Chế độ fixture
-  có Swagger runtime riêng. Các quy ước mock bên dưới chỉ áp dụng khi dùng fixture.
+- `APP_TEXT_SEARCH_SOURCE=service` / `APP_IMAGE_SEARCH_SOURCE=service` chọn
+  retrieval CLIP thật và search event PostgreSQL; thiếu dependency trả lỗi,
+  không fallback fixture. Cấu hình/index/cache phải được bàn giao riêng.
+- Mock search/feedback chỉ đăng ký khi `APP_MOCK_API_ENABLED=true` và
+  `APP_ENV` khác production. Chọn mock nhưng tắt mock/ở production làm route
+  tương ứng vắng mặt (404), không tự bật service.
+- Assets mặc định đọc DB. Fixture chỉ được chọn khi bật mock, chọn
+  `APP_ASSET_LIST_SOURCE=fixture`, cả search đều không chọn service và feedback
+  không chọn database. Production luôn đọc DB.
+- Có thể cấu hình các mode độc lập, nhưng feedback cần khớp nguồn event.
+  Để dùng feedback thật cho cả text/ảnh, chọn profile của openapi-feedback.json.
+- Cấu hình fusion W6/E5/RRF đã khóa cho evaluation không tự thay baseline của
+  HTTP API. API service hiện tại dùng CLIP, score_type=cosine.
 
-## Contract mock gốc (Issue #9)
+## Endpoints và response
 
-Trạng thái: backend đã có contract/mock để review; **chờ Nguyễn Văn Duy xác nhận**
-request/response, lỗi và phân trang. Không coi tài liệu này là bằng chứng hai phía
-đã thống nhất. OpenAPI thực thi được export tại `docs/openapi.json`.
-
-## Phạm vi
-
-- Base path `/api/v1`; JSON UTF-8, image upload dùng multipart/form-data.
-- Chỉ phục vụ fixture cho frontend/Swagger. Text khớp từ khóa; ảnh trả tập fixture
-  cố định sau validation. Không dùng để đánh giá semantic retrieval.
-- Search giữ các trường frontend đang đọc: query_id, search_event_id, query,
-  results, versions. Thêm pagination và mock=true; không bọc search trong data.
-- Asset metadata thống nhất giữa list/detail/search, giữ null khi thiếu thông tin.
-- Các response mock thành công có mock=true, source=fixture và IDs/versions mock-.
-- Feedback chỉ được ghi trong RAM, response storage=memory. Không ghi PostgreSQL,
-  không tái sử dụng dữ liệu hoặc schema runtime của Issue #8.
-- Các endpoint này chỉ đăng ký khi APP_ENV khác production và
-  APP_MOCK_API_ENABLED=true. Tắt mock không tự fallback sang API giả.
-
-## Endpoints
-
-| Method | URL | Input | Response thành công |
-|---|---|---|---|
-| GET | /api/v1/assets | Query page, limit và filters | 200: items, pagination, mock |
-| GET | /api/v1/assets/{asset_id} | ID fixture | 200: asset, mock |
-| POST | /api/v1/search/text | JSON query, filters, page, limit | 200: shape search hiện có + pagination, mock |
-| POST | /api/v1/search/image | Multipart image, filters, page, limit | 200: shape search, query là mock-image:<SHA-256> |
-| POST | /api/v1/feedback | JSON search_event_id, asset_id, relevance | 201: feedback_id, event/asset/relevance, created_at, storage, mock |
-
-Feedback phải dùng event ID từ search vừa chạy trong cùng tiến trình. ID trong
-Swagger example chỉ minh họa, không phải event có sẵn. Event không tồn tại/đã
-bị loại khỏi bộ nhớ trả 404; asset không tồn tại trả 404; asset không thuộc trang
-kết quả của event trả 400. Mỗi lần gửi hợp lệ tạo một feedback mock mới; chưa
-chốt nhận diện phiên hoặc idempotency của API thật.
-
-Mock giữ tối đa 256 search events và 1000 feedback gần nhất, riêng từng process.
-Restart sẽ mất dữ liệu; không dùng nhiều worker để thử luồng feedback mock này.
-
-## Phân trang
-
-- page bắt đầu từ 1, mặc định 1; limit từ 1 đến 50, mặc định 12.
-- Áp dụng filter trước, sau đó phân trang theo thứ tự fixture ổn định.
-- pagination gồm page, limit, total, pages, has_next.
-- total là tổng kết quả sau lọc/khớp query, trước phân trang.
-- pages=ceil(total/limit), bằng 0 khi không có kết quả.
-- Trang vượt phạm vi trả mảng rỗng với HTTP 200, không trả lỗi 404.
-- rank bắt đầu lại từ 1 trên mỗi trang để giữ tương thích validator frontend W1.
-
-## Filters
-
-| Trường | Kiểu | Ý nghĩa |
+| Method / URL | Request | Thành công |
 |---|---|---|
-| category | string | Danh mục bằng chính xác giá trị metadata |
-| license | string | License bằng chính xác; null không khớp giá trị có yêu cầu |
-| format | string | Giá trị nằm trong mảng formats |
-| face_count_min | integer >= 0 | Cận dưới bao gồm |
-| face_count_max | integer >= 0 | Cận trên bao gồm |
+| GET /healthz | Không có | 200: `{"status":"ok"}`; chỉ liveness |
+| GET /api/v1/assets | Query page, limit và filters | 200: items, pagination, mock |
+| GET /api/v1/assets/{asset_id} | Asset ID | 200: asset, mock |
+| POST /api/v1/search/text | JSON query, filters, page, limit | 200: query_id, search_event_id, query, results, versions, pagination, mock |
+| POST /api/v1/search/image | Multipart image, filters, page, limit | 200: cấu trúc search chung |
+| POST /api/v1/feedback | JSON search_event_id, asset_id, relevance | 201: feedback_id, search_event_id, asset_id, relevance, created_at, storage, mock |
+| GET /api/v1/admin/jobs | Query kind, status, page, limit | 200: items, pagination, mock=false |
+| GET /api/v1/admin/jobs/{job_id} | UUID job | 200: job, mock=false |
+| POST /api/v1/admin/reindex | JSON request_id UUID, profile tùy chọn | 202: job_id, status, status_url, reused=false; replay 200/reused=true |
 
-Các điều kiện kết hợp AND, min không vượt max. Asset face_count=null bị loại khi
-lọc số mặt. Không lọc thì null không tự làm asset bị loại. Unknown fields bị từ
-chối 400, không âm thầm bỏ qua. Đây là contract đề xuất cụ thể của Issue #9,
-cần Duy và owner search review trước ghép nối tính năng thật.
+Assets giữ metadata nullable: description/category/face_count/thumbnail_url/
+source_url/author/license có thể null; tags/formats là arrays. Name thiếu dùng
+asset_id làm nhãn. Chỉ trả URL HTTP(S) không chứa credentials; path local trả
+null. API không tải URL tùy ý và chưa có route phục vụ model/preview local.
+List DB dùng asset_id ASC; không đồng nghĩa mọi asset đã searchable.
+`mock=false` xác định nguồn DB/service, không chứng minh bản ghi seed là asset thật.
 
-List nhận filter qua query parameters; text search qua object filters; image
-search qua **JSON string** ở field filters trong form.
-Tại thời điểm mock W1, frontend chỉ gửi filters={}. Frontend hiện có DTO và
-validator cho các filters ở trên; xem [đối chiếu Issue #9](frontend-api-v1.md).
+Chi tiết: [asset API](../guides/asset-api.md),
+[text service](text-search-w3.md), [image service](../guides/image-search-api.md),
+[explanation](search-explanation-w5.md), [feedback](feedback-w4.md),
+[jobs](jobs-status-w5.md), [reindex](reindex-w5.md).
 
-## Text search
+## Filters, phân trang và search events
 
-query được trim, 1-500 Unicode code points. limit/page trong JSON phải là số
-nguyên, không nhận boolean hoặc chuỗi số. Ví dụ:
+- `page` integer >=1, mặc định 1; `limit` 1–50, mặc định 12. JSON text page/
+  limit phải là integer, không nhận bool hoặc chuỗi số; query/form được parse.
+- Filters: category/license/format so khớp metadata, face_count_min/max >=0,
+  min <= max; AND trước phân trang. Face count null không khớp cận số mặt.
+  Không biết thuộc tính thì không suy đoán từ preview. DTO JSON/query dùng
+  extra=forbid; dùng OpenAPI đúng endpoint/mode để kiểm kiểu. Multipart chỉ nên
+  gửi các field đã công bố, không coi mọi field form dư đều được kiểm extra=forbid.
+- List assets nhận filters qua query, text qua object `filters`, image qua
+  **chuỗi JSON** tại multipart field `filters` (không phải nhiều field tùy ý).
+- Pagination: page, limit, total, pages, has_next; pages=ceil(total/limit),
+  total=0 thì pages=0. Trang vượt phạm vi trả mảng rỗng/200.
+- Rank **bắt đầu từ 1 trên mỗi trang**, cả mock và service. Không đổi thành
+  rank toàn cục. Kết quả mỗi trang không lặp asset ID.
+- Service: total là số ứng viên sau lọc trong **cửa sổ tối đa 200**, không phải
+  count toàn thư viện. Mỗi request thành công, kể cả retry, trang rỗng hoặc
+  đổi trang, tạo event mới đã commit. query_id=search_event_id là cùng UUID.
+  Event lưu đúng IDs của trang đã trả, filters và versions thực tế.
+- Mock: total theo fixture; event/feedback giữ RAM từng process, mất khi restart.
+  Không lấy ID event mock gửi sang feedback PostgreSQL.
+
+## Text và image search
+
+Text query được trim, dài 1–500 Unicode code points:
 
 ```json
-{"query":"ghế gỗ","filters":{},"page":1,"limit":12}
+{"query":"wooden chair","filters":{},"page":1,"limit":12}
 ```
 
-Response giữ query đã trim, IDs mock duy nhất, results không trùng asset_id,
-score=null, explanation nêu rõ chỉ khớp metadata. Metadata/versions dùng đúng
-shape đang có ở `frontend/src/features/search/types.ts`. Runtime mock dùng
-`model_version=mock-no-encoder`, `index_version=mock-w1`,
-`config_version=mock-contract-v1` (khác ví dụ lịch sử W1 `mock-text-v1`).
-Mỗi request, kể cả retry/đổi trang, tạo query_id và search_event_id mới; event
-chỉ giữ response trang trong RAM, chưa dùng ORM SearchEvent.
+Service text trả `retrieval_sources=["clip_text_to_preview"]`, image trả
+`["clip_image_to_preview"]`; score_type=cosine, score hữu hạn trong [-1,1],
+không phải phần trăm chính xác. Explanation là chuỗi giải thích tín hiệu
+retrieval; không khẳng định mesh/license/thuộc tính chưa biết. Versions gồm
+model_version, index_version, config_version, dataset_snapshot thực tế.
+Không gán mock versions cho kết quả thật.
 
-Frontend yêu cầu query echo, rank 1..N theo trang, ID không trùng trong trang và
-số phần tử đúng `min(limit,max(0,total-(page-1)*limit))`. Schema backend chưa
-enforce đầy đủ các quan hệ này. Search schema có mock const=true/default=true
-nhưng OpenAPI không đánh dấu required; DTO/validator frontend chưa kiểm tra cờ.
-Các invariants và semantics total cho retrieval thật còn chờ review W3.
+Mock text khớp metadata keywords, score có thể null và versions có tiền tố
+mock-. Mock image trả fixture, không làm semantic retrieval.
 
-## Image search
+Image: field `image` bắt buộc, JPEG/PNG theo nội dung decode được, file <=5 MiB,
+mỗi chiều <=4096 px; filters="{}", page=1, limit=12 mặc định. Browser dùng
+FormData và tự đặt Content-Type/boundary. API không nhận URL để tải ảnh.
+Service query là `sha256:<64 ký tự hex>` của bytes ảnh; mock dùng mock-image:...
+Hash không phải endpoint tải lại ảnh. File không được lưu làm kho ảnh upload;
+search event thật giữ tham chiếu hash. Xem [upload contract](image-upload-w4.md).
 
-Trong Swagger chọn file tại field image; filters mặc định `{}`, page=1, limit=12.
-Mock kiểm tra ảnh JPEG/PNG thực sự decode được, không tin đuôi file hay MIME.
-Giới hạn cho contract mock: <=5 MiB, mỗi chiều <=4096 pixel. Đây là lựa chọn
-triển khai của Issue #9, không tuyên bố là ngưỡng đã được PDF/SRS chốt.
+## Feedback và retry
 
-Không tải URL do người dùng nhập. Không giữ ảnh sau request; event chỉ giữ chuỗi
-tham chiếu hash và response mock. Không coi hash là kết quả nhận diện nội dung.
-
-## Lỗi thống nhất
+`relevance` chỉ nhận JSON Boolean; lấy đúng cặp event/asset từ cùng response:
 
 ```json
-{
-  "error": {
-    "code": "INVALID_REQUEST",
-    "message": "Yêu cầu không hợp lệ.",
-    "details": [{"field":"body.query","message":"Giá trị không hợp lệ."}]
-  }
-}
+{"search_event_id":"00000000-0000-4000-8000-000000000080","asset_id":"example-chair","relevance":true}
 ```
 
-| HTTP | code | Khi nào |
-|---|---|---|
-| 400 | INVALID_REQUEST | Validation query/body/form, JSON hỏng, unknown fields |
-| 400 | INVALID_FILTERS | Field filters trong image form không phải JSON filter hợp lệ |
-| 400 | INVALID_IMAGE / UNSUPPORTED_IMAGE | Ảnh hỏng hoặc ngoài JPEG/PNG |
-| 400 | IMAGE_TOO_LARGE / IMAGE_DIMENSIONS_EXCEEDED | Vượt giới hạn ảnh |
-| 400 | EVENT_ASSET_MISMATCH | Feedback asset không thuộc kết quả event |
-| 404 | ASSET_NOT_FOUND / SEARCH_EVENT_NOT_FOUND | Resource không tồn tại |
-| 404 | HTTP_404 | Đường dẫn không tồn tại hoặc mock routes bị tắt |
-| 405 | HTTP_405 | Method không được hỗ trợ |
-| 500 | INTERNAL_ERROR | Lỗi nội bộ, không trả exception message/stack trace |
+Đây chỉ là ví dụ; thay IDs bằng kết quả vừa search, không dùng example như dữ
+liệu đã tồn tại. PostgreSQL yêu cầu event UUID, asset ID 1–128 ký tự và asset
+thuộc đúng trang kết quả event; trả storage=postgresql/mock=false sau commit.
+Mock trả storage=memory/mock=true. Mỗi request hợp lệ tạo feedback mới, kể cả
+gửi lại/đổi đánh giá. Không có idempotency cho feedback; mất response rồi retry
+có thể thêm row. Event cũ thiếu result snapshot yêu cầu tìm kiếm lại.
 
-Validation trả **400 theo Issue #9**, thay 422 trong nháp W1. Swagger/OpenAPI
-không quảng bá response 422 tự sinh. Client search hiện xử lý 400 và 422 bằng
-thông báo invalid cố định; 422 được giữ cho tương thích lịch sử. Client search
-không đọc error.code/message từ body; client asset có đọc code để phân biệt
-ASSET_NOT_FOUND với route không tồn tại. 503 cho search thật còn chờ owner xác nhận,
-chưa được router/OpenAPI search hiện tại khai báo.
+Frontend hiện đọc **runtime** `/openapi.json` trước khi gửi feedback, kiểm schema
+FeedbackResponse/LiveFeedbackResponse để tránh trộn nguồn; không đọc trực tiếp
+file Git docs/openapi.json. Proxy cần chuyển đường dẫn này tới backend.
 
-Giữ APP_DEBUG=false khi kiểm tra contract lỗi 500; chế độ debug của framework có
-thể trả traceback thay handler 500. CORS preflight là phản hồi middleware riêng,
-không phải response nghiệp vụ trong bảng trên.
+## Jobs và reindex quản trị
 
-## Swagger và frontend local
+Header X-Admin-Key phải khớp APP_ADMIN_API_KEY (>=32 ký tự); Swagger dùng
+Authorize/AdminKey. Chỉ dành cho local/nội bộ, chưa có tài khoản/role/SSO.
+Không đưa key vào URL, logs, Git hoặc biến VITE_*.
 
-Từ backend/, cài requirements-dev rồi chạy:
+Jobs lọc kind=ingestion/indexing và status=queued/running/succeeded/failed,
+thứ tự created_at DESC rồi job_id DESC; progress null là chưa đo, không phải 0%.
+GET trả 200 có thể chứa job failed; HTTP thành công không khẳng định operation
+thành công. Lỗi commit cuối có thể để job queued/running, không tự suy diễn
+terminal state từ log/artifact.
 
-```powershell
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+Reindex mặc định tắt; profile duy nhất clip-candidate200-v1. Cùng request_id
+trả job cũ, kể cả failed, không chạy lại; request_id khác khi resource bận trả
+409. 202 là đã nhận job, không phải đã dựng xong index. Output UUID riêng,
+không activate index hay đổi cấu hình W6. Không có endpoint retry/cancel/resume.
+Xem [chẩn đoán jobs W6](../guides/job-failure-diagnostics-w6.md).
+
+## Lỗi và tracing
+
+Envelope chung của API (không áp dụng cho lỗi do proxy/web server tạo):
+
+```json
+{"error":{"code":"INVALID_REQUEST","message":"Yêu cầu không hợp lệ.","details":[{"field":"body.query","message":"Giá trị không hợp lệ."}]}}
 ```
 
-Mở http://127.0.0.1:8000/docs. Chạy text/image search trước, copy search_event_id
-và asset_id trong results sang POST feedback. Dữ liệu cố định có 6 fixture:
-mock-chair-01/02, mock-table-01, mock-lamp-01, mock-vase-01, mock-box-01.
+| HTTP | Mã thường gặp / tình huống |
+|---|---|
+| 400 | INVALID_REQUEST: validation/JSON/multipart parser; INVALID_FILTERS; INVALID_IMAGE/UNSUPPORTED_IMAGE/IMAGE_TOO_LARGE/IMAGE_DIMENSIONS_EXCEEDED |
+| 400 | EVENT_ASSET_MISMATCH hoặc SEARCH_EVENT_RESULTS_UNAVAILABLE khi feedback |
+| 403 | ADMIN_ACCESS_DENIED: thiếu/sai key; không dùng 401 trong contract admin này |
+| 404 | ASSET_NOT_FOUND, SEARCH_EVENT_NOT_FOUND, JOB_NOT_FOUND; HTTP_404 cho route vắng mặt |
+| 405 | HTTP_405: method không hỗ trợ |
+| 409 | REINDEX_IN_PROGRESS: resource đang có queued/running |
+| 500 | INTERNAL_ERROR: lỗi nội bộ/DB; không trả SQL/credentials/traceback |
+| 503 | SEARCH_UNAVAILABLE hoặc ADMIN_API_UNAVAILABLE/REINDEX_UNAVAILABLE |
 
-CORS mặc định cho http://localhost:5173 và http://127.0.0.1:5173. Có thể cấu hình
-APP_CORS_ORIGINS bằng mảng JSON; không dùng wildcard hoặc credentials mặc định.
-Từ frontend/:
+Validation backend trả **400**, spec loại 422 tự sinh. Text client còn nhận
+422 để tương thích lịch sử, không có nghĩa backend hiện quảng bá 422. Image
+client map mã upload 400 sang thông báo an toàn; text client xử lý chủ yếu theo
+status; UI không nên hiển thị raw error body/exception.
 
-```powershell
-$env:VITE_API_BASE_URL = 'http://127.0.0.1:8000'
-npm run dev:api
-```
+Giữ APP_DEBUG=false. Server trả X-Request-ID UUID v4 riêng từng HTTP request,
+bỏ qua ID client gửi và expose qua CORS cho origin được phép. Không thêm ID
+vào body. Header này khác event/job/request_id reindex. CORS preflight là
+response middleware riêng. Xem [logging/CORS](request-logging-w6.md).
 
-Giao diện lúc đó dùng HTTP client gọi backend mock, không dùng fixture client
-trong trình duyệt. Nếu cổng Vite khác 5173, bổ sung origin chính xác vào cấu hình.
+## Chạy, export và kiểm chứng
 
-## Export và kiểm tra
-
-Từ backend/:
+Theo [hướng dẫn API tái lập W7](../guides/api-reproducibility-w7.md) để chọn
+local/Compose, đúng persistence mode, gọi Swagger/curl và kiểm proxy/runtime
+spec. Từ backend/, export **cả bốn** spec:
 
 ```powershell
 .\.venv\Scripts\python.exe -m app.export_openapi
-.\.venv\Scripts\python.exe -m pytest
 ```
 
-Exporter dùng settings mock xác định, không phụ thuộc APP_NAME/APP_ENV của máy,
-ghi UTF-8 vào docs/openapi.json. Tests đối chiếu file export với app.openapi(),
-kiểm tra refs/examples, validation, pagination, upload và feedback.
+Examples trong Swagger/spec là minh họa, không phải benchmark hoặc IDs đã seed.
+Exporter không mở lifespan/nạp model, không migrate/seed DB và không làm index
+sẵn sàng. `/healthz`=200 cũng không chứng minh retrieval/feedback đã chạy thật.
 
-## Checklist review với Duy
-
-- [ ] Đồng ý giữ search payload top-level, thêm pagination/mock.
-- [ ] Xác nhận 400 thay cho 422 và cách UI đọc error.code/message.
-- [ ] Xác nhận page/limit, empty page và rank theo trang.
-- [ ] Review filters, multipart field image và giới hạn ảnh.
-- [ ] Review feedback Boolean và storage=memory trong giai đoạn mock.
-
-Các ô này chưa tích vì chưa có xác nhận từ Duy; việc code/test thành công không
-thay cho thỏa thuận API của nhóm.
+Review #145 còn chờ Duy đối chiếu client và Khuê đối chiếu setup/evaluation.
+Không dùng tests local để ghi nhận hai người đã xác nhận hoặc CI/merge đã đạt.
