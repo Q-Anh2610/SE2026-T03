@@ -1,0 +1,29 @@
+# Opt-in runtime wiring, not an index builder or authorization to change W6 pins.
+services:
+  backend:
+    environment:
+      APP_MOCK_API_ENABLED: "false"
+      APP_ASSET_LIST_SOURCE: database
+      APP_TEXT_SEARCH_SOURCE: service
+      APP_IMAGE_SEARCH_SOURCE: service
+      APP_FEEDBACK_SOURCE: database
+      APP_TEXT_INDEX_ROOT: /handoff
+      APP_IMAGE_INDEX_ROOT: /handoff
+      APP_TEXT_INDEX_MANIFEST: ${SEARCH_TEXT_MANIFEST:?Set a container path under /handoff}
+      APP_IMAGE_INDEX_MANIFEST: ${SEARCH_IMAGE_MANIFEST:?Set a container path under /handoff}
+      HF_HOME: /models
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+    volumes:
+      - type: bind
+        source: ${SEARCH_HANDOFF_ROOT:?Set the existing checked handoff directory}
+        target: /handoff
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${SEARCH_MODEL_CACHE:?Set the existing Hugging Face cache directory}
+        target: /models
+        read_only: true
+        bind:
+          create_host_path: false

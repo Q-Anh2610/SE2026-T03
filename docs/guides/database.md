@@ -55,7 +55,8 @@ docker compose -f docker-compose.yml exec backend python -m alembic check
 docker compose -f docker-compose.yml exec backend python -m app.db.seed
 ```
 
-Migration và seed là lệnh riêng, không tự chạy khi Uvicorn khởi động.
+W7 / #148: Compose chạy `upgrade head` bằng service `migrate` riêng trước backend;
+Uvicorn không tự chạy migration. Seed vẫn là lệnh riêng, không tự chạy.
 `GET /healthz` giữ nguyên liveness, không thay bằng DB readiness.
 
 ## Schema

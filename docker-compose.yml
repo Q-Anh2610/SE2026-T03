@@ -1,18 +1,36 @@
+x-backend: &backend
+  build:
+    context: ./backend
+  env_file:
+    - .env
+  environment:
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: "5432"
+    APP_TEXT_QDRANT_URL: http://qdrant:6333
+    APP_IMAGE_QDRANT_URL: http://qdrant:6333
+
 services:
-  backend:
-    build:
-      context: ./backend
-    env_file:
-      - .env
-    environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: "5432"
+  migrate:
+    <<: *backend
+    command: ["python", "-m", "alembic", "upgrade", "head"]
     depends_on:
       postgres:
+        condition: service_healthy
+    restart: "no"
+
+  backend:
+    <<: *backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      qdrant:
         condition: service_healthy
     ports:
       - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
     healthcheck:
+      # Liveness only. The verification script checks DB/schema and proxy separately.
       test:
         - CMD
         - python
@@ -20,8 +38,22 @@ services:
         - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"
       interval: 10s
       timeout: 5s
-      start_period: 10s
-      retries: 3
+      start_period: 20s
+      retries: 6
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/ui-healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
 
   postgres:
     image: postgres:17
@@ -39,5 +71,28 @@ services:
       timeout: 5s
       retries: 12
 
+  qdrant:
+    image: qdrant/qdrant:v1.15.1
+    ports:
+      - "127.0.0.1:${QDRANT_HTTP_PORT:-6333}:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      # The official image has bash, without requiring curl/wget in the image.
+      test:
+        - CMD
+        - bash
+        - -ec
+        - >-
+          exec 3<>/dev/tcp/127.0.0.1/6333;
+          printf 'GET /readyz HTTP/1.0\r\nHost: localhost\r\n\r\n' >&3;
+          IFS= read -r response <&3;
+          [[ "$$response" == *" 200 "* ]]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 12
+
 volumes:
   postgres_data:
+  qdrant_data:

@@ -1,0 +1,25 @@
+{
+    "issue":  148,
+    "scope":  "docker_infrastructure_only",
+    "project":  "issue148-clean",
+    "started_at":  "2026-11-26T19:51:53.4611404Z",
+    "os":  "Microsoft Windows NT 10.0.26300.0",
+    "powershell":  "5.1.26100.9818",
+    "status":  "failed",
+    "checks":  {
+                   "postgres":  "running_healthy",
+                   "qdrant":  "running_healthy"
+               },
+    "retrieval_verified":  false,
+    "e2e_verified":  false,
+    "benchmark_verified":  false,
+    "commit":  "3a0e601d84fd7ef95809fe998913b5a6868481ee",
+    "dirty":  true,
+    "compose_version":  "5.3.0",
+    "docker_server_version":  "29.6.1",
+    "image_ids":  [
+                      "97fb53376be3e4fb1a8a61421daa69dcc3bf2fa39bda3259f5245f9a455af1a9",
+                      "d122138f76868edba68d36cb0833139c1d1761f00f09e48e61f8314196e6a4c6"
+                  ],
+    "finished_at":  "2026-11-26T19:51:57.2974997Z"
+}
