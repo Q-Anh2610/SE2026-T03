@@ -1,6 +1,10 @@
 # Backend — Vũ Nguyễn Quỳnh Anh, Trịnh Thị Thu Huyền, Lê Thị Linh Chi
 
-FastAPI skeleton dùng Python 3.13, Uvicorn, pydantic-settings và pytest.
+FastAPI dùng Python 3.13, Uvicorn, pydantic-settings và pytest; assets DB,
+text/image CLIP hoặc mock, feedback PostgreSQL hoặc RAM và jobs/reindex quản trị.
+Xem [contract API hiện hành](../docs/contracts/api-v1.md) và
+[hướng dẫn tái lập W7](../docs/guides/api-reproducibility-w7.md) để chọn đúng
+mode, OpenAPI, persistence và giới hạn proxy Docker.
 
 W7 / #148: [stack Docker đầy đủ và runbook máy sạch](../docs/guides/docker-clean-setup-w7.md).
 Compose chạy migration bằng container riêng trước backend; `/healthz` vẫn chỉ là liveness.
@@ -52,17 +56,18 @@ chứa user/password; đường dẫn file local trả null cho đến khi có c
 source_url không hợp lệ hoặc chứa credentials cũng trả null; không sửa dữ liệu
 gốc trong DB. Xem [bàn giao asset API](../docs/guides/asset-api.md).
 
-## Các API mock còn lại (Issue #9)
+## Mock và service: chọn chế độ hiện có
 
 Contract text search thật và search event persistence của Issue #63 đã có tại
 [bàn giao W3](../docs/contracts/text-search-w3.md). Chế độ `service` của #65
 đã nối CLIP/Qdrant #60 và persistence; chế độ mock phát triển vẫn riêng.
 JSON Schema W3 xuất bằng `python -m app.export_text_search_contract`.
 
-Swagger `/docs` có đủ GET assets/list-detail, POST search/text, search/image và
-feedback dưới `/api/v1`. Xem [contract mock v1](../docs/contracts/api-v1.md) và
-`docs/openapi.json`. Text chỉ khớp từ khóa fixture, ảnh trả dữ liệu mẫu cố định;
-feedback lưu trong RAM, không ghi PostgreSQL. List/detail mặc định đọc DB như trên.
+Swagger `/docs` và runtime `/openapi.json` phản ánh routes/modes của tiến trình.
+Xem [bảng profiles và endpoints](../docs/contracts/api-v1.md). Mặc định text chỉ
+khớp fixture, image trả fixture và feedback lưu RAM. Khi chọn text/image service,
+API dùng CLIP/Qdrant và lưu search event PostgreSQL; feedback thật cần chọn riêng
+`APP_FEEDBACK_SOURCE=database`. List/detail mặc định đọc DB như trên.
 
 Mock chỉ bật khi `APP_MOCK_API_ENABLED=true` và `APP_ENV` khác `production`.
 Mặc định CORS cho Vite localhost:5173; cấu hình `APP_CORS_ORIGINS` bằng mảng JSON.
@@ -145,7 +150,8 @@ Jobs/status W5 (#115): [contract và JSON](../docs/contracts/jobs-status-w5.md),
 [migration, runner CLI và smoke](../docs/guides/jobs-status-api.md).
 Hai GET `/api/v1/admin/jobs` và `/api/v1/admin/jobs/{job_id}` đọc PostgreSQL;
 cần migration `0003` và `APP_ADMIN_API_KEY` (header `X-Admin-Key`).
-Chưa cấu hình khóa thì API quản trị trả 503. Chưa có HTTP tạo/retry/reindex job.
+Chưa cấu hình khóa thì API quản trị trả 503. Tạo reindex qua POST #117 nêu trên;
+không có endpoint retry/cancel/resume hoặc tạo ingestion job tùy ý.
 
 Quy trình kiểm chứng migration, lỗi và Frontend–PostgreSQL của Issue #49:
 [hướng dẫn và lệnh chạy lại](../docs/guides/asset-api-verification.md).
@@ -189,16 +195,19 @@ dụng, kiểm tra tiến trình/container đang giữ cổng trước khi dừn
 `BACKEND_PORT` thành cổng host còn trống trong `.env`. Khi đổi cổng, dùng cổng
 đó trong URL health check, ví dụ `http://127.0.0.1:<BACKEND_PORT>/healthz`.
 
-Compose khởi chạy backend và PostgreSQL 17; backend chờ PostgreSQL healthy.
+Compose có PostgreSQL 17, Qdrant, migration, backend và frontend. Backend chờ
+PostgreSQL/Qdrant healthy và migration container hoàn tất thành công.
 Container chạy user non-root, có healthcheck và chỉ publish lên localhost.
-Migration và seed chạy riêng theo [hướng dẫn database](../docs/guides/database.md).
+Compose tự chạy migration qua service `migrate`; seed vẫn là bước riêng theo
+[hướng dẫn database](../docs/guides/database.md). Dựng cả UI và kiểm chứng sạch:
+xem [runbook W7](../docs/guides/docker-clean-setup-w7.md).
 
 ```powershell
 docker compose -f docker-compose.yml logs backend
 docker compose -f docker-compose.yml stop
 ```
 
-Lệnh `stop` dừng backend và PostgreSQL, giữ nguyên volume/database. Không dùng
+Lệnh `stop` dừng các services đang chạy của project, giữ nguyên volume/database. Không dùng
 `down -v` hoặc lệnh prune khi chỉ cần dừng stack.
 
 Để build/run Dockerfile riêng, cũng chạy từ gốc repository:

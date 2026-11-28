@@ -29,10 +29,13 @@ Semantic Search cho thư viện 3D assets: tìm bằng văn bản/ảnh, sử d�
 
 Xem [sơ đồ thư mục và ranh giới module](docs/STRUCTURE.md), [kế hoạch](ROADMAP.md) và [hướng dẫn Codex](AGENTS.md).
 
-Backend có FastAPI skeleton, `GET /healthz`, cấu hình `.env`, pytest và Dockerfile.
+Backend FastAPI có assets PostgreSQL, text/image search chọn mock hoặc CLIP service,
+feedback chọn RAM/PostgreSQL, jobs/status và reindex quản trị, cùng logging W6.
 Xem [hướng dẫn cài đặt, chạy và kiểm thử backend](backend/README.md).
-Backend mock có 5 endpoints tại `/api/v1` để phát triển UI, xem
-[API contract v1](docs/contracts/api-v1.md) và `docs/openapi.json`; chờ frontend review.
+Xem [API contract hiện hành và bảng bốn OpenAPI profiles](docs/contracts/api-v1.md),
+[hướng dẫn chạy/kiểm chứng API W7](docs/guides/api-reproducibility-w7.md).
+`docs/openapi.json` là profile mặc định assets DB + search/feedback mock;
+runtime `/openapi.json` trên origin backend phản ánh cấu hình server đang chạy.
 `docker-compose.yml` khởi chạy frontend, backend, PostgreSQL, Qdrant và migration. Xem
 [hướng dẫn ORM, Alembic và seed](docs/guides/database.md).
 List/detail asset mặc định đọc PostgreSQL (Issues #47/#48); cấu hình mẫu giữ
