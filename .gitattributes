@@ -38,3 +38,11 @@ scripts/verify_issue135_rebuild.py text eol=lf
 # #135: preserve raw local evidence bytes, including archived corpus manifest.
 docs/evidence/issue135-rebuild-*/** -text
 docs/evidence/issue135-w7-rebuild-20261126.md text eol=lf
+
+# #149: keep copied evidence bytes and hashed E2E harness stable on checkout.
+docs/evidence/issue149/*.json -text
+scripts/prepare_w7_e2e.py text eol=lf
+scripts/audit_w7_e2e.py text eol=lf
+backend/tests/unit/test_w7_e2e_preparation.py text eol=lf
+frontend/playwright.stack.config.ts text eol=lf
+frontend/tests/stack/search.spec.ts text eol=lf

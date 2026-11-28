@@ -23,6 +23,11 @@ snapshot khi có. Feedback dùng đúng cặp event ID và asset ID của kết 
 
 ## Chạy local
 
+E2E trên frontend production/nginx và backend/PostgreSQL/Qdrant thật dùng
+`npm run test:stack` sau khi đặt `E2E_STACK_URL`, `E2E_STACK_INPUT`. Bộ này
+không tự bật mock/server; xem [runbook #149](../docs/guides/e2e-search-w7.md)
+và [kết quả/lỗi local](../docs/evidence/issue149-w7-search-e2e.md).
+
 ### UI ảnh W4 — multipart và response service
 
 Link **Tìm bằng ảnh** mở `/#image-search`. Chọn/thay/xóa JPEG hoặc PNG; UI kiểm

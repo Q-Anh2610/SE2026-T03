@@ -1,0 +1,34 @@
+{
+  "status": "prepared",
+  "run_id": "20261128T161923Z-e7bdf801",
+  "code_commit": "213472bdeff7b6eef9b9f7ac6c54c79099831589",
+  "working_tree_dirty": true,
+  "database": "test_issue149_w7_20261128",
+  "collection": "issue149_7419c6ca20524df5998c7f2d3e185935",
+  "embedding": {
+    "embedded": 200,
+    "failed": 0,
+    "skipped": 0
+  },
+  "model_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "dimension": 512,
+  "source_sha256": "9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd",
+  "ready_sha256": "050ebe41f3a33dec671a879b165ee3ecf68b914c20f5f1b62051a643d11143b3",
+  "input_previews_unchanged": true,
+  "packages": {
+    "torch": "2.8.0",
+    "transformers": "4.57.1",
+    "qdrant-client": "1.15.1",
+    "Pillow": "13.0.0"
+  },
+  "manifests": {
+    "text-index-manifest.json": "ac06494306260ca2bfff63f5566b0c3dbcf8b538572dea1704c8546c20d3c6a5",
+    "image-index-manifest.json": "8669ec28f9f198c3b9269f36341e954f0003f1a935835aaa69aa1e97fb4d0f47"
+  },
+  "module_sha256": {
+    "scripts/prepare_w7_e2e.py": "5652596bbdc24650aa25ca5e3279134d3438b67db3242312eebc16600208bc33",
+    "backend/app/embedding/clip_encoder.py": "053f6c863d1c3284216749b4574bd8d30539b3c621cf07396c12b223a86bd650",
+    "backend/app/embedding/batch.py": "c9aa719554d99b7ee5b12ea17f5f7e201362c628d391ddc4b5ec9ea3e96fcc95",
+    "backend/app/search/qdrant_store.py": "124a1a12e79314890c79e7b59d7de45360d161e1fd4ae00a551c4e63961f573f"
+  }
+}

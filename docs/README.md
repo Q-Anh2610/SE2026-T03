@@ -5,6 +5,8 @@
 - `contracts/`: API/schema dùng chung giữa backend, frontend và evaluation.
 - `adr/`: quyết định kỹ thuật đã chốt, có lý do và tradeoff.
 - `guides/`: hướng dẫn dựng/chạy/vận hành dựa trên lệnh thực tế.
+- [E2E search W7 — #149](guides/e2e-search-w7.md): stack thật, manifests và desktop/mobile;
+  [kết quả local/lỗi còn mở](evidence/issue149-w7-search-e2e.md).
 - `evaluation/`: báo cáo thí nghiệm có kết quả thật.
 - [Benchmark W2/W3](evaluation/home-interior-text-v2-keyword-baseline.md): trạng thái bộ query/qrels đã khóa, phép đo keyword diagnostic và phần CLIP text retrieval còn chờ trên snapshot nội thất.
 - [Báo cáo so sánh ban đầu W5 — #105](evaluation/issue105-w5-initial-comparison.md): CLIP/E5/RRF trên validation đã bàn giao ở #91, giới hạn ảnh và checklist kiểm chứng; xem [các bước thực hiện](guides/issue105-w5-evaluation-report.md).

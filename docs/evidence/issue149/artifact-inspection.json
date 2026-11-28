@@ -1,0 +1,23 @@
+{
+  "trace_count": 13,
+  "known_db_secret_matches": 0,
+  "sensitive_request_headers": 0,
+  "failed_requests": [],
+  "sha256": {
+    "e2e-run-1/stack-report.json": "63c3b31b15ff47231e33c5cd8ab9fc848af0e6ada85380bcb5783bfb234a0516",
+    "e2e-run-1/stack/search-image-retrieval-pag-24598-l-and-back-retain-the-image-stack-desktop/trace.zip": "8ff732ad698ae2660fb761f424db28760847a3733c28b1612d9b58b059f1f1a0",
+    "e2e-run-1/stack/search-image-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-desktop/trace.zip": "c854e47f1f923a8ca8c49d1d4f26932f62c3616a644a191f8b673559a1a4c818",
+    "e2e-run-1/stack/search-image-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-mobile/trace.zip": "fc6f44aaaf44ee31d9ea0e1ae8bd4a0cdeebb6b41af6500b6e32fa60d2f90c63",
+    "e2e-run-1/stack/search-nginx-exposes-the-live-feedback-OpenAPI-contract-stack-desktop/trace.zip": "33f593601da3b3c320073bb063f434d8cb2b7ccf108da52c778f17f8c5d528b7",
+    "e2e-run-1/stack/search-nginx-exposes-the-live-feedback-OpenAPI-contract-stack-mobile/trace.zip": "56fd532d628aa04e9f62ef9d6617ff6f1fd54194832db54f4ef8497c5d5cd347",
+    "e2e-run-1/stack/search-text-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-desktop/trace.zip": "dfde5b15ff8e4069a3ca207700c823431559d953aa136e11c8d320eb28cdf458",
+    "e2e-run-1/stack/search-text-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-mobile/trace.zip": "0194a06a63fe2887b3ed4b7ceea43429940ffb3af41c9b892b8879950cb96b03",
+    "e2e-run-2/stack-report.json": "60988240a16650f0ec9462dfadf48c9b490858259720c9d4253b4bbad5cc7ea9",
+    "e2e-run-2/stack/search-image-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-desktop/trace.zip": "86ce968e8c26888b829e1a88e365deb67fc9b5872c1d3e3598f46c52a4054015",
+    "e2e-run-2/stack/search-image-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-mobile/trace.zip": "e096643355a9efdad745dfa1fdc6ee7ada4a85e2036cfb2818a03a62a93c9ba2",
+    "e2e-run-2/stack/search-nginx-exposes-the-live-feedback-OpenAPI-contract-stack-desktop/trace.zip": "7fd6770ebbcd33a945e8fba1594c61170cb9acc8cc0071bd2f0fb2847963a2f2",
+    "e2e-run-2/stack/search-nginx-exposes-the-live-feedback-OpenAPI-contract-stack-mobile/trace.zip": "4d02404e6fe7c08027ffe2a5b8c090a78539d817f09c40378feef323bf424a6a",
+    "e2e-run-2/stack/search-text-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-desktop/trace.zip": "1210c4cd00d452bde469c84bf92f8376dedac56400af06d0fc7ed413b88e55d6",
+    "e2e-run-2/stack/search-text-UI-feedback-is-accepted-by-PostgreSQL-mode-stack-mobile/trace.zip": "e7ed65d3cbdc581613fd4fb30a4cd66219328c93587890e312b7c0ecd8988055"
+  }
+}

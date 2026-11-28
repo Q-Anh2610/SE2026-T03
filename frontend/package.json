@@ -19,7 +19,8 @@
     "test:e2e": "npm run build && playwright test",
     "test:integration": "playwright test --config playwright.integration.config.ts",
     "test:database": "playwright test --config playwright.database.config.ts",
-    "test:semantic": "playwright test --config playwright.semantic.config.ts"
+    "test:semantic": "playwright test --config playwright.semantic.config.ts",
+    "test:stack": "playwright test --config playwright.stack.config.ts"
   },
   "dependencies": {
     "react": "^19.2.0",

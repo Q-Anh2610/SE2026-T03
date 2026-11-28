@@ -1,0 +1,207 @@
+{
+  "status": "persistence_verified",
+  "report_sha256": "63c3b31b15ff47231e33c5cd8ab9fc848af0e6ada85380bcb5783bfb234a0516",
+  "stats": {
+    "startTime": "2026-11-28T16:23:02.553Z",
+    "duration": 236984.182,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 7,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "nginx exposes the live feedback OpenAPI contract",
+      "project": "stack-desktop",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "duration_ms": 2166
+        }
+      ]
+    },
+    {
+      "title": "text retrieval, pagination, detail and back use real metadata",
+      "project": "stack-desktop",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 18221
+        }
+      ]
+    },
+    {
+      "title": "text AND filters and empty state",
+      "project": "stack-desktop",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 4131
+        }
+      ]
+    },
+    {
+      "title": "image retrieval, pagination, detail and back retain the image",
+      "project": "stack-desktop",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "timedOut",
+          "duration_ms": 90344
+        }
+      ]
+    },
+    {
+      "title": "image AND filters and empty state",
+      "project": "stack-desktop",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 6689
+        }
+      ]
+    },
+    {
+      "title": "text UI feedback is accepted by PostgreSQL mode",
+      "project": "stack-desktop",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "duration_ms": 18810
+        }
+      ]
+    },
+    {
+      "title": "image UI feedback is accepted by PostgreSQL mode",
+      "project": "stack-desktop",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "duration_ms": 19681
+        }
+      ]
+    },
+    {
+      "title": "direct API feedback and invalid input use real endpoints",
+      "project": "stack-desktop",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 2724
+        }
+      ]
+    },
+    {
+      "title": "nginx exposes the live feedback OpenAPI contract",
+      "project": "stack-mobile",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "duration_ms": 1407
+        }
+      ]
+    },
+    {
+      "title": "text retrieval, pagination, detail and back use real metadata",
+      "project": "stack-mobile",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 5012
+        }
+      ]
+    },
+    {
+      "title": "text AND filters and empty state",
+      "project": "stack-mobile",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 2209
+        }
+      ]
+    },
+    {
+      "title": "image retrieval, pagination, detail and back retain the image",
+      "project": "stack-mobile",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 4708
+        }
+      ]
+    },
+    {
+      "title": "image AND filters and empty state",
+      "project": "stack-mobile",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 2371
+        }
+      ]
+    },
+    {
+      "title": "text UI feedback is accepted by PostgreSQL mode",
+      "project": "stack-mobile",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "duration_ms": 16720
+        }
+      ]
+    },
+    {
+      "title": "image UI feedback is accepted by PostgreSQL mode",
+      "project": "stack-mobile",
+      "status": "unexpected",
+      "attempts": [
+        {
+          "status": "failed",
+          "duration_ms": 18697
+        }
+      ]
+    },
+    {
+      "title": "direct API feedback and invalid input use real endpoints",
+      "project": "stack-mobile",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "duration_ms": 1895
+        }
+      ]
+    }
+  ],
+  "observed_search_events_verified": 20,
+  "feedback_receipts_verified": 2,
+  "database_counts": {
+    "assets": 200,
+    "search_events": 47,
+    "feedbacks": 4
+  },
+  "qdrant": {
+    "collection": "issue149_7419c6ca20524df5998c7f2d3e185935",
+    "point_count": 200,
+    "payload_versions_verified": true
+  },
+  "receipt_ids": [
+    "f2773a41-94d3-4647-b5eb-89673b26fa32",
+    "c68ef135-c78d-452e-98d6-7c888f6c0da1"
+  ],
+  "note": "Audit persistence không biến E2E thất bại thành đạt."
+}

@@ -1,0 +1,24 @@
+{
+  "query_image": "previews/703ab241bbc1800eb70ee9a08898954be0090655383e3a9263b3da840ca37358.jpg",
+  "query_sha256": "703ab241bbc1800eb70ee9a08898954be0090655383e3a9263b3da840ca37358",
+  "asset_count": 200,
+  "text_versions": {
+    "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "index_version": "issue149-20261128T161923Z-e7bdf801",
+    "config_version": "clip-text-exact-all-filtered-v1-k200",
+    "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  },
+  "image_versions": {
+    "model_version": "openai/clip-vit-base-patch32@3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "index_version": "issue149-20261128T161923Z-e7bdf801",
+    "config_version": "image-exact-all-filtered-rgb-v1-k200",
+    "dataset_snapshot": "home-interior-clear-200-v3-sha256:9dcc0afdab56adfd670ef1ecb0bc6e2a968a76eeb978be1ec0f32ff5fc7a9ffd"
+  },
+  "filters": {
+    "category": "furniture-home",
+    "license": "by",
+    "format": "glb",
+    "face_count_min": 540642,
+    "face_count_max": 540642
+  }
+}
