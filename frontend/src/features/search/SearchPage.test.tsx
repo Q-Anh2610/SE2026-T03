@@ -211,6 +211,67 @@ describe('search page behavior', () => {
     }
   })
 
+  it('keeps results and an unsent draft when navigating to a search anchor', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const query = screen.getByRole('searchbox')
+    await user.type(query, 'ghế gỗ{Enter}')
+    await screen.findByRole('heading', { name: 'Ghế gỗ kiểm thử' })
+    await user.clear(query)
+    await user.type(query, 'bản nháp chưa gửi')
+
+    await act(async () => {
+      window.history.pushState(null, '', '#search-panel')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+
+    expect(query).toHaveValue('bản nháp chưa gửi')
+    expect(searchMock).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('heading', { name: 'Ghế gỗ kiểm thử' })).toBeVisible()
+    expect(new URLSearchParams(window.location.search).get('q')).toBe('ghế gỗ')
+
+    await act(async () => {
+      window.history.pushState(null, '', '/')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+    expect(query).toHaveValue('')
+    expect(screen.getByRole('region', { name: 'Bạn đang tìm gì?' })).toBeVisible()
+    expect(searchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('returns from detail via a search anchor without rerunning the search', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('searchbox'), 'ghế gỗ{Enter}')
+    await user.click(await screen.findByRole('button', { name: 'Xem chi tiết Ghế gỗ kiểm thử' }))
+    expect(await screen.findByRole('region', { name: 'Chi tiết asset' })).toBeVisible()
+
+    await act(async () => {
+      window.history.pushState(null, '', '#asset-query')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+
+    expect(screen.getByRole('region', { name: 'Kết quả tìm kiếm' })).toBeVisible()
+    expect(screen.queryByRole('region', { name: 'Chi tiết asset' })).not.toBeInTheDocument()
+    expect(searchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('closes the filter disclosure when resetting an empty search', async () => {
+    searchMock.mockResolvedValueOnce({ ...makeResponse(), results: [] })
+    const user = userEvent.setup()
+    render(<App />)
+    const summary = screen.getByText('Bộ lọc', { exact: true })
+    await user.click(summary)
+    await user.type(screen.getByLabelText('Định dạng'), 'glb')
+    await user.type(screen.getByRole('searchbox'), 'ghế gỗ{Enter}')
+    await user.click(await screen.findByRole('button', { name: 'Xóa tìm kiếm và bộ lọc' }))
+
+    expect(summary.closest('details')).not.toHaveAttribute('open')
+    expect(screen.getByLabelText('Định dạng')).toHaveValue('')
+    expect(screen.getByRole('searchbox')).toHaveFocus()
+    expect(new URLSearchParams(window.location.search).get('filters_open')).toBe('0')
+  })
+
   it('restores a catalog URL and applies its facet only to the received page', async () => {
     window.history.replaceState(null, '', '/?mode=browse&limit=7&page=2&facet=Chi%E1%BA%BFu%20s%C3%A1ng')
     render(<App />)
@@ -305,6 +366,8 @@ describe('search page behavior', () => {
     expect(browseButton).toHaveTextContent('Duyệt thư viện')
     expect(browseButton).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('status')).toHaveTextContent('Đang tải danh sách asset')
+    expect(screen.getByLabelText('Số kết quả')).toBeDisabled()
+    expect(screen.getByLabelText('Số kết quả')).toHaveValue('6')
 
     await act(async () => {
       pending.resolve({

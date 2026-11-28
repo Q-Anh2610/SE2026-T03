@@ -15,6 +15,20 @@ afterEach(() => {
   document.querySelector('meta[name="theme-color"]')?.remove()
 })
 
+it('moves focus into the current page without changing the route', async () => {
+  window.history.replaceState(null, '', '#image-search')
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.tab()
+  expect(screen.getByRole('link', { name: 'Đến nội dung chính' })).toHaveFocus()
+  await user.keyboard('{Enter}')
+
+  expect(screen.getByRole('main')).toHaveFocus()
+  expect(window.location.hash).toBe('#image-search')
+  expect(screen.getByRole('heading', { name: 'Tìm kiếm bằng ảnh' })).toBeVisible()
+})
+
 describe('theme preference', () => {
   it('renders one actual header and footer with the current navigation and no stale slogan', () => {
     render(<App />)

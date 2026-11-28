@@ -110,7 +110,8 @@ it('shows loading/error, retries the same file/page and renders an empty success
   await act(async () => { pending.reject(new Error('API lỗi')) })
   expect(await screen.findByRole('alert')).toHaveTextContent('API lỗi')
   fireEvent.click(screen.getByText('Thử lại'))
-  expect(await screen.findByText('Chưa có asset phù hợp')).toBeVisible()
+  expect(await screen.findByRole('heading', { name: 'Chưa có asset phù hợp' })).toBeVisible()
+  expect(screen.getByRole('status')).toHaveTextContent('Chưa có asset phù hợp')
   expect(api.search.mock.calls[0].slice(0, 2)).toEqual(api.search.mock.calls[1].slice(0, 2))
 })
 

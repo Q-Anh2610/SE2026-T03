@@ -208,3 +208,56 @@ test('keeps search compact and resets a genuine empty result', async ({ page }) 
   await expect(view.query).toBeFocused()
   await view.checkWidth()
 })
+
+test('preserves search results and the draft across anchor navigation and browser history', async ({ page }) => {
+  const view = new SearchPage(page)
+  await view.open()
+  await view.search('ghe go')
+  await expect(view.results).toHaveCount(1)
+  await view.query.fill('bản nháp chưa gửi')
+
+  await page.getByRole('navigation', { name: 'Điều hướng chính' })
+    .getByRole('link', { name: 'Khám phá asset' }).click()
+  await expect(page).toHaveURL(/#search-panel$/)
+  await expect(view.query).toHaveValue('bản nháp chưa gửi')
+  await expect(view.results).toHaveCount(1)
+
+  await page.goBack()
+  await expect(view.query).toHaveValue('bản nháp chưa gửi')
+  await expect(view.results).toHaveCount(1)
+  await page.goForward()
+  await expect(page).toHaveURL(/#search-panel$/)
+  await expect(view.query).toHaveValue('bản nháp chưa gửi')
+  await expect(view.results).toHaveCount(1)
+})
+
+test('skips navigation with the keyboard without leaving image search', async ({ page }) => {
+  await page.goto('/#image-search')
+  const main = page.getByRole('main')
+  const imageInput = main.getByLabel(/Chọn hoặc thay ảnh JPEG\/PNG/)
+  await expect(imageInput).toHaveCount(1)
+
+  await page.keyboard.press('Tab')
+  await expect(page.getByRole('link', { name: 'Đến nội dung chính' })).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(main).toBeFocused()
+  await expect(page).toHaveURL(/#image-search$/)
+
+  await page.keyboard.press('Tab')
+  await expect(imageInput).toBeFocused()
+  await expect(page.locator('.image-file-drop')).toHaveCSS('outline-style', 'solid')
+})
+
+test('fits search results and image filters at 320 CSS pixels', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 })
+  const view = new SearchPage(page)
+  await view.open()
+  await view.search('glb')
+  await expect(view.results).toHaveCount(6)
+  await view.checkWidth()
+
+  await page.getByRole('navigation', { name: 'Điều hướng chính' })
+    .getByRole('link', { name: 'Tìm bằng ảnh' }).click()
+  await expect(page.getByRole('group', { name: 'Bộ lọc ảnh' })).toBeVisible()
+  await view.checkWidth()
+})
